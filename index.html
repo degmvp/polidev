@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -48,9 +47,6 @@
             border-radius: 10px;
             margin-top: 30px;
         }
-        .box h3 {
-            margin-top: 0;
-        }
         .formulario {
             background-color: #f0f0f0;
             padding: 30px;
@@ -83,8 +79,13 @@
             padding: 20px;
             margin-top: 40px;
         }
+        .msg {
+            margin-top: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
+
 <body>
 
 <header>
@@ -94,14 +95,15 @@
 </header>
 
 <section>
-    <h2>O que é o POLIDEV?</h2>
-    <p>
-        O <strong>POLIDEV</strong> é um projeto educacional focado em <strong>programação prática</strong>,
-        com múltiplas linguagens, bancos de dados e exemplos reais.
-        Aqui você aprende como o código funciona no mundo real.
-    </p>
 
-```
+<h2>O que é o POLIDEV?</h2>
+<p>
+O <strong>POLIDEV</strong> é um projeto educacional focado em
+<strong>programação prática</strong>, com múltiplas linguagens,
+bancos de dados e exemplos reais.
+Aqui você aprende como o código funciona no mundo real.
+</p>
+
 <h2>O que você vai aprender</h2>
 <ul>
     <li>Python do zero ao avançado</li>
@@ -114,9 +116,7 @@
 
 <div class="box">
     <h3>🎁 Conteúdo GRATUITO</h3>
-    <p>
-        Ao se cadastrar, você recebe gratuitamente:
-    </p>
+    <p>Ao se cadastrar, você recebe gratuitamente:</p>
     <ul>
         <li>Guias em HTML prontos para estudo</li>
         <li>Códigos funcionais e comentados</li>
@@ -126,14 +126,35 @@
 </div>
 
 <h2>Receba o material gratuito</h2>
+
 <div class="formulario">
-    <form>
-        <input type="text" placeholder="Seu nome" required>
-        <input type="email" placeholder="Seu e-mail" required>
-        <input type="tel" placeholder="Celular / WhatsApp" required>
+    <form id="leadForm" autocomplete="on">
+        <input type="text"
+               name="nome"
+               placeholder="Seu nome"
+               autocomplete="name"
+               required>
+
+        <input type="email"
+               name="email"
+               placeholder="Seu e-mail"
+               autocomplete="email"
+               required>
+
+        <input type="tel"
+               name="telefone"
+               placeholder="Celular / WhatsApp"
+               autocomplete="tel"
+               required>
+
         <button type="submit">QUERO ACESSO GRATUITO</button>
     </form>
-    <p style="font-size:14px;">Sem spam. Apenas conteúdo técnico de qualidade.</p>
+
+    <div class="msg" id="msg"></div>
+
+    <p style="font-size:14px;">
+        Sem spam. Apenas conteúdo técnico de qualidade.
+    </p>
 </div>
 
 <h2>Por que o POLIDEV é diferente?</h2>
@@ -143,7 +164,6 @@
     <li>Multilinguagem e multibanco</li>
     <li>Ideal para estudo e referência</li>
 </ul>
-```
 
 </section>
 
@@ -151,6 +171,47 @@
     <p>POLIDEV © 2026</p>
     <p>Leia • Entenda • Execute seu código</p>
 </footer>
+
+<script>
+const form = document.getElementById("leadForm");
+const msg  = document.getElementById("msg");
+
+// AJUSTE COM SEUS DADOS REAIS
+const GITHUB_ACTION_URL =
+  "https://api.github.com/repos/SEU_USUARIO/SEU_REPO/actions/workflows/leads.yml/dispatches";
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.textContent = "Enviando...";
+
+    const data = Object.fromEntries(new FormData(form));
+
+    try {
+        const response = await fetch(GITHUB_ACTION_URL, {
+            method: "POST",
+            headers: {
+                "Accept": "application/vnd.github+json",
+                "Authorization": "Bearer SEU_TOKEN_DISPATCH"
+            },
+            body: JSON.stringify({
+                ref: "main", // ou "master"
+                inputs: data
+            })
+        });
+
+        if (response.ok) {
+            msg.textContent = "Cadastro realizado com sucesso!";
+            form.reset();
+        } else {
+            msg.textContent = "Erro ao enviar. Tente novamente.";
+            console.error("Erro HTTP:", response.status);
+        }
+    } catch (err) {
+        msg.textContent = "Falha de conexão.";
+        console.error(err);
+    }
+});
+</script>
 
 </body>
 </html>
