@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>POLIDEV | Multiprogramação e Multibanco</title>
+    <title>POLYDEV | Multiprogramação e Multibanco</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -79,26 +79,22 @@
             padding: 20px;
             margin-top: 40px;
         }
-        .msg {
-            margin-top: 15px;
-            font-weight: bold;
-        }
     </style>
 </head>
 
 <body>
 
 <header>
-    <h1>POLIDEV</h1>
+    <h1>POLYDEV</h1>
     <p>Multiprogramação • Multibanco • Código Real</p>
     <p><strong>Leia • Entenda • Execute seu código</strong></p>
 </header>
 
 <section>
 
-<h2>O que é o POLIDEV?</h2>
+<h2>O que é o POLYDEV?</h2>
 <p>
-O <strong>POLIDEV</strong> é um projeto educacional focado em
+O <strong>POLYDEV</strong> é um projeto educacional focado em
 <strong>programação prática</strong>, com múltiplas linguagens,
 bancos de dados e exemplos reais.
 Aqui você aprende como o código funciona no mundo real.
@@ -128,7 +124,11 @@ Aqui você aprende como o código funciona no mundo real.
 <h2>Receba o material gratuito</h2>
 
 <div class="formulario">
-    <form id="leadForm" autocomplete="on">
+    <form
+        method="POST"
+        action="https://script.google.com/macros/s/https://degmvp.github.io/polidev/exec"
+        autocomplete="on"
+    >
         <input type="text"
                name="nome"
                placeholder="Seu nome"
@@ -150,14 +150,12 @@ Aqui você aprende como o código funciona no mundo real.
         <button type="submit">QUERO ACESSO GRATUITO</button>
     </form>
 
-    <div class="msg" id="msg"></div>
-
     <p style="font-size:14px;">
         Sem spam. Apenas conteúdo técnico de qualidade.
     </p>
 </div>
 
-<h2>Por que o POLIDEV é diferente?</h2>
+<h2>Por que o POLYDEV é diferente?</h2>
 <ul>
     <li>Conteúdo direto e técnico</li>
     <li>Código que realmente funciona</li>
@@ -168,50 +166,9 @@ Aqui você aprende como o código funciona no mundo real.
 </section>
 
 <footer>
-    <p>POLIDEV © 2026</p>
+    <p>POLYDEV © 2026</p>
     <p>Leia • Entenda • Execute seu código</p>
 </footer>
-
-<script>
-const form = document.getElementById("leadForm");
-const msg  = document.getElementById("msg");
-
-// AJUSTE COM SEUS DADOS REAIS
-const GITHUB_ACTION_URL =
-  "https://api.github.com/repos/SEU_USUARIO/SEU_REPO/actions/workflows/leads.yml/dispatches";
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    msg.textContent = "Enviando...";
-
-    const data = Object.fromEntries(new FormData(form));
-
-    try {
-        const response = await fetch(GITHUB_ACTION_URL, {
-            method: "POST",
-            headers: {
-                "Accept": "application/vnd.github+json",
-                "Authorization": "Bearer SEU_TOKEN_DISPATCH"
-            },
-            body: JSON.stringify({
-                ref: "main", // ou "master"
-                inputs: data
-            })
-        });
-
-        if (response.ok) {
-            msg.textContent = "Cadastro realizado com sucesso!";
-            form.reset();
-        } else {
-            msg.textContent = "Erro ao enviar. Tente novamente.";
-            console.error("Erro HTTP:", response.status);
-        }
-    } catch (err) {
-        msg.textContent = "Falha de conexão.";
-        console.error(err);
-    }
-});
-</script>
 
 </body>
 </html>
