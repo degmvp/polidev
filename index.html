@@ -112,63 +112,51 @@ Aqui você aprende como o código funciona no mundo real.
 
 <div class="box">
     <h3>🎁 Conteúdo GRATUITO</h3>
-    <p>Ao se cadastrar, você recebe gratuitamente:</p>
-    <ul>
-        <li>Guias em HTML prontos para estudo</li>
-        <li>Códigos funcionais e comentados</li>
-        <li>Labs passo a passo</li>
-        <li>Estrutura real de projetos</li>
-    </ul>
 </div>
 
 <h2>Receba o material gratuito</h2>
 
 <div class="formulario">
-    <form
-        method="POST"
-        action="https://script.google.com/macros/s/https://degmvp.github.io/polidev/exec"
-        autocomplete="on"
-    >
-        <input type="text"
-               name="nome"
-               placeholder="Seu nome"
-               autocomplete="name"
-               required>
+    <form id="polyForm" autocomplete="on">
 
-        <input type="email"
-               name="email"
-               placeholder="Seu e-mail"
-               autocomplete="email"
-               required>
-
-        <input type="tel"
-               name="telefone"
-               placeholder="Celular / WhatsApp"
-               autocomplete="tel"
-               required>
+        <input type="text" name="nome" placeholder="Seu nome" required>
+        <input type="email" name="email" placeholder="Seu e-mail" required>
+        <input type="tel" name="telefone" placeholder="Celular / WhatsApp" required>
 
         <button type="submit">QUERO ACESSO GRATUITO</button>
     </form>
 
-    <p style="font-size:14px;">
-        Sem spam. Apenas conteúdo técnico de qualidade.
-    </p>
+    <p id="mensagem" style="font-size:14px; margin-top:10px;"></p>
 </div>
-
-<h2>Por que o POLYDEV é diferente?</h2>
-<ul>
-    <li>Conteúdo direto e técnico</li>
-    <li>Código que realmente funciona</li>
-    <li>Multilinguagem e multibanco</li>
-    <li>Ideal para estudo e referência</li>
-</ul>
 
 </section>
 
 <footer>
     <p>POLYDEV © 2026</p>
-    <p>Leia • Entenda • Execute seu código</p>
 </footer>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc-49KVwgoneHAt09pR7GqMxKce42rjyh8ZzY2iuS6EiXkBwAtPClZgaBteXovflXj/exec";
+
+document.getElementById("polyForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("mensagem").innerHTML = "✅ Cadastro realizado com sucesso!";
+        this.reset();
+    })
+    .catch(error => {
+        document.getElementById("mensagem").innerHTML = "❌ Erro ao enviar. Tente novamente.";
+    });
+});
+</script>
 
 </body>
 </html>
