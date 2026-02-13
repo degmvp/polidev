@@ -145,16 +145,25 @@ document.getElementById("polyForm").addEventListener("submit", function(e){
 
     fetch(SCRIPT_URL, {
         method: "POST",
-        body: formData
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nome: formData.get("nome"),
+            email: formData.get("email"),
+            telefone: formData.get("telefone")
+        })
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
         document.getElementById("mensagem").innerHTML = "✅ Cadastro realizado com sucesso!";
         this.reset();
     })
     .catch(error => {
-        document.getElementById("mensagem").innerHTML = "❌ Erro ao enviar. Tente novamente.";
+        document.getElementById("mensagem").innerHTML = "❌ Erro ao enviar.";
+        console.error(error);
     });
+
 });
 </script>
 
