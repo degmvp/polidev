@@ -136,7 +136,7 @@ Aqui você aprende como o código funciona no mundo real.
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc-49KVwgoneHAt09pR7GqMxKce42rjyh8ZzY2iuS6EiXkBwAtPClZgaBteXovflXj/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc-49KVwgoneHAt09pR7GqMxKce42rjyh8ZzY2iuS6EiXkBwAtPClZgaBteXovflXj/exec"
 
 document.getElementById("polyForm").addEventListener("submit", function(e){
     e.preventDefault();
@@ -145,16 +145,9 @@ document.getElementById("polyForm").addEventListener("submit", function(e){
 
     fetch(SCRIPT_URL, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: formData.get("nome"),
-            email: formData.get("email"),
-            telefone: formData.get("telefone")
-        })
+        body: formData
     })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
         document.getElementById("mensagem").innerHTML = "✅ Cadastro realizado com sucesso!";
         this.reset();
@@ -163,8 +156,6 @@ document.getElementById("polyForm").addEventListener("submit", function(e){
         document.getElementById("mensagem").innerHTML = "❌ Erro ao enviar.";
         console.error(error);
     });
-
-});
 </script>
 
 </body>
