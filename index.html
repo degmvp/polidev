@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>POLYDEV | Multiprogramação e Multibanco</title>
+    <title>POLIDEV | Multiprogramação e Multibanco</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -47,6 +47,9 @@
             border-radius: 10px;
             margin-top: 30px;
         }
+        .box h3 {
+            margin-top: 0;
+        }
         .formulario {
             background-color: #f0f0f0;
             padding: 30px;
@@ -81,23 +84,20 @@
         }
     </style>
 </head>
-
 <body>
 
 <header>
-    <h1>POLYDEV</h1>
+    <h1>POLIDEV</h1>
     <p>Multiprogramação • Multibanco • Código Real</p>
     <p><strong>Leia • Entenda • Execute seu código</strong></p>
 </header>
 
 <section>
 
-<h2>O que é o POLYDEV?</h2>
+<h2>O que é o POLIDEV?</h2>
 <p>
-O <strong>POLYDEV</strong> é um projeto educacional focado em
-<strong>programação prática</strong>, com múltiplas linguagens,
-bancos de dados e exemplos reais.
-Aqui você aprende como o código funciona no mundo real.
+    O <strong>POLIDEV</strong> é um projeto educacional focado em programação prática,
+    com múltiplas linguagens, bancos de dados e exemplos reais.
 </p>
 
 <h2>O que você vai aprender</h2>
@@ -112,50 +112,79 @@ Aqui você aprende como o código funciona no mundo real.
 
 <div class="box">
     <h3>🎁 Conteúdo GRATUITO</h3>
+    <ul>
+        <li>Guias em HTML prontos para estudo</li>
+        <li>Códigos funcionais e comentados</li>
+        <li>Labs passo a passo</li>
+        <li>Estrutura real de projetos</li>
+    </ul>
 </div>
 
 <h2>Receba o material gratuito</h2>
-
 <div class="formulario">
-    <form id="polyForm" autocomplete="on">
-
-        <input type="text" name="nome" placeholder="Seu nome" required>
-        <input type="email" name="email" placeholder="Seu e-mail" required>
-        <input type="tel" name="telefone" placeholder="Celular / WhatsApp" required>
-
+    <form id="formCadastro">
+        <input type="text" id="nome" placeholder="Seu nome" required>
+        <input type="email" id="email" placeholder="Seu e-mail" required>
+        <input type="tel" id="celular" placeholder="Celular / WhatsApp" required>
         <button type="submit">QUERO ACESSO GRATUITO</button>
     </form>
-
-    <p id="mensagem" style="font-size:14px; margin-top:10px;"></p>
+    <p style="font-size:14px;">Sem spam. Apenas conteúdo técnico de qualidade.</p>
 </div>
+
+<h2>Por que o POLIDEV é diferente?</h2>
+<ul>
+    <li>Conteúdo direto e técnico</li>
+    <li>Código que realmente funciona</li>
+    <li>Multilinguagem e multibanco</li>
+    <li>Ideal para estudo e referência</li>
+</ul>
 
 </section>
 
 <footer>
-    <p>POLYDEV © 2026</p>
+    <p>POLIDEV © 2026</p>
+    <p>Leia • Entenda • Execute seu código</p>
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc-49KVwgoneHAt09pR7GqMxKce42rjyh8ZzY2iuS6EiXkBwAtPClZgaBteXovflXj/exec"
-
-document.getElementById("polyForm").addEventListener("submit", function(e){
+document.getElementById("formCadastro").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const formData = new FormData(this);
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const celular = document.getElementById("celular").value;
 
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("mensagem").innerHTML = "✅ Cadastro realizado com sucesso!";
-        this.reset();
-    })
-    .catch(error => {
-        document.getElementById("mensagem").innerHTML = "❌ Erro ao enviar.";
-        console.error(error);
-    });
+    try {
+        const response = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/cadastros",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                    "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                    "Prefer": "return=minimal"
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email,
+                    celular: celular
+                })
+            }
+        );
+
+        if (response.ok) {
+            alert("Cadastro realizado com sucesso!");
+            document.getElementById("formCadastro").reset();
+        } else {
+            const erro = await response.text();
+            alert("Erro ao salvar: " + erro);
+        }
+
+    } catch (err) {
+        alert("Erro de conexão: " + err);
+    }
+});
 </script>
 
 </body>
