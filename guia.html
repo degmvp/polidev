@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV - Guia Geral do Projeto</title>
+
+<style>
+body{
+    background-color: yellowgreen;
+    color: white;
+    font-family: Arial;
+    margin: 40px;
+    line-height:1.6;
+}
+h1{
+    background-color: black;
+    color: white;
+    padding: 10px;
+}
+h2{
+    background-color: black;
+    padding: 5px;
+}
+p{
+    background-color: black;
+    padding: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>POLYDEV  Documentação e Guia do Projeto</h1>
+
+<h2>1. Visão Geral do Projeto</h2>
+<p>
+O projeto POLYDEV é uma plataforma web para disponibilizar códigos,
+exemplos, templates, scripts e materiais de programação para download.
+A ideia do projeto é funcionar como uma biblioteca de códigos organizada
+por linguagem, categoria e popularidade.
+</p>
+
+<p>
+O objetivo não é apenas armazenar arquivos, mas criar uma plataforma
+educacional e uma biblioteca técnica para programadores e estudantes.
+</p>
+
+<h2>2. Arquitetura do Sistema</h2>
+<p>
+O POLYDEV utiliza uma arquitetura moderna chamada serverless,
+ou seja, não existe um servidor tradicional rodando backend.
+</p>
+
+<p>
+A arquitetura funciona da seguinte forma:
+</p>
+
+<p>
+GitHub Pages (Frontend)<br>
+↓<br>
+HTML + JavaScript<br>
+↓<br>
+Supabase (API REST)<br>
+↓<br>
+PostgreSQL (Banco de Dados)<br>
+↓<br>
+Arquivos armazenados no GitHub (Downloads)
+</p>
+
+<p>
+Isso permite que a plataforma funcione sem servidor próprio,
+sem VPS e com custo praticamente zero.
+</p>
+
+<h2>3. Tecnologias Utilizadas</h2>
+<p>
+O projeto utiliza as seguintes tecnologias:
+</p>
+
+<p>
+GitHub - armazenamento dos arquivos e hospedagem do site<br>
+GitHub Pages - hospedagem do frontend<br>
+Supabase - API e backend serverless<br>
+PostgreSQL - banco de dados<br>
+HTML - estrutura das páginas<br>
+CSS - layout e visual<br>
+JavaScript - integração com o banco de dados
+DBeaver ferramenta gráfica universal open source para bancos de dados.
+</p>
+
+<h2>4. Estrutura do Banco de Dados</h2>
+<p>
+A principal tabela do sistema é a tabela de conteúdos.
+Ela armazena todos os códigos disponíveis para download.
+</p>
+
+<p>
+Tabela: conteudos
+</p>
+
+<p>
+id<br>
+titulo<br>
+descricao<br>
+categoria<br>
+arquivo_url<br>
+ativo<br>
+downloads<br>
+created_at
+</p>
+
+<p>
+Essa tabela é o coração da biblioteca de códigos.
+</p>
+
+<h2>5. O que já foi desenvolvido no projeto</h2>
+<p>
+Até o momento, as seguintes partes do sistema já foram implementadas:
+</p>
+
+<p>
+Infraestrutura pronta<br>
+Banco de dados criado<br>
+Tabela de conteúdos criada<br>
+Sistema de cadastro funcionando<br>
+Administração funcionando<br>
+Catálogo automático de conteúdos<br>
+Sistema de downloads<br>
+Registro de downloads no banco<br>
+Contador de downloads
+</p>
+
+<p>
+Isso significa que o POLYDEV já funciona como uma biblioteca de códigos.
+</p>
+
+<h2>6. Fluxo de funcionamento da biblioteca</h2>
+<p>
+O funcionamento do sistema ocorre da seguinte forma:
+</p>
+
+<p>
+Usuário entra na página conteudos.html<br>
+↓<br>
+O sistema consulta o banco de dados<br>
+↓<br>
+Lista automaticamente os conteúdos disponíveis<br>
+↓<br>
+Usuário clica em Download<br>
+↓<br>
+O sistema registra o download no banco<br>
+↓<br>
+O arquivo abre para download<br>
+↓<br>
+O contador de downloads é atualizado
+</p>
+
+<p>
+Esse fluxo é o núcleo do sistema POLYDEV.
+</p>
+
+<h2>7. Situação atual do projeto</h2>
+<p>
+Status geral do sistema:
+</p>
+
+<p>
+Infraestrutura ✔ pronta<br>
+Banco de dados ✔ pronto<br>
+Cadastro ✔ funcionando<br>
+Administração ✔ funcionando<br>
+Conteúdos ✔ estruturado<br>
+Catálogo web ✔ funcionando<br>
+Downloads ✔ funcionando<br>
+Contador ✔ funcionando<br>
+</p>
+
+<p>
+Ou seja, a primeira fase do projeto está praticamente concluída.
+</p>
+
+<h2>8. Próximas etapas do projeto</h2>
+<p>
+Agora o projeto entra na fase de evolução da plataforma.
+As próximas funcionalidades que devem ser implementadas são:
+</p>
+
+<p>
+Top Downloads<br>
+Filtro por linguagem<br>
+Busca de conteúdos<br>
+Página individual do conteúdo<br>
+Sistema de usuários<br>
+Favoritos<br>
+Comentários<br>
+Upload de arquivos<br>
+Painel administrativo completo
+</p>
+
+<h2>9. Roadmap do Projeto POLYDEV</h2>
+<p>
+Fase 1 – Biblioteca de códigos<br>
+Banco de dados<br>
+Administração<br>
+Conteúdos<br>
+Catálogo<br>
+Downloads<br>
+Contador
+</p>
+
+<p>
+Fase 2 – Navegação e organização<br>
+Top downloads<br>
+Filtros por linguagem<br>
+Busca<br>
+Página do conteúdo
+</p>
+
+<p>
+Fase 3 – Plataforma<br>
+Usuários<br>
+Favoritos<br>
+Comentários<br>
+Uploads de arquivos
+</p>
+
+<p>
+Fase 4 – Portal educacional<br>
+Cursos<br>
+Vídeos<br>
+Trilhas de estudo<br>
+Materiais didáticos<br>
+Certificados
+</p>
+
+<h2>10. Objetivo final do POLYDEV</h2>
+<p>
+O objetivo final do projeto POLYDEV é se tornar uma plataforma de ensino,
+biblioteca de códigos e portal educacional voltado para programação,
+bancos de dados e desenvolvimento de software.
+</p>
+
+<p>
+A ideia é centralizar códigos, exemplos, aulas, guias e materiais
+em um único ambiente organizado por tecnologia.
+</p>
+
+<h2>11. Conclusão</h2>
+<p>
+O projeto POLYDEV já possui a parte mais difícil concluída:
+arquitetura, banco de dados, integração com API,
+catálogo automático e sistema de downloads.
+</p>
+
+<p>
+As próximas etapas agora são evoluções da interface,
+organização dos conteúdos e funcionalidades de usuários.
+</p>
+
+<p>
+O projeto já pode ser considerado uma plataforma funcional
+de biblioteca de códigos.
+</p>
+
+</body>
+</html>

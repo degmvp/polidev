@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Teste POLYDEV</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<h2>Teste conexão POLYDEV</h2>
+
+<button id="btn">TESTAR BANCO</button>
+
+<pre id="resultado"></pre>
+
+<script>
+
+alert("JS iniciou")
+
+const { createClient } = supabase
+
+const db = createClient(
+"https://vdpucrilxzlnxxnaohdh.supabase.co",
+"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
+)
+
+document.getElementById("btn").addEventListener("click", async () => {
+
+alert("Consultando tabela")
+
+const { data, error } = await db
+.from("conteudos")
+.select("*")
+
+if(error){
+
+document.getElementById("resultado").innerText =
+"ERRO: " + error.message
+
+}else{
+
+document.getElementById("resultado").innerText =
+JSON.stringify(data,null,2)
+
+}
+
+})
+
+</script>
+
+</body>
+</html>
