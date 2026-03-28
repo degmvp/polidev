@@ -19,8 +19,17 @@ const db = createClient(
 "https://vdpucrilxzlnxxnaohdh.supabase.co",
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
+
 const params = new URLSearchParams(window.location.search)
 const id = params.get("id")
+
+// Se não tiver ID, não consulta o banco
+if(!id){
+document.getElementById("conteudo").innerHTML =
+"<h3>Nenhum conteúdo selecionado</h3>"
+}else{
+carregar()
+}
 
 async function carregar(){
 
@@ -47,8 +56,6 @@ document.getElementById("conteudo").innerHTML = `
 </a>
 `
 }
-
-carregar()
 
 </script>
 
