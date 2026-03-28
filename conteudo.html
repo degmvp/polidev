@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Conteúdo</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div id="conteudo"></div>
+
+<script>
+
+const { createClient } = supabase
+
+const db = createClient(
+"https://vdpucrilxzlnxxnaohdh.supabase.co",
+"SUA_CHAVE"
+)
+
+const params = new URLSearchParams(window.location.search)
+const id = params.get("id")
+
+async function carregar(){
+
+const { data, error } = await db
+.from("conteudos")
+.select("*")
+.eq("id", id)
+.single()
+
+let c = data
+
+document.getElementById("conteudo").innerHTML = `
+<h2>${c.titulo}</h2>
+<p>Linguagem: ${c.linguagem}</p>
+<p>Tipo: ${c.tipo}</p>
+<p>Descrição: ${c.descricao}</p>
+<p>Downloads: ${c.downloads}</p>
+
+<a href="${c.arquivo_url}" target="_blank">
+<button>Download</button>
+</a>
+`
+
+}
+
+carregar()
+
+</script>
+
+</body>
+</html>

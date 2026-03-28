@@ -1,49 +1,63 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Top Downloads - POLYDEV</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
-<h1>TOP DOWNLOADS - POLYDEV</h1>
+<h2>Top Downloads</h2>
 
 <table border="1">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Linguagem</th>
-            <th>Tipo</th>
-            <th>Downloads</th>
-        </tr>
-    </thead>
-    <tbody id="tabelaTop"></tbody>
+<thead>
+<tr>
+<th>Título</th>
+<th>Linguagem</th>
+<th>Tipo</th>
+<th>Downloads</th>
+</tr>
+</thead>
+
+<tbody id="tabela"></tbody>
 </table>
 
 <script>
-const url = "https://SEU-PROJETO.supabase.co/rest/v1/conteudos?select=*&order=downloads.desc&limit=10";
 
-fetch(url, {
-    headers: {
-        "apikey": "SUA_API_KEY",
-        "Authorization": "Bearer SUA_API_KEY"
-    }
+const { createClient } = supabase
+
+const db = createClient(
+"https://vdpucrilxzlnxxnaohdh.supabase.co",
+"SUA_CHAVE"
+)
+
+async function carregarTop(){
+
+const { data, error } = await db
+.from("conteudos")
+.select("*")
+.order("downloads", { ascending: false })
+.limit(10)
+
+let tabela = document.getElementById("tabela")
+
+data.forEach(item => {
+tabela.innerHTML += `
+<tr>
+<td>${item.titulo}</td>
+<td>${item.linguagem}</td>
+<td>${item.tipo}</td>
+<td>${item.downloads}</td>
+</tr>
+`
 })
-.then(res => res.json())
-.then(dados => {
-    let tabela = document.getElementById("tabelaTop");
 
-    dados.forEach(item => {
-        tabela.innerHTML += `
-            <tr>
-                <td>${item.titulo}</td>
-                <td>${item.linguagem}</td>
-                <td>${item.tipo}</td>
-                <td>${item.downloads}</td>
-            </tr>
-        `;
-    });
-});
+}
+
+carregarTop()
+
 </script>
 
 </body>
