@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Top Downloads - POLYDEV</title>
+</head>
+<body>
+
+<h1>TOP DOWNLOADS - POLYDEV</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Linguagem</th>
+            <th>Tipo</th>
+            <th>Downloads</th>
+        </tr>
+    </thead>
+    <tbody id="tabelaTop"></tbody>
+</table>
+
+<script>
+const url = "https://SEU-PROJETO.supabase.co/rest/v1/conteudos?select=*&order=downloads.desc&limit=10";
+
+fetch(url, {
+    headers: {
+        "apikey": "SUA_API_KEY",
+        "Authorization": "Bearer SUA_API_KEY"
+    }
+})
+.then(res => res.json())
+.then(dados => {
+    let tabela = document.getElementById("tabelaTop");
+
+    dados.forEach(item => {
+        tabela.innerHTML += `
+            <tr>
+                <td>${item.titulo}</td>
+                <td>${item.linguagem}</td>
+                <td>${item.tipo}</td>
+                <td>${item.downloads}</td>
+            </tr>
+        `;
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Buscar Conteúdos - POLYDEV</title>
+</head>
+<body>
+
+<h1>Buscar Conteúdos</h1>
+
+<input type="text" id="linguagem" placeholder="Digite a linguagem">
+<button onclick="buscar()">Buscar</button>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Linguagem</th>
+            <th>Tipo</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody id="tabelaBusca"></tbody>
+</table>
+
+<script>
+function buscar() {
+
+    let linguagem = document.getElementById("linguagem").value;
+
+    const url = `https://SEU-PROJETO.supabase.co/rest/v1/conteudos?linguagem=eq.${linguagem}`;
+
+    fetch(url, {
+        headers: {
+            "apikey": "SUA_API_KEY",
+            "Authorization": "Bearer SUA_API_KEY"
+        }
+    })
+    .then(res => res.json())
+    .then(dados => {
+
+        let tabela = document.getElementById("tabelaBusca");
+        tabela.innerHTML = "";
+
+        dados.forEach(item => {
+            tabela.innerHTML += `
+                <tr>
+                    <td>${item.titulo}</td>
+                    <td>${item.linguagem}</td>
+                    <td>${item.tipo}</td>
+                    <td>
+                        <a href="${item.arquivo_url}" target="_blank">
+                            Download
+                        </a>
+                    </td>
+                </tr>
+            `;
+        });
+    });
+}
+</script>
+
+</body>
+</html>
