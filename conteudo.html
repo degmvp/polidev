@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Conteúdo</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
-<div id="conteudo"></div>
+<h2>Conteúdo</h2>
+<div id="conteudo">Carregando...</div>
 
 <script>
 
@@ -17,7 +17,7 @@ const { createClient } = supabase
 
 const db = createClient(
 "https://vdpucrilxzlnxxnaohdh.supabase.co",
-"SUA_CHAVE"
+"SUA_CHAVE_PUBLICA"
 )
 
 const params = new URLSearchParams(window.location.search)
@@ -28,23 +28,25 @@ async function carregar(){
 const { data, error } = await db
 .from("conteudos")
 .select("*")
-.eq("id", id)
+.eq("id", parseInt(id))
 .single()
 
-let c = data
+if(error){
+document.getElementById("conteudo").innerText =
+"Erro: " + error.message
+return
+}
 
 document.getElementById("conteudo").innerHTML = `
-<h2>${c.titulo}</h2>
-<p>Linguagem: ${c.linguagem}</p>
-<p>Tipo: ${c.tipo}</p>
-<p>Descrição: ${c.descricao}</p>
-<p>Downloads: ${c.downloads}</p>
+<h3>${data.titulo}</h3>
+<p>Categoria: ${data.categoria}</p>
+<p>${data.descricao}</p>
+<p>Downloads: ${data.downloads}</p>
 
-<a href="${c.arquivo_url}" target="_blank">
+<a href="${data.arquivo_url}" target="_blank">
 <button>Download</button>
 </a>
 `
-
 }
 
 carregar()
