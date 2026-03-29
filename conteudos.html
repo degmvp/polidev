@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-
 <head>
 <meta charset="UTF-8">
 <title>Teste POLYDEV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<script src="config.js"></script>
 </head>
 
 <body>
@@ -23,24 +20,27 @@
 
 alert("JS iniciou")
 
+const params = new URLSearchParams(window.location.search)
+const categoria = params.get("categoria")
+
 document.getElementById("btn").addEventListener("click", async () => {
 
 alert("Consultando tabela")
 
-const { data, error } = await db
-.from("conteudos")
-.select("*")
+let query = db.from("conteudos").select("*")
+
+if(categoria){
+query = query.eq("categoria", categoria)
+}
+
+const { data, error } = await query
 
 if(error){
-
 document.getElementById("resultado").innerText =
 "ERRO: " + error.message
-
 }else{
-
 document.getElementById("resultado").innerText =
 JSON.stringify(data,null,2)
-
 }
 
 })

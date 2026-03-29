@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Categorias</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+</head>
+
+<body>
+
+<h2>Categorias</h2>
+
+<ul id="lista"></ul>
+
+<script>
+
+async function carregarCategorias(){
+
+const { data, error } = await db
+.from("conteudos")
+.select("categoria")
+
+let categorias = {}
+
+data.forEach(item => {
+if(categorias[item.categoria]){
+categorias[item.categoria]++
+}else{
+categorias[item.categoria] = 1
+}
+})
+
+let lista = document.getElementById("lista")
+lista.innerHTML = ""
+
+for(let cat in categorias){
+lista.innerHTML += `
+<li>
+<a href="conteudos.html?categoria=${cat}">
+${cat} (${categorias[cat]})
+</a>
+</li>
+`
+}
+
+}
+
+carregarCategorias()
+
+</script>
+
+</body>
+</html>
