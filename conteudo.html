@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <head>
 <meta charset="UTF-8">
 <title>Conteúdo</title>
@@ -13,13 +15,6 @@
 
 <script>
 alert("JS carregou");
-const { createClient } = supabase
-
-const db = createClient(
-"https://vdpucrilxzlnxxnaohdh.supabase.co",
-"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
-)
-
 const params = new URLSearchParams(window.location.search)
 const id = params.get("id")
 
