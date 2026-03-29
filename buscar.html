@@ -5,11 +5,12 @@
 <title>Buscar Conteúdos</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 </head>
 
 <body>
 
-<h2>Buscar por linguagem</h2>
+<h2>Buscar por categoria</h2>
 
 <input type="text" id="ling">
 <button onclick="buscar()">Buscar</button>
@@ -18,7 +19,7 @@
 <thead>
 <tr>
 <th>Título</th>
-<th>Linguagem</th>
+<th>Categoria</th>
 <th>Tipo</th>
 <th>Download</th>
 </tr>
@@ -29,13 +30,6 @@
 
 <script>
 
-const { createClient } = supabase
-
-const db = createClient(
-"https://vdpucrilxzlnxxnaohdh.supabase.co",
-"SUA_CHAVE"
-)
-
 async function buscar(){
 
 let linguagem = document.getElementById("ling").value
@@ -43,7 +37,7 @@ let linguagem = document.getElementById("ling").value
 const { data, error } = await db
 .from("conteudos")
 .select("*")
-.eq("linguagem", linguagem)
+.eq("categoria", linguagem)
 
 let tabela = document.getElementById("tabela")
 tabela.innerHTML = ""
@@ -52,8 +46,8 @@ data.forEach(item => {
 tabela.innerHTML += `
 <tr>
 <td>${item.titulo}</td>
-<td>${item.linguagem}</td>
-<td>${item.tipo}</td>
+<td>${item.categoria}</td>
+<td>${item.tipo || "-"}</td>
 <td><a href="${item.arquivo_url}" target="_blank">Download</a></td>
 </tr>
 `
