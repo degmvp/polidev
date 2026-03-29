@@ -2,30 +2,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Teste POLYDEV</title>
+<title>Conteúdos POLYDEV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 </head>
 
 <body>
 
-<h2>Teste conexão POLYDEV</h2>
+<h2>Lista de Conteúdos</h2>
 
-<button id="btn">TESTAR BANCO</button>
+<table border="1">
+<thead>
+<tr>
+<th>Título</th>
+<th>Categoria</th>
+<th>Download</th>
+</tr>
+</thead>
 
-<pre id="resultado"></pre>
+<tbody id="tabela"></tbody>
+</table>
 
 <script>
-
-alert("JS iniciou")
 
 const params = new URLSearchParams(window.location.search)
 const categoria = params.get("categoria")
 
-document.getElementById("btn").addEventListener("click", async () => {
-
-alert("Consultando tabela")
+async function carregar(){
 
 let query = db.from("conteudos").select("*")
 
@@ -35,15 +40,22 @@ query = query.eq("categoria", categoria)
 
 const { data, error } = await query
 
-if(error){
-document.getElementById("resultado").innerText =
-"ERRO: " + error.message
-}else{
-document.getElementById("resultado").innerText =
-JSON.stringify(data,null,2)
+let tabela = document.getElementById("tabela")
+tabela.innerHTML = ""
+
+data.forEach(item => {
+tabela.innerHTML += `
+<tr>
+<td>${item.titulo}</td>
+<td>${item.categoria}</td>
+<td><a href="${item.arquivo_url}" target="_blank">Download</a></td>
+</tr>
+`
+})
+
 }
 
-})
+carregar()
 
 </script>
 
