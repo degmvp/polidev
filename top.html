@@ -1,58 +1,64 @@
 <!DOCTYPE html>
-<html>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Top Downloads - POLYDEV</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="config.js"></script>
 </head>
 
 <body>
 
-<h2>Top Downloads</h2>
+<h1>Top Downloads</h1>
 
 <table border="1">
-<thead>
-<tr>
-<th>Título</th>
-<th>Linguagem</th>
-<th>Tipo</th>
-<th>Downloads</th>
-</tr>
-</thead>
-
-<tbody id="tabela"></tbody>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Categoria</th>
+            <th>Downloads</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody id="tabelaTop">
+    </tbody>
 </table>
 
 <script>
+async function carregarTop() {
 
-async function carregarTop(){
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+        .order("downloads", { ascending: false })
+        .limit(10)
 
-const { data, error } = await db
-.from("conteudos")
-.select("*")
-.order("downloads", { ascending: false })
-.limit(10)
+    if (error) {
+        alert("Erro ao carregar TOP")
+        console.log(error)
+        return
+    }
 
-let tabela = document.getElementById("tabela")
+    let tabela = document.getElementById("tabelaTop")
+    tabela.innerHTML = ""
 
-data.forEach(item => {
-tabela.innerHTML += `
-<tr>
-<td>${item.titulo}</td>
-<td>${item.linguagem}</td>
-<td>${item.tipo}</td>
-<td>${item.downloads}</td>
-</tr>
-`
-})
-
+    data.forEach(item => {
+        tabela.innerHTML += `
+            <tr>
+                <td>${item.titulo}</td>
+                <td>${item.categoria}</td>
+                <td>${item.downloads}</td>
+                <td>
+                    <a href="${item.arquivo_url}" target="_blank">
+                        Download
+                    </a>
+                </td>
+            </tr>
+        `
+    })
 }
 
 carregarTop()
-
 </script>
 
 </body>
