@@ -48,7 +48,11 @@ tabela.innerHTML += `
 <tr>
 <td>${item.titulo}</td>
 <td>${item.categoria}</td>
-<td><a href="${item.arquivo_url}" target="_blank">Download</a></td>
+<td>
+<button onclick="baixar(${item.id}, '${item.arquivo_url}')">
+Download
+</button>
+</td>
 </tr>
 `
 })
