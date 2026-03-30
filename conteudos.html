@@ -63,6 +63,7 @@ carregar()
 
 </script>
 <script>
+
 async function baixar(id, url) {
 
     const { error } = await db
@@ -76,15 +77,14 @@ async function baixar(id, url) {
         ])
 
     if (error) {
-        console.log("Erro ao registrar download:", error)
+        console.log("Erro:", error)
         alert("Erro ao registrar download")
         return
     }
 
-    console.log("Download registrado com sucesso")
-
-    // abre o arquivo
-    window.open(url, "_blank")
+    // monta URL completa do GitHub Pages
+    let base = "https://degmvp.github.io/polidev/"
+    window.open(base + url, "_blank")
 }
 </script>
 </body>
