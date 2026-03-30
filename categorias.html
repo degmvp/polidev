@@ -6,13 +6,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 </head>
 
 <body>
 
-<h2>Categorias</h2>
+<h2>Categorias de Conteúdos</h2>
 
-<ul id="lista"></ul>
+<table border="1">
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Quantidade</th>
+<th>Abrir</th>
+</tr>
+</thead>
+
+<tbody id="tabela"></tbody>
+</table>
 
 <script>
 
@@ -22,26 +33,32 @@ const { data, error } = await db
 .from("conteudos")
 .select("categoria")
 
-let categorias = {}
+if(error){
+alert(error.message)
+return
+}
+
+// contar categorias
+let contagem = {}
 
 data.forEach(item => {
-if(categorias[item.categoria]){
-categorias[item.categoria]++
-}else{
-categorias[item.categoria] = 1
+if(!contagem[item.categoria]){
+contagem[item.categoria] = 0
 }
+contagem[item.categoria]++
 })
 
-let lista = document.getElementById("lista")
-lista.innerHTML = ""
+// montar tabela
+let tabela = document.getElementById("tabela")
+tabela.innerHTML = ""
 
-for(let cat in categorias){
-lista.innerHTML += `
-<li>
-<a href="conteudos.html?categoria=${cat}">
-${cat} (${categorias[cat]})
-</a>
-</li>
+for(let cat in contagem){
+tabela.innerHTML += `
+<tr>
+<td>${cat}</td>
+<td>${contagem[cat]}</td>
+<td><a href="conteudos.html?categoria=${cat}">Ver</a></td>
+</tr>
 `
 }
 
