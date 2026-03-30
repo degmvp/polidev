@@ -33,25 +33,19 @@
 async function buscar(){
 
 let linguagem = document.getElementById("ling").value
+let texto = document.getElementById("busca").value
 
-const { data, error } = await db
-.from("conteudos")
-.select("*")
-.eq("categoria", linguagem)
+let query = db.from("conteudos").select("*")
 
-let tabela = document.getElementById("tabela")
-tabela.innerHTML = ""
+if(linguagem){
+  query = query.eq("categoria", linguagem)
+}
 
-data.forEach(item => {
-tabela.innerHTML += `
-<tr>
-<td>${item.titulo}</td>
-<td>${item.categoria}</td>
-<td>${item.tipo || "-"}</td>
-<td><a href="${item.arquivo_url}" target="_blank">Download</a></td>
-</tr>
-`
-})
+if(texto){
+  query = query.ilike("titulo", "%" + texto + "%")
+}
+
+const { data, error } = await query
 
 }
 
