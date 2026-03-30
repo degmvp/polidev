@@ -65,19 +65,25 @@ carregar()
 <script>
 async function baixar(id, url) {
 
-    const { data: item } = await db
-        .from("conteudos")
-        .select("downloads")
-        .eq("id", id)
-        .single()
+    const { error } = await db
+        .from("downloads")
+        .insert([
+            {
+                conteudo_id: id,
+                email: "anonimo@polydev.com",
+                ip: "0.0.0.0"
+            }
+        ])
 
-    let total = item.downloads + 1
+    if (error) {
+        console.log("Erro ao registrar download:", error)
+        alert("Erro ao registrar download")
+        return
+    }
 
-    await db
-        .from("conteudos")
-        .update({ downloads: total })
-        .eq("id", id)
+    console.log("Download registrado com sucesso")
 
+    // abre o arquivo
     window.open(url, "_blank")
 }
 </script>
