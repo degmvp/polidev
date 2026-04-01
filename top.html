@@ -1,64 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Top Downloads - POLYDEV</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="config.js"></script>
-</head>
 
+<script src="config.js"></script>
+
+</head>
 <body>
 
-<h1>Top Downloads</h1>
+<h2>TOP DOWNLOADS</h2>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Categoria</th>
-            <th>Downloads</th>
-            <th>Download</th>
-        </tr>
-    </thead>
-    <tbody id="tabelaTop">
-    </tbody>
-</table>
+<button onclick="downloadPython()">Download Python</button>
+<button onclick="downloadHTML()">Download HTML</button>
+<button onclick="downloadSQL()">Download SQL</button>
 
 <script>
-async function carregarTop() {
-
-    const { data, error } = await db
-        .from("conteudos")
-        .select("*")
-        .order("downloads", { ascending: false })
-        .limit(10)
-
-    if (error) {
-        alert("Erro ao carregar TOP")
-        console.log(error)
-        return
-    }
-
-    let tabela = document.getElementById("tabelaTop")
-    tabela.innerHTML = ""
-
-    data.forEach(item => {
-        tabela.innerHTML += `
-            <tr>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads}</td>
-                <td>
-                    <a href="${item.arquivo_url}" target="_blank">
-                        Download
-                    </a>
-                </td>
-            </tr>
-        `
-    })
+async function downloadPython() {
+    await incrementar("python");
+    window.location.href = "zips/programas_python.zip";
 }
 
-carregarTop()
+async function downloadHTML() {
+    await incrementar("html");
+    window.location.href = "zips/programas_html.zip";
+}
+
+async function downloadSQL() {
+    await incrementar("sql");
+    window.location.href = "zips/programas_sql.zip";
+}
+
+async function incrementar(categoria) {
+    try {
+        await fetch(SUPABASE_URL + "/rest/v1/rpc/incrementar_download", {
+            method: "POST",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ cat: categoria })
+        });
+    } catch (e) {
+        console.log("Erro ao incrementar");
+    }
+}
 </script>
 
 </body>
