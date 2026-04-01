@@ -2,20 +2,64 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Top Downloads - POLYDEV</title>
+<title>TOP DOWNLOADS - POLYDEV</title>
 
 <script src="config.js"></script>
 
+<style>
+body {
+    background-color: navy;
+    color: white;
+    font-family: Arial;
+    text-align: center;
+}
+
+h1 {
+    color: lightgreen;
+}
+
+button {
+    width: 220px;
+    height: 45px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#ranking {
+    margin-top: 30px;
+    font-size: 18px;
+}
+</style>
 </head>
+
 <body>
 
-<h2>TOP DOWNLOADS</h2>
+<h1>TOP DOWNLOADS - POLYDEV</h1>
 
-<button onclick="downloadPython()">Download Python</button>
-<button onclick="downloadHTML()">Download HTML</button>
+<button onclick="downloadPython()">Download Python</button><br>
+<button onclick="downloadHTML()">Download HTML</button><br>
 <button onclick="downloadSQL()">Download SQL</button>
 
+<div id="ranking"></div>
+
 <script>
+async function incrementar(categoria) {
+    try {
+        await fetch(SUPABASE_URL + "/rest/v1/rpc/incrementar_download", {
+            method: "POST",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ cat: categoria })
+        });
+    } catch (e) {
+        console.log("Erro ao incrementar contador");
+    }
+}
+
 async function downloadPython() {
     await incrementar("python");
     window.location.href = "zips/programas_python.zip";
@@ -31,21 +75,31 @@ async function downloadSQL() {
     window.location.href = "zips/programas_sql.zip";
 }
 
-async function incrementar(categoria) {
+async function carregarRanking() {
     try {
-        await fetch(SUPABASE_URL + "/rest/v1/rpc/incrementar_download", {
-            method: "POST",
+        let resposta = await fetch(SUPABASE_URL + "/rest/v1/categorias?select=nome,downloads&order=downloads.desc", {
             headers: {
                 "apikey": SUPABASE_KEY,
-                "Authorization": "Bearer " + SUPABASE_KEY,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ cat: categoria })
+                "Authorization": "Bearer " + SUPABASE_KEY
+            }
         });
+
+        let dados = await resposta.json();
+
+        let html = "<h2>Ranking Downloads</h2>";
+
+        dados.forEach((item, i) => {
+            html += (i+1) + "º - " + item.nome + " : " + item.downloads + "<br>";
+        });
+
+        document.getElementById("ranking").innerHTML = html;
+
     } catch (e) {
-        console.log("Erro ao incrementar");
+        console.log("Erro ao carregar ranking");
     }
 }
+
+carregarRanking();
 </script>
 
 </body>
