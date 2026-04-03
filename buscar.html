@@ -50,6 +50,24 @@ const { data, error } = await query
 }
 
 </script>
+<script>
+async function baixar(id, url) {
 
+    const { data: item } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", id)
+        .single()
+
+    let total = item.downloads + 1
+
+    await db
+        .from("conteudos")
+        .update({ downloads: total })
+        .eq("id", id)
+
+    window.open(url, "_blank")
+}
+</script>
 </body>
 </html>

@@ -44,17 +44,17 @@ let tabela = document.getElementById("tabela")
 tabela.innerHTML = ""
 
 data.forEach(item => {
-tabela.innerHTML += `
-<tr>
-<td>${item.titulo}</td>
-<td>${item.categoria}</td>
-<td>
-<button onclick="baixar(${item.id}, '${item.arquivo_url}')">
-Download
-</button>
-</td>
-</tr>
-`
+    tabela.innerHTML += `
+    <tr>
+        <td>${item.titulo}</td>
+        <td>${item.categoria}</td>
+        <td>
+            <button onclick="baixar(${item.id}, '${item.arquivo_url}')">
+            Download
+            </button>
+        </td>
+    </tr>
+    `
 })
 
 }
@@ -85,6 +85,25 @@ async function baixar(id, url) {
     // monta URL completa do GitHub Pages
     let base = "https://degmvp.github.io/polidev/"
     window.open(base + url, "_blank")
+}
+</script>
+<script>
+async function baixar(id, url) {
+
+    const { data: item } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", id)
+        .single()
+
+    let total = item.downloads + 1
+
+    await db
+        .from("conteudos")
+        .update({ downloads: total })
+        .eq("id", id)
+
+    window.open(url, "_blank")
 }
 </script>
 </body>
