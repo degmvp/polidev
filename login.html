@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<button onclick="logout()">Sair</button>
+<head>
+<meta charset="UTF-8">
+<title>Login Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<script>
+
+if(localStorage.getItem("logado") !== "sim"){
+    alert("Acesso negado")
+    window.location.href = "login.html"
+}
+
+</script>
+<h2>Login Administrativo</h2>
+
+<input type="text" id="usuario" placeholder="Usuário"><br><br>
+<input type="password" id="senha" placeholder="Senha"><br><br>
+
+<button onclick="login()">Entrar</button>
+
+<p id="msg"></p>
+
+<script>
+
+function login(){
+
+    let user = document.getElementById("usuario").value
+    let pass = document.getElementById("senha").value
+
+    // LOGIN SIMPLES (v1.0)
+    if(user === "admin" && pass === "123"){
+
+        // salva sessão
+        localStorage.setItem("logado", "sim")
+
+        window.location.href = "admin.html"
+
+    } else {
+
+        document.getElementById("msg").innerText = "Login inválido"
+    }
+}
+
+</script>
+
+</body>
+</html>
+<script>
+function logout(){
+    localStorage.removeItem("logado")
+    window.location.href = "login.html"
+}
+</script>
