@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Login Admin</title>
-
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -23,8 +21,8 @@
 
 function login(){
 
-    let user = document.getElementById("usuario").value.trim()
-    let pass = document.getElementById("senha").value.trim()
+    let user = document.getElementById("usuario").value
+    let pass = document.getElementById("senha").value
 
     if(user === "admin" && pass === "123"){
 
@@ -33,7 +31,6 @@ function login(){
         window.location.href = "admin.html"
 
     } else {
-
         document.getElementById("msg").innerText = "Login inválido"
     }
 }
