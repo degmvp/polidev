@@ -13,7 +13,7 @@
 
 <body>
 
-<!-- 🔒 PROTEÇÃO (SOMENTE AQUI) -->
+<!-- 🔒 PROTEÇÃO -->
 <script>
 if(localStorage.getItem("logado") !== "sim"){
     alert("Acesso negado")
@@ -31,9 +31,10 @@ if(localStorage.getItem("logado") !== "sim"){
 <input type="text" id="categoria" placeholder="Categoria"><br><br>
 <input type="text" id="url" placeholder="URL do arquivo"><br><br>
 
-<button onclick="inserir()">Inserir</button>
+<button id="btnSalvar">Inserir</button>
 
 <p id="msg"></p>
+
 <h3>Conteúdos cadastrados</h3>
 
 <table border="1">
@@ -49,6 +50,7 @@ if(localStorage.getItem("logado") !== "sim"){
 
 <tbody id="lista"></tbody>
 </table>
+
 <script>
 
 // CARREGAR LISTA
@@ -59,23 +61,28 @@ async function carregar(){
         .select("*")
         .order("id", { ascending: true })
 
+    console.log("DATA:", data)
+    console.log("ERROR:", error)
+
     let tabela = document.getElementById("lista")
     tabela.innerHTML = ""
 
-    data.forEach(item => {
-        tabela.innerHTML += `
-        <tr>
-            <td>${item.id}</td>
-            <td>${item.titulo}</td>
-            <td>${item.categoria}</td>
-            <td>${item.downloads}</td>
-            <td>
-                <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
-                <button onclick="excluir(${item.id})">Excluir</button>
-            </td>
-        </tr>
-        `
-    })
+    if(data){
+        data.forEach(item => {
+            tabela.innerHTML += `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.titulo}</td>
+                <td>${item.categoria}</td>
+                <td>${item.downloads}</td>
+                <td>
+                    <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
+                    <button onclick="excluir(${item.id})">Excluir</button>
+                </td>
+            </tr>
+            `
+        })
+    }
 }
 
 // INSERIR
@@ -100,6 +107,7 @@ async function inserir(){
         alert("Erro ao inserir")
     } else {
         alert("Inserido com sucesso")
+        limpar()
         carregar()
     }
 }
@@ -118,7 +126,6 @@ async function excluir(id){
 
         console.log(error)
 
-        // 🔥 TRATAMENTO DA FK
         if(error.message.includes("foreign key")){
             alert("Não é possível excluir: este conteúdo possui downloads")
         } else {
@@ -130,15 +137,14 @@ async function excluir(id){
         carregar()
     }
 }
-}
-// EDITAR (preenche o formulário)
+
+// EDITAR
 function editar(id, titulo, categoria, url){
 
     document.getElementById("titulo").value = titulo
     document.getElementById("categoria").value = categoria
     document.getElementById("url").value = url
 
-    // guarda id para update
     document.getElementById("titulo").dataset.id = id
 }
 
@@ -169,7 +175,7 @@ async function atualizar(){
     }
 }
 
-// LIMPAR FORM
+// LIMPAR
 function limpar(){
     document.getElementById("titulo").value = ""
     document.getElementById("categoria").value = ""
@@ -183,8 +189,8 @@ function logout(){
     window.location.href = "login.html"
 }
 
-// ALTERAR BOTÃO DINAMICAMENTE
-document.querySelector("button[onclick='inserir()']").onclick = function(){
+// BOTÃO INSERIR/ATUALIZAR
+document.getElementById("btnSalvar").onclick = function(){
 
     let id = document.getElementById("titulo").dataset.id
 
@@ -196,30 +202,9 @@ document.querySelector("button[onclick='inserir()']").onclick = function(){
 }
 
 // INICIALIZA
-async function carregar(){
-
-    const { data, error } = await db
-        .from("conteudos")
-        .select("*")
-
-    console.log("DATA:", data)
-    console.log("ERROR:", error)
-
-    let tabela = document.getElementById("lista")
-    tabela.innerHTML = ""
-
-    data.forEach(item => {
-        tabela.innerHTML += `
-        <tr>
-            <td>${item.id}</td>
-            <td>${item.titulo}</td>
-            <td>${item.categoria}</td>
-            <td>${item.downloads}</td>
-        </tr>
-        `
-    })
-}
+carregar()
 
 </script>
+
 </body>
 </html>
