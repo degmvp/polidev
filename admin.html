@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Admin - POLYDEV</title>
+<title>Admin POLYDEV</title>
+
+<link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
@@ -10,73 +12,58 @@
 </head>
 
 <body>
+
 <script>
-
-let status = localStorage.getItem("logado")
-
-if(status !== "sim"){
+// PROTEÇÃO (SÓ AQUI)
+if(localStorage.getItem("logado") !== "sim"){
     alert("Acesso negado")
     window.location.href = "login.html"
 }
-
 </script>
 
-<h2>Administração - Inserir Conteúdo</h2>
+<h2>Administração de Conteúdos</h2>
 
-<label>Título:</label><br>
-<input type="text" id="titulo"><br><br>
+<button onclick="logout()">Sair</button>
 
-<label>Descrição:</label><br>
-<textarea id="descricao"></textarea><br><br>
+<br><br>
 
-<label>Categoria:</label><br>
-<select id="categoria">
-  <option value="python">Python</option>
-  <option value="sql">SQL</option>
-  <option value="html">HTML</option>
-</select><br><br>
+<input type="text" id="titulo" placeholder="Título"><br><br>
+<input type="text" id="categoria" placeholder="Categoria"><br><br>
+<input type="text" id="url" placeholder="URL do arquivo"><br><br>
 
-<label>URL do Arquivo:</label><br>
-<input type="text" id="arquivo"><br><br>
-
-<button onclick="salvar()">Salvar</button>
+<button onclick="inserir()">Inserir</button>
 
 <p id="msg"></p>
 
 <script>
 
-async function salvar(){
+async function inserir(){
 
-let titulo = document.getElementById("titulo").value
-let descricao = document.getElementById("descricao").value
-let categoria = document.getElementById("categoria").value
-let arquivo = document.getElementById("arquivo").value
+    let titulo = document.getElementById("titulo").value
+    let categoria = document.getElementById("categoria").value
+    let url = document.getElementById("url").value
 
-const { error } = await db
-.from("conteudos")
-.insert([
-  {
-    titulo: titulo,
-    descricao: descricao,
-    categoria: categoria,
-    arquivo_url: arquivo,
-    ativo: true,
-    downloads: 0
-  }
-])
+    const { error } = await db
+        .from("conteudos")
+        .insert([
+            {
+                titulo: titulo,
+                categoria: categoria,
+                arquivo_url: url,
+                downloads: 0
+            }
+        ])
 
-if(error){
-document.getElementById("msg").innerText = "Erro: " + error.message
-return
+    if(error){
+        document.getElementById("msg").innerText = "Erro ao inserir"
+    } else {
+        document.getElementById("msg").innerText = "Inserido com sucesso"
+    }
 }
 
-document.getElementById("msg").innerText = "Inserido com sucesso!"
-
-// limpa campos
-document.getElementById("titulo").value = ""
-document.getElementById("descricao").value = ""
-document.getElementById("arquivo").value = ""
-
+function logout(){
+    localStorage.removeItem("logado")
+    window.location.href = "login.html"
 }
 
 </script>
