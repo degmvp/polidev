@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Estatísticas POLYDEV</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+</head>
+
+<body>
+
+<h1>Estatísticas POLYDEV</h1>
+
+<h2>Resumo</h2>
+<p id="total_conteudos"></p>
+<p id="total_downloads"></p>
+<p id="total_categorias"></p>
+
+<h2>Top 5 Downloads</h2>
+
+<table border="1">
+<thead>
+<tr>
+<th>Título</th>
+<th>Categoria</th>
+<th>Downloads</th>
+</tr>
+</thead>
+
+<tbody id="top"></tbody>
+</table>
+
+<script>
+
+async function carregar(){
+
+    // TOTAL DE CONTEÚDOS
+    const { count: totalConteudos } = await db
+        .from("conteudos")
+        .select("*", { count: "exact", head: true })
+
+    document.getElementById("total_conteudos").innerHTML =
+        "Total de conteúdos: " + totalConteudos
+
+
+    // TOTAL DE DOWNLOADS
+    const { data: lista } = await db
+        .from("conteudos")
+        .select("downloads")
+
+    let totalDownloads = 0
+
+    lista.forEach(item => {
+        totalDownloads += item.downloads
+    })
+
+    document.getElementById("total_downloads").innerHTML =
+        "Total de downloads: " + totalDownloads
+
+
+    // TOTAL DE CATEGORIAS
+    const { count: totalCategorias } = await db
+        .from("categorias")
+        .select("*", { count: "exact", head: true })
+
+    document.getElementById("total_categorias").innerHTML =
+        "Total de categorias: " + totalCategorias
+
+
+    // TOP 5 DOWNLOADS
+    const { data: top } = await db
+        .from("conteudos")
+        .select("*")
+        .order("downloads", { ascending: false })
+        .limit(5)
+
+    let tabela = document.getElementById("top")
+    tabela.innerHTML = ""
+
+    top.forEach(item => {
+        tabela.innerHTML += `
+        <tr>
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.downloads}</td>
+        </tr>
+        `
+    })
+
+}
+
+carregar()
+
+</script>
+
+</body>
+</html>
