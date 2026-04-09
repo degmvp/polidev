@@ -115,7 +115,7 @@ async function excluir(id){
         .eq("id", id)
 
     if(error){
-        console.log(error)
+        console.log("ERRO DELETE:", error)
         alert("Erro ao excluir")
     } else {
         alert("Excluído com sucesso")
