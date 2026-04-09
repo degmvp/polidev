@@ -4,21 +4,22 @@
 <meta charset="UTF-8">
 <title>Estatísticas POLYDEV</title>
 
+<link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
-<h1>Estatísticas POLYDEV</h1>
+<h2>📊 Estatísticas do Sistema</h2>
 
-<h2>Resumo</h2>
-<p id="total_conteudos"></p>
-<p id="total_downloads"></p>
-<p id="total_categorias"></p>
+<h3 id="total">Total de downloads: 0</h3>
 
-<h2>Top 5 Downloads</h2>
+<h3>🏆 Top Downloads</h3>
 
 <table border="1">
 <thead>
@@ -29,69 +30,74 @@
 </tr>
 </thead>
 
-<tbody id="top"></tbody>
+<tbody id="ranking"></tbody>
 </table>
+
+<br><br>
+
+<canvas id="grafico" width="600" height="300"></canvas>
 
 <script>
 
-async function carregar(){
+async function carregarEstatisticas(){
 
-    // TOTAL DE CONTEÚDOS
-    const { count: totalConteudos } = await db
-        .from("conteudos")
-        .select("*", { count: "exact", head: true })
+    // TOTAL GERAL
+    const { data: totalData } = await db
+        .from("downloads")
+        .select("*")
 
-    document.getElementById("total_conteudos").innerHTML =
-        "Total de conteúdos: " + totalConteudos
+    let total = totalData ? totalData.length : 0
+    document.getElementById("total").innerText = "Total de downloads: " + total
 
-
-    // TOTAL DE DOWNLOADS
-    const { data: lista } = await db
-        .from("conteudos")
-        .select("downloads")
-
-    let totalDownloads = 0
-
-    lista.forEach(item => {
-        totalDownloads += item.downloads
-    })
-
-    document.getElementById("total_downloads").innerHTML =
-        "Total de downloads: " + totalDownloads
-
-
-    // TOTAL DE CATEGORIAS
-    const { count: totalCategorias } = await db
-        .from("categorias")
-        .select("*", { count: "exact", head: true })
-
-    document.getElementById("total_categorias").innerHTML =
-        "Total de categorias: " + totalCategorias
-
-
-    // TOP 5 DOWNLOADS
-    const { data: top } = await db
+    // TOP DOWNLOADS
+    const { data } = await db
         .from("conteudos")
         .select("*")
         .order("downloads", { ascending: false })
-        .limit(5)
+        .limit(10)
 
-    let tabela = document.getElementById("top")
+    let tabela = document.getElementById("ranking")
     tabela.innerHTML = ""
 
-    top.forEach(item => {
-        tabela.innerHTML += `
-        <tr>
-            <td>${item.titulo}</td>
-            <td>${item.categoria}</td>
-            <td>${item.downloads}</td>
-        </tr>
-        `
-    })
+    let labels = []
+    let valores = []
 
+    if(data){
+        data.forEach(item => {
+
+            tabela.innerHTML += `
+            <tr>
+                <td>${item.titulo}</td>
+                <td>${item.categoria}</td>
+                <td>${item.downloads}</td>
+            </tr>
+            `
+
+            labels.push(item.titulo)
+            valores.push(item.downloads)
+        })
+    }
+
+    // GRÁFICO
+    const ctx = document.getElementById('grafico').getContext('2d')
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Downloads',
+                data: valores
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    })
 }
 
-carregar()
+// INICIALIZA
+carregarEstatisticas()
 
 </script>
 
