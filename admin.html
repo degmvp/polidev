@@ -115,12 +115,13 @@ async function excluir(id){
         .eq("id", id)
 
     if(error){
+        console.log(error)
         alert("Erro ao excluir")
     } else {
+        alert("Excluído com sucesso")
         carregar()
     }
 }
-
 // EDITAR (preenche o formulário)
 function editar(id, titulo, categoria, url){
 
