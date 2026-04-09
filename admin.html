@@ -196,7 +196,29 @@ document.querySelector("button[onclick='inserir()']").onclick = function(){
 }
 
 // INICIALIZA
-carregar()
+async function carregar(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+
+    console.log("DATA:", data)
+    console.log("ERROR:", error)
+
+    let tabela = document.getElementById("lista")
+    tabela.innerHTML = ""
+
+    data.forEach(item => {
+        tabela.innerHTML += `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.downloads}</td>
+        </tr>
+        `
+    })
+}
 
 </script>
 </body>
