@@ -28,17 +28,16 @@ if(localStorage.getItem("logado") !== "sim"){
 <p id="msg"></p>
 
 <script>
-
 function login(){
 
-    let user = document.getElementById("usuario").value
-    let pass = document.getElementById("senha").value
+    let user = document.getElementById("usuario").value.trim()
+    let pass = document.getElementById("senha").value.trim()
 
-    // LOGIN SIMPLES (v1.0)
     if(user === "admin" && pass === "123"){
 
-        // salva sessão
         localStorage.setItem("logado", "sim")
+
+        alert("Login OK")
 
         window.location.href = "admin.html"
 
@@ -47,7 +46,6 @@ function login(){
         document.getElementById("msg").innerText = "Login inválido"
     }
 }
-
 </script>
 
 </body>

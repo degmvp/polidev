@@ -10,6 +10,16 @@
 </head>
 
 <body>
+<script>
+
+let status = localStorage.getItem("logado")
+
+if(status !== "sim"){
+    alert("Acesso negado")
+    window.location.href = "login.html"
+}
+
+</script>
 
 <h2>Administração - Inserir Conteúdo</h2>
 
