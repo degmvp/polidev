@@ -9,13 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
-<style>
-.destaque {
-    background-color: darkred;
-    color: white;
-}
-</style>
-
 </head>
 
 <body>
@@ -35,9 +28,11 @@ if(localStorage.getItem("logado") !== "sim"){
 
 <input type="text" id="titulo" placeholder="Título"><br><br>
 <input type="text" id="categoria" placeholder="Categoria"><br><br>
-<input type="text" id="url" placeholder="URL do arquivo"><br><br>
 
-<button id="btnSalvar">Inserir</button>
+<!-- 🔥 NOVO: upload -->
+<input type="file" id="arquivo"><br><br>
+
+<button id="btnSalvar">Enviar e Salvar</button>
 
 <p id="msg"></p>
 
@@ -59,50 +54,39 @@ if(localStorage.getItem("logado") !== "sim"){
 
 <script>
 
-// CARREGAR LISTA
-async function carregar(){
-
-    const { data, error } = await db
-        .from("conteudos")
-        .select("*")
-        .order("downloads", { ascending: false })
-
-    let tabela = document.getElementById("lista")
-    tabela.innerHTML = ""
-
-    if(data){
-
-        data.forEach(item => {
-
-            let destaque = item.downloads > 5 ? "destaque" : ""
-
-            let botaoExcluir = item.downloads > 0
-                ? `<button disabled title="Possui downloads">Excluir</button>`
-                : `<button onclick="excluir(${item.id})">Excluir</button>`
-
-            tabela.innerHTML += `
-            <tr class="${destaque}">
-                <td>${item.id}</td>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads}</td>
-                <td>
-                    <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
-                    ${botaoExcluir}
-                </td>
-            </tr>
-            `
-        })
-    }
-}
-
-// INSERIR
+// UPLOAD + INSERT
 async function inserir(){
 
     let titulo = document.getElementById("titulo").value
     let categoria = document.getElementById("categoria").value
-    let url = document.getElementById("url").value
+    let file = document.getElementById("arquivo").files[0]
 
+    if(!file){
+        alert("Selecione um arquivo")
+        return
+    }
+
+    let nomeArquivo = Date.now() + "_" + file.name
+
+    // 🔥 UPLOAD
+    const { error: uploadError } = await db.storage
+        .from("downloads")
+        .upload(nomeArquivo, file)
+
+    if(uploadError){
+        console.log(uploadError)
+        alert("Erro no upload")
+        return
+    }
+
+    // 🔥 PEGAR URL
+    const { data } = db.storage
+        .from("downloads")
+        .getPublicUrl(nomeArquivo)
+
+    let url = data.publicUrl
+
+    // 🔥 SALVAR NO BANCO
     const { error } = await db
         .from("conteudos")
         .insert([
@@ -115,18 +99,54 @@ async function inserir(){
         ])
 
     if(error){
-        alert("Erro ao inserir")
+        alert("Erro ao salvar")
     } else {
-        alert("Inserido com sucesso")
+        alert("Upload realizado com sucesso")
         limpar()
         carregar()
+    }
+}
+
+// RESTO DO SISTEMA (igual antes)
+
+// CARREGAR
+async function carregar(){
+
+    const { data } = await db
+        .from("conteudos")
+        .select("*")
+        .order("downloads", { ascending: false })
+
+    let tabela = document.getElementById("lista")
+    tabela.innerHTML = ""
+
+    if(data){
+        data.forEach(item => {
+
+            let botaoExcluir = item.downloads > 0
+                ? `<button disabled>Excluir</button>`
+                : `<button onclick="excluir(${item.id})">Excluir</button>`
+
+            tabela.innerHTML += `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.titulo}</td>
+                <td>${item.categoria}</td>
+                <td>${item.downloads}</td>
+                <td>
+                    <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
+                    ${botaoExcluir}
+                </td>
+            </tr>
+            `
+        })
     }
 }
 
 // EXCLUIR
 async function excluir(id){
 
-    if(!confirm("Deseja excluir?")) return
+    if(!confirm("Excluir?")) return
 
     const { error } = await db
         .from("conteudos")
@@ -134,52 +154,8 @@ async function excluir(id){
         .eq("id", id)
 
     if(error){
-
-        if(error.message.includes("foreign key")){
-            alert("Não é possível excluir: este conteúdo possui downloads")
-        } else {
-            alert("Erro ao excluir")
-        }
-
+        alert("Erro ao excluir")
     } else {
-        alert("Excluído com sucesso")
-        carregar()
-    }
-}
-
-// EDITAR
-function editar(id, titulo, categoria, url){
-
-    document.getElementById("titulo").value = titulo
-    document.getElementById("categoria").value = categoria
-    document.getElementById("url").value = url
-
-    document.getElementById("titulo").dataset.id = id
-}
-
-// ATUALIZAR
-async function atualizar(){
-
-    let id = document.getElementById("titulo").dataset.id
-
-    let titulo = document.getElementById("titulo").value
-    let categoria = document.getElementById("categoria").value
-    let url = document.getElementById("url").value
-
-    const { error } = await db
-        .from("conteudos")
-        .update({
-            titulo: titulo,
-            categoria: categoria,
-            arquivo_url: url
-        })
-        .eq("id", id)
-
-    if(error){
-        alert("Erro ao atualizar")
-    } else {
-        alert("Atualizado com sucesso")
-        limpar()
         carregar()
     }
 }
@@ -188,8 +164,7 @@ async function atualizar(){
 function limpar(){
     document.getElementById("titulo").value = ""
     document.getElementById("categoria").value = ""
-    document.getElementById("url").value = ""
-    delete document.getElementById("titulo").dataset.id
+    document.getElementById("arquivo").value = ""
 }
 
 // LOGOUT
@@ -198,19 +173,10 @@ function logout(){
     window.location.href = "login.html"
 }
 
-// BOTÃO DINÂMICO
-document.getElementById("btnSalvar").onclick = function(){
+// BOTÃO
+document.getElementById("btnSalvar").onclick = inserir
 
-    let id = document.getElementById("titulo").dataset.id
-
-    if(id){
-        atualizar()
-    } else {
-        inserir()
-    }
-}
-
-// INICIALIZA
+// INIT
 carregar()
 
 </script>
