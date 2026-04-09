@@ -34,9 +34,51 @@ if(localStorage.getItem("logado") !== "sim"){
 <button onclick="inserir()">Inserir</button>
 
 <p id="msg"></p>
+<h3>Conteúdos cadastrados</h3>
 
+<table border="1">
+<thead>
+<tr>
+<th>ID</th>
+<th>Título</th>
+<th>Categoria</th>
+<th>Downloads</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody id="lista"></tbody>
+</table>
 <script>
 
+// CARREGAR LISTA
+async function carregar(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+        .order("id", { ascending: true })
+
+    let tabela = document.getElementById("lista")
+    tabela.innerHTML = ""
+
+    data.forEach(item => {
+        tabela.innerHTML += `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.downloads}</td>
+            <td>
+                <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
+                <button onclick="excluir(${item.id})">Excluir</button>
+            </td>
+        </tr>
+        `
+    })
+}
+
+// INSERIR
 async function inserir(){
 
     let titulo = document.getElementById("titulo").value
@@ -55,18 +97,97 @@ async function inserir(){
         ])
 
     if(error){
-        document.getElementById("msg").innerText = "Erro ao inserir"
+        alert("Erro ao inserir")
     } else {
-        document.getElementById("msg").innerText = "Inserido com sucesso"
+        alert("Inserido com sucesso")
+        carregar()
     }
 }
 
+// EXCLUIR
+async function excluir(id){
+
+    if(!confirm("Deseja excluir?")) return
+
+    const { error } = await db
+        .from("conteudos")
+        .delete()
+        .eq("id", id)
+
+    if(error){
+        alert("Erro ao excluir")
+    } else {
+        carregar()
+    }
+}
+
+// EDITAR (preenche o formulário)
+function editar(id, titulo, categoria, url){
+
+    document.getElementById("titulo").value = titulo
+    document.getElementById("categoria").value = categoria
+    document.getElementById("url").value = url
+
+    // guarda id para update
+    document.getElementById("titulo").dataset.id = id
+}
+
+// ATUALIZAR
+async function atualizar(){
+
+    let id = document.getElementById("titulo").dataset.id
+
+    let titulo = document.getElementById("titulo").value
+    let categoria = document.getElementById("categoria").value
+    let url = document.getElementById("url").value
+
+    const { error } = await db
+        .from("conteudos")
+        .update({
+            titulo: titulo,
+            categoria: categoria,
+            arquivo_url: url
+        })
+        .eq("id", id)
+
+    if(error){
+        alert("Erro ao atualizar")
+    } else {
+        alert("Atualizado com sucesso")
+        limpar()
+        carregar()
+    }
+}
+
+// LIMPAR FORM
+function limpar(){
+    document.getElementById("titulo").value = ""
+    document.getElementById("categoria").value = ""
+    document.getElementById("url").value = ""
+    delete document.getElementById("titulo").dataset.id
+}
+
+// LOGOUT
 function logout(){
     localStorage.removeItem("logado")
     window.location.href = "login.html"
 }
 
-</script>
+// ALTERAR BOTÃO DINAMICAMENTE
+document.querySelector("button[onclick='inserir()']").onclick = function(){
 
+    let id = document.getElementById("titulo").dataset.id
+
+    if(id){
+        atualizar()
+    } else {
+        inserir()
+    }
+}
+
+// INICIALIZA
+carregar()
+
+</script>
 </body>
 </html>
