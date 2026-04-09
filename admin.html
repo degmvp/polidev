@@ -115,12 +115,21 @@ async function excluir(id){
         .eq("id", id)
 
     if(error){
-        console.log("ERRO DELETE:", error)
-        alert("Erro ao excluir")
+
+        console.log(error)
+
+        // 🔥 TRATAMENTO DA FK
+        if(error.message.includes("foreign key")){
+            alert("Não é possível excluir: este conteúdo possui downloads")
+        } else {
+            alert("Erro ao excluir")
+        }
+
     } else {
         alert("Excluído com sucesso")
         carregar()
     }
+}
 }
 // EDITAR (preenche o formulário)
 function editar(id, titulo, categoria, url){
