@@ -9,11 +9,17 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
+<style>
+.destaque {
+    background-color: darkred;
+    color: white;
+}
+</style>
+
 </head>
 
 <body>
 
-<!-- 🔒 PROTEÇÃO -->
 <script>
 if(localStorage.getItem("logado") !== "sim"){
     alert("Acesso negado")
@@ -59,25 +65,30 @@ async function carregar(){
     const { data, error } = await db
         .from("conteudos")
         .select("*")
-        .order("id", { ascending: true })
-
-    console.log("DATA:", data)
-    console.log("ERROR:", error)
+        .order("downloads", { ascending: false })
 
     let tabela = document.getElementById("lista")
     tabela.innerHTML = ""
 
     if(data){
+
         data.forEach(item => {
+
+            let destaque = item.downloads > 5 ? "destaque" : ""
+
+            let botaoExcluir = item.downloads > 0
+                ? `<button disabled title="Possui downloads">Excluir</button>`
+                : `<button onclick="excluir(${item.id})">Excluir</button>`
+
             tabela.innerHTML += `
-            <tr>
+            <tr class="${destaque}">
                 <td>${item.id}</td>
                 <td>${item.titulo}</td>
                 <td>${item.categoria}</td>
                 <td>${item.downloads}</td>
                 <td>
                     <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
-                    <button onclick="excluir(${item.id})">Excluir</button>
+                    ${botaoExcluir}
                 </td>
             </tr>
             `
@@ -123,8 +134,6 @@ async function excluir(id){
         .eq("id", id)
 
     if(error){
-
-        console.log(error)
 
         if(error.message.includes("foreign key")){
             alert("Não é possível excluir: este conteúdo possui downloads")
@@ -189,7 +198,7 @@ function logout(){
     window.location.href = "login.html"
 }
 
-// BOTÃO INSERIR/ATUALIZAR
+// BOTÃO DINÂMICO
 document.getElementById("btnSalvar").onclick = function(){
 
     let id = document.getElementById("titulo").dataset.id
