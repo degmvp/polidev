@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV - Conteúdos</title>
+
+<style>
+body {
+    background-color: yellowgreen;
+    font-family: Arial;
+    margin: 0;
+}
+
+/* MENU */
+.menu {
+    display: flex;
+    background: black;
+    padding: 10px;
+}
+
+.menu div {
+    color: white;
+    margin-right: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.menu div:hover {
+    color: yellowgreen;
+}
+
+/* CONTEÚDO */
+.content {
+    padding: 20px;
+}
+
+.section {
+    display: none;
+}
+
+code {
+    background: white;
+    display: block;
+    padding: 10px;
+    margin: 10px 0;
+}
+</style>
+
+<script>
+function showSection(id) {
+    var sections = document.querySelectorAll(".section");
+    sections.forEach(sec => sec.style.display = "none");
+
+    document.getElementById(id).style.display = "block";
+}
+</script>
+
+</head>
+<body>
+
+<!-- MENU -->
+<div class="menu">
+    <div onclick="showSection('scripting')">Scripting</div>
+    <div onclick="showSection('automation')">Automation</div>
+    <div onclick="showSection('data')">Data Analysis</div>
+    <div onclick="showSection('cloud')">Cloud</div>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="content">
+
+<!-- SCRIPTING -->
+<div id="scripting" class="section">
+<h2>📌 Scripting</h2>
+
+<p>Automação com scripts.</p>
+
+<h3>Exemplo Python</h3>
+<code>
+for i in range(3):
+    print(i)
+</code>
+
+</div>
+
+<!-- AUTOMATION -->
+<div id="automation" class="section">
+<h2>⚙️ Automation</h2>
+
+<p>Automatização de tarefas repetitivas.</p>
+
+<h3>Exemplo</h3>
+<code>
+echo "Automação em execução"
+</code>
+
+</div>
+
+<!-- DATA -->
+<div id="data" class="section">
+<h2>📊 Data Analysis</h2>
+
+<p>Análise de dados com Python.</p>
+
+<h3>Exemplo Pandas</h3>
+<code>
+import pandas as pd
+df = pd.read_csv("dados.csv")
+print(df.head())
+</code>
+
+</div>
+
+<!-- CLOUD -->
+<div id="cloud" class="section">
+<h2>☁️ Cloud Computing</h2>
+
+<p>Uso de serviços na nuvem.</p>
+
+<h3>Exemplo</h3>
+<code>
+aws s3 ls
+</code>
+
+</div>
+
+</div>
+
+</body>
+</html>

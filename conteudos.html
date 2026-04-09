@@ -18,7 +18,8 @@
 <tr>
 <th>Título</th>
 <th>Categoria</th>
-<th>Download</th>
+<th>Downloads</th>
+<th>Ação</th>
 </tr>
 </thead>
 
@@ -27,84 +28,87 @@
 
 <script>
 
+// pegar categoria da URL
 const params = new URLSearchParams(window.location.search)
 const categoria = params.get("categoria")
 
 async function carregar(){
 
-let query = db.from("conteudos").select("*")
+    let query = db.from("conteudos").select("*")
 
-if(categoria){
-query = query.eq("categoria", categoria)
-}
+    if(categoria){
+        query = query.eq("categoria", categoria)
+    }
 
-const { data, error } = await query
+    const { data, error } = await query
 
-let tabela = document.getElementById("tabela")
-tabela.innerHTML = ""
+    if(error){
+        console.log(error)
+        alert("Erro ao carregar dados")
+        return
+    }
 
-data.forEach(item => {
-    tabela.innerHTML += `
-    <tr>
-        <td>${item.titulo}</td>
-        <td>${item.categoria}</td>
-        <td>
-            <button onclick="baixar(${item.id}, '${item.arquivo_url}')">
-            Download
-            </button>
-        </td>
-    </tr>
-    `
-})
+    let tabela = document.getElementById("tabela")
+    tabela.innerHTML = ""
+
+    data.forEach(item => {
+        tabela.innerHTML += `
+        <tr>
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.downloads}</td>
+            <td>
+                <button onclick="baixar(${item.id}, '${item.arquivo_url}')">
+                Download
+                </button>
+            </td>
+        </tr>
+        `
+    })
 
 }
 
 carregar()
 
 </script>
+
 <script>
 
+// FUNÇÃO FINAL 1.0
 async function baixar(id, url) {
 
-    const { error } = await db
-        .from("downloads")
-        .insert([
-            {
-                conteudo_id: id,
-                email: "anonimo@polydev.com",
-                ip: "0.0.0.0"
-            }
-        ])
-
-    if (error) {
-        console.log("Erro:", error)
-        alert("Erro ao registrar download")
-        return
-    }
-
-    // monta URL completa do GitHub Pages
-    let base = "https://degmvp.github.io/polidev/"
-    window.open(base + url, "_blank")
-}
-</script>
-<script>
-async function baixar(id, url) {
-
-    const { data: item } = await db
+    // buscar downloads atuais
+    const { data: item, error } = await db
         .from("conteudos")
         .select("downloads")
         .eq("id", id)
         .single()
 
+    if(error){
+        console.log(error)
+        alert("Erro ao buscar downloads")
+        return
+    }
+
     let total = item.downloads + 1
 
-    await db
+    // atualizar contador
+    const { error: erroUpdate } = await db
         .from("conteudos")
         .update({ downloads: total })
         .eq("id", id)
 
+    if(erroUpdate){
+        console.log(erroUpdate)
+        alert("Erro ao atualizar downloads")
+        return
+    }
+
+    // abrir arquivo
     window.open(url, "_blank")
 }
+
 </script>
+
 </body>
 </html>
