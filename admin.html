@@ -133,10 +133,11 @@ async function carregar(){
                 <td>${item.titulo}</td>
                 <td>${item.categoria}</td>
                 <td>${item.downloads}</td>
-                <td>
-                    <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
-                    ${botaoExcluir}
-                </td>
+            <td>
+            <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
+            <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
+            ${botaoExcluir}
+            </td>
             </tr>
             `
         })
