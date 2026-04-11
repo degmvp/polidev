@@ -54,9 +54,17 @@ if(localStorage.getItem("logado") !== "sim"){
 
 <script>
 
-// UPLOAD + INSERT
 async function inserir(){
 
+    let id = document.getElementById("titulo").dataset.id
+
+    // 🔥 SE TEM ID → UPDATE
+    if(id){
+        atualizar()
+        return
+    }
+
+    // 🔥 SENÃO → INSERT (com upload)
     let titulo = document.getElementById("titulo").value
     let categoria = document.getElementById("categoria").value
     let file = document.getElementById("arquivo").files[0]
@@ -68,25 +76,21 @@ async function inserir(){
 
     let nomeArquivo = Date.now() + "_" + file.name
 
-    // 🔥 UPLOAD
     const { error: uploadError } = await db.storage
         .from("downloads")
         .upload(nomeArquivo, file)
 
     if(uploadError){
-        console.log(uploadError)
         alert("Erro no upload")
         return
     }
 
-    // 🔥 PEGAR URL
     const { data } = db.storage
         .from("downloads")
         .getPublicUrl(nomeArquivo)
 
     let url = data.publicUrl
 
-    // 🔥 SALVAR NO BANCO
     const { error } = await db
         .from("conteudos")
         .insert([
@@ -101,62 +105,8 @@ async function inserir(){
     if(error){
         alert("Erro ao salvar")
     } else {
-        alert("Upload realizado com sucesso")
+        alert("Inserido com sucesso")
         limpar()
-        carregar()
-    }
-}
-
-// RESTO DO SISTEMA (igual antes)
-
-// CARREGAR
-async function carregar(){
-
-    const { data } = await db
-        .from("conteudos")
-        .select("*")
-        .order("downloads", { ascending: false })
-
-    let tabela = document.getElementById("lista")
-    tabela.innerHTML = ""
-
-    if(data){
-        data.forEach(item => {
-
-            let botaoExcluir = item.downloads > 0
-                ? `<button disabled>Excluir</button>`
-                : `<button onclick="excluir(${item.id})">Excluir</button>`
-
-            tabela.innerHTML += `
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads}</td>
-            <td>
-            <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
-            <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
-            ${botaoExcluir}
-            </td>
-            </tr>
-            `
-        })
-    }
-}
-
-// EXCLUIR
-async function excluir(id){
-
-    if(!confirm("Excluir?")) return
-
-    const { error } = await db
-        .from("conteudos")
-        .delete()
-        .eq("id", id)
-
-    if(error){
-        alert("Erro ao excluir")
-    } else {
         carregar()
     }
 }
