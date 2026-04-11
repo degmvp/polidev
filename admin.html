@@ -31,7 +31,7 @@ if(localStorage.getItem("logado") !== "sim"){
 
 <input type="file" id="arquivo"><br><br>
 
-<button id="btnSalvar">Enviar e Salvar</button>
+<button id="btnSalvar">Salvar</button>
 
 <p id="msg"></p>
 
@@ -67,44 +67,68 @@ async function carregar(){
     let tabela = document.getElementById("lista")
     tabela.innerHTML = ""
 
-    if(data){
-        data.forEach(item => {
-
-            let botaoExcluir = item.downloads > 0
-                ? `<button disabled title="Possui downloads">Excluir</button>`
-                : `<button onclick="excluir(${item.id})">Excluir</button>`
-
-            tabela.innerHTML += `
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads}</td>
-                <td>
-                    <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
-                    <button onclick="editar(${item.id}, '${item.titulo}', '${item.categoria}', '${item.arquivo_url}')">Editar</button>
-                    ${botaoExcluir}
-                </td>
-            </tr>
-            `
-        })
-    }
-}
-
-// 🔥 INSERIR / ATUALIZAR
-async function inserir(){
-
-    let id = document.getElementById("titulo").dataset.id
-
-    // UPDATE
-    if(id){
-        atualizar()
+    if(error){
+        tabela.innerHTML = `<tr><td colspan="5">Erro ao carregar</td></tr>`
         return
     }
 
-    // INSERT COM UPLOAD
+    if(!data || data.length === 0){
+        tabela.innerHTML = `<tr><td colspan="5">Nenhum registro encontrado</td></tr>`
+        return
+    }
+
+    data.forEach(item => {
+
+        let botaoExcluir = item.downloads > 0
+            ? `<button disabled>Excluir</button>`
+            : `<button onclick="excluir(${item.id})">Excluir</button>`
+
+        tabela.innerHTML += `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.downloads}</td>
+            <td>
+                <button onclick="window.open('${item.arquivo_url}')">Abrir</button>
+                <button onclick="editar(${item.id}, \`${item.titulo}\`, \`${item.categoria}\`, \`${item.arquivo_url}\`)">Editar</button>
+                ${botaoExcluir}
+            </td>
+        </tr>
+        `
+    })
+}
+
+// 🔥 INSERIR OU ATUALIZAR
+async function salvar(){
+
+    let id = document.getElementById("titulo").dataset.id
     let titulo = document.getElementById("titulo").value
     let categoria = document.getElementById("categoria").value
+
+    // 🔵 UPDATE (não precisa arquivo)
+    if(id){
+
+        const { error } = await db
+            .from("conteudos")
+            .update({
+                titulo: titulo,
+                categoria: categoria
+            })
+            .eq("id", id)
+
+        if(error){
+            alert("Erro ao atualizar")
+        } else {
+            alert("Atualizado com sucesso")
+            limpar()
+            carregar()
+        }
+
+        return
+    }
+
+    // 🔴 INSERT (com upload)
     let file = document.getElementById("arquivo").files[0]
 
     if(!file){
@@ -160,31 +184,6 @@ function editar(id, titulo, categoria, url){
     document.getElementById("titulo").dataset.id = id
 }
 
-// 🔥 ATUALIZAR
-async function atualizar(){
-
-    let id = document.getElementById("titulo").dataset.id
-
-    let titulo = document.getElementById("titulo").value
-    let categoria = document.getElementById("categoria").value
-
-    const { error } = await db
-        .from("conteudos")
-        .update({
-            titulo: titulo,
-            categoria: categoria
-        })
-        .eq("id", id)
-
-    if(error){
-        alert("Erro ao atualizar")
-    } else {
-        alert("Atualizado com sucesso")
-        limpar()
-        carregar()
-    }
-}
-
 // 🔥 EXCLUIR
 async function excluir(id){
 
@@ -224,7 +223,7 @@ function logout(){
 }
 
 // 🔥 BOTÃO
-document.getElementById("btnSalvar").onclick = inserir
+document.getElementById("btnSalvar").onclick = salvar
 
 // 🔥 INIT
 carregar()
