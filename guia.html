@@ -6,74 +6,114 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+
+body{
+    margin:0;
+    display:flex;
+    background-color:navy;
+    color:yellowgreen;
+    font-family:Arial;
+}
+
+/* MENU LATERAL */
+.sidebar{
+    width:250px;
+    height:100vh;
+    background:black;
+    padding:20px;
+    position:fixed;
+}
+
+.sidebar h2{
+    color:yellowgreen;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    margin:10px 0;
+}
+
+.sidebar a:hover{
+    color:yellowgreen;
+}
+
+/* CONTEÚDO */
+.content{
+    margin-left:270px;
+    padding:20px;
+    width:100%;
+}
+
+/* SEÇÕES */
+section{
+    margin-bottom:60px;
+}
+
+pre{
+    background:white;
+    color:black;
+    padding:10px;
+}
+
+</style>
+
 </head>
 
-<body style="background-color: navy; color: yellowgreen;">
+<body>
 
-<h1>🚀 Guia Oficial do Projeto POLYDEV</h1>
+<!-- MENU -->
+<div class="sidebar">
+    <h2>POLYDEV</h2>
 
-<p><b>Autor:</b> Degmar Barbosa 👏<br>
-<b>Data:</b> 11/04 🎂<br>
-<b>Missão:</b> Criar uma biblioteca de conteúdos técnicos operando como sistema em nuvem</p>
+    <a href="#visao">Visão Geral</a>
+    <a href="#arquitetura">Arquitetura</a>
+    <a href="#fluxo">Fluxo</a>
+    <a href="#dados">Dados</a>
+    <a href="#storage">Storage</a>
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#qualidade">Qualidade</a>
+    <a href="#nivel">Nível</a>
+    <a href="#mensagem">Mensagem</a>
+</div>
 
-<hr>
+<!-- CONTEÚDO -->
+<div class="content">
 
-<h2>📌 VISÃO GERAL</h2>
+<h1>🚀 Guia POLYDEV</h1>
+<p>📅 11/04 🎂</p>
 
+<section id="visao">
+<h2>📌 Visão Geral</h2>
 <p>
-O POLYDEV é uma plataforma web que funciona como uma biblioteca de conteúdos técnicos,
-permitindo armazenar, gerenciar e distribuir arquivos através de um sistema integrado com banco de dados e armazenamento em nuvem.
+Sistema web que funciona como biblioteca de conteúdos em nuvem,
+permitindo upload, gestão e download de arquivos.
 </p>
+</section>
 
-<hr>
-
-<h2>⚙️ ARQUITETURA DO SISTEMA</h2>
-
-<p>
-O sistema é dividido em três camadas principais:
-</p>
-
+<section id="arquitetura">
+<h2>⚙️ Arquitetura</h2>
 <ul>
-<li><b>Frontend:</b> HTML + CSS + JavaScript</li>
-<li><b>Backend (BaaS):</b> Supabase</li>
-<li><b>Storage:</b> Supabase Storage (arquivos)</li>
+<li>Frontend: HTML + JS</li>
+<li>Backend: Supabase</li>
+<li>Storage: Supabase Storage</li>
 </ul>
+</section>
 
-<hr>
-
-<h2>🔄 FLUXO OPERACIONAL</h2>
-
-<h3>1. Upload de Conteúdo</h3>
+<section id="fluxo">
+<h2>🔄 Fluxo</h2>
 <p>
-Admin envia arquivo → Storage salva → URL gerada → registro no banco
+Upload → Storage → URL → Banco → Listagem → Download
 </p>
+</section>
 
-<h3>2. Listagem</h3>
-<p>
-Sistema consulta tabela "conteudos" → dados exibidos
-</p>
+<section id="dados">
+<h2>🧠 Dados</h2>
 
-<h3>3. Download</h3>
-<p>
-Clique → registra download → abre arquivo
-</p>
-
-<h3>4. Edição</h3>
-<p>
-Altera dados → atualiza banco → reflete na tela
-</p>
-
-<h3>5. Exclusão</h3>
-<p>
-Verifica FK → impede exclusão com histórico
-</p>
-
-<hr>
-
-<h2>🧠 MODELAGEM DE DADOS</h2>
-
-<h3>Tabela: conteudos</h3>
-<pre style="background-color:white; color:black;">
+<h3>conteudos</h3>
+<pre>
 id
 titulo
 categoria
@@ -81,104 +121,78 @@ arquivo_url
 downloads
 </pre>
 
-<h3>Tabela: downloads</h3>
-<pre style="background-color:white; color:black;">
+<h3>downloads</h3>
+<pre>
 id
-conteudo_id (FK)
+conteudo_id
 email
 ip
 </pre>
 
-<hr>
+</section>
 
-<h2>☁️ STORAGE (NUVEM)</h2>
-
+<section id="storage">
+<h2>☁️ Storage</h2>
 <p>
-Arquivos ficam no bucket "downloads" com URL pública acessível.
+Arquivos armazenados no bucket downloads com acesso público.
 </p>
+</section>
 
-<hr>
-
-<h2>📊 FUNCIONALIDADES IMPLEMENTADAS</h2>
-
+<section id="funcionalidades">
+<h2>📊 Funcionalidades</h2>
 <ul>
-<li>✔ CRUD completo</li>
-<li>✔ Upload de arquivos</li>
-<li>✔ Download com contagem</li>
-<li>✔ Estatísticas</li>
-<li>✔ Dashboard</li>
-<li>✔ Login admin</li>
-<li>✔ Integridade com FK</li>
+<li>CRUD completo</li>
+<li>Upload automático</li>
+<li>Download com contador</li>
+<li>Dashboard</li>
+<li>Login (em evolução)</li>
 </ul>
+</section>
 
-<hr>
-
-<h2>📈 QUALIDADE DAS TECNOLOGIAS</h2>
-
-<h3>Frontend</h3>
-<p>
-✔ Simples, leve e eficiente<br>
-✔ Controle total sem frameworks<br>
-✔ Fácil manutenção
-</p>
-
-<h3>Supabase</h3>
-<p>
-✔ PostgreSQL robusto<br>
-✔ Storage integrado<br>
-✔ API automática<br>
-✔ Escalável
-</p>
-
-<h3>Arquitetura</h3>
-<p>
-✔ Separação clara<br>
-✔ Integração limpa<br>
-✔ Pronto para crescer
-</p>
-
-<hr>
-
-<h2>🏆 NÍVEL DO PROJETO</h2>
-
-<ul>
-<li>✔ Plataforma SaaS básica</li>
-<li>✔ Sistema de conteúdo</li>
-<li>✔ Biblioteca digital em nuvem</li>
-</ul>
-
-<hr>
-
-<h2>👨‍👩‍👧‍👦 MENSAGEM</h2>
+<section id="qualidade">
+<h2>📈 Qualidade</h2>
 
 <p>
-Este projeto mostra evolução real.<br><br>
-
-Não é apenas código — é construção de conhecimento.<br><br>
-
-Você transformou ideia em sistema.
+✔ Arquitetura limpa<br>
+✔ Baixo acoplamento<br>
+✔ Escalável<br>
+✔ Base moderna
 </p>
 
-<hr>
+</section>
 
-<h2>🚀 PRÓXIMOS PASSOS</h2>
-
-<ul>
-<li>🔐 Login real</li>
-<li>📊 Dashboard avançado</li>
-<li>📁 Organização por categorias</li>
-<li>🔄 Upload múltiplo</li>
-</ul>
-
-<hr>
-
-<h2>🎂 CONCLUSÃO</h2>
+<section id="nivel">
+<h2>🏆 Nível</h2>
 
 <p>
-No dia 11/04 nasceu um sistema completo.<br><br>
-
-Parabéns pelo POLYDEV 🚀
+Sistema equivalente a uma plataforma SaaS básica.
 </p>
+
+</section>
+
+<section id="mensagem">
+<h2>👨‍👩‍👧‍👦 Mensagem</h2>
+
+<p>
+Você construiu um sistema real.<br><br>
+
+Isso é mais que código — é evolução.
+</p>
+
+</section>
+
+</div>
+
+<!-- SCROLL SUAVE -->
+<script>
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", function(e){
+        e.preventDefault()
+        document.querySelector(this.getAttribute("href"))
+            .scrollIntoView({ behavior: "smooth" })
+    })
+})
+</script>
 
 </body>
 </html>
