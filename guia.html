@@ -1,181 +1,184 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Guia POLYDEV</title>
 
-<style>
-body {
-    background-color: navy;
-    color: white;
-    font-family: Arial;
-    margin: 40px;
-}
-
-h1 {
-    color: lightgreen;
-}
-
-h2 {
-    color: yellow;
-}
-
-p {
-    color: lightgreen;
-}
-
-/* Container de código/estrutura */
-.code {
-    background-color: #111111;
-    color: #00FF7F;
-    padding: 15px;
-    margin: 15px 0;
-    font-family: Courier New;
-    border-left: 5px solid yellow;
-}
-
-/* Container de explicação */
-.box {
-    background-color: #1a1a1a;
-    padding: 15px;
-    margin: 15px 0;
-    border-left: 5px solid lightgreen;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
-<body>
+<body style="background-color: navy; color: yellowgreen;">
 
-<h1>DOCUMENTAÇÃO DO PROJETO POLYDEV</h1>
+<h1>🚀 Guia Oficial do Projeto POLYDEV</h1>
 
-<h2>1. Objetivo do Projeto</h2>
-<div class="box">
-O projeto POLYDEV tem como objetivo criar um portal de conteúdos de programação,
-permitindo disponibilizar arquivos, downloads, pacotes ZIP, ranking de downloads
-e administração dos conteúdos utilizando apenas GitHub Pages e Supabase.
-</div>
+<p><b>Autor:</b> Degmar Barbosa 👏<br>
+<b>Data:</b> 11/04 🎂<br>
+<b>Missão:</b> Criar uma biblioteca de conteúdos técnicos operando como sistema em nuvem</p>
 
-<h2>2. Arquitetura do Sistema</h2>
-<div class="box">
-O sistema POLYDEV funciona sem servidor próprio, utilizando apenas frontend
-em HTML e JavaScript e banco de dados no Supabase.
-</div>
+<hr>
 
-<div class="code">
-USUÁRIO <br>
-↓ <br>
-GitHub Pages (HTML + JavaScript) <br>
-↓ <br>
-Supabase (Banco de Dados) <br>
-↓ <br>
-Arquivos Downloads / ZIP <br>
-↓ <br>
-Ranking / Estatísticas
-</div>
+<h2>📌 VISÃO GERAL</h2>
 
-<h2>3. Estrutura de Diretórios</h2>
+<p>
+O POLYDEV é uma plataforma web que funciona como uma biblioteca de conteúdos técnicos,
+permitindo armazenar, gerenciar e distribuir arquivos através de um sistema integrado com banco de dados e armazenamento em nuvem.
+</p>
 
-<div class="code">
-/polidev <br>
-index.html <br>
-top.html <br>
-categorias.html <br>
-conteudos.html <br>
-buscar.html <br>
-admin.html <br>
-guia.html <br>
-config.js <br>
-<br>
-/downloads <br>
-arquivos individuais <br>
-<br>
-/zips <br>
-programas_python.zip <br>
-programas_html.zip <br>
-programas_sql.zip
-</div>
+<hr>
 
-<h2>4. Conceito de Categoria</h2>
-<div class="box">
-No projeto POLYDEV, categoria não é o arquivo ZIP.
-Categoria representa a linguagem ou extensão dos arquivos.
-</div>
+<h2>⚙️ ARQUITETURA DO SISTEMA</h2>
 
-<div class="code">
-python → arquivos .py <br>
-html → arquivos .html <br>
-sql → arquivos .sql <br>
-cpp → arquivos .cpp <br>
-js → arquivos .js
-</div>
+<p>
+O sistema é dividido em três camadas principais:
+</p>
 
-<h2>5. Banco de Dados</h2>
-<div class="box">
-O sistema utiliza o Supabase como banco de dados.
-Existem duas tabelas principais:
-</div>
+<ul>
+<li><b>Frontend:</b> HTML + CSS + JavaScript</li>
+<li><b>Backend (BaaS):</b> Supabase</li>
+<li><b>Storage:</b> Supabase Storage (arquivos)</li>
+</ul>
 
-<div class="code">
-Tabela categorias → ranking de downloads <br>
-Tabela conteudos → arquivos individuais
-</div>
+<hr>
 
-<h2>6. Páginas do Sistema</h2>
+<h2>🔄 FLUXO OPERACIONAL</h2>
 
-<div class="code">
-index.html → Menu principal <br>
-top.html → Ranking downloads <br>
-categorias.html → Lista categorias <br>
-conteudos.html → Lista conteúdos <br>
-buscar.html → Busca conteúdos <br>
-admin.html → Administração <br>
-guia.html → Documentação <br>
-config.js → Configuração Supabase
-</div>
+<h3>1. Upload de Conteúdo</h3>
+<p>
+Admin envia arquivo → Storage salva → URL gerada → registro no banco
+</p>
 
-<h2>7. Fluxo de Download</h2>
-<div class="box">
-Quando o usuário clica para baixar um pacote ZIP:
-</div>
+<h3>2. Listagem</h3>
+<p>
+Sistema consulta tabela "conteudos" → dados exibidos
+</p>
 
-<div class="code">
-Botão Download <br>
-↓ <br>
-JavaScript <br>
-↓ <br>
-Supabase incrementa contador <br>
-↓ <br>
-Download do arquivo ZIP
-</div>
+<h3>3. Download</h3>
+<p>
+Clique → registra download → abre arquivo
+</p>
 
-<h2>8. Tecnologias Utilizadas</h2>
+<h3>4. Edição</h3>
+<p>
+Altera dados → atualiza banco → reflete na tela
+</p>
 
-<div class="code">
-HTML <br>
-CSS <br>
-JavaScript <br>
-Supabase <br>
-GitHub Pages <br>
-Arquivos ZIP
-</div>
+<h3>5. Exclusão</h3>
+<p>
+Verifica FK → impede exclusão com histórico
+</p>
 
-<h2>9. Filosofia do Projeto POLYDEV</h2>
+<hr>
 
-<div class="code">
-LER <br>
-ENTENDER <br>
-EXECUTAR <br>
-MODIFICAR <br>
-COMPARTILHAR
-</div>
+<h2>🧠 MODELAGEM DE DADOS</h2>
 
-<h2>10. Final</h2>
-<div class="box">
-O projeto POLYDEV é um portal educacional voltado para ensino de programação
-baseado em exemplos práticos, downloads de códigos e documentação técnica.
-</div>
+<h3>Tabela: conteudos</h3>
+<pre style="background-color:white; color:black;">
+id
+titulo
+categoria
+arquivo_url
+downloads
+</pre>
+
+<h3>Tabela: downloads</h3>
+<pre style="background-color:white; color:black;">
+id
+conteudo_id (FK)
+email
+ip
+</pre>
+
+<hr>
+
+<h2>☁️ STORAGE (NUVEM)</h2>
+
+<p>
+Arquivos ficam no bucket "downloads" com URL pública acessível.
+</p>
+
+<hr>
+
+<h2>📊 FUNCIONALIDADES IMPLEMENTADAS</h2>
+
+<ul>
+<li>✔ CRUD completo</li>
+<li>✔ Upload de arquivos</li>
+<li>✔ Download com contagem</li>
+<li>✔ Estatísticas</li>
+<li>✔ Dashboard</li>
+<li>✔ Login admin</li>
+<li>✔ Integridade com FK</li>
+</ul>
+
+<hr>
+
+<h2>📈 QUALIDADE DAS TECNOLOGIAS</h2>
+
+<h3>Frontend</h3>
+<p>
+✔ Simples, leve e eficiente<br>
+✔ Controle total sem frameworks<br>
+✔ Fácil manutenção
+</p>
+
+<h3>Supabase</h3>
+<p>
+✔ PostgreSQL robusto<br>
+✔ Storage integrado<br>
+✔ API automática<br>
+✔ Escalável
+</p>
+
+<h3>Arquitetura</h3>
+<p>
+✔ Separação clara<br>
+✔ Integração limpa<br>
+✔ Pronto para crescer
+</p>
+
+<hr>
+
+<h2>🏆 NÍVEL DO PROJETO</h2>
+
+<ul>
+<li>✔ Plataforma SaaS básica</li>
+<li>✔ Sistema de conteúdo</li>
+<li>✔ Biblioteca digital em nuvem</li>
+</ul>
+
+<hr>
+
+<h2>👨‍👩‍👧‍👦 MENSAGEM</h2>
+
+<p>
+Este projeto mostra evolução real.<br><br>
+
+Não é apenas código — é construção de conhecimento.<br><br>
+
+Você transformou ideia em sistema.
+</p>
+
+<hr>
+
+<h2>🚀 PRÓXIMOS PASSOS</h2>
+
+<ul>
+<li>🔐 Login real</li>
+<li>📊 Dashboard avançado</li>
+<li>📁 Organização por categorias</li>
+<li>🔄 Upload múltiplo</li>
+</ul>
+
+<hr>
+
+<h2>🎂 CONCLUSÃO</h2>
+
+<p>
+No dia 11/04 nasceu um sistema completo.<br><br>
+
+Parabéns pelo POLYDEV 🚀
+</p>
 
 </body>
 </html>
