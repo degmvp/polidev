@@ -73,47 +73,41 @@ td, th {
 // 🔐 Verificar login
 async function verificarUsuario() {
     const { data: { user } } = await db.auth.getUser()
-
     if (!user) {
         alert("Faça login primeiro")
         window.location.href = "login.html"
     }
 }
 
-// 🚀 Carregar Dashboard
+// 🚀 Dashboard
 async function carregarDashboard(){
 
     try {
 
-        // 1. DOWNLOADS
-        const { data: downloads, error: erro1 } = await db
+        // ✅ TOTAL CORRETO DIRETO DO BANCO
+        const { count } = await db
+            .from("downloads")
+            .select("*", { count: "exact", head: true })
+
+        document.getElementById("total").innerText = count
+
+        // 2. DOWNLOADS
+        const { data: downloads } = await db
             .from("downloads")
             .select("conteudo_id")
 
-        if (erro1) {
-            console.log("Erro downloads:", erro1)
-            return
-        }
-
-        document.getElementById("total").innerText = downloads.length
-
-        // 2. CONTEUDOS
-        const { data: conteudos, error: erro2 } = await db
+        // 3. CONTEUDOS
+        const { data: conteudos } = await db
             .from("conteudos")
             .select("id, titulo, categoria")
 
-        if (erro2) {
-            console.log("Erro conteudos:", erro2)
-            return
-        }
-
-        // 3. MAPA
+        // 4. MAPA
         let mapa = {}
         conteudos.forEach(c => {
             mapa[c.id] = c
         })
 
-        // 4. CONTAGEM
+        // 5. CONTAGEM
         let categorias = {}
         let ranking = {}
 
@@ -126,7 +120,7 @@ async function carregarDashboard(){
             ranking[c.titulo] = (ranking[c.titulo] || 0) + 1
         })
 
-        // 5. MOSTRAR CATEGORIAS
+        // 6. CATEGORIAS
         let tabelaCat = document.getElementById("categorias")
         tabelaCat.innerHTML = ""
 
@@ -139,7 +133,7 @@ async function carregarDashboard(){
             tabelaCat.appendChild(linha)
         }
 
-        // 6. MOSTRAR RANKING
+        // 7. RANKING
         let tabelaRank = document.getElementById("ranking")
         tabelaRank.innerHTML = ""
 
@@ -156,7 +150,7 @@ async function carregarDashboard(){
         })
 
     } catch (e) {
-        console.log("Erro geral:", e)
+        console.log("Erro:", e)
     }
 }
 
