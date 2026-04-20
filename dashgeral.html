@@ -1,4 +1,4 @@
-```html id="v9m2zt"
+```html
 <!DOCTYPE html>
 <html>
 
@@ -19,12 +19,14 @@ margin:20px;
 
 h1{
 text-align:center;
+margin-bottom:30px;
 }
 
 .section{
 margin-top:30px;
 padding:20px;
 border:1px solid yellowgreen;
+border-radius:8px;
 }
 
 table{
@@ -53,7 +55,7 @@ color:black;
 <h1>📊 POLYDEV Dashboard Geral</h1>
 
 <div class="section">
-<h2>📂 Downloads por Categoria</h2>
+<h2>📂 Downloads por Categoria (Ranking)</h2>
 <table id="cat"></table>
 </div>
 
@@ -68,7 +70,7 @@ color:black;
 </div>
 
 <div class="section">
-<h2>👤 Usuários Ativos</h2>
+<h2>👤 Usuários Mais Ativos</h2>
 <table id="users"></table>
 </div>
 
@@ -79,101 +81,91 @@ const supabase = window.supabase.createClient(
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
 
-// 1 - Downloads por categoria
+// 📂 Downloads por categoria (vw_downloads_categoria)
 async function loadCat(){
 
-let { data } = await supabase
-.from("downloads")
-.select("conteudo_id, conteudos(categoria)")
+let { data, error } = await supabase
+.from("vw_downloads_categoria")
+.select("*")
 
-let map = {}
-
-data.forEach(d=>{
-let cat = d.conteudos.categoria
-map[cat] = (map[cat] || 0) + 1
-})
+if(error){
+document.getElementById("cat").innerHTML = error.message
+return
+}
 
 let html = "<tr><th>Categoria</th><th>Total</th></tr>"
 
-for(let c in map){
-html += `<tr><td>${c}</td><td>${map[c]}</td></tr>`
-}
+data.forEach(i=>{
+html += `<tr><td>${i.categoria}</td><td>${i.total_downloads}</td></tr>`
+})
 
 document.getElementById("cat").innerHTML = html
 }
 
-// 2 - Top conteúdos
+// 🏆 Top conteúdos (vw_top_conteudos)
 async function loadTop(){
 
-let { data } = await supabase
-.from("downloads")
-.select("conteudo_id, conteudos(titulo)")
+let { data, error } = await supabase
+.from("vw_top_conteudos")
+.select("*")
 
-let map = {}
-
-data.forEach(d=>{
-let t = d.conteudos.titulo
-map[t] = (map[t] || 0) + 1
-})
-
-let arr = Object.entries(map).sort((a,b)=>b[1]-a[1])
+if(error){
+document.getElementById("top").innerHTML = error.message
+return
+}
 
 let html = "<tr><th>Título</th><th>Downloads</th></tr>"
 
-arr.forEach(i=>{
-html += `<tr><td>${i[0]}</td><td>${i[1]}</td></tr>`
+data.forEach(i=>{
+html += `<tr><td>${i.titulo}</td><td>${i.total}</td></tr>`
 })
 
 document.getElementById("top").innerHTML = html
 }
 
-// 3 - Volume por categoria (repetido do SQL)
+// 📊 Volume por categoria (vw_volume_categoria)
 async function loadCat2(){
 
-let { data } = await supabase
-.from("downloads")
-.select("conteudo_id, conteudos(categoria)")
+let { data, error } = await supabase
+.from("vw_volume_categoria")
+.select("*")
 
-let map = {}
-
-data.forEach(d=>{
-let cat = d.conteudos.categoria
-map[cat] = (map[cat] || 0) + 1
-})
+if(error){
+document.getElementById("cat2").innerHTML = error.message
+return
+}
 
 let html = "<tr><th>Categoria</th><th>Total</th></tr>"
 
-for(let c in map){
-html += `<tr><td>${c}</td><td>${map[c]}</td></tr>`
-}
+data.forEach(i=>{
+html += `<tr><td>${i.categoria}</td><td>${i.total}</td></tr>`
+})
 
 document.getElementById("cat2").innerHTML = html
 }
 
-// 4 - usuários ativos
+// 👤 Usuários ativos (vw_usuarios_ativos)
 async function loadUsers(){
 
-let { data } = await supabase
-.from("downloads")
-.select("email")
+let { data, error } = await supabase
+.from("vw_usuarios_ativos")
+.select("*")
 
-let map = {}
-
-data.forEach(d=>{
-map[d.email] = (map[d.email] || 0) + 1
-})
-
-let arr = Object.entries(map).sort((a,b)=>b[1]-a[1])
+if(error){
+document.getElementById("users").innerHTML = error.message
+return
+}
 
 let html = "<tr><th>Email</th><th>Downloads</th></tr>"
 
-arr.forEach(i=>{
-html += `<tr><td>${i[0]}</td><td>${i[1]}</td></tr>`
+data.forEach(i=>{
+html += `<tr><td>${i.email}</td><td>${i.total}</td></tr>`
 })
 
 document.getElementById("users").innerHTML = html
 }
 
+// carregar tudo
 loadCat()
 loadTop()
 loadCat2()
