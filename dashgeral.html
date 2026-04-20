@@ -1,11 +1,13 @@
-```html
+```html id="test1ok">
 <!DOCTYPE html>
 <html>
 
 <head>
 <meta charset="UTF-8">
-<title>TESTE</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>TESTE OK</title>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
@@ -23,7 +25,7 @@ const supabase = window.supabase.createClient(
 
 async function teste(){
 
-document.getElementById("status").innerText = "consultando banco...";
+document.getElementById("status").innerText = "consultando...";
 
 let { data, error } = await supabase
 .from("vw_top_conteudos")
@@ -49,4 +51,3 @@ teste();
 </body>
 </html>
 ```
-
