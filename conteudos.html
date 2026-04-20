@@ -8,6 +8,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 </head>
 
 <body>
@@ -29,31 +30,49 @@
 
 <script>
 
-// pegar categoria da URL
-const params = new URLSearchParams(window.location.search)
-const categoria = params.get("categoria")
+// 🔐 Verifica login
+async function verificarUsuario() {
+    const { data: { user } } = await db.auth.getUser()
 
+    if (!user) {
+        alert("Você precisa fazer login")
+        window.location.href = "login.html"
+    }
+}
+verificarUsuario()
+
+// 📊 Carregar conteúdos + contagem
 async function carregar(){
 
-    const { data: conteudos } = await db
+    const { data: conteudos, error: erro1 } = await db
         .from("conteudos")
         .select("*")
 
-    const { data: downloads } = await db
+    const { data: downloads, error: erro2 } = await db
         .from("downloads")
         .select("conteudo_id")
+
+    if (erro1) {
+        console.log("Erro conteudos:", erro1)
+        return
+    }
+
+    if (erro2) {
+        console.log("Erro downloads:", erro2)
+        return
+    }
 
     let tabela = document.getElementById("tabela")
     tabela.innerHTML = ""
 
+    // 🔢 Contagem manual
     let contagem = {}
 
-    if (downloads) {
-        downloads.forEach(d => {
-            contagem[d.conteudo_id] = (contagem[d.conteudo_id] || 0) + 1
-        })
-    }
+    downloads.forEach(d => {
+        contagem[d.conteudo_id] = (contagem[d.conteudo_id] || 0) + 1
+    })
 
+    // 📋 Montar tabela
     conteudos.forEach(item => {
 
         let total = contagem[item.id] || 0
@@ -73,24 +92,13 @@ async function carregar(){
 
         tabela.appendChild(linha)
     })
+
 }
 
-// chama a função
+// 🚀 Executa
 carregar()
 
-// verificar login
-async function verificarUsuario() {
-    const { data: { user } } = await db.auth.getUser()
-
-    if (!user) {
-        alert("Você precisa fazer login")
-        window.location.href = "login.html"
-    }
-}
-
-verificarUsuario()
-
-// download
+// 📥 Download + registro
 async function baixar(id, url) {
 
     const { data: { user } } = await db.auth.getUser()
