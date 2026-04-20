@@ -4,52 +4,83 @@
 
 <head>
 <meta charset="UTF-8">
-<title>TESTE FINAL</title>
+<title>POLYDEV DASHGERAL</title>
 
-<script src="supabase.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<style>
+
+body{
+background:black;
+color:yellowgreen;
+font-family:Arial;
+margin:20px;
+}
+
+h1{
+text-align:center;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid yellowgreen;
+padding:10px;
+}
+
+th{
+background:yellowgreen;
+color:black;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<h2 id="status">iniciando...</h2>
+<h1>📊 DASHGERAL POLYDEV</h1>
+
+<table id="tabela"></table>
 
 <script>
-
-document.getElementById("status").innerText = "JS OK";
-
-if(!window.supabase){
-document.getElementById("status").innerText = "ERRO: Supabase não carregou";
-throw new Error("Supabase não carregou");
-}
 
 const supabase = window.supabase.createClient(
 "https://vdpucrilxzlnxxnaohdh.supabase.co",
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
 
-async function teste(){
-
-document.getElementById("status").innerText = "consultando...";
+async function carregar(){
 
 let { data, error } = await supabase
-.from("vw_top_conteudos")
+.from("dashgeral")
 .select("*")
 
 if(error){
-document.getElementById("status").innerText = "ERRO: " + error.message;
-console.log(error);
-return;
+alert("Erro: " + error.message)
+console.log(error)
+return
 }
 
-document.getElementById("status").innerText =
-"OK: " + data.length + " registros";
+let html = "<tr><th>Tipo</th><th>Descrição</th><th>Total</th></tr>"
 
-console.log(data);
+data.forEach(l=>{
+html += `<tr>
+<td>${l.tipo}</td>
+<td>${l.descricao}</td>
+<td>${l.total}</td>
+</tr>`
+})
+
+document.getElementById("tabela").innerHTML = html
 
 }
 
-teste();
+carregar()
 
 </script>
 
