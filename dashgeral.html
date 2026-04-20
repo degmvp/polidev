@@ -1,12 +1,10 @@
-```html
+```html id="finalok">
 <!DOCTYPE html>
 <html>
 
 <head>
 <meta charset="UTF-8">
 <title>POLYDEV DASHGERAL</title>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -45,45 +43,59 @@ color:black;
 
 <h1>📊 DASHGERAL POLYDEV</h1>
 
+<div id="status">Carregando dados...</div>
+
 <table id="tabela"></table>
 
 <script>
 
-const supabase = window.supabase.createClient(
-"https://vdpucrilxzlnxxnaohdh.supabase.co",
-"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
-)
-
 async function carregar(){
 
-let { data, error } = await supabase
-.from("dashgeral")
-.select("*")
+try{
 
-if(error){
-alert("Erro: " + error.message)
-console.log(error)
-return
+const url = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/dashgeral?select=*";
+
+const resposta = await fetch(url, {
+headers: {
+"apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 }
+});
 
-let html = "<tr><th>Tipo</th><th>Descrição</th><th>Total</th></tr>"
+const data = await resposta.json();
+
+console.log("DADOS:", data);
+
+document.getElementById("status").innerText =
+"OK: " + data.length + " registros";
+
+let html = "<tr><th>Tipo</th><th>Descrição</th><th>Total</th></tr>";
 
 data.forEach(l=>{
 html += `<tr>
 <td>${l.tipo}</td>
 <td>${l.descricao}</td>
 <td>${l.total}</td>
-</tr>`
-})
+</tr>`;
+});
 
-document.getElementById("tabela").innerHTML = html
+document.getElementById("tabela").innerHTML = html;
+
+}catch(e){
+
+document.getElementById("status").innerText =
+"Erro: " + e;
+
+console.log(e);
 
 }
 
-carregar()
+}
+
+carregar();
 
 </script>
 
 </body>
+
 </html>
 ```
