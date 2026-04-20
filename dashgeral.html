@@ -4,32 +4,16 @@
 
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Dashboard Geral</title>
+<title>POLYDEV Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 body{
 background:black;
 color:yellowgreen;
 font-family:Arial;
-margin:20px;
-}
-
-h1{
-text-align:center;
-}
-
-.section{
-margin-top:30px;
 padding:20px;
-border:1px solid yellowgreen;
-}
-
-.status{
-font-size:12px;
-color:yellow;
 }
 
 table{
@@ -47,38 +31,16 @@ th{
 background:yellowgreen;
 color:black;
 }
-
 </style>
 
 </head>
 
 <body>
 
-<h1>📊 POLYDEV Dashboard Geral</h1>
+<h1>🏆 Top Conteúdos</h1>
 
-<div class="section">
-<h2>📂 vw_downloads_categoria</h2>
-<div class="status" id="s1">executando...</div>
-<table id="t1"></table>
-</div>
-
-<div class="section">
-<h2>🏆 vw_top_conteudos</h2>
-<div class="status" id="s2">executando...</div>
-<table id="t2"></table>
-</div>
-
-<div class="section">
-<h2>📊 vw_volume_categoria</h2>
-<div class="status" id="s3">executando...</div>
-<table id="t3"></table>
-</div>
-
-<div class="section">
-<h2>👤 vw_usuarios_ativos</h2>
-<div class="status" id="s4">executando...</div>
-<table id="t4"></table>
-</div>
+<div id="status">carregando...</div>
+<table id="tabela"></table>
 
 <script>
 
@@ -87,57 +49,38 @@ const supabase = window.supabase.createClient(
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
 
-// 🔹 Função genérica para EXECUTAR VIEW
-async function executarView(view, tabelaId, statusId){
-
-document.getElementById(statusId).innerText =
-"Executando SELECT * FROM " + view
+async function carregar(){
 
 let { data, error } = await supabase
-.from(view)
+.from("vw_top_conteudos")
 .select("*")
 
 if(error){
-document.getElementById(statusId).innerText =
+document.getElementById("status").innerText =
 "ERRO: " + error.message
+console.log(error)
 return
 }
 
-if(data.length === 0){
-document.getElementById(statusId).innerText =
-"OK (sem dados)"
-return
-}
+console.log("DADOS:", data)
 
-// montar tabela dinâmica
-let html = "<tr>"
+document.getElementById("status").innerText =
+"OK: " + data.length + " registros"
 
-Object.keys(data[0]).forEach(col=>{
-html += `<th>${col}</th>`
+let html = "<tr><th>Título</th><th>Total</th></tr>"
+
+data.forEach(item=>{
+html += `<tr>
+<td>${item.titulo}</td>
+<td>${item.total}</td>
+</tr>`
 })
 
-html += "</tr>"
-
-data.forEach(row=>{
-html += "<tr>"
-Object.values(row).forEach(v=>{
-html += `<td>${v}</td>`
-})
-html += "</tr>"
-})
-
-document.getElementById(tabelaId).innerHTML = html
-
-document.getElementById(statusId).innerText =
-"OK (" + data.length + " registros)"
+document.getElementById("tabela").innerHTML = html
 
 }
 
-// 🚀 EXECUÇÃO DAS VIEWS (AQUI ESTÁ O QUE VOCÊ QUER VER)
-executarView("vw_downloads_categoria","t1","s1")
-executarView("vw_top_conteudos","t2","s2")
-executarView("vw_volume_categoria","t3","s3")
-executarView("vw_usuarios_ativos","t4","s4")
+carregar()
 
 </script>
 
