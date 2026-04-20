@@ -74,40 +74,50 @@ carregar()
 </script>
 
 <script>
+let usuario = null
+
+async function verificarUsuario() {
+    const { data: { user } } = await db.auth.getUser()
+
+    if (!user) {
+        alert("Você precisa fazer login")
+        window.location.href = "login.html"
+    } else {
+        usuario = user
+        console.log("Usuário logado:", user.email)
+    }
+}
+
+verificarUsuario()
 
 // FUNÇÃO FINAL 1.0
 async function baixar(id, url) {
 
-    // buscar downloads atuais
-    const { data: item, error } = await db
-        .from("conteudos")
-        .select("downloads")
-        .eq("id", id)
-        .single()
+    if (!usuario) {
+        alert("Faça login primeiro")
+        return
+    }
 
-    if(error){
+    const { error } = await db
+        .from("downloads")
+        .insert([
+            {
+                conteudo_id: id,
+                email: usuario.email,
+                ip: "0.0.0.0"
+            }
+        ])
+
+    if (error) {
         console.log(error)
-        alert("Erro ao buscar downloads")
+        alert("Erro ao registrar download")
         return
     }
 
-    let total = item.downloads + 1
-
-    // atualizar contador
-    const { error: erroUpdate } = await db
-        .from("conteudos")
-        .update({ downloads: total })
-        .eq("id", id)
-
-    if(erroUpdate){
-        console.log(erroUpdate)
-        alert("Erro ao atualizar downloads")
-        return
-    }
-
-    // abrir arquivo
-    window.open(url, "_blank")
+    let base = "https://degmvp.github.io/polidev/"
+    window.open(base + url, "_blank")
 }
+
 
 </script>
 

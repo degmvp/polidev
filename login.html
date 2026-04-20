@@ -2,39 +2,38 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login Admin</title>
+<title>Login POLYDEV</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 </head>
 
 <body>
 
-<h2>Login Administrativo</h2>
+<h2>Login</h2>
 
-<input type="text" id="usuario" placeholder="Usuário"><br><br>
+<input type="email" id="email" placeholder="Email"><br><br>
 <input type="password" id="senha" placeholder="Senha"><br><br>
 
 <button onclick="login()">Entrar</button>
 
-<p id="msg"></p>
-
 <script>
+async function login() {
+    let email = document.getElementById("email").value
+    let senha = document.getElementById("senha").value
 
-function login(){
+    const { data, error } = await db.auth.signInWithPassword({
+        email: email,
+        password: senha
+    })
 
-    let user = document.getElementById("usuario").value
-    let pass = document.getElementById("senha").value
-
-    if(user === "admin" && pass === "123"){
-
-        localStorage.setItem("logado", "sim")
-
-        window.location.href = "admin.html"
-
+    if (error) {
+        alert("Erro: " + error.message)
     } else {
-        document.getElementById("msg").innerText = "Login inválido"
+        alert("Login realizado!")
+        window.location.href = "conteudos.html"
     }
 }
-
 </script>
 
 </body>
