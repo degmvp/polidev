@@ -64,9 +64,37 @@ async function carregarDashboard(){
     document.getElementById("total").innerText = totalData.length
 
     // DOWNLOADS + CONTEUDOS
-    const { data: dados } = await db
-        .from("downloads")
-        .select("conteudo_id, conteudos(titulo, categoria)")
+// 1. buscar downloads
+const { data: downloads } = await db
+    .from("downloads")
+    .select("conteudo_id")
+
+// 2. buscar conteudos
+const { data: conteudos } = await db
+    .from("conteudos")
+    .select("id, titulo, categoria")
+
+// 3. mapear conteudos
+let mapa = {}
+conteudos.forEach(c => {
+    mapa[c.id] = c
+})
+
+// 4. contagem
+let categorias = {}
+let ranking = {}
+
+downloads.forEach(d => {
+
+    let conteudo = mapa[d.conteudo_id]
+    if (!conteudo) return
+
+    let cat = conteudo.categoria
+    let titulo = conteudo.titulo
+
+    categorias[cat] = (categorias[cat] || 0) + 1
+    ranking[titulo] = (ranking[titulo] || 0) + 1
+})
 
     // CONTAGEM
     let categorias = {}
