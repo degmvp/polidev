@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard POLYDEV</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+</head>
+
+<body>
+
+<h1>📊 Dashboard POLYDEV</h1>
+
+<h2>Total de Downloads</h2>
+<p id="total"></p>
+
+<h2>📁 Downloads por Categoria</h2>
+<table border="1">
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="categorias"></tbody>
+</table>
+
+<h2>🏆 Top Conteúdos</h2>
+<table border="1">
+<thead>
+<tr>
+<th>Título</th>
+<th>Downloads</th>
+</tr>
+</thead>
+<tbody id="ranking"></tbody>
+</table>
+
+<script>
+
+// 🔐 Verificar login
+async function verificarUsuario() {
+    const { data: { user } } = await db.auth.getUser()
+
+    if (!user) {
+        alert("Faça login primeiro")
+        window.location.href = "login.html"
+    }
+}
+verificarUsuario()
+
+// 🚀 Carregar Dashboard
+async function carregarDashboard(){
+
+    // TOTAL DOWNLOADS
+    const { data: totalData } = await db
+        .from("downloads")
+        .select("id")
+
+    document.getElementById("total").innerText = totalData.length
+
+    // DOWNLOADS + CONTEUDOS
+    const { data: dados } = await db
+        .from("downloads")
+        .select("conteudo_id, conteudos(titulo, categoria)")
+
+    // CONTAGEM
+    let categorias = {}
+    let ranking = {}
+
+    dados.forEach(item => {
+
+        let cat = item.conteudos.categoria
+        let titulo = item.conteudos.titulo
+
+        // categoria
+        categorias[cat] = (categorias[cat] || 0) + 1
+
+        // ranking
+        ranking[titulo] = (ranking[titulo] || 0) + 1
+    })
+
+    // TABELA CATEGORIAS
+    let tabelaCat = document.getElementById("categorias")
+    tabelaCat.innerHTML = ""
+
+    for (let cat in categorias){
+        tabelaCat.innerHTML += `
+        <tr>
+            <td>${cat}</td>
+            <td>${categorias[cat]}</td>
+        </tr>
+        `
+    }
+
+    // TABELA RANKING
+    let tabelaRank = document.getElementById("ranking")
+    tabelaRank.innerHTML = ""
+
+    let ordenado = Object.entries(ranking)
+        .sort((a,b) => b[1] - a[1])
+
+    ordenado.forEach(item => {
+        tabelaRank.innerHTML += `
+        <tr>
+            <td>${item[0]}</td>
+            <td>${item[1]}</td>
+        </tr>
+        `
+    })
+
+}
+
+carregarDashboard()
+
+</script>
+
+</body>
+</html>
