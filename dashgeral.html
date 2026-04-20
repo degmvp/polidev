@@ -1,17 +1,58 @@
-```html id="puretest">
+```html
 <!DOCTYPE html>
 <html>
+
+<head>
+<meta charset="UTF-8">
+<title>TESTE FINAL</title>
+
+<script src="supabase.js"></script>
+
+</head>
+
 <body>
 
 <h2 id="status">iniciando...</h2>
 
 <script>
 
-document.getElementById("status").innerText = "JS funcionando";
+document.getElementById("status").innerText = "JS OK";
+
+if(!window.supabase){
+document.getElementById("status").innerText = "ERRO: Supabase não carregou";
+throw new Error("Supabase não carregou");
+}
+
+const supabase = window.supabase.createClient(
+"https://vdpucrilxzlnxxnaohdh.supabase.co",
+"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
+)
+
+async function teste(){
+
+document.getElementById("status").innerText = "consultando...";
+
+let { data, error } = await supabase
+.from("vw_top_conteudos")
+.select("*")
+
+if(error){
+document.getElementById("status").innerText = "ERRO: " + error.message;
+console.log(error);
+return;
+}
+
+document.getElementById("status").innerText =
+"OK: " + data.length + " registros";
+
+console.log(data);
+
+}
+
+teste();
 
 </script>
 
 </body>
 </html>
 ```
-
