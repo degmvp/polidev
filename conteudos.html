@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="style.css">
 <head>
 <meta charset="UTF-8">
 <title>Conteúdos POLYDEV</title>
 
+<link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-
 </head>
 
 <body>
@@ -33,43 +33,27 @@
 const params = new URLSearchParams(window.location.search)
 const categoria = params.get("categoria")
 
-<script>
 async function carregar(){
 
-    // Buscar conteúdos
-    const { data: conteudos, error: erro1 } = await db
+    const { data: conteudos } = await db
         .from("conteudos")
         .select("*")
 
-    // Buscar downloads
-    const { data: downloads, error: erro2 } = await db
+    const { data: downloads } = await db
         .from("downloads")
         .select("conteudo_id")
-
-    console.log("Conteudos:", conteudos)
-    console.log("Downloads:", downloads)
 
     let tabela = document.getElementById("tabela")
     tabela.innerHTML = ""
 
-    if (!conteudos) {
-        console.log("Erro ao carregar conteudos")
-        return
-    }
-
-    // Contagem
     let contagem = {}
 
     if (downloads) {
         downloads.forEach(d => {
-            if (!contagem[d.conteudo_id]) {
-                contagem[d.conteudo_id] = 0
-            }
-            contagem[d.conteudo_id]++
+            contagem[d.conteudo_id] = (contagem[d.conteudo_id] || 0) + 1
         })
     }
 
-    // Montar tabela
     conteudos.forEach(item => {
 
         let total = contagem[item.id] || 0
@@ -89,30 +73,24 @@ async function carregar(){
 
         tabela.appendChild(linha)
     })
-
 }
+
+// chama a função
 carregar()
 
-</script>
-
-<script>
-let usuario = null
-
+// verificar login
 async function verificarUsuario() {
     const { data: { user } } = await db.auth.getUser()
 
     if (!user) {
         alert("Você precisa fazer login")
         window.location.href = "login.html"
-    } else {
-        usuario = user
-        console.log("Usuário logado:", user.email)
     }
 }
 
 verificarUsuario()
 
-// FUNÇÃO FINAL 1.0
+// download
 async function baixar(id, url) {
 
     const { data: { user } } = await db.auth.getUser()
@@ -133,18 +111,16 @@ async function baixar(id, url) {
         ])
 
     if (error) {
-        console.log("ERRO INSERT:", error)
+        console.log("ERRO:", error)
         alert("Erro ao registrar download")
         return
     }
-    console.log("Download registrado:", id)
+
     alert("Download registrado com sucesso!")
 
-    // SÓ ABRE depois de gravar
     let base = "https://degmvp.github.io/polidev/"
     window.open(base + url, "_blank")
 }
-
 
 </script>
 
