@@ -93,7 +93,9 @@ verificarUsuario()
 // FUNÇÃO FINAL 1.0
 async function baixar(id, url) {
 
-    if (!usuario) {
+    const { data: { user } } = await db.auth.getUser()
+
+    if (!user) {
         alert("Faça login primeiro")
         return
     }
@@ -103,17 +105,20 @@ async function baixar(id, url) {
         .insert([
             {
                 conteudo_id: id,
-                email: usuario.email,
+                email: user.email,
                 ip: "0.0.0.0"
             }
         ])
 
     if (error) {
-        console.log(error)
+        console.log("ERRO INSERT:", error)
         alert("Erro ao registrar download")
         return
     }
 
+    console.log("Download registrado com sucesso")
+
+    // SÓ ABRE depois de gravar
     let base = "https://degmvp.github.io/polidev/"
     window.open(base + url, "_blank")
 }
