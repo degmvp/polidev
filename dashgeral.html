@@ -1,0 +1,186 @@
+```html id="v9m2zt"
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Dashboard Geral</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+body{
+background:black;
+color:yellowgreen;
+font-family:Arial;
+margin:20px;
+}
+
+h1{
+text-align:center;
+}
+
+.section{
+margin-top:30px;
+padding:20px;
+border:1px solid yellowgreen;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+border:1px solid yellowgreen;
+padding:8px;
+text-align:left;
+}
+
+th{
+background:yellowgreen;
+color:black;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>📊 POLYDEV Dashboard Geral</h1>
+
+<div class="section">
+<h2>📂 Downloads por Categoria</h2>
+<table id="cat"></table>
+</div>
+
+<div class="section">
+<h2>🏆 Top Conteúdos</h2>
+<table id="top"></table>
+</div>
+
+<div class="section">
+<h2>📊 Volume por Categoria</h2>
+<table id="cat2"></table>
+</div>
+
+<div class="section">
+<h2>👤 Usuários Ativos</h2>
+<table id="users"></table>
+</div>
+
+<script>
+
+const supabase = window.supabase.createClient(
+"https://vdpucrilxzlnxxnaohdh.supabase.co",
+"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
+)
+
+// 1 - Downloads por categoria
+async function loadCat(){
+
+let { data } = await supabase
+.from("downloads")
+.select("conteudo_id, conteudos(categoria)")
+
+let map = {}
+
+data.forEach(d=>{
+let cat = d.conteudos.categoria
+map[cat] = (map[cat] || 0) + 1
+})
+
+let html = "<tr><th>Categoria</th><th>Total</th></tr>"
+
+for(let c in map){
+html += `<tr><td>${c}</td><td>${map[c]}</td></tr>`
+}
+
+document.getElementById("cat").innerHTML = html
+}
+
+// 2 - Top conteúdos
+async function loadTop(){
+
+let { data } = await supabase
+.from("downloads")
+.select("conteudo_id, conteudos(titulo)")
+
+let map = {}
+
+data.forEach(d=>{
+let t = d.conteudos.titulo
+map[t] = (map[t] || 0) + 1
+})
+
+let arr = Object.entries(map).sort((a,b)=>b[1]-a[1])
+
+let html = "<tr><th>Título</th><th>Downloads</th></tr>"
+
+arr.forEach(i=>{
+html += `<tr><td>${i[0]}</td><td>${i[1]}</td></tr>`
+})
+
+document.getElementById("top").innerHTML = html
+}
+
+// 3 - Volume por categoria (repetido do SQL)
+async function loadCat2(){
+
+let { data } = await supabase
+.from("downloads")
+.select("conteudo_id, conteudos(categoria)")
+
+let map = {}
+
+data.forEach(d=>{
+let cat = d.conteudos.categoria
+map[cat] = (map[cat] || 0) + 1
+})
+
+let html = "<tr><th>Categoria</th><th>Total</th></tr>"
+
+for(let c in map){
+html += `<tr><td>${c}</td><td>${map[c]}</td></tr>`
+}
+
+document.getElementById("cat2").innerHTML = html
+}
+
+// 4 - usuários ativos
+async function loadUsers(){
+
+let { data } = await supabase
+.from("downloads")
+.select("email")
+
+let map = {}
+
+data.forEach(d=>{
+map[d.email] = (map[d.email] || 0) + 1
+})
+
+let arr = Object.entries(map).sort((a,b)=>b[1]-a[1])
+
+let html = "<tr><th>Email</th><th>Downloads</th></tr>"
+
+arr.forEach(i=>{
+html += `<tr><td>${i[0]}</td><td>${i[1]}</td></tr>`
+})
+
+document.getElementById("users").innerHTML = html
+}
+
+loadCat()
+loadTop()
+loadCat2()
+loadUsers()
+
+</script>
+
+</body>
+</html>
+```
