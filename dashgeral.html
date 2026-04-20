@@ -1,53 +1,17 @@
-```html id="test1ok">
+```html id="puretest">
 <!DOCTYPE html>
 <html>
-
-<head>
-<meta charset="UTF-8">
-<title>TESTE OK</title>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-</head>
-
 <body>
 
 <h2 id="status">iniciando...</h2>
 
 <script>
 
-document.getElementById("status").innerText = "JS carregado";
-
-const supabase = window.supabase.createClient(
-"https://vdpucrilxzlnxxnaohdh.supabase.co",
-"sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
-)
-
-async function teste(){
-
-document.getElementById("status").innerText = "consultando...";
-
-let { data, error } = await supabase
-.from("vw_top_conteudos")
-.select("*")
-
-if(error){
-document.getElementById("status").innerText = "ERRO: " + error.message;
-console.log(error);
-return;
-}
-
-document.getElementById("status").innerText =
-"OK: " + data.length + " registros";
-
-console.log(data);
-
-}
-
-teste();
+document.getElementById("status").innerText = "JS funcionando";
 
 </script>
 
 </body>
 </html>
 ```
+
