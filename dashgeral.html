@@ -19,14 +19,17 @@ margin:20px;
 
 h1{
 text-align:center;
-margin-bottom:30px;
 }
 
 .section{
 margin-top:30px;
 padding:20px;
 border:1px solid yellowgreen;
-border-radius:8px;
+}
+
+.status{
+font-size:12px;
+color:yellow;
 }
 
 table{
@@ -38,7 +41,6 @@ margin-top:10px;
 th,td{
 border:1px solid yellowgreen;
 padding:8px;
-text-align:left;
 }
 
 th{
@@ -55,23 +57,27 @@ color:black;
 <h1>📊 POLYDEV Dashboard Geral</h1>
 
 <div class="section">
-<h2>📂 Downloads por Categoria (Ranking)</h2>
-<table id="cat"></table>
+<h2>📂 vw_downloads_categoria</h2>
+<div class="status" id="s1">executando...</div>
+<table id="t1"></table>
 </div>
 
 <div class="section">
-<h2>🏆 Top Conteúdos</h2>
-<table id="top"></table>
+<h2>🏆 vw_top_conteudos</h2>
+<div class="status" id="s2">executando...</div>
+<table id="t2"></table>
 </div>
 
 <div class="section">
-<h2>📊 Volume por Categoria</h2>
-<table id="cat2"></table>
+<h2>📊 vw_volume_categoria</h2>
+<div class="status" id="s3">executando...</div>
+<table id="t3"></table>
 </div>
 
 <div class="section">
-<h2>👤 Usuários Mais Ativos</h2>
-<table id="users"></table>
+<h2>👤 vw_usuarios_ativos</h2>
+<div class="status" id="s4">executando...</div>
+<table id="t4"></table>
 </div>
 
 <script>
@@ -81,95 +87,57 @@ const supabase = window.supabase.createClient(
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
 
-// 📂 Downloads por categoria (vw_downloads_categoria)
-async function loadCat(){
+// 🔹 Função genérica para EXECUTAR VIEW
+async function executarView(view, tabelaId, statusId){
+
+document.getElementById(statusId).innerText =
+"Executando SELECT * FROM " + view
 
 let { data, error } = await supabase
-.from("vw_downloads_categoria")
+.from(view)
 .select("*")
 
 if(error){
-document.getElementById("cat").innerHTML = error.message
+document.getElementById(statusId).innerText =
+"ERRO: " + error.message
 return
 }
 
-let html = "<tr><th>Categoria</th><th>Total</th></tr>"
-
-data.forEach(i=>{
-html += `<tr><td>${i.categoria}</td><td>${i.total_downloads}</td></tr>`
-})
-
-document.getElementById("cat").innerHTML = html
-}
-
-// 🏆 Top conteúdos (vw_top_conteudos)
-async function loadTop(){
-
-let { data, error } = await supabase
-.from("vw_top_conteudos")
-.select("*")
-
-if(error){
-document.getElementById("top").innerHTML = error.message
+if(data.length === 0){
+document.getElementById(statusId).innerText =
+"OK (sem dados)"
 return
 }
 
-let html = "<tr><th>Título</th><th>Downloads</th></tr>"
+// montar tabela dinâmica
+let html = "<tr>"
 
-data.forEach(i=>{
-html += `<tr><td>${i.titulo}</td><td>${i.total}</td></tr>`
+Object.keys(data[0]).forEach(col=>{
+html += `<th>${col}</th>`
 })
 
-document.getElementById("top").innerHTML = html
-}
+html += "</tr>"
 
-// 📊 Volume por categoria (vw_volume_categoria)
-async function loadCat2(){
-
-let { data, error } = await supabase
-.from("vw_volume_categoria")
-.select("*")
-
-if(error){
-document.getElementById("cat2").innerHTML = error.message
-return
-}
-
-let html = "<tr><th>Categoria</th><th>Total</th></tr>"
-
-data.forEach(i=>{
-html += `<tr><td>${i.categoria}</td><td>${i.total}</td></tr>`
+data.forEach(row=>{
+html += "<tr>"
+Object.values(row).forEach(v=>{
+html += `<td>${v}</td>`
+})
+html += "</tr>"
 })
 
-document.getElementById("cat2").innerHTML = html
+document.getElementById(tabelaId).innerHTML = html
+
+document.getElementById(statusId).innerText =
+"OK (" + data.length + " registros)"
+
 }
 
-// 👤 Usuários ativos (vw_usuarios_ativos)
-async function loadUsers(){
-
-let { data, error } = await supabase
-.from("vw_usuarios_ativos")
-.select("*")
-
-if(error){
-document.getElementById("users").innerHTML = error.message
-return
-}
-
-let html = "<tr><th>Email</th><th>Downloads</th></tr>"
-
-data.forEach(i=>{
-html += `<tr><td>${i.email}</td><td>${i.total}</td></tr>`
-})
-
-document.getElementById("users").innerHTML = html
-}
-
-// carregar tudo
-loadCat()
-loadTop()
-loadCat2()
-loadUsers()
+// 🚀 EXECUÇÃO DAS VIEWS (AQUI ESTÁ O QUE VOCÊ QUER VER)
+executarView("vw_downloads_categoria","t1","s1")
+executarView("vw_top_conteudos","t2","s2")
+executarView("vw_volume_categoria","t3","s3")
+executarView("vw_usuarios_ativos","t4","s4")
 
 </script>
 
