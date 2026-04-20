@@ -9,6 +9,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
+<style>
+body {
+    background-color: navy;
+    color: white;
+    font-family: Arial;
+}
+
+h1, h2 {
+    color: lightgreen;
+}
+
+table {
+    width: 100%;
+    background: white;
+    color: black;
+    margin-bottom: 20px;
+}
+
+th {
+    background: yellowgreen;
+}
+
+td, th {
+    padding: 8px;
+    text-align: center;
+}
+</style>
+
 </head>
 
 <body>
@@ -16,7 +44,7 @@
 <h1>📊 Dashboard POLYDEV</h1>
 
 <h2>Total de Downloads</h2>
-<p id="total"></p>
+<p id="total">Carregando...</p>
 
 <h2>📁 Downloads por Categoria</h2>
 <table border="1">
@@ -51,157 +79,92 @@ async function verificarUsuario() {
         window.location.href = "login.html"
     }
 }
-verificarUsuario()
 
 // 🚀 Carregar Dashboard
-<script>
 async function carregarDashboard(){
 
-    const totalEl = document.getElementById("total")
-    const tabelaCat = document.getElementById("categorias")
-    const tabelaRank = document.getElementById("ranking")
+    try {
 
-    tabelaCat.innerHTML = ""
-    tabelaRank.innerHTML = ""
+        // 1. DOWNLOADS
+        const { data: downloads, error: erro1 } = await db
+            .from("downloads")
+            .select("conteudo_id")
 
-    // 1. DOWNLOADS
-    const { data: downloads, error: erro1 } = await db
-        .from("downloads")
-        .select("conteudo_id")
-
-    console.log("DOWNLOADS:", downloads)
-
-    if (erro1 || !downloads) {
-        console.log("Erro downloads:", erro1)
-        totalEl.innerText = "Erro ao carregar downloads"
-        return
-    }
-
-    totalEl.innerText = downloads.length
-
-    // 2. CONTEUDOS
-    const { data: conteudos, error: erro2 } = await db
-        .from("conteudos")
-        .select("id, titulo, categoria")
-
-    console.log("CONTEUDOS:", conteudos)
-
-    if (erro2 || !conteudos) {
-        console.log("Erro conteudos:", erro2)
-        return
-    }
-
-    // 3. MAPA
-    let mapa = {}
-    conteudos.forEach(c => {
-        mapa[c.id] = c
-    })
-
-    // 4. CONTAGEM
-    let categorias = {}
-    let ranking = {}
-
-    downloads.forEach(d => {
-
-        let c = mapa[d.conteudo_id]
-
-        if (!c) {
-            console.log("SEM RELAÇÃO:", d.conteudo_id)
+        if (erro1) {
+            console.log("Erro downloads:", erro1)
             return
         }
 
-        categorias[c.categoria] = (categorias[c.categoria] || 0) + 1
-        ranking[c.titulo] = (ranking[c.titulo] || 0) + 1
-    })
+        document.getElementById("total").innerText = downloads.length
 
-    console.log("CATEGORIAS:", categorias)
-    console.log("RANKING:", ranking)
+        // 2. CONTEUDOS
+        const { data: conteudos, error: erro2 } = await db
+            .from("conteudos")
+            .select("id, titulo, categoria")
 
-    // 5. MOSTRAR CATEGORIAS
-    for (let cat in categorias){
-        let linha = document.createElement("tr")
-        linha.innerHTML = `
-            <td>${cat}</td>
-            <td>${categorias[cat]}</td>
-        `
-        tabelaCat.appendChild(linha)
+        if (erro2) {
+            console.log("Erro conteudos:", erro2)
+            return
+        }
+
+        // 3. MAPA
+        let mapa = {}
+        conteudos.forEach(c => {
+            mapa[c.id] = c
+        })
+
+        // 4. CONTAGEM
+        let categorias = {}
+        let ranking = {}
+
+        downloads.forEach(d => {
+
+            let c = mapa[d.conteudo_id]
+            if (!c) return
+
+            categorias[c.categoria] = (categorias[c.categoria] || 0) + 1
+            ranking[c.titulo] = (ranking[c.titulo] || 0) + 1
+        })
+
+        // 5. MOSTRAR CATEGORIAS
+        let tabelaCat = document.getElementById("categorias")
+        tabelaCat.innerHTML = ""
+
+        for (let cat in categorias){
+            let linha = document.createElement("tr")
+            linha.innerHTML = `
+                <td>${cat}</td>
+                <td>${categorias[cat]}</td>
+            `
+            tabelaCat.appendChild(linha)
+        }
+
+        // 6. MOSTRAR RANKING
+        let tabelaRank = document.getElementById("ranking")
+        tabelaRank.innerHTML = ""
+
+        let ordenado = Object.entries(ranking)
+            .sort((a,b)=>b[1]-a[1])
+
+        ordenado.forEach(item => {
+            let linha = document.createElement("tr")
+            linha.innerHTML = `
+                <td>${item[0]}</td>
+                <td>${item[1]}</td>
+            `
+            tabelaRank.appendChild(linha)
+        })
+
+    } catch (e) {
+        console.log("Erro geral:", e)
     }
-
-    // 6. MOSTRAR RANKING
-    let ordenado = Object.entries(ranking).sort((a,b)=>b[1]-a[1])
-
-    ordenado.forEach(item => {
-        let linha = document.createElement("tr")
-        linha.innerHTML = `
-            <td>${item[0]}</td>
-            <td>${item[1]}</td>
-        `
-        tabelaRank.appendChild(linha)
-    }
-
 }
+
+// EXECUÇÃO
+verificarUsuario()
 carregarDashboard()
+
 </script>
-
-    // TOTAL DOWNLOADS
-    const { data: totalData } = await db
-        .from("downloads")
-        .select("id")
-
-    document.getElementById("total").innerText = totalData.length
-
-    // DOWNLOADS + CONTEUDOS
-// 1. buscar downloads
-const { data: downloads } = await db
-    .from("downloads")
-    .select("conteudo_id")
-
-// 2. buscar conteudos
-const { data: conteudos } = await db
-    .from("conteudos")
-    .select("id, titulo, categoria")
-
-// 3. mapear conteudos
-let mapa = {}
-conteudos.forEach(c => {
-    mapa[c.id] = c
-})
-
-// 4. contagem
-let categorias = {}
-let ranking = {}
-
-downloads.forEach(d => {
-
-    let conteudo = mapa[d.conteudo_id]
-    if (!conteudo) return
-
-    let cat = conteudo.categoria
-    let titulo = conteudo.titulo
-
-    categorias[cat] = (categorias[cat] || 0) + 1
-    ranking[titulo] = (ranking[titulo] || 0) + 1
-})
-
-    // CONTAGEM
-    let categorias = {}
-    let ranking = {}
-
-    dados.forEach(item => {
-
-        let cat = item.conteudos.categoria
-        let titulo = item.conteudos.titulo
-
-        // categoria
-        categorias[cat] = (categorias[cat] || 0) + 1
-
-        // ranking
-        ranking[titulo] = (ranking[titulo] || 0) + 1
-    })
-
-    // TABELA CATEGORIAS
-    let tabelaCat = document.getElementById("categorias")
-    tabelaCat.innerHTML = ""
 
 </body>
 </html>
