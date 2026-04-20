@@ -36,47 +36,59 @@ const categoria = params.get("categoria")
 <script>
 async function carregar(){
 
-// 1. Busca conteúdos
-const { data: conteudos } = await db
-    .from("conteudos")
-    .select("*")
+    // Buscar conteúdos
+    const { data: conteudos, error: erro1 } = await db
+        .from("conteudos")
+        .select("*")
 
-// 2. Busca contagem de downloads
-const { data: downloads } = await db
-    .from("downloads")
-    .select("conteudo_id")
+    // Buscar downloads
+    const { data: downloads, error: erro2 } = await db
+        .from("downloads")
+        .select("conteudo_id")
 
-// 3. Conta manualmente
-let contagem = {}
+    console.log("Conteudos:", conteudos)
+    console.log("Downloads:", downloads)
 
-downloads.forEach(d => {
-    if (!contagem[d.conteudo_id]) {
-        contagem[d.conteudo_id] = 0
+    let tabela = document.getElementById("tabela")
+    tabela.innerHTML = ""
+
+    if (!conteudos) {
+        console.log("Erro ao carregar conteudos")
+        return
     }
-    contagem[d.conteudo_id]++
-})
 
-// 4. Monta tabela
-let tabela = document.getElementById("tabela")
-tabela.innerHTML = ""
+    // Contagem
+    let contagem = {}
 
-conteudos.forEach(item => {
+    if (downloads) {
+        downloads.forEach(d => {
+            if (!contagem[d.conteudo_id]) {
+                contagem[d.conteudo_id] = 0
+            }
+            contagem[d.conteudo_id]++
+        })
+    }
 
-let total = contagem[item.id] || 0
+    // Montar tabela
+    conteudos.forEach(item => {
 
-tabela.innerHTML += `
-<tr>
-<td>${item.titulo}</td>
-<td>${item.categoria}</td>
-<td>${total}</td>
-<td>
-<button onclick="baixar(${item.id}, '${item.arquivo_url}')">
-Download
-</button>
-</td>
-</tr>
-`
-})
+        let total = contagem[item.id] || 0
+
+        let linha = document.createElement("tr")
+
+        linha.innerHTML = `
+            <td>${item.titulo}</td>
+            <td>${item.categoria}</td>
+            <td>${total}</td>
+            <td>
+                <button onclick="baixar(${item.id}, '${item.arquivo_url}')">
+                    Download
+                </button>
+            </td>
+        `
+
+        tabela.appendChild(linha)
+    })
 
 }
 </script>
