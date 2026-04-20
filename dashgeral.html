@@ -4,86 +4,49 @@
 
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV Dashboard</title>
-
+<title>TESTE</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body{
-background:black;
-color:yellowgreen;
-font-family:Arial;
-padding:20px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th,td{
-border:1px solid yellowgreen;
-padding:8px;
-}
-
-th{
-background:yellowgreen;
-color:black;
-}
-</style>
-
 </head>
 
 <body>
 
-<h1>🏆 Top Conteúdos</h1>
-
-<div id="status">carregando...</div>
-<table id="tabela"></table>
+<h2 id="status">iniciando...</h2>
 
 <script>
+
+document.getElementById("status").innerText = "JS carregado";
 
 const supabase = window.supabase.createClient(
 "https://vdpucrilxzlnxxnaohdh.supabase.co",
 "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
 )
 
-async function carregar(){
+async function teste(){
+
+document.getElementById("status").innerText = "consultando banco...";
 
 let { data, error } = await supabase
 .from("vw_top_conteudos")
 .select("*")
 
 if(error){
-document.getElementById("status").innerText =
-"ERRO: " + error.message
-console.log(error)
-return
+document.getElementById("status").innerText = "ERRO: " + error.message;
+console.log(error);
+return;
 }
 
-console.log("DADOS:", data)
-
 document.getElementById("status").innerText =
-"OK: " + data.length + " registros"
+"OK: " + data.length + " registros";
 
-let html = "<tr><th>Título</th><th>Total</th></tr>"
-
-data.forEach(item=>{
-html += `<tr>
-<td>${item.titulo}</td>
-<td>${item.total}</td>
-</tr>`
-})
-
-document.getElementById("tabela").innerHTML = html
+console.log(data);
 
 }
 
-carregar()
+teste();
 
 </script>
 
 </body>
 </html>
 ```
+
