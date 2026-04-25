@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: burlywood;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5dc; /* Um tom mais claro de burlywood */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #deb887; /* Burlywood mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #f5f5dc;
+            border: 1px solid #deb887;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia JavaScript</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> JavaScript é uma linguagem de programação versátil usada principalmente para desenvolvimento web. Ela é executada no navegador e também no backend com Node.js.</p>
+                <p><strong>Exemplo 1:</strong> Primeiro programa em JavaScript.</p>
+                <pre>
+console.log("Olá, mundo!");
+                </pre>
+                <p><strong>Exemplo 2:</strong> Inserindo JavaScript em HTML.</p>
+                <pre>
+<script>
+    alert("Isso é JavaScript!");
+</script>
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem variáveis, tipos de dados e operadores.</p>
+                <p><strong>Exemplo 1:</strong> Declaração de variáveis.</p>
+                <pre>
+let nome = "JavaScript";
+const anoCriacao = 1995;
+var versao = "ES6"; // Evite usar var
+console.log(nome, anoCriacao, versao);
+                </pre>
+                <p><strong>Exemplo 2:</strong> Tipos de dados.</p>
+                <pre>
+let numero = 42; // Number
+let texto = "Olá"; // String
+let ativo = true; // Boolean
+let lista = [1, 2, 3]; // Array
+let objeto = { chave: "valor" }; // Object
+console.log(typeof numero, typeof texto, typeof ativo, typeof lista, typeof objeto);
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Operadores</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> JavaScript suporta operadores aritméticos, relacionais e lógicos.</p>
+                <p><strong>Exemplo 1:</strong> Operadores aritméticos.</p>
+                <pre>
+let a = 10;
+let b = 3;
+console.log("Soma:", a + b); // 13
+console.log("Subtração:", a - b); // 7
+console.log("Multiplicação:", a * b); // 30
+console.log("Divisão:", a / b); // 3.333...
+console.log("Resto:", a % b); // 1
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operadores lógicos.</p>
+                <pre>
+let x = true;
+let y = false;
+console.log("AND:", x && y); // false
+console.log("OR:", x || y); // true
+console.log("NOT:", !x); // false
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Controle de Fluxo</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `for` e `while` permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+let idade = 18;
+if (idade >= 18) {
+    console.log("Maior de idade");
+} else {
+    console.log("Menor de idade");
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `for`.</p>
+                <pre>
+for (let i = 1; i <= 5; i++) {
+    console.log("Número:", i);
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Funções</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função básica.</p>
+                <pre>
+function saudacao(nome) {
+    return `Olá, ${nome}!`;
+}
+console.log(saudacao("João"));
+                </pre>
+                <p><strong>Exemplo 2:</strong> Funções anônimas e arrow functions.</p>
+                <pre>
+// Função anônima
+const soma = function(a, b) {
+    return a + b;
+};
+console.log(soma(5, 3));
+
+// Arrow function
+const multiplicacao = (a, b) => a * b;
+console.log(multiplicacao(4, 5));
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Arrays</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Arrays são coleções ordenadas de elementos.</p>
+                <p><strong>Exemplo 1:</strong> Manipulação básica de arrays.</p>
+                <pre>
+let numeros = [1, 2, 3, 4];
+numeros.push(5); // Adiciona ao final
+numeros.pop(); // Remove o último elemento
+console.log(numeros);
+
+// Iterando com forEach
+numeros.forEach((numero) => {
+    console.log(numero);
+});
+                </pre>
+                <p><strong>Exemplo 2:</strong> Métodos avançados de array.</p>
+                <pre>
+let numeros = [1, 2, 3, 4];
+
+// Map
+let dobrados = numeros.map((numero) => numero * 2);
+console.log(dobrados);
+
+// Filter
+let pares = numeros.filter((numero) => numero % 2 === 0);
+console.log(pares);
+
+// Reduce
+let soma = numeros.reduce((total, numero) => total + numero, 0);
+console.log(soma);
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Objetos</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Objetos são coleções de pares chave-valor.</p>
+                <p><strong>Exemplo 1:</strong> Criação e manipulação de objetos.</p>
+                <pre>
+let pessoa = {
+    nome: "Maria",
+    idade: 25,
+    saudacao: function() {
+        console.log(`Olá, meu nome é ${this.nome}`);
+    }
+};
+pessoa.saudacao();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Acesso dinâmico a propriedades.</p>
+                <pre>
+let produto = {
+    nome: "Camiseta",
+    preco: 50
+};
+console.log(produto["nome"]); // Camiseta
+produto["cor"] = "Azul";
+console.log(produto.cor); // Azul
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. DOM Manipulation</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> O DOM (Document Object Model) permite interagir com o HTML e CSS usando JavaScript.</p>
+                <p><strong>Exemplo 1:</strong> Alterando conteúdo de um elemento.</p>
+                <pre>
+document.getElementById("titulo").innerText = "Novo Título";
+                </pre>
+                <p><strong>Exemplo 2:</strong> Adicionando eventos.</p>
+                <pre>
+document.getElementById("botao").addEventListener("click", () => {
+    alert("Botão clicado!");
+});
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Promises e Async/Await</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Promises e async/await facilitam o trabalho com código assíncrono.</p>
+                <p><strong>Exemplo 1:</strong> Uso de Promises.</p>
+                <pre>
+function obterDados() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve("Dados obtidos"), 1000);
+    });
+}
+obterDados().then((resultado) => {
+    console.log(resultado);
+});
+                </pre>
+                <p><strong>Exemplo 2:</strong> Uso de async/await.</p>
+                <pre>
+async function buscarDados() {
+    let resultado = await obterDados();
+    console.log(resultado);
+}
+buscarDados();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Classes</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Classes são uma forma de criar objetos com métodos e propriedades.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma classe.</p>
+                <pre>
+class Pessoa {
+    constructor(nome, idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+    saudacao() {
+        console.log(`Olá, sou ${this.nome} e tenho ${this.idade} anos.`);
+    }
+}
+let joao = new Pessoa("João", 30);
+joao.saudacao();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Herança de classes.</p>
+                <pre>
+class Funcionario extends Pessoa {
+    constructor(nome, idade, cargo) {
+        super(nome, idade);
+        this.cargo = cargo;
+    }
+    detalhes() {
+        console.log(`${this.nome} é ${this.cargo}.`);
+    }
+}
+let maria = new Funcionario("Maria", 25, "Desenvolvedora");
+maria.detalhes();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Módulos</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Módulos permitem organizar o código em arquivos separados.</p>
+                <p><strong>Exemplo 1:</strong> Exportando e importando módulos.</p>
+                <pre>
+// math.js
+export function soma(a, b) {
+    return a + b;
+}
+
+// main.js
+import { soma } from './math.js';
+console.log(soma(5, 3)); // 8
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Melhores Práticas</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Boas práticas incluem uso de const/let, evitar var, modularização e tratamento de erros.</p>
+                <p><strong>Exemplo 1:</strong> Tratamento de erros com try/catch.</p>
+                <pre>
+try {
+    throw new Error("Erro simulado");
+} catch (erro) {
+    console.error("Erro capturado:", erro.message);
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Modularização do código.</p>
+                <pre>
+// utils.js
+export function formatarData(data) {
+    return data.toISOString().split("T")[0];
+}
+
+// app.js
+import { formatarData } from './utils.js';
+console.log(formatarData(new Date())); // YYYY-MM-DD
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

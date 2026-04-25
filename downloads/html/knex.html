@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Knex.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: yellowgreen;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #e8f5e9; /* Um tom mais claro de yellowgreen */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #8bc34a; /* Yellowgreen mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #8bc34a;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Knex.js</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Biblioteca</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Knex.js é uma biblioteca de construção de consultas SQL para Node.js. Ele permite interagir com bancos de dados SQL de forma programática, segura e modular.</p>
+                <p><strong>Exemplo 1:</strong> Instalação do Knex.js.</p>
+                <pre>
+# Execute no terminal:
+npm install knex pg
+                </pre>
+                <p><strong>Exemplo 2:</strong> Configuração inicial.</p>
+                <pre>
+// knexfile.js
+module.exports = {
+    development: {
+        client: 'pg',
+        connection: {
+            host: 'localhost',
+            user: 'seu_usuario',
+            password: 'sua_senha',
+            database: 'seu_banco'
+        },
+        migrations: {
+            directory: './migrations'
+        },
+        seeds: {
+            directory: './seeds'
+        }
+    }
+};
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem a criação de consultas básicas e conexão com o banco de dados.</p>
+                <p><strong>Exemplo 1:</strong> Conexão com o banco de dados.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function testarConexao() {
+    try {
+        await knex.raw('SELECT 1+1 AS result');
+        console.log('Conexão bem-sucedida!');
+    } catch (error) {
+        console.error('Erro ao conectar:', error);
+    }
+}
+testarConexao();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Consulta básica.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function consultarUsuarios() {
+    const usuarios = await knex('usuarios').select('nome', 'email');
+    console.log(usuarios);
+}
+consultarUsuarios();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Query Builder</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> O Query Builder do Knex.js permite construir consultas SQL de forma programática.</p>
+                <p><strong>Exemplo 1:</strong> Inserindo dados.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function inserirUsuario() {
+    await knex('usuarios').insert({
+        nome: 'João',
+        email: 'joao@example.com',
+        idade: 25
+    });
+    console.log('Usuário inserido!');
+}
+inserirUsuario();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Atualizando dados.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function atualizarUsuario() {
+    await knex('usuarios')
+        .where('id', 1)
+        .update({ idade: 26 });
+    console.log('Usuário atualizado!');
+}
+atualizarUsuario();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Migrações</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Migrações permitem gerenciar alterações no esquema do banco de dados de forma controlada.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma migração.</p>
+                <pre>
+# Execute no terminal:
+npx knex migrate:make create_usuarios_table
+                </pre>
+                <p><strong>Exemplo 2:</strong> Implementando a migração.</p>
+                <pre>
+// migrations/20231010_create_usuarios_table.js
+exports.up = function(knex) {
+    return knex.schema.createTable('usuarios', function(table) {
+        table.increments('id').primary();
+        table.string('nome').notNullable();
+        table.string('email').unique().notNullable();
+        table.integer('idade');
+        table.timestamps(true, true); // created_at e updated_at
+    });
+};
+
+exports.down = function(knex) {
+    return knex.schema.dropTable('usuarios');
+};
+                </pre>
+                <p><strong>Exemplo 3:</strong> Executando a migração.</p>
+                <pre>
+# Execute no terminal:
+npx knex migrate:latest
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Seeds</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Seeds permitem popular o banco de dados com dados iniciais ou de teste.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma seed.</p>
+                <pre>
+# Execute no terminal:
+npx knex seed:make usuarios_seed
+                </pre>
+                <p><strong>Exemplo 2:</strong> Implementando a seed.</p>
+                <pre>
+// seeds/usuarios_seed.js
+exports.seed = async function(knex) {
+    await knex('usuarios').insert([
+        { nome: 'Maria', email: 'maria@example.com', idade: 30 },
+        { nome: 'Pedro', email: 'pedro@example.com', idade: 22 }
+    ]);
+};
+                </pre>
+                <p><strong>Exemplo 3:</strong> Executando a seed.</p>
+                <pre>
+# Execute no terminal:
+npx knex seed:run
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Transações</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Transações garantem a integridade dos dados em operações complexas.</p>
+                <p><strong>Exemplo 1:</strong> Usando transações.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function realizarTransacao() {
+    const trx = await knex.transaction();
+    try {
+        await trx('usuarios').insert({ nome: 'Ana', email: 'ana@example.com', idade: 28 });
+        await trx('usuarios').where('id', 1).update({ idade: 27 });
+        await trx.commit();
+        console.log('Transação concluída!');
+    } catch (error) {
+        await trx.rollback();
+        console.error('Erro na transação:', error);
+    }
+}
+realizarTransacao();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Consultas Complexas</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Knex.js suporta consultas avançadas, como joins e agregações.</p>
+                <p><strong>Exemplo 1:</strong> Join entre tabelas.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function consultarPedidosComUsuarios() {
+    const resultados = await knex('pedidos')
+        .join('usuarios', 'pedidos.usuario_id', 'usuarios.id')
+        .select('usuarios.nome', 'pedidos.produto');
+    console.log(resultados);
+}
+consultarPedidosComUsuarios();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Agregações.</p>
+                <pre>
+const knex = require('knex')(require('./knexfile').development);
+
+async function calcularTotalDePedidos() {
+    const total = await knex('pedidos').sum('valor as total');
+    console.log(total);
+}
+calcularTotalDePedidos();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Suporte Multi-Banco</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Knex.js suporta múltiplos bancos de dados, como MySQL, PostgreSQL, SQLite e MSSQL.</p>
+                <p><strong>Exemplo 1:</strong> Trocando de banco de dados.</p>
+                <pre>
+// knexfile.js
+module.exports = {
+    development: {
+        client: 'mysql', // Altere para 'sqlite3', 'mssql', etc.
+        connection: {
+            host: 'localhost',
+            user: 'seu_usuario',
+            password: 'sua_senha',
+            database: 'seu_banco'
+        }
+    }
+};
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Debugging e Logs</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Knex.js oferece suporte a logs para depuração de consultas.</p>
+                <p><strong>Exemplo 1:</strong> Habilitando logs.</p>
+                <pre>
+const knex = require('knex')({
+    client: 'pg',
+    connection: {
+        host: 'localhost',
+        user: 'seu_usuario',
+        password: 'sua_senha',
+        database: 'seu_banco'
+    },
+    debug: true // Habilita logs detalhados
+});
+
+async function consultarUsuarios() {
+    const usuarios = await knex('usuarios').select('*');
+    console.log(usuarios);
+}
+consultarUsuarios();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Melhores Práticas</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Boas práticas para usar Knex.js incluem organização de código, uso de migrações e evitar queries inline.</p>
+                <p><strong>Exemplo 1:</strong> Organização de consultas em funções.</p>
+                <pre>
+// db/queries.js
+const knex = require('knex')(require('../knexfile').development);
+
+async function buscarUsuarios() {
+    return knex('usuarios').select('*');
+}
+
+module.exports = { buscarUsuarios };
+
+// index.js
+const { buscarUsuarios } = require('./db/queries');
+
+async function main() {
+    const usuarios = await buscarUsuarios();
+    console.log(usuarios);
+}
+main();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Evitando queries inline.</p>
+                <pre>
+// Ruim: Query inline
+await knex.raw('SELECT * FROM usuarios WHERE idade > ?', [18]);
+
+// Bom: Query Builder
+await knex('usuarios').where('idade', '>', 18).select('*');
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Orientação a Objetos em Go</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: yellowgreen;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #e7f4ff;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guia de Referência sobre Orientação a Objetos em Go (Golang)</h1>
+    
+    <div class="note">
+        <p>Go é uma linguagem que adota uma abordagem diferente para orientação a objetos, sem classes tradicionais, mas com estruturas (structs) e métodos associados a tipos.</p>
+    </div>
+
+    <h2>1. Descrição da "Classe" em Go</h2>
+    
+    <p>Em Go, não existem classes como em linguagens tradicionais OO. Em vez disso, usamos:</p>
+    
+    <ul>
+        <li><strong>Structs</strong>: Para definir a estrutura de dados (equivalentes aos atributos)</li>
+        <li><strong>Métodos</strong>: Funções associadas a tipos (structs)</li>
+        <li><strong>Interfaces</strong>: Para definir comportamentos (equivalentes a interfaces em outras linguagens)</li>
+    </ul>
+    
+    <h3>Exemplo básico de struct (classe):</h3>
+    
+    <pre><code>type Pessoa struct {
+    Nome  string
+    Idade int
+}</code></pre>
+
+    <h2>2. Exemplo Prático: Cadastro de Produtos e Fornecedores</h2>
+    
+    <h3>2.1 Definição das Structs</h3>
+    
+    <pre><code>package main
+
+import "fmt"
+
+// Fornecedor representa um fornecedor de produtos
+type Fornecedor struct {
+    ID     int
+    Nome   string
+    CNPJ   string
+    Ativo  bool
+}
+
+// Produto representa um produto em nosso sistema
+type Produto struct {
+    ID          int
+    Nome        string
+    Descricao   string
+    Preco       float64
+    Quantidade  int
+    Fornecedor  Fornecedor
+    Disponivel  bool
+}</code></pre>
+
+    <h3>2.2 Métodos para Produto</h3>
+    
+    <pre><code>// Método para aumentar o preço em uma porcentagem
+func (p *Produto) AumentarPreco(percentual float64) {
+    p.Preco += p.Preco * (percentual / 100)
+}
+
+// Método para verificar disponibilidade
+func (p Produto) EstaDisponivel() bool {
+    return p.Disponivel && p.Quantidade > 0
+}
+
+// Método para vender uma quantidade do produto
+func (p *Produto) Vender(quantidade int) error {
+    if quantidade > p.Quantidade {
+        return fmt.Errorf("quantidade indisponível")
+    }
+    p.Quantidade -= quantidade
+    return nil
+}</code></pre>
+
+    <h3>2.3 Métodos para Fornecedor</h3>
+    
+    <pre><code>// Método para ativar/desativar fornecedor
+func (f *Fornecedor) AlterarStatus(ativo bool) {
+    f.Ativo = ativo
+}
+
+// Método para validar CNPJ (simplificado)
+func (f Fornecedor) ValidarCNPJ() bool {
+    return len(f.CNPJ) == 14
+}</code></pre>
+
+    <h3>2.4 Exemplo de Uso</h3>
+    
+    <pre><code>func main() {
+    // Criando um fornecedor
+    fornecedor := Fornecedor{
+        ID:    1,
+        Nome:  "Fornecedor Exemplo Ltda",
+        CNPJ:  "12345678000199",
+        Ativo: true,
+    }
+
+    // Criando um produto
+    produto := Produto{
+        ID:          1,
+        Nome:        "Notebook Elite",
+        Descricao:   "Notebook de última geração",
+        Preco:       4500.00,
+        Quantidade:  10,
+        Fornecedor:  fornecedor,
+        Disponivel:  true,
+    }
+
+    // Usando os métodos
+    fmt.Println("Produto disponível:", produto.EstaDisponivel())
+    
+    produto.AumentarPreco(10)
+    fmt.Println("Novo preço:", produto.Preco)
+    
+    err := produto.Vender(3)
+    if err != nil {
+        fmt.Println("Erro na venda:", err)
+    } else {
+        fmt.Println("Venda realizada. Novo estoque:", produto.Quantidade)
+    }
+    
+    fornecedor.AlterarStatus(false)
+    fmt.Println("Fornecedor ativo?", fornecedor.Ativo)
+}</code></pre>
+
+    <h2>3. Definição de Métodos e Funções - Exemplos Práticos</h2>
+    
+    <h3>3.1 Diferença entre Métodos e Funções</h3>
+    
+    <p><strong>Função</strong>: Bloco de código independente que recebe parâmetros e retorna valores.</p>
+    
+    <pre><code>func CalcularDesconto(preco float64, percentual float64) float64 {
+    return preco * (percentual / 100)
+}</code></pre>
+    
+    <p><strong>Método</strong>: Função associada a um tipo (receiver). Pode modificar o objeto (ponteiro) ou apenas ler (valor).</p>
+    
+    <pre><code>// Método com receiver por valor (não modifica o original)
+func (p Produto) PrecoComDesconto(percentual float64) float64 {
+    return p.Preco * (1 - (percentual / 100))
+}
+
+// Método com receiver por ponteiro (pode modificar o original)
+func (p *Produto) AplicarDesconto(percentual float64) {
+    p.Preco = p.Preco * (1 - (percentual / 100))
+}</code></pre>
+
+    <h3>3.2 Encapsulamento em Go</h3>
+    
+    <p>Em Go, o encapsulamento é controlado pela capitalização dos nomes:</p>
+    
+    <ul>
+        <li><strong>Público</strong>: Nome começa com letra maiúscula (acessível de outros pacotes)</li>
+        <li><strong>Privado</strong>: Nome começa com letra minúscula (acessível apenas no mesmo pacote)</li>
+    </ul>
+    
+    <pre><code>type Conta struct {
+    saldo float64  // privado (acessível apenas no mesmo pacote)
+    Titular string // público (acessível de outros pacotes)
+}</code></pre>
+
+    <h2>4. Tabelas SQL para Produtos e Fornecedores</h2>
+    
+    <h3>4.1 MySQL</h3>
+    
+    <pre><code>-- Tabela de Fornecedores
+CREATE TABLE fornecedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
+    ativo BOOLEAN DEFAULT TRUE,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 0,
+    disponivel BOOLEAN DEFAULT TRUE,
+    fornecedor_id INT NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id)
+);</code></pre>
+    
+    <h3>4.2 SQL Server</h3>
+    
+    <pre><code>-- Tabela de Fornecedores
+CREATE TABLE fornecedores (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome NVARCHAR(100) NOT NULL,
+    cnpj NVARCHAR(14) NOT NULL UNIQUE,
+    ativo BIT DEFAULT 1,
+    data_cadastro DATETIME DEFAULT GETDATE()
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome NVARCHAR(100) NOT NULL,
+    descricao NVARCHAR(MAX),
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 0,
+    disponivel BIT DEFAULT 1,
+    fornecedor_id INT NOT NULL,
+    data_cadastro DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id)
+);</code></pre>
+
+    <h2>5. Exemplo Avançado: Interface para Repositório</h2>
+    
+    <p>Usando interfaces para definir um contrato de repositório:</p>
+    
+    <pre><code>// RepositorioProduto define os métodos para operações com produtos
+type RepositorioProduto interface {
+    Salvar(produto Produto) (int, error)
+    BuscarPorID(id int) (Produto, error)
+    ListarTodos() ([]Produto, error)
+    Atualizar(produto Produto) error
+    Excluir(id int) error
+}
+
+// Implementação concreta para MySQL
+type ProdutoMySQLRepo struct {
+    db *sql.DB
+}
+
+func (r ProdutoMySQLRepo) Salvar(produto Produto) (int, error) {
+    // Implementação para salvar no MySQL
+    result, err := r.db.Exec("INSERT INTO produtos (...) VALUES (...)")
+    // ...
+}
+
+// Uso da interface
+func CadastrarNovoProduto(repo RepositorioProduto, p Produto) error {
+    _, err := repo.Salvar(p)
+    return err
+}</code></pre>
+
+    <div class="note">
+        <p><strong>Dica</strong>: Em Go, a composição é preferida em vez de herança. Você pode embutir structs para reutilizar comportamento.</p>
+        <pre><code>type Pessoa struct {
+    Nome string
+    Idade int
+}
+
+type Funcionario struct {
+    Pessoa  // Embedding (composição)
+    Salario float64
+}</code></pre>
+    </div>
+
+    <h2>Conclusão</h2>
+    
+    <p>Embora Go tenha uma abordagem diferente para orientação a objetos, ele oferece todos os mecanismos necessários para criar sistemas bem estruturados com encapsulamento, polimorfismo (via interfaces) e reutilização de código (via composição).</p>
+    
+    <p>A chave é pensar em termos de tipos, comportamentos e interfaces, em vez de classes e hierarquias complexas.</p>
+</body>
+</html>

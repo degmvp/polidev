@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Ruby</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: coral;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffebcd; /* Um tom mais claro de coral */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #ff7f50; /* Coral mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #ffebcd;
+            border: 1px solid #ff7f50;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Ruby</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Ruby é uma linguagem de programação dinâmica, orientada a objetos e de alto nível. Criada por Yukihiro "Matz" Matsumoto em 1995, ela é conhecida por sua sintaxe elegante e legibilidade.</p>
+                <p><strong>Exemplo 1:</strong> Primeiro programa em Ruby.</p>
+                <pre>
+puts "Olá, mundo!"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Execução via terminal.</p>
+                <pre>
+# Salve o arquivo como script.rb
+# Execute:
+ruby script.rb
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem variáveis, tipos de dados e operadores.</p>
+                <p><strong>Exemplo 1:</strong> Declaração de variáveis.</p>
+                <pre>
+nome = "Ruby"
+idade = 30
+puts "Estou aprendendo #{nome} aos #{idade} anos."
+                </pre>
+                <p><strong>Exemplo 2:</strong> Tipos de dados.</p>
+                <pre>
+numero = 42          # Integer
+texto = "Olá"       # String
+ativo = true        # Boolean
+lista = [1, 2, 3]   # Array
+hash = { chave: "valor" } # Hash
+puts numero.class   # Integer
+puts texto.class    # String
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Controle de Fluxo</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `unless` e loops permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+idade = 18
+if idade >= 18
+  puts "Maior de idade"
+else
+  puts "Menor de idade"
+end
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `each`.</p>
+                <pre>
+[1, 2, 3].each do |numero|
+  puts "Número: #{numero}"
+end
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Funções</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função básica.</p>
+                <pre>
+def saudacao(nome)
+  "Olá, #{nome}!"
+end
+puts saudacao("João")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Funções com argumentos padrão.</p>
+                <pre>
+def saudacao(nome = "mundo")
+  "Olá, #{nome}!"
+end
+puts saudacao
+puts saudacao("Maria")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Classes e Objetos</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Ruby é uma linguagem orientada a objetos, e tudo em Ruby é um objeto.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma classe.</p>
+                <pre>
+class Pessoa
+  attr_accessor :nome, :idade
+
+  def initialize(nome, idade)
+    @nome = nome
+    @idade = idade
+  end
+
+  def saudacao
+    "Olá, sou #{@nome} e tenho #{@idade} anos."
+  end
+end
+
+pessoa = Pessoa.new("João", 30)
+puts pessoa.saudacao
+                </pre>
+                <p><strong>Exemplo 2:</strong> Herança de classes.</p>
+                <pre>
+class Funcionario < Pessoa
+  attr_accessor :cargo
+
+  def initialize(nome, idade, cargo)
+    super(nome, idade)
+    @cargo = cargo
+  end
+
+  def detalhes
+    "#{@nome} é #{@cargo}."
+  end
+end
+
+funcionario = Funcionario.new("Maria", 25, "Desenvolvedora")
+puts funcionario.detalhes
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Ruby on Rails</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Ruby on Rails (RoR) é um framework web de código aberto escrito em Ruby. Ele segue o padrão MVC (Model-View-Controller) e é conhecido por sua convenção sobre configuração.</p>
+                <p><strong>Exemplo 1:</strong> Instalação do Rails.</p>
+                <pre>
+gem install rails
+rails new meu_app
+cd meu_app
+rails server
+                </pre>
+                <p><strong>Exemplo 2:</strong> Criando um CRUD básico.</p>
+                <pre>
+# Gerar um scaffold para um recurso
+rails generate scaffold Produto nome:string preco:decimal
+rails db:migrate
+
+# Acessar o CRUD em http://localhost:3000/produtos
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. ActiveRecord</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> ActiveRecord é a camada ORM (Object-Relational Mapping) do Rails, usada para interagir com o banco de dados.</p>
+                <p><strong>Exemplo 1:</strong> Criando e consultando registros.</p>
+                <pre>
+# Criar um novo registro
+produto = Produto.create(nome: "Notebook", preco: 3000.00)
+
+# Consultar registros
+produtos = Produto.where("preco > ?", 1000)
+produtos.each do |p|
+  puts p.nome
+end
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Rotas</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> As rotas no Rails definem como as URLs são mapeadas para os controllers.</p>
+                <p><strong>Exemplo 1:</strong> Definindo rotas no arquivo `config/routes.rb`.</p>
+                <pre>
+Rails.application.routes.draw do
+  get 'sobre', to: 'paginas#sobre'
+  resources :produtos
+end
+                </pre>
+                <p><strong>Exemplo 2:</strong> Controller para a rota.</p>
+                <pre>
+class PaginasController < ApplicationController
+  def sobre
+    render plain: "Esta é a página Sobre"
+  end
+end
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Views</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Views são responsáveis pela interface do usuário no Rails.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma view.</p>
+                <pre>
+<!-- app/views/paginas/sobre.html.erb -->
+<h1>Sobre</h1>
+<p>Bem-vindo à nossa aplicação!</p>
+                </pre>
+                <p><strong>Exemplo 2:</strong> Usando ERB para exibir dados.</p>
+                <pre>
+<!-- app/views/produtos/index.html.erb -->
+<h1>Lista de Produtos</h1>
+<ul>
+  <% @produtos.each do |produto| %>
+    <li><%= produto.nome %> - <%= number_to_currency(produto.preco) %></li>
+  <% end %>
+</ul>
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Gems</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Gems são bibliotecas reutilizáveis em Ruby. O Rails usa gems para adicionar funcionalidades.</p>
+                <p><strong>Exemplo 1:</strong> Adicionando uma gem ao projeto.</p>
+                <pre>
+# Gemfile
+gem 'devise'
+
+# Instalar a gem
+bundle install
+                </pre>
+                <p><strong>Exemplo 2:</strong> Usando a gem Devise para autenticação.</p>
+                <pre>
+rails generate devise:install
+rails generate devise User
+rails db:migrate
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Testes</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Testes são essenciais em Rails para garantir a qualidade do código.</p>
+                <p><strong>Exemplo 1:</strong> Escrevendo um teste unitário.</p>
+                <pre>
+# test/models/produto_test.rb
+require 'test_helper'
+
+class ProdutoTest < ActiveSupport::TestCase
+  test "deve salvar um produto válido" do
+    produto = Produto.new(nome: "Notebook", preco: 3000.00)
+    assert produto.save
+  end
+end
+                </pre>
+                <p><strong>Exemplo 2:</strong> Rodando os testes.</p>
+                <pre>
+rails test
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Melhores Práticas</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Boas práticas incluem seguir convenções, usar gems moderadamente e escrever testes.</p>
+                <p><strong>Exemplo 1:</strong> Convenção sobre configuração.</p>
+                <pre>
+# Nomeie arquivos e pastas de acordo com as convenções do Rails
+app/controllers/produtos_controller.rb
+app/models/produto.rb
+                </pre>
+                <p><strong>Exemplo 2:</strong> Mantenha o código limpo e modularizado.</p>
+                <pre>
+# Extrair lógica complexa para métodos privados no controller
+class ProdutosController < ApplicationController
+  def index
+    @produtos = filtrar_produtos
+  end
+
+  private
+
+  def filtrar_produtos
+    Produto.where("preco > ?", params[:minimo])
+  end
+end
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

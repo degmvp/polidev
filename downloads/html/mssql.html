@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: yellowgreen;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        pre {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia de Comandos MSSQL Server 2022</h1>
+
+        <h2>1 - Conexão ao Banco</h2>
+        <pre>
+-- Conectar ao SQL Server usando autenticação do SQL
+sqlcmd -S servidor\instancia -U usuario -P senha -d banco_de_dados
+
+-- Conectar ao SQL Server usando autenticação do Windows
+sqlcmd -S servidor\instancia -E -d banco_de_dados
+
+-- Conectar via SQL Server Management Studio (SSMS)
+-- Preencher: 
+-- Nome do servidor: servidor\instancia
+-- Autenticação: Windows ou SQL Server
+-- Nome de usuário e senha (se autenticação SQL)
+</pre>
+
+        <h2>2 - Usuários e Schema</h2>
+        <pre>
+-- Criar um novo login
+CREATE LOGIN novo_usuario WITH PASSWORD = 'Senha@123';
+
+-- Criar um usuário associado ao login
+USE banco_de_dados;
+CREATE USER novo_usuario FOR LOGIN novo_usuario;
+
+-- Criar um schema
+CREATE SCHEMA vendas AUTHORIZATION novo_usuario;
+
+-- Alterar o schema padrão de um usuário
+ALTER USER novo_usuario WITH DEFAULT_SCHEMA = vendas;
+</pre>
+
+        <h2>3 - Criação de Tabelas</h2>
+        <pre>
+-- Criar uma tabela básica
+CREATE TABLE clientes (
+    cliente_id INT PRIMARY KEY IDENTITY(1,1),
+    nome NVARCHAR(100) NOT NULL,
+    email NVARCHAR(100) UNIQUE,
+    data_cadastro DATETIME DEFAULT GETDATE(),
+    ativo BIT DEFAULT 1
+);
+
+-- Criar tabela com chave estrangeira
+CREATE TABLE pedidos (
+    pedido_id INT PRIMARY KEY IDENTITY(1,1),
+    cliente_id INT NOT NULL,
+    data_pedido DATETIME DEFAULT GETDATE(),
+    valor_total DECIMAL(10,2),
+    CONSTRAINT fk_cliente FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
+);
+</pre>
+
+        <h2>4 - Procedures</h2>
+        <pre>
+-- Criar uma stored procedure básica
+CREATE PROCEDURE sp_inserir_cliente
+    @nome NVARCHAR(100),
+    @email NVARCHAR(100)
+AS
+BEGIN
+    INSERT INTO clientes (nome, email)
+    VALUES (@nome, @email);
+    
+    RETURN SCOPE_IDENTITY();
+END;
+
+-- Chamar a procedure
+EXEC sp_inserir_cliente 'João Silva', 'joao@email.com';
+</pre>
+
+        <h2>5 - Funções</h2>
+        <pre>
+-- Criar uma função escalar
+CREATE FUNCTION fn_calcular_desconto(@valor DECIMAL(10,2), @percentual INT)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @valor * (@percentual / 100.0);
+END;
+
+-- Criar uma função com valor de tabela
+CREATE FUNCTION fn_clientes_ativos()
+RETURNS TABLE
+AS
+RETURN (
+    SELECT cliente_id, nome, email 
+    FROM clientes 
+    WHERE ativo = 1
+);
+
+-- Usar as funções
+SELECT dbo.fn_calcular_desconto(100, 10); -- Retorna 90.00
+SELECT * FROM fn_clientes_ativos();
+</pre>
+
+        <h2>6 - Views</h2>
+        <pre>
+-- Criar uma view
+CREATE VIEW vw_pedidos_clientes AS
+SELECT 
+    p.pedido_id,
+    c.nome AS cliente,
+    p.data_pedido,
+    p.valor_total
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.cliente_id;
+
+-- Consultar a view
+SELECT * FROM vw_pedidos_clientes 
+WHERE data_pedido > DATEADD(day, -30, GETDATE());
+</pre>
+
+        <h2>7 - Formatação de Consultas (Queries)</h2>
+        <pre>
+-- Consulta com formatação de datas e números
+SELECT 
+    cliente_id,
+    nome,
+    FORMAT(data_cadastro, 'dd/MM/yyyy HH:mm') AS data_formatada,
+    UPPER(LEFT(nome, 1)) + LOWER(SUBSTRING(nome, 2, LEN(nome))) AS nome_formatado,
+    CAST(valor_total AS DECIMAL(10,2)) AS valor_br
+FROM clientes
+WHERE YEAR(data_cadastro) = YEAR(GETDATE());
+
+-- Consulta com CASE para categorização
+SELECT 
+    nome,
+    valor_total,
+    CASE 
+        WHEN valor_total > 1000 THEN 'Alto'
+        WHEN valor_total > 500 THEN 'Médio'
+        ELSE 'Baixo'
+    END AS categoria_valor
+FROM pedidos;
+</pre>
+
+        <h2>8 - Criação e Gerenciamento de Índices</h2>
+        <pre>
+-- Criar índice clusterizado (a tabela já tem um na chave primária)
+-- Criar índice não-clusterizado
+CREATE INDEX idx_clientes_nome ON clientes(nome);
+
+-- Criar índice composto
+CREATE INDEX idx_pedidos_data_cliente ON pedidos(data_pedido, cliente_id);
+
+-- Criar índice com inclusão de colunas
+CREATE INDEX idx_clientes_email ON clientes(email) INCLUDE (nome, ativo);
+
+-- Ver índices de uma tabela
+EXEC sp_helpindex 'clientes';
+
+-- Reorganizar índice
+ALTER INDEX idx_clientes_nome ON clientes REORGANIZE;
+
+-- Reconstruir índice
+ALTER INDEX idx_clientes_nome ON clientes REBUILD;
+</pre>
+
+        <h2>9 - Espaço em Disco</h2>
+        <pre>
+-- Verificar espaço usado por banco de dados
+EXEC sp_spaceused;
+
+-- Verificar espaço usado por tabelas em um banco
+EXEC sp_MSforeachtable 'EXEC sp_spaceused [?]';
+
+-- Verificar crescimento de arquivos
+SELECT 
+    name AS [Nome do Arquivo],
+    physical_name AS [Caminho Físico],
+    size/128.0 AS [Tamanho Atual em MB],
+    size/128.0 - CAST(FILEPROPERTY(name, 'SpaceUsed') AS [Espaço Livre em MB],
+    growth/128.0 AS [Crescimento em MB]
+FROM sys.database_files;
+
+-- Reduzir arquivo de log
+DBCC SHRINKFILE('banco_de_dados_log', 100); -- Reduzir para 100MB
+</pre>
+
+        <h2>10 - Particionamento de Tabelas</h2>
+        <pre>
+-- Criar função de partição por ano
+CREATE PARTITION FUNCTION pf_pedidos_por_ano(DATETIME)
+AS RANGE RIGHT FOR VALUES 
+    ('2020-01-01', '2021-01-01', '2022-01-01', '2023-01-01');
+
+-- Criar esquema de partição
+CREATE PARTITION SCHEME ps_pedidos_por_ano
+AS PARTITION pf_pedidos_por_ano
+TO (fg_2019, fg_2020, fg_2021, fg_2022, fg_2023);
+
+-- Criar tabela particionada
+CREATE TABLE pedidos_part (
+    pedido_id INT,
+    data_pedido DATETIME,
+    cliente_id INT,
+    valor_total DECIMAL(10,2)
+) ON ps_pedidos_por_ano(data_pedido);
+
+-- Ver em qual partição estão os dados
+SELECT 
+    $PARTITION.pf_pedidos_por_ano(data_pedido) AS PartitionNumber,
+    COUNT(*) AS RowCount
+FROM pedidos_part
+GROUP BY $PARTITION.pf_pedidos_por_ano(data_pedido)
+ORDER BY PartitionNumber;
+</pre>
+
+        <h2>11 - Gerenciamento de Permissões Usuário e Objetos</h2>
+        <pre>
+-- Conceder permissões a um usuário
+GRANT SELECT, INSERT ON clientes TO novo_usuario;
+GRANT EXECUTE ON sp_inserir_cliente TO novo_usuario;
+
+-- Conceder permissão em um schema
+GRANT SELECT ON SCHEMA::vendas TO novo_usuario;
+
+-- Negar permissão
+DENY DELETE ON clientes TO novo_usuario;
+
+-- Criar role e adicionar permissões
+CREATE ROLE role_leitura;
+GRANT SELECT ON SCHEMA::dbo TO role_leitura;
+EXEC sp_addrolemember 'role_leitura', 'novo_usuario';
+
+-- Ver permissões de um usuário
+EXEC sp_helprotect NULL, 'novo_usuario';
+</pre>
+
+        <h2>12 - Backup de Tabelas e Bancos</h2>
+        <pre>
+-- Backup completo de banco de dados
+BACKUP DATABASE banco_de_dados 
+TO DISK = 'C:\Backups\banco_de_dados_full.bak'
+WITH COMPRESSION, STATS = 10;
+
+-- Backup diferencial
+BACKUP DATABASE banco_de_dados 
+TO DISK = 'C:\Backups\banco_de_dados_diff.bak'
+WITH DIFFERENTIAL, COMPRESSION, STATS = 10;
+
+-- Backup de log de transações
+BACKUP LOG banco_de_dados 
+TO DISK = 'C:\Backups\banco_de_dados_log.trn'
+WITH COMPRESSION, STATS = 10;
+
+-- Backup de tabela específica (usando SELECT INTO)
+SELECT * INTO clientes_backup_202307
+FROM clientes
+WHERE data_cadastro < '2023-07-01';
+
+-- Restaurar banco de dados
+RESTORE DATABASE banco_de_dados 
+FROM DISK = 'C:\Backups\banco_de_dados_full.bak'
+WITH REPLACE, RECOVERY, STATS = 10;
+</pre>
+
+        <h2>13 - Metadados</h2>
+        <pre>
+-- Obter informações sobre tabelas
+SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';
+
+-- Obter colunas de uma tabela
+SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'clientes';
+
+-- Obter procedures
+SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE';
+
+-- Obter constraints
+SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS;
+
+-- Obter chaves estrangeiras
+SELECT 
+    fk.name AS constraint_name,
+    OBJECT_NAME(fk.parent_object_id) AS table_name,
+    COL_NAME(fkc.parent_object_id, fkc.parent_column_id) AS column_name,
+    OBJECT_NAME(fk.referenced_object_id) AS referenced_table,
+    COL_NAME(fkc.referenced_object_id, fkc.referenced_column_id) AS referenced_column
+FROM sys.foreign_keys AS fk
+INNER JOIN sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id;
+</pre>
+
+        <h2>14 - Catálogo do Sistema (Tabelas e Views)</h2>
+        <pre>
+-- Tabelas do sistema mais úteis
+SELECT * FROM sys.objects; -- Todos os objetos do banco
+SELECT * FROM sys.tables; -- Todas as tabelas
+SELECT * FROM sys.views; -- Todas as views
+SELECT * FROM sys.procedures; -- Todas as procedures
+SELECT * FROM sys.indexes; -- Todos os índices
+SELECT * FROM sys.columns; -- Todas as colunas
+
+-- Views de catálogo úteis
+SELECT * FROM sys.sql_modules; -- Código fonte de objetos
+SELECT * FROM sys.dm_db_index_usage_stats; -- Estatísticas de uso de índices
+SELECT * FROM sys.dm_exec_query_stats; -- Estatísticas de performance de queries
+SELECT * FROM sys.dm_os_performance_counters; -- Contadores de performance
+
+-- Consultar dependências entre objetos
+EXEC sp_depends 'clientes';
+
+-- Consultar texto de objetos
+EXEC sp_helptext 'sp_inserir_cliente';
+</pre>
+    </div>
+</body>
+</html>

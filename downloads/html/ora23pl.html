@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Guia Rápido: PL/SQL Oracle 23c</title>
+<style>
+  body {
+    background-color: yellowgreen;
+    color: black;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 2rem;
+  }
+  h1, h2 {
+    margin-top: 1.2em;
+  }
+  pre {
+    background: white;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  code {
+    font-family: "Courier New", monospace;
+  }
+  section {
+    margin-bottom: 2rem;
+  }
+</style>
+</head>
+<body>
+<h1>Guia Rápido: PL/SQL Oracle 23c</h1>
+
+<section id="introducao">
+<h2>Introdução à Linguagem PL/SQL</h2>
+<p>PL/SQL (Procedural Language/SQL) é a linguagem procedural da Oracle que combina declarações SQL com estruturas de programação.</p>
+<pre><code>BEGIN
+  DBMS_OUTPUT.PUT_LINE('Olá, PL/SQL 23c!');
+END;
+/</code></pre>
+</section>
+
+<section id="fundamentos">
+<h2>Fundamentos</h2>
+<p>Todo bloco PL/SQL possui cabeçalho opcional, seção de declarações, corpo executável e seção de exceções.</p>
+<pre><code>DECLARE
+  v_msg VARCHAR2(100) := 'Fundamentos de bloco';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE(v_msg);
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Erro: ' || SQLERRM);
+END;
+/</code></pre>
+</section>
+
+<section id="conceitos-fundamentais">
+<h2>Conceitos Fundamentais</h2>
+<p>Variáveis, constantes e cursores são alicerces para manipulação de dados em PL/SQL.</p>
+<pre><code>DECLARE
+  CURSOR c_emp IS SELECT first_name, salary FROM employees;
+BEGIN
+  FOR r IN c_emp LOOP
+    DBMS_OUTPUT.PUT_LINE(r.first_name || ': ' || r.salary);
+  END LOOP;
+END;
+/</code></pre>
+</section>
+
+<section id="tipos-dados">
+<h2>Tipos de Dados</h2>
+<p>Principais tipos: NUMBER, VARCHAR2, DATE, BOOLEAN, CLOB, BLOB.</p>
+<pre><code>DECLARE
+  v_num   NUMBER := 42;
+  v_text  VARCHAR2(50) := 'Texto exemplo';
+  v_date  DATE := SYSDATE;
+BEGIN
+  DBMS_OUTPUT.PUT_LINE(v_text || ' (' || v_num || ') em ' || TO_CHAR(v_date, 'DD/MM/YYYY'));
+END;
+/</code></pre>
+</section>
+
+<section id="operadores">
+<h2>Operadores</h2>
+<p>Aritméticos (+, -, *, /, **), de comparação (&lt;, &gt;, =, !=, &lt;&gt;), concatenação (||).</p>
+<pre><code>DECLARE
+  v_result NUMBER;
+BEGIN
+  v_result := (10 + 5) * 2 ** 2; -- resultado 60
+  DBMS_OUTPUT.PUT_LINE('Resultado: ' || v_result);
+END;
+/</code></pre>
+</section>
+
+<section id="controle-fluxo">
+<h2>Controle de Fluxo</h2>
+<p>Utilize IF/ELSIF/ELSE, LOOP, WHILE, FOR para controlar a execução.</p>
+<pre><code>DECLARE
+  v_i NUMBER := 1;
+BEGIN
+  WHILE v_i &lt;= 5 LOOP
+    IF MOD(v_i, 2) = 0 THEN
+      DBMS_OUTPUT.PUT_LINE(v_i || ' é par');
+    ELSE
+      DBMS_OUTPUT.PUT_LINE(v_i || ' é ímpar');
+    END IF;
+    v_i := v_i + 1;
+  END LOOP;
+END;
+/</code></pre>
+</section>
+
+<section id="operadores-logicos">
+<h2>Operadores Lógicos</h2>
+<p>AND, OR, NOT combinam condições em instruções SQL e PL/SQL.</p>
+<pre><code>DECLARE
+  v_age NUMBER := 25;
+  v_city VARCHAR2(20) := 'Fortaleza';
+BEGIN
+  IF v_age &gt;= 18 AND v_city = 'Fortaleza' THEN
+    DBMS_OUTPUT.PUT_LINE('Maior de idade em Fortaleza');
+  END IF;
+END;
+/</code></pre>
+</section>
+
+<section id="arquivos">
+<h2>Arquivos Texto e Binário</h2>
+<p>UTL_FILE permite ler/escrever em diretórios autorizados.</p>
+<pre><code>DECLARE
+  v_file UTL_FILE.FILE_TYPE;
+BEGIN
+  v_file := UTL_FILE.FOPEN('DIR_TEMP', 'demo.txt', 'W');
+  UTL_FILE.PUT_LINE(v_file, 'Olá arquivo!');
+  UTL_FILE.FCLOSE(v_file);
+END;
+/</code></pre>
+</section>
+
+<section id="tabelas">
+<h2>Tabelas</h2>
+<p>Criação de tabelas para armazenar dados.</p>
+<pre><code>CREATE TABLE dept23 (
+  dept_id   NUMBER PRIMARY KEY,
+  dept_name VARCHAR2(40)
+);
+/</code></pre>
+</section>
+
+<section id="indices">
+<h2>Índices</h2>
+<p>Melhoram a performance de consultas.</p>
+<pre><code>CREATE INDEX idx_dept_name ON dept23(dept_name);
+/</code></pre>
+</section>
+
+<section id="relacionamentos">
+<h2>Relacionamentos</h2>
+<p>Chaves estrangeiras mantêm integridade referencial.</p>
+<pre><code>ALTER TABLE employees
+ADD CONSTRAINT fk_dept
+FOREIGN KEY (dept_id)
+REFERENCES dept23(dept_id);
+/</code></pre>
+</section>
+
+<section id="funcoes">
+<h2>Funções</h2>
+<p>Retornam um valor e podem ser usadas em SELECTs.</p>
+<pre><code>CREATE OR REPLACE FUNCTION calc_bonus(p_salary NUMBER)
+RETURN NUMBER IS
+BEGIN
+  RETURN p_salary * 0.10;
+END calc_bonus;
+/</code></pre>
+</section>
+
+<section id="procedures">
+<h2>Procedures</h2>
+<p>Executam ações sem retornar valor direto.</p>
+<pre><code>CREATE OR REPLACE PROCEDURE give_raise(p_emp_id NUMBER, p_amt NUMBER) IS
+BEGIN
+  UPDATE employees SET salary = salary + p_amt WHERE employee_id = p_emp_id;
+  COMMIT;
+END give_raise;
+/</code></pre>
+</section>
+
+<section id="views">
+<h2>Views</h2>
+<p>Consultas armazenadas que simplificam acesso aos dados.</p>
+<pre><code>CREATE OR REPLACE VIEW v_high_salary AS
+SELECT first_name, salary
+FROM employees
+WHERE salary &gt; 10000;
+/</code></pre>
+</section>
+
+<section id="armazenamento">
+<h2>Armazenamento</h2>
+<p>Compressão e particionamento otimizam espaço e performance.</p>
+<pre><code>ALTER TABLE employees MOVE COMPRESS ADVANCED;
+/</code></pre>
+</section>
+
+<section id="usuarios">
+<h2>Criação e Manutenção de Usuários</h2>
+<p>Usuários controlam sessões e objetos.</p>
+<pre><code>CREATE USER dev_user IDENTIFIED BY senha_forte
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp;
+
+GRANT CONNECT, RESOURCE TO dev_user;
+/</code></pre>
+</section>
+
+<section id="permissoes-objetos">
+<h2>Permissões dos Objetos</h2>
+<p>Grants específicos a tabelas, procedures, views e funções.</p>
+<pre><code>GRANT SELECT, INSERT ON dept23 TO dev_user;
+GRANT EXECUTE ON give_raise TO dev_user;
+/</code></pre>
+</section>
+
+<section id="tablespaces">
+<h2>Gerenciamento de Tablespaces</h2>
+<p>Tablespaces agrupam segmentos de dados.</p>
+<pre><code>CREATE TABLESPACE ts_dados
+DATAFILE '/u01/app/oracle/oradata/ORCLCDB/ts_dados01.dbf' SIZE 100M
+AUTOEXTEND ON NEXT 20M MAXSIZE 2G;
+/</code></pre>
+</section>
+
+<footer>
+<p style="margin-top:3rem; font-style: italic;">Guia resumido criado para Oracle Database 23c — adapte comandos conforme seu ambiente.</p>
+</footer>
+
+</body>
+</html>

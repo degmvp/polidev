@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Orientação a Objetos em Rust</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: yellowgreen;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #e7f4ff;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guia de Referência sobre Orientação a Objetos em Rust</h1>
+    
+    <div class="note">
+        <p>Rust não é uma linguagem puramente orientada a objetos, mas oferece recursos que permitem implementar conceitos de OO como encapsulamento, herança (via traits) e polimorfismo.</p>
+    </div>
+    
+    <h2>1. Descrição da Classe em Rust</h2>
+    
+    <p>Em Rust, o conceito mais próximo de uma classe é uma <code>struct</code> combinada com um bloco <code>impl</code> para implementar métodos.</p>
+    
+    <h3>Componentes principais:</h3>
+    <ul>
+        <li><strong>Struct:</strong> Define a estrutura de dados (atributos/campos)</li>
+        <li><strong>Impl:</strong> Implementa métodos associados à struct</li>
+        <li><strong>Traits:</strong> Similares a interfaces em outras linguagens, definem comportamentos que tipos podem implementar</li>
+    </ul>
+    
+    <h2>2. Exemplo Prático: Cadastro de Produtos e Fornecedores</h2>
+    
+    <h3>2.1 Definição das Structs</h3>
+    
+    <pre><code class="language-rust">// Definindo a struct Fornecedor
+struct Fornecedor {
+    id: u32,
+    nome: String,
+    cnpj: String,
+    telefone: String,
+    email: String,
+}
+
+// Definindo a struct Produto
+struct Produto {
+    id: u32,
+    nome: String,
+    descricao: String,
+    preco: f64,
+    quantidade_estoque: u32,
+    fornecedor_id: u32, // Relacionamento com Fornecedor
+}</code></pre>
+    
+    <h3>2.2 Implementação dos Métodos</h3>
+    
+    <pre><code class="language-rust">// Implementação dos métodos para Fornecedor
+impl Fornecedor {
+    // Método construtor
+    fn new(id: u32, nome: String, cnpj: String, telefone: String, email: String) -> Self {
+        Fornecedor {
+            id,
+            nome,
+            cnpj,
+            telefone,
+            email,
+        }
+    }
+    
+    // Método para exibir informações
+    fn exibir(&self) {
+        println!("Fornecedor: {}", self.nome);
+        println!("CNPJ: {}", self.cnpj);
+        println!("Contato: {} | {}", self.telefone, self.email);
+    }
+    
+    // Método para validar CNPJ (simplificado)
+    fn cnpj_valido(&self) -> bool {
+        self.cnpj.len() == 14
+    }
+}
+
+// Implementação dos métodos para Produto
+impl Produto {
+    // Método construtor
+    fn new(
+        id: u32,
+        nome: String,
+        descricao: String,
+        preco: f64,
+        quantidade_estoque: u32,
+        fornecedor_id: u32,
+    ) -> Self {
+        Produto {
+            id,
+            nome,
+            descricao,
+            preco,
+            quantidade_estoque,
+            fornecedor_id,
+        }
+    }
+    
+    // Método para calcular valor total em estoque
+    fn valor_total_estoque(&self) -> f64 {
+        self.preco * (self.quantidade_estoque as f64)
+    }
+    
+    // Método para atualizar preço
+    fn atualizar_preco(&mut self, novo_preco: f64) {
+        self.preco = novo_preco;
+    }
+    
+    // Método para adicionar estoque
+    fn adicionar_estoque(&mut self, quantidade: u32) {
+        self.quantidade_estoque += quantidade;
+    }
+    
+    // Método para remover estoque
+    fn remover_estoque(&mut self, quantidade: u32) -> Result<(), String> {
+        if quantidade > self.quantidade_estoque {
+            Err("Quantidade insuficiente em estoque".to_string())
+        } else {
+            self.quantidade_estoque -= quantidade;
+            Ok(())
+        }
+    }
+}</code></pre>
+    
+    <h3>2.3 Exemplo de Uso</h3>
+    
+    <pre><code class="language-rust">fn main() {
+    // Criando um fornecedor
+    let mut fornecedor = Fornecedor::new(
+        1,
+        "Distribuidora ABC".to_string(),
+        "12345678000199".to_string(),
+        "11999998888".to_string(),
+        "contato@abc.com".to_string(),
+    );
+    
+    // Verificando CNPJ
+    if !fornecedor.cnpj_valido() {
+        println!("CNPJ inválido!");
+    }
+    
+    // Criando um produto
+    let mut produto = Produto::new(
+        101,
+        "Notebook Ultra".to_string(),
+        "Notebook com 16GB RAM, SSD 512GB".to_string(),
+        4599.90,
+        50,
+        fornecedor.id,
+    );
+    
+    // Operações com o produto
+    println!("Valor total em estoque: R${:.2}", produto.valor_total_estoque());
+    
+    produto.atualizar_preco(4799.90);
+    produto.adicionar_estoque(10);
+    
+    match produto.remover_estoque(5) {
+        Ok(_) => println!("Estoque atualizado com sucesso"),
+        Err(e) => println!("Erro: {}", e),
+    }
+    
+    println!("Novo valor total em estoque: R${:.2}", produto.valor_total_estoque());
+}</code></pre>
+    
+    <h2>3. Definição de Métodos e Funções - Exemplos Práticos</h2>
+    
+    <h3>3.1 Diferença entre Métodos e Funções Associadas</h3>
+    
+    <p>Em Rust, podemos ter:</p>
+    <ul>
+        <li><strong>Métodos:</strong> Funções que recebem <code>&self</code>, <code>&mut self</code> ou <code>self</code> como primeiro parâmetro</li>
+        <li><strong>Funções associadas:</strong> Funções que não recebem <code>self</code> (similares a métodos estáticos em outras linguagens)</li>
+    </ul>
+    
+    <h3>3.2 Exemplos Adicionais</h3>
+    
+    <pre><code class="language-rust">impl Produto {
+    // Função associada (não recebe self)
+    fn criar_produto_padrao(id: u32, fornecedor_id: u32) -> Self {
+        Produto {
+            id,
+            nome: "Novo Produto".to_string(),
+            descricao: "Descrição padrão".to_string(),
+            preco: 100.0,
+            quantidade_estoque: 0,
+            fornecedor_id,
+        }
+    }
+    
+    // Método que consome o objeto (recebe self)
+    fn consumir(self) {
+        println!("Produto {} consumido e struct liberada", self.nome);
+    }
+    
+    // Método que recebe referência imutável (&self)
+    fn get_nome(&self) -> &str {
+        &self.nome
+    }
+    
+    // Método que recebe referência mutável (&mut self)
+    fn set_nome(&mut self, novo_nome: String) {
+        self.nome = novo_nome;
+    }
+}
+
+// Exemplo de trait (interface)
+trait Logavel {
+    fn log(&self) -> String;
+}
+
+// Implementando o trait para Produto
+impl Logavel for Produto {
+    fn log(&self) -> String {
+        format!(
+            "Produto ID: {}, Nome: {}, Preço: R${:.2}",
+            self.id, self.nome, self.preco
+        )
+    }
+}
+
+// Função que usa o trait (polimorfismo)
+fn registrar_log(item: &impl Logavel) {
+    println!("Registrando: {}", item.log());
+}</code></pre>
+    
+    <h2>4. Modelagem do Banco de Dados (SQL Server/MySQL)</h2>
+    
+    <h3>4.1 Tabela de Fornecedores</h3>
+    
+    <table>
+        <tr>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>INT PRIMARY KEY</td>
+            <td>Identificador único</td>
+        </tr>
+        <tr>
+            <td>nome</td>
+            <td>VARCHAR(100)</td>
+            <td>Nome do fornecedor</td>
+        </tr>
+        <tr>
+            <td>cnpj</td>
+            <td>VARCHAR(14)</td>
+            <td>CNPJ (sem formatação)</td>
+        </tr>
+        <tr>
+            <td>telefone</td>
+            <td>VARCHAR(20)</td>
+            <td>Telefone de contato</td>
+        </tr>
+        <tr>
+            <td>email</td>
+            <td>VARCHAR(100)</td>
+            <td>Email de contato</td>
+        </tr>
+        <tr>
+            <td>data_cadastro</td>
+            <td>DATETIME</td>
+            <td>Data do cadastro (DEFAULT CURRENT_TIMESTAMP)</td>
+        </tr>
+    </table>
+    
+    <h4>SQL de Criação (MySQL):</h4>
+    <pre><code class="language-sql">CREATE TABLE fornecedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
+    telefone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+    
+    <h3>4.2 Tabela de Produtos</h3>
+    
+    <table>
+        <tr>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>INT PRIMARY KEY</td>
+            <td>Identificador único</td>
+        </tr>
+        <tr>
+            <td>nome</td>
+            <td>VARCHAR(100)</td>
+            <td>Nome do produto</td>
+        </tr>
+        <tr>
+            <td>descricao</td>
+            <td>TEXT</td>
+            <td>Descrição detalhada</td>
+        </tr>
+        <tr>
+            <td>preco</td>
+            <td>DECIMAL(10,2)</td>
+            <td>Preço de venda</td>
+        </tr>
+        <tr>
+            <td>quantidade_estoque</td>
+            <td>INT</td>
+            <td>Quantidade disponível</td>
+        </tr>
+        <tr>
+            <td>fornecedor_id</td>
+            <td>INT</td>
+            <td>Chave estrangeira para fornecedor</td>
+        </tr>
+        <tr>
+            <td>data_cadastro</td>
+            <td>DATETIME</td>
+            <td>Data do cadastro (DEFAULT CURRENT_TIMESTAMP)</td>
+        </tr>
+    </table>
+    
+    <h4>SQL de Criação (MySQL):</h4>
+    <pre><code class="language-sql">CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
+    quantidade_estoque INT NOT NULL DEFAULT 0,
+    fornecedor_id INT NOT NULL,
+    data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id)
+);</code></pre>
+    
+    <h2>5. Integração com Banco de Dados em Rust</h2>
+    
+    <p>Para conectar com SQL Server ou MySQL em Rust, podemos usar crates como:</p>
+    <ul>
+        <li><code>sqlx</code>: Para consultas assíncronas e compilação verificada</li>
+        <li><code>diesel</code>: ORM com suporte a vários bancos de dados</li>
+    </ul>
+    
+    <h3>Exemplo com SQLx (MySQL):</h3>
+    
+    <pre><code class="language-rust">use sqlx::mysql::MySqlPool;
+use sqlx::FromRow;
+
+// Struct para mapear a tabela de produtos
+#[derive(Debug, FromRow)]
+struct ProdutoDB {
+    id: u32,
+    nome: String,
+    descricao: Option<String>,
+    preco: f64,
+    quantidade_estoque: i32,
+    fornecedor_id: u32,
+}
+
+async fn buscar_produtos(pool: &MySqlPool) -> Result<Vec<ProdutoDB>, sqlx::Error> {
+    let produtos = sqlx::query_as::<_, ProdutoDB>(
+        "SELECT id, nome, descricao, preco, quantidade_estoque, fornecedor_id FROM produtos"
+    )
+    .fetch_all(pool)
+    .await?;
+    
+    Ok(produtos)
+}
+
+#[tokio::main]
+async fn main() -> Result<(), sqlx::Error> {
+    // Configurar a conexão com o banco de dados
+    let pool = MySqlPool::connect("mysql://usuario:senha@localhost/banco_de_dados")
+        .await?;
+    
+    // Buscar produtos
+    let produtos = buscar_produtos(&pool).await?;
+    
+    for produto in produtos {
+        println!("Produto: {}, Preço: {}", produto.nome, produto.preco);
+    }
+    
+    Ok(())
+}</code></pre>
+    
+    <div class="note">
+        <p><strong>Nota:</strong> Este é um exemplo básico. Em aplicações reais, você deve tratar erros adequadamente, usar variáveis de ambiente para credenciais e considerar padrões como repositórios ou DAOs para organizar o acesso a dados.</p>
+    </div>
+    
+    <h2>Conclusão</h2>
+    
+    <p>Embora Rust não seja uma linguagem puramente orientada a objetos, seus recursos como structs, traits e implementações permitem aplicar os principais conceitos de OO de forma eficiente. A combinação desses recursos com um sistema de tipos forte e gerenciamento de memória seguro torna Rust uma ótima escolha para sistemas que requerem tanto organização orientada a objetos quanto performance.</p>
+</body>
+</html>

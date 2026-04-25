@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Operações Binárias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: navy;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e3a8a; /* Um tom mais claro de navy */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: white;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #0c2d48; /* Navy mais escuro */
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #1e3a8a;
+            border: 1px solid #0c2d48;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Operações Binárias</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução às Operações Binárias</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Operações binárias manipulam bits diretamente, usando operadores como AND, OR, XOR, NOT e deslocamentos de bits.</p>
+                <p><strong>Exemplo 1:</strong> Representação binária de números.</p>
+                <pre>
+Decimal: 13 → Binário: 1101
+Decimal: 7  → Binário: 0111
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operador AND (&).</p>
+                <pre>
+13 & 7 = 5
+// Explicação:
+// 1101 (13)
+// 0111 (7)
+// ---- AND
+// 0101 (5)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Operadores Lógicos Bitwise</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os principais operadores bitwise são AND (&), OR (|), XOR (^) e NOT (~).</p>
+                <p><strong>Exemplo 1:</strong> Operador OR (|).</p>
+                <pre>
+13 | 7 = 15
+// Explicação:
+// 1101 (13)
+// 0111 (7)
+// ---- OR
+// 1111 (15)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operador XOR (^).</p>
+                <pre>
+13 ^ 7 = 10
+// Explicação:
+// 1101 (13)
+// 0111 (7)
+// ---- XOR
+// 1010 (10)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conversões de Base</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Números podem ser convertidos entre bases decimais, binárias e hexadecimais.</p>
+                <p><strong>Exemplo 1:</strong> Decimal → Binário.</p>
+                <pre>
+Decimal: 25 → Binário: 11001
+// Método: Divida por 2 até o quociente ser zero.
+                </pre>
+                <p><strong>Exemplo 2:</strong> Binário → Hexadecimal.</p>
+                <pre>
+Binário: 11001 → Hexadecimal: 19
+// Agrupe em blocos de 4 bits: 0001 1001 → 19
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Arrays e Vetores com Representação Hexadecimal</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Arrays podem armazenar valores em diferentes bases, incluindo hexadecimal.</p>
+                <p><strong>Exemplo 1:</strong> Array de números hexadecimais.</p>
+                <pre>
+let vetor = [0x1A, 0xFF, 0x7F];
+console.log(vetor); // [26, 255, 127]
+                </pre>
+                <p><strong>Exemplo 2:</strong> Manipulação de bits em arrays.</p>
+                <pre>
+let vetor = [0b1101, 0b1010]; // [13, 10]
+vetor[0] = vetor[0] & 0b1010; // 13 & 10 = 8
+console.log(vetor); // [8, 10]
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Aplicações Práticas: Bitmasking</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Bitmasking é uma técnica usada para manipular ou verificar bits específicos em um número.</p>
+                <p><strong>Exemplo 1:</strong> Verificar se um bit está ativo.</p>
+                <pre>
+let numero = 0b1010; // 10 em decimal
+let mascara = 0b0010; // Verifica o segundo bit
+if (numero & mascara) {
+    console.log("O segundo bit está ativo.");
+} else {
+    console.log("O segundo bit está inativo.");
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Ativar ou desativar bits.</p>
+                <pre>
+let numero = 0b1010; // 10 em decimal
+numero |= 0b0100;     // Ativa o terceiro bit → 1110 (14)
+numero &= ~0b0010;    // Desativa o segundo bit → 1100 (12)
+console.log(numero.toString(2)); // "1100"
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Conversão Entre Bases</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Conversões entre bases são úteis em sistemas de baixo nível, como redes e criptografia.</p>
+                <p><strong>Exemplo 1:</strong> Decimal → Hexadecimal.</p>
+                <pre>
+Decimal: 255 → Hexadecimal: FF
+// Método: Divida por 16 até o quociente ser zero.
+                </pre>
+                <p><strong>Exemplo 2:</strong> Hexadecimal → Binário.</p>
+                <pre>
+Hexadecimal: 1A → Binário: 00011010
+// Converta cada dígito hexadecimal para 4 bits.
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Algoritmos com Bitwise</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Algoritmos que usam bitwise são rápidos e eficientes em termos de memória.</p>
+                <p><strong>Exemplo 1:</strong> Contagem de bits ativos (Hamming Weight).</p>
+                <pre>
+function contarBits(n) {
+    let count = 0;
+    while (n) {
+        count += n & 1; // Verifica o bit menos significativo
+        n >>= 1;        // Desloca para a direita
+    }
+    return count;
+}
+console.log(contarBits(13)); // 1101 → 3 bits ativos
+                </pre>
+                <p><strong>Exemplo 2:</strong> Troca de valores sem variável temporária.</p>
+                <pre>
+let a = 5, b = 7;
+a = a ^ b; // a = 12 (1100)
+b = a ^ b; // b = 5  (0101)
+a = a ^ b; // a = 7  (0111)
+console.log(a, b); // 7, 5
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Exemplos Práticos de Bitmasking</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Bitmasking é amplamente usado em flags, permissões e otimizações.</p>
+                <p><strong>Exemplo 1:</strong> Gerenciamento de permissões.</p>
+                <pre>
+const PERMISSAO_LEITURA = 0b0001;
+const PERMISSAO_ESCRITA = 0b0010;
+const PERMISSAO_EXECUCAO = 0b0100;
+
+let usuario = PERMISSAO_LEITURA | PERMISSAO_ESCRITA; // 0b0011
+if (usuario & PERMISSAO_LEITURA) {
+    console.log("Permissão de leitura concedida.");
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Flags em jogos.</p>
+                <pre>
+const FLAG_VIVO = 0b0001;
+const FLAG_INVENCIVEL = 0b0010;
+
+let estado = FLAG_VIVO | FLAG_INVENCIVEL; // 0b0011
+if (estado & FLAG_VIVO) {
+    console.log("O jogador está vivo.");
+}
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

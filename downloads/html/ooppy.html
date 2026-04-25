@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Orientação a Objetos em Python</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: yellowgreen;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .example {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .note {
+            background-color: #fffde7;
+            padding: 15px;
+            border-left: 4px solid #ffd600;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia de Referência sobre Orientação a Objetos em Python</h1>
+        
+        <section id="classes">
+            <h2>1. Descrição de Classes em Python</h2>
+            <p>Em Python, uma classe é uma estrutura que permite criar objetos. Ela define um tipo de dado abstrato que contém:</p>
+            <ul>
+                <li><strong>Atributos:</strong> Variáveis que armazenam dados</li>
+                <li><strong>Métodos:</strong> Funções que definem comportamentos</li>
+            </ul>
+            
+            <h3>Sintaxe básica de uma classe:</h3>
+            <pre><code>class NomeDaClasse:
+    def __init__(self, parametros):
+        # Inicialização dos atributos
+        self.atributo = valor
+        
+    def metodo(self, parametros):
+        # Corpo do método
+        return resultado</code></pre>
+            
+            <div class="note">
+                <p><strong>Observação:</strong> O método <code>__init__</code> é o construtor da classe, chamado automaticamente quando um novo objeto é criado.</p>
+            </div>
+        </section>
+        
+        <section id="exemplo-pratico">
+            <h2>2. Exemplo Prático: Cadastro de Produtos e Fornecedores</h2>
+            
+            <h3>2.1 Classe Produto</h3>
+            <div class="example">
+                <pre><code>class Produto:
+    def __init__(self, codigo, nome, preco, quantidade_estoque, fornecedor):
+        self.codigo = codigo
+        self.nome = nome
+        self.preco = preco
+        self.quantidade_estoque = quantidade_estoque
+        self.fornecedor = fornecedor  # Associação com um objeto Fornecedor
+    
+    def atualizar_preco(self, novo_preco):
+        if novo_preco > 0:
+            self.preco = novo_preco
+            return True
+        return False
+    
+    def vender(self, quantidade):
+        if quantidade <= self.quantidade_estoque:
+            self.quantidade_estoque -= quantidade
+            return True
+        return False
+    
+    def repor_estoque(self, quantidade):
+        if quantidade > 0:
+            self.quantidade_estoque += quantidade
+            return True
+        return False
+    
+    def __str__(self):
+        return f"Produto: {self.nome} (Código: {self.codigo}) - Preço: R${self.preco:.2f} - Estoque: {self.quantidade_estoque}"</code></pre>
+            </div>
+            
+            <h3>2.2 Classe Fornecedor</h3>
+            <div class="example">
+                <pre><code>class Fornecedor:
+    def __init__(self, cnpj, nome, telefone, email):
+        self.cnpj = cnpj
+        self.nome = nome
+        self.telefone = telefone
+        self.email = email
+        self.produtos_fornecidos = []  # Lista de produtos que este fornecedor fornece
+    
+    def adicionar_produto(self, produto):
+        if produto not in self.produtos_fornecidos:
+            self.produtos_fornecidos.append(produto)
+            return True
+        return False
+    
+    def remover_produto(self, produto):
+        if produto in self.produtos_fornecidos:
+            self.produtos_fornecidos.remove(produto)
+            return True
+        return False
+    
+    def listar_produtos(self):
+        return self.produtos_fornecidos
+    
+    def __str__(self):
+        return f"Fornecedor: {self.nome} (CNPJ: {self.cnpj}) - Contato: {self.telefone}"</code></pre>
+            </div>
+            
+            <h3>2.3 Exemplo de Uso</h3>
+            <div class="example">
+                <pre><code># Criando fornecedores
+fornecedor1 = Fornecedor("12.345.678/0001-90", "Distribuidora Alimentos LTDA", "(11) 9999-8888", "contato@distribuidora.com")
+fornecedor2 = Fornecedor("98.765.432/0001-21", "Bebidas Refrescantes SA", "(11) 7777-6666", "vendas@bebidas.com")
+
+# Criando produtos
+arroz = Produto("P001", "Arroz Integral 5kg", 22.90, 100, fornecedor1)
+feijao = Produto("P002", "Feijão Carioca 1kg", 8.50, 150, fornecedor1)
+refrigerante = Produto("P003", "Refrigerante Cola 2L", 7.99, 200, fornecedor2)
+
+# Associando produtos aos fornecedores
+fornecedor1.adicionar_produto(arroz)
+fornecedor1.adicionar_produto(feijao)
+fornecedor2.adicionar_produto(refrigerante)
+
+# Operações com produtos
+arroz.vender(10)  # Vende 10 unidades
+feijao.repor_estoque(50)  # Repõe 50 unidades
+refrigerante.atualizar_preco(8.49)  # Atualiza preço
+
+# Exibindo informações
+print(fornecedor1)
+for produto in fornecedor1.listar_produtos():
+    print(f"  - {produto}")</code></pre>
+            </div>
+        </section>
+        
+        <section id="metodos-funcoes">
+            <h2>3. Definição de Métodos e Funções</h2>
+            
+            <h3>3.1 Diferença entre Métodos e Funções</h3>
+            <ul>
+                <li><strong>Função:</strong> Bloco de código independente que realiza uma tarefa específica</li>
+                <li><strong>Método:</strong> Função que está associada a uma classe e opera em instâncias dessa classe</li>
+            </ul>
+            
+            <h3>3.2 Tipos de Métodos</h3>
+            
+            <h4>Métodos de Instância</h4>
+            <p>Operam em uma instância específica da classe (recebem <code>self</code> como primeiro parâmetro).</p>
+            <div class="example">
+                <pre><code>class Exemplo:
+    def metodo_instancia(self, parametro):
+        # Acessa atributos da instância com self
+        return self.atributo + parametro</code></pre>
+            </div>
+            
+            <h4>Métodos de Classe (<code>@classmethod</code>)</h4>
+            <p>Operam na classe em si, não em instâncias específicas (recebem <code>cls</code> como primeiro parâmetro).</p>
+            <div class="example">
+                <pre><code>class Exemplo:
+    @classmethod
+    def metodo_classe(cls, parametro):
+        # Pode criar ou manipular a classe
+        return cls()  # Retorna uma nova instância</code></pre>
+            </div>
+            
+            <h4>Métodos Estáticos (<code>@staticmethod</code>)</h4>
+            <p>Não recebem referência implícita (nem <code>self</code> nem <code>cls</code>). São funções normais, mas pertencem ao namespace da classe.</p>
+            <div class="example">
+                <pre><code>class Exemplo:
+    @staticmethod
+    def metodo_estatico(parametro):
+        # Não acessa a classe nem instância
+        return parametro * 2</code></pre>
+            </div>
+            
+            <h3>3.3 Exemplo Prático na Classe Produto</h3>
+            <div class="example">
+                <pre><code>class Produto:
+    # ... outros métodos ...
+    
+    @classmethod
+    def criar_produto_promocional(cls, codigo, nome, preco_normal, desconto):
+        """Método de classe para criar produtos com desconto"""
+        preco_promocional = preco_normal * (1 - desconto/100)
+        return cls(codigo, nome, preco_promocional, 0, None)
+    
+    @staticmethod
+    def validar_codigo(codigo):
+        """Método estático para validar formato do código"""
+        return len(codigo) == 4 and codigo[0] == 'P' and codigo[1:].isdigit()
+
+# Uso do método de classe
+produto_promo = Produto.criar_produto_promocional("P004", "Óleo Vegetal 1L", 10.00, 20)
+
+# Uso do método estático
+print(Produto.validar_codigo("P123"))  # True
+print(Produto.validar_codigo("ABC123"))  # False</code></pre>
+            </div>
+        </section>
+        
+        <section id="banco-dados">
+            <h2>4. Tabelas SQL para Produtos e Fornecedores</h2>
+            
+            <h3>4.1 MySQL</h3>
+            <div class="example">
+                <pre><code>-- Tabela de Fornecedores
+CREATE TABLE fornecedores (
+    cnpj VARCHAR(18) PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(15),
+    email VARCHAR(100)
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+    codigo VARCHAR(10) PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade_estoque INT NOT NULL DEFAULT 0,
+    cnpj_fornecedor VARCHAR(18),
+    FOREIGN KEY (cnpj_fornecedor) REFERENCES fornecedores(cnpj)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);</code></pre>
+            </div>
+            
+            <h3>4.2 SQL Server</h3>
+            <div class="example">
+                <pre><code>-- Tabela de Fornecedores
+CREATE TABLE fornecedores (
+    cnpj VARCHAR(18) PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(15),
+    email VARCHAR(100)
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+    codigo VARCHAR(10) PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade_estoque INT NOT NULL DEFAULT 0,
+    cnpj_fornecedor VARCHAR(18),
+    CONSTRAINT fk_fornecedor FOREIGN KEY (cnpj_fornecedor) 
+        REFERENCES fornecedores(cnpj)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);</code></pre>
+            </div>
+            
+            <h3>4.3 Exemplo de Dados</h3>
+            <table>
+                <caption>Tabela: fornecedores</caption>
+                <thead>
+                    <tr>
+                        <th>cnpj</th>
+                        <th>nome</th>
+                        <th>telefone</th>
+                        <th>email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12.345.678/0001-90</td>
+                        <td>Distribuidora Alimentos LTDA</td>
+                        <td>(11) 9999-8888</td>
+                        <td>contato@distribuidora.com</td>
+                    </tr>
+                    <tr>
+                        <td>98.765.432/0001-21</td>
+                        <td>Bebidas Refrescantes SA</td>
+                        <td>(11) 7777-6666</td>
+                        <td>vendas@bebidas.com</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table>
+                <caption>Tabela: produtos</caption>
+                <thead>
+                    <tr>
+                        <th>codigo</th>
+                        <th>nome</th>
+                        <th>preco</th>
+                        <th>quantidade_estoque</th>
+                        <th>cnpj_fornecedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>P001</td>
+                        <td>Arroz Integral 5kg</td>
+                        <td>22.90</td>
+                        <td>100</td>
+                        <td>12.345.678/0001-90</td>
+                    </tr>
+                    <tr>
+                        <td>P002</td>
+                        <td>Feijão Carioca 1kg</td>
+                        <td>8.50</td>
+                        <td>150</td>
+                        <td>12.345.678/0001-90</td>
+                    </tr>
+                    <tr>
+                        <td>P003</td>
+                        <td>Refrigerante Cola 2L</td>
+                        <td>7.99</td>
+                        <td>200</td>
+                        <td>98.765.432/0001-21</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="conclusao">
+            <h2>Conclusão</h2>
+            <p>Este guia apresentou os conceitos fundamentais de orientação a objetos em Python, com exemplos práticos de cadastro de produtos e fornecedores. A abordagem incluiu:</p>
+            <ul>
+                <li>Definição de classes e objetos</li>
+                <li>Implementação de métodos de instância, classe e estáticos</li>
+                <li>Relações entre objetos (associação)</li>
+                <li>Modelagem de banco de dados relacional para o sistema</li>
+            </ul>
+            <p>Com esses conceitos, você pode expandir o sistema adicionando novas funcionalidades como categorias de produtos, histórico de vendas, ou integração com outras partes de um sistema maior.</p>
+        </section>
+    </div>
+</body>
+</html>

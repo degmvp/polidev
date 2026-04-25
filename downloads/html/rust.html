@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Referência Rust</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #d04a00;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: black;
+        }
+        .chapter {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .chapter-header {
+            background-color: #d04a00;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chapter-header::after {
+            content: "+";
+            font-size: 1.2em;
+        }
+        .chapter.active .chapter-header::after {
+            content: "-";
+        }
+        .chapter-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .chapter.active .chapter-content {
+            max-height: 1000px;
+            padding: 20px;
+        }
+        .chapter-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .chapter-content li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .chapter-content li:last-child {
+            border-bottom: none;
+        }
+        .chapter-content a {
+            color: black;
+            text-decoration: none;
+            display: block;
+            padding: 8px 5px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .chapter-content a:hover {
+            background-color: #fff5f0;
+        }
+        .chapter-content a.active {
+            font-weight: bold;
+            background-color: #ffe8dc;
+        }
+        .content-section {
+            display: none;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin: 15px 0 5px;
+            border-left: 4px solid #d04a00;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            header {
+                padding: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Guia de Referência Rust</h1>
+        <p class="subtitle">Complete Rust Programming Guide - by Degmar</p>
+    </header>
+
+    <!-- Capítulo 1 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">1. Introdução à linguagem</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('filosofia-rust', this)" class="active">- Filosofia e objetivos do Rust</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('instalacao-rust', this)">- Instalação e configuração do ambiente</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('ferramentas-basicas', this)">- Ferramentas básicas (rustc, cargo, rustup)</a></li>
+            </ul>
+            
+            <div id="filosofia-rust" class="content-section" style="display: block;">
+                <h3>Filosofia e objetivos do Rust</h3>
+                <p>Rust é uma linguagem de programação focada em três pilares:</p>
+                <ul>
+                    <li><strong>Segurança</strong>: Previne erros de memória sem garbage collector</li>
+                    <li><strong>Concorrência</strong>: Facilita programação paralela segura</li>
+                    <li><strong>Performance</strong>: Comparável a C/C++</li>
+                </ul>
+                <p>Seu sistema de ownership é revolucionário para gerenciamento de memória em tempo de compilação.</p>
+            </div>
+            
+            <div id="instalacao-rust" class="content-section">
+                <h3>Instalação e configuração do ambiente</h3>
+                <p>Para instalar o Rust:</p>
+                <ol>
+                    <li>No Linux/macOS: <code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></li>
+                    <li>No Windows: Baixe e execute o <a href="https://rustup.rs/" target="_blank">rustup-init.exe</a></li>
+                </ol>
+                <p>Verifique a instalação com: <code>rustc --version</code></p>
+            </div>
+            
+            <div id="ferramentas-basicas" class="content-section">
+                <h3>Ferramentas básicas</h3>
+                <ul>
+                    <li><strong>rustc</strong>: Compilador Rust</li>
+                    <li><strong>cargo</strong>: Sistema de build e gerenciador de pacotes</li>
+                    <li><strong>rustup</strong>: Gerenciador de versões e toolchains</li>
+                </ul>
+                <p>Comandos úteis:</p>
+                <pre><code>cargo new projeto
+cargo build
+cargo run</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 2 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">2. Fundamentos</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('sintaxe-basica', this)">- Sintaxe básica</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('tipos-primitivos', this)">- Tipos de dados primitivos</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('variaveis-constantes', this)">- Variáveis e constantes</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('controle-fluxo', this)">- Controle de fluxo</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('funcoes', this)">- Funções e procedimentos</a></li>
+            </ul>
+            
+            <div id="sintaxe-basica" class="content-section">
+                <h3>Sintaxe básica</h3>
+                <p>Exemplo de "Hello World":</p>
+                <pre><code>fn main() {
+    println!("Hello, world!");
+}</code></pre>
+                <p>Características:</p>
+                <ul>
+                    <li>Blocos delimitados por chaves {}</li>
+                    <li>Ponto e vírgula no final das instruções</li>
+                    <li>Macros usam ! (como println!)</li>
+                </ul>
+            </div>
+            
+            <div id="tipos-primitivos" class="content-section">
+                <h3>Tipos de dados primitivos</h3>
+                <p>Principais tipos:</p>
+                <ul>
+                    <li><strong>Inteiros</strong>: i8, i16, i32, i64, i128, isize</li>
+                    <li><strong>Unsigned</strong>: u8, u16, u32, u64, u128, usize</li>
+                    <li><strong>Ponto flutuante</strong>: f32, f64</li>
+                    <li><strong>Boolean</strong>: bool</li>
+                    <li><strong>Caractere</strong>: char (unicode, 4 bytes)</li>
+                </ul>
+            </div>
+            
+            <div id="variaveis-constantes" class="content-section">
+                <h3>Variáveis e constantes</h3>
+                <p>Variáveis são imutáveis por padrão:</p>
+                <pre><code>let x = 5;       // imutável
+let mut y = 10; // mutável</code></pre>
+                <p>Constantes sempre imutáveis e exigem tipo:</p>
+                <pre><code>const PI: f64 = 3.14159;</code></pre>
+            </div>
+            
+            <div id="controle-fluxo" class="content-section">
+                <h3>Controle de fluxo</h3>
+                <p>Condicionais:</p>
+                <pre><code>if x > 5 {
+    println!("Maior");
+} else {
+    println!("Menor ou igual");
+}</code></pre>
+                <p>Loops:</p>
+                <pre><code>while x < 100 {
+    x *= 2;
+}
+
+for i in 1..10 {
+    println!("{}", i);
+}</code></pre>
+            </div>
+            
+            <div id="funcoes" class="content-section">
+                <h3>Funções e procedimentos</h3>
+                <p>Definição de função:</p>
+                <pre><code>fn soma(a: i32, b: i32) -> i32 {
+    a + b  // sem ; significa retorno
+}</code></pre>
+                <p>Procedimento (função sem retorno):</p>
+                <pre><code>fn cumprimentar(nome: &str) {
+    println!("Olá, {}!", nome);
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 3 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">3. Conceitos fundamentais</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('ownership', this)">- Sistema de ownership</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('borrowing', this)">- Borrowing e referências</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('lifetimes', this)">- Lifetimes</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('pattern-matching', this)">- Pattern matching</a></li>
+            </ul>
+            
+            <div id="ownership" class="content-section">
+                <h3>Sistema de ownership</h3>
+                <p>Regras básicas:</p>
+                <ol>
+                    <li>Cada valor tem um dono (owner)</li>
+                    <li>Só pode ter um dono por vez</li>
+                    <li>Quando o dono sai de escopo, o valor é liberado</li>
+                </ol>
+                <pre><code>let s1 = String::from("hello");
+let s2 = s1;  // s1 é movido para s2
+// println!("{}", s1); // Erro! s1 não é mais válido</code></pre>
+            </div>
+            
+            <div id="borrowing" class="content-section">
+                <h3>Borrowing e referências</h3>
+                <p>Emprestar valores sem transferir ownership:</p>
+                <pre><code>fn calcula_tamanho(s: &String) -> usize {
+    s.len()
+}
+
+let s = String::from("texto");
+let tamanho = calcula_tamanho(&s); // s continua válido</code></pre>
+            </div>
+            
+            <div id="lifetimes" class="content-section">
+                <h3>Lifetimes</h3>
+                <p>Garantem que referências sejam válidas:</p>
+                <pre><code>fn maior<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}</code></pre>
+                <p>'a é um parâmetro de lifetime que garante que o retorno viverá tanto quanto as entradas.</p>
+            </div>
+            
+            <div id="pattern-matching" class="content-section">
+                <h3>Pattern matching</h3>
+                <p>Poderoso sistema de correspondência de padrões:</p>
+                <pre><code>match valor {
+    1 => println!("Um"),
+    2 | 3 => println!("Dois ou três"),
+    4..=10 => println!("Quatro a dez"),
+    _ => println!("Outro valor"),
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 4 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">4. Tipos de dados compostos</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('structs-enums', this)">- Structs e enums</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('arrays-vetores', this)">- Arrays e vetores</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('strings-slices', this)">- Strings e slices</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('tuplas', this)">- Tuplas</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('hashmaps', this)">- Hashmaps e coleções</a></li>
+            </ul>
+            
+            <div id="structs-enums" class="content-section">
+                <h3>Structs e enums</h3>
+                <p>Struct:</p>
+                <pre><code>struct Usuario {
+    nome: String,
+    idade: u32,
+}
+
+let user = Usuario {
+    nome: String::from("João"),
+    idade: 30,
+};</code></pre>
+                <p>Enum:</p>
+                <pre><code>enum Estado {
+    Inativo,
+    Ativo,
+    Suspenso,
+}</code></pre>
+            </div>
+            
+            <div id="arrays-vetores" class="content-section">
+                <h3>Arrays e vetores</h3>
+                <p>Array (tamanho fixo):</p>
+                <pre><code>let arr = [1, 2, 3]; // tipo [i32; 3]</code></pre>
+                <p>Vetor (tamanho dinâmico):</p>
+                <pre><code>let mut vec = vec![1, 2, 3];
+vec.push(4);</code></pre>
+            </div>
+            
+            <div id="strings-slices" class="content-section">
+                <h3>Strings e slices</h3>
+                <p>String (UTF-8, alocada no heap):</p>
+                <pre><code>let s = String::from("Olá");</code></pre>
+                <p>String slice (&str):</p>
+                <pre><code>let slice: &str = &s[0..2]; // "Ol"</code></pre>
+            </div>
+            
+            <div id="tuplas" class="content-section">
+                <h3>Tuplas</h3>
+                <p>Coleção de valores de tipos diferentes:</p>
+                <pre><code>let tupla: (i32, f64, char) = (500, 6.4, 'z');
+let (x, y, z) = tupla; // destructuring</code></pre>
+            </div>
+            
+            <div id="hashmaps" class="content-section">
+                <h3>Hashmaps e coleções</h3>
+                <p>HashMap (dicionário):</p>
+                <pre><code>use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+scores.insert(String::from("Azul"), 10);</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 5 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">5. Programação orientada a traits</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('implementando-traits', this)">- Implementando traits</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('traits-padrao', this)">- Traits padrão da biblioteca</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('trait-objects', this)">- Trait objects e dynamic dispatch</a></li>
+            </ul>
+            
+            <div id="implementando-traits" class="content-section">
+                <h3>Implementando traits</h3>
+                <p>Definindo uma trait:</p>
+                <pre><code>trait Resumivel {
+    fn resumo(&self) -> String;
+}</code></pre>
+                <p>Implementando para um tipo:</p>
+                <pre><code>impl Resumivel for Artigo {
+    fn resumo(&self) -> String {
+        format!("{}, por {}", self.titulo, self.autor)
+    }
+}</code></pre>
+            </div>
+            
+            <div id="traits-padrao" class="content-section">
+                <h3>Traits padrão da biblioteca</h3>
+                <p>Traits comuns:</p>
+                <ul>
+                    <li>Debug: formatação para debug</li>
+                    <li>Clone: clonagem de valores</li>
+                    <li>Copy: cópia bit a bit</li>
+                    <li>PartialEq e Eq: comparação</li>
+                </ul>
+            </div>
+            
+            <div id="trait-objects" class="content-section">
+                <h3>Trait objects e dynamic dispatch</h3>
+                <p>Permite polimorfismo em tempo de execução:</p>
+                <pre><code>trait Desenhavel {
+    fn desenhar(&self);
+}
+
+fn desenhar_todos(itens: &Vec<Box<dyn Desenhavel>>) {
+    for item in itens {
+        item.desenhar();
+    }
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 6 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">6. Manipulação de erros</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('result-option', this)">- Result e Option</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('panic-result', this)">- Panic vs Result</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('propagacao-erros', this)">- Propagação de erros</a></li>
+            </ul>
+            
+            <div id="result-option" class="content-section">
+                <h3>Result e Option</h3>
+                <p>Option para valores opcionais:</p>
+                <pre><code>fn divide(a: f64, b: f64) -> Option<f64> {
+    if b == 0.0 { None } else { Some(a / b) }
+}</code></pre>
+                <p>Result para operações que podem falhar:</p>
+                <pre><code>fn ler_arquivo(caminho: &str) -> Result<String, io::Error> {
+    fs::read_to_string(caminho)
+}</code></pre>
+            </div>
+            
+            <div id="panic-result" class="content-section">
+                <h3>Panic vs Result</h3>
+                <p>Panic para erros irrecuperáveis:</p>
+                <pre><code>if valor_invalido {
+    panic!("Valor inválido!");
+}</code></pre>
+                <p>Result para erros recuperáveis:</p>
+                <pre><code>let f = File::open("arquivo.txt")?;</code></pre>
+            </div>
+            
+            <div id="propagacao-erros" class="content-section">
+                <h3>Propagação de erros</h3>
+                <p>Operador ? para propagar erros:</p>
+                <pre><code>fn ler_config() -> Result<Config, io::Error> {
+    let conteudo = fs::read_to_string("config.toml")?;
+    // ... parse do conteúdo
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 7 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">7. Concorrência</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('threads', this)">- Threads</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('channels', this)">- Channels</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('mutex-arc', this)">- Mutex e Arc</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('async-await', this)">- Async/await</a></li>
+            </ul>
+            
+            <div id="threads" class="content-section">
+                <h3>Threads</h3>
+                <p>Criando uma thread:</p>
+                <pre><code>use std::thread;
+
+let handle = thread::spawn(|| {
+    println!("Executando na thread");
+});
+
+handle.join().unwrap();</code></pre>
+            </div>
+            
+            <div id="channels" class="content-section">
+                <h3>Channels</h3>
+                <p>Comunicação entre threads:</p>
+                <pre><code>use std::sync::mpsc;
+
+let (tx, rx) = mpsc::channel();
+
+thread::spawn(move || {
+    tx.send("mensagem").unwrap();
+});
+
+let recebido = rx.recv().unwrap();</code></pre>
+            </div>
+            
+            <div id="mutex-arc" class="content-section">
+                <h3>Mutex e Arc</h3>
+                <p>Compartilhamento seguro de estado:</p>
+                <pre><code>use std::sync::{Arc, Mutex};
+
+let contador = Arc::new(Mutex::new(0));
+
+let contador_clone = Arc::clone(&contador);
+thread::spawn(move || {
+    let mut num = contador_clone.lock().unwrap();
+    *num += 1;
+});</code></pre>
+            </div>
+            
+            <div id="async-await" class="content-section">
+                <h3>Async/await</h3>
+                <p>Programação assíncrona:</p>
+                <pre><code>async fn buscar_dados() -> Result<String, Error> {
+    // ... operação assíncrona
+}
+
+#[tokio::main]
+async fn main() {
+    let dados = buscar_dados().await;
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 8 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">8. Ferramentas e ecossistema</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('cargo', this)">- Cargo e gerenciamento de pacotes</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('testes-docs', this)">- Testes e documentação</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('compilacao-condicional', this)">- Compilação condicional e features</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('ffi', this)">- Integração com código C/FFI</a></li>
+            </ul>
+            
+            <div id="cargo" class="content-section">
+                <h3>Cargo e gerenciamento de pacotes</h3>
+                <p>Principais comandos:</p>
+                <pre><code>cargo new --lib minha_lib  # criar biblioteca
+cargo add pacote        # adicionar dependência
+cargo build --release   # build otimizado
+cargo update           # atualizar dependências</code></pre>
+            </div>
+            
+            <div id="testes-docs" class="content-section">
+                <h3>Testes e documentação</h3>
+                <p>Testes unitários:</p>
+                <pre><code>#[test]
+fn teste_soma() {
+    assert_eq!(soma(2, 2), 4);
+}</code></pre>
+                <p>Documentação:</p>
+                <pre><code>/// Calcula a soma de dois números
+/// # Exemplo
+/// ```
+/// assert_eq!(soma(2, 2), 4);
+/// ```
+fn soma(a: i32, b: i32) -> i32 {
+    a + b
+}</code></pre>
+            </div>
+            
+            <div id="compilacao-condicional" class="content-section">
+                <h3>Compilação condicional e features</h3>
+                <p>Condicional por sistema operacional:</p>
+                <pre><code>#[cfg(target_os = "linux")]
+fn linux_only() {}</code></pre>
+                <p>Features no Cargo.toml:</p>
+                <pre><code>[features]
+default = []
+completo = ["serde", "async"]</code></pre>
+            </div>
+            
+            <div id="ffi" class="content-section">
+                <h3>Integração com código C/FFI</h3>
+                <p>Chamando funções C:</p>
+                <pre><code>extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+unsafe {
+    println!("Abs de -3: {}", abs(-3));
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 9 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">9. Padrões comuns e idiomáticos</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('design-patterns', this)">- Design patterns em Rust</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('codigo-idiomatico', this)">- Código idiomático vs código não idiomático</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('otimizacoes', this)">- Otimizações comuns</a></li>
+            </ul>
+            
+            <div id="design-patterns" class="content-section">
+                <h3>Design patterns em Rust</h3>
+                <p>Padrões comuns:</p>
+                <ul>
+                    <li>Builder pattern</li>
+                    <li>Newtype pattern</li>
+                    <li>RAII (Resource Acquisition Is Initialization)</li>
+                    <li>Strategy pattern com traits</li>
+                </ul>
+            </div>
+            
+            <div id="codigo-idiomatico" class="content-section">
+                <h3>Código idiomático vs código não idiomático</h3>
+                <p>Idiomático:</p>
+                <pre><code>if let Some(valor) = opcional {
+    println!("{}", valor);
+}</code></pre>
+                <p>Não idiomático:</p>
+                <pre><code>match opcional {
+    Some(valor) => println!("{}", valor),
+    None => (),
+}</code></pre>
+            </div>
+            
+            <div id="otimizacoes" class="content-section">
+                <h3>Otimizações comuns</h3>
+                <p>Técnicas:</p>
+                <ul>
+                    <li>Usar iteradores ao invés de loops</li>
+                    <li>Evitar clones desnecessários</li>
+                    <li>Usar Cow para evitar alocações</li>
+                    <li>Prefira stack ao heap quando possível</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capítulo 10 -->
+    <div class="chapter">
+        <div class="chapter-header" onclick="toggleChapter(this.parentElement)">10. Exemplos práticos</div>
+        <div class="chapter-content">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="showContent('programas-completos', this)">- Pequenos programas completos</a></li>
+                <li><a href="javascript:void(0)" onclick="showContent('solucoes-problemas', this)">- Soluções para problemas comuns</a></li>
+            </ul>
+            
+            <div id="programas-completos" class="content-section">
+                <h3>Pequenos programas completos</h3>
+                <p>Contador de palavras:</p>
+                <pre><code>use std::collections::HashMap;
+
+fn contar_palavras(texto: &str) -> HashMap<&str, u32> {
+    let mut contador = HashMap::new();
+    for palavra in texto.split_whitespace() {
+        *contador.entry(palavra).or_insert(0) += 1;
+    }
+    contador
+}</code></pre>
+            </div>
+            
+            <div id="solucoes-problemas" class="content-section">
+                <h3>Soluções para problemas comuns</h3>
+                <p>Ler linhas de um arquivo:</p>
+                <pre><code>use std::fs::File;
+use std::io::{self, BufRead};
+
+fn ler_linhas(caminho: &str) -> io::Result<Vec<String>> {
+    let file = File::open(caminho)?;
+    let linhas = io::BufReader::new(file)
+        .lines()
+        .collect::<Result<_, _>>()?;
+    Ok(linhas)
+}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variável para controlar o conteúdo ativo
+        let activeContent = 'filosofia-rust';
+        
+        // Função para alternar capítulos
+        function toggleChapter(chapter) {
+            // Fecha todos os outros capítulos primeiro
+            document.querySelectorAll('.chapter').forEach(c => {
+                if (c !== chapter) {
+                    c.classList.remove('active');
+                }
+            });
+            
+            // Alterna o capítulo clicado
+            chapter.classList.toggle('active');
+            
+            // Mantém o conteúdo ativo visível
+            if (chapter.classList.contains('active')) {
+                const content = document.getElementById(activeContent);
+                if (content) {
+                    content.style.display = 'block';
+                }
+            }
+        }
+        
+        // Função para mostrar conteúdo específico
+        function showContent(id, linkElement) {
+            // Atualiza o conteúdo ativo
+            activeContent = id;
+            
+            // Esconde todos os conteúdos primeiro
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Remove destaque de todos os links
+            document.querySelectorAll('.chapter-content a').forEach(a => {
+                a.classList.remove('active');
+            });
+            
+            // Destaca o link clicado
+            if (linkElement) {
+                linkElement.classList.add('active');
+            }
+            
+            // Mostra o conteúdo selecionado
+            const content = document.getElementById(id);
+            if (content) {
+                content.style.display = 'block';
+                
+                // Garante que o capítulo pai está aberto
+                const chapter = content.closest('.chapter');
+                if (chapter && !chapter.classList.contains('active')) {
+                    // Fecha outros capítulos
+                    document.querySelectorAll('.chapter').forEach(c => {
+                        c.classList.remove('active');
+                    });
+                    // Abre o capítulo atual
+                    chapter.classList.add('active');
+                }
+                
+                // Rolagem suave para o conteúdo
+                content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        // Inicializa o primeiro conteúdo como ativo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fecha todos os capítulos exceto o primeiro
+            document.querySelectorAll('.chapter').forEach((c, index) => {
+                if (index !== 0) {
+                    c.classList.remove('active');
+                }
+            });
+            
+            // Destaca o primeiro link
+            const firstLink = document.querySelector('.chapter-content a');
+            if (firstLink) {
+                firstLink.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplos de Comandos para Oracle 23c</title>
+    <style>
+        body {
+            background-color: orange;
+            color: black;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.4;
+            margin: 0;
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: rgba(255, 255, 255, 0.25);
+            border: 1px solid black;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "Courier New", monospace;
+            font-size: 0.95rem;
+        }
+        hr.section-break {
+            border: none;
+            border-top: 4px double black;
+            margin: 3rem 0 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Exemplos de Comandos para Oracle 23c</h1>
+
+    <hr class="section-break">
+    <h2>Comandos DDL (Data Definition Language)</h2>
+    <pre><code>-- Criar tabela
+CREATE TABLE clientes (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome VARCHAR2(100) NOT NULL,
+    email VARCHAR2(100) UNIQUE,
+    data_nascimento DATE,
+    salario NUMBER(10,2),
+    ativo CHAR(1) DEFAULT 'S'
+);
+
+-- Criar tabela com JSON
+CREATE TABLE pedidos (
+    pedido_id NUMBER PRIMARY KEY,
+    cliente_id NUMBER REFERENCES clientes(id),
+    dados_pedido JSON,
+    data_pedido TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+-- Adicionar coluna
+ALTER TABLE clientes ADD telefone VARCHAR2(20);
+
+-- Modificar coluna
+ALTER TABLE clientes MODIFY email VARCHAR2(150);
+
+-- Renomear tabela
+RENAME clientes TO usuarios;
+
+-- Criar índice
+CREATE INDEX idx_clientes_nome ON clientes(nome);
+
+-- Criar visão (view)
+CREATE VIEW view_clientes_ativos AS
+SELECT id, nome, email FROM clientes WHERE ativo = 'S';
+
+-- Criar sequência (obsoleto com identity columns, mas ainda útil)
+CREATE SEQUENCE seq_pedidos START WITH 1 INCREMENT BY 1;
+
+-- Criar sinônimo
+CREATE SYNONYM cli FOR clientes;
+
+-- Apagar tabela
+DROP TABLE pedidos PURGE;</code></pre>
+
+    <hr class="section-break">
+    <h2>Comandos DML (Data Manipulation Language)</h2>
+    <pre><code>-- Inserir dados
+INSERT INTO clientes (nome, email, data_nascimento, salario)
+VALUES ('João Silva', 'joao@email.com', TO_DATE('15/05/1985', 'DD/MM/YYYY'), 4500.00);
+
+-- Inserir com JSON
+INSERT INTO pedidos (pedido_id, cliente_id, dados_pedido)
+VALUES (1, 1, '{"itens": [{"produto": "Notebook", "quantidade": 1, "preco": 3500}], "forma_pagamento": "cartao"}');
+
+-- Consultar dados
+SELECT * FROM clientes WHERE salario > 3000 ORDER BY nome;
+
+-- Consultar JSON
+SELECT p.pedido_id, c.nome, p.dados_pedido.itens[0].produto 
+FROM pedidos p JOIN clientes c ON p.cliente_id = c.id;
+
+-- Atualizar dados
+UPDATE clientes SET salario = salario * 1.1 WHERE ativo = 'S';
+
+-- Atualizar JSON
+UPDATE pedidos 
+SET dados_pedido = JSON_MERGEPATCH(dados_pedido, '{"status": "entregue"}')
+WHERE pedido_id = 1;
+
+-- Excluir dados
+DELETE FROM clientes WHERE ativo = 'N';
+
+-- Merge (upsert)
+MERGE INTO clientes c
+USING (SELECT 'Maria Souza' AS nome, 'maria@email.com' AS email FROM dual) n
+ON (c.email = n.email)
+WHEN MATCHED THEN
+    UPDATE SET c.nome = n.nome
+WHEN NOT MATCHED THEN
+    INSERT (nome, email) VALUES (n.nome, n.email);</code></pre>
+
+    <hr class="section-break">
+    <h2>Comandos DCL (Data Control Language)</h2>
+    <pre><code>-- Conceder privilégios
+GRANT SELECT, INSERT ON clientes TO usuario_app;
+
+-- Revogar privilégios
+REVOKE DELETE ON clientes FROM usuario_app;
+
+-- Criar role e conceder privilégios
+CREATE ROLE gerente;
+GRANT SELECT, INSERT, UPDATE, DELETE ON clientes TO gerente;
+GRANT gerente TO maria, joao;</code></pre>
+
+    <hr class="section-break">
+    <h2>Comandos TCL (Transaction Control Language)</h2>
+    <pre><code>-- Iniciar transação implícita
+UPDATE clientes SET salario = 5000 WHERE id = 1;
+
+-- Confirmar transação
+COMMIT;
+
+-- Desfazer transação
+ROLLBACK;
+
+-- Ponto de salvamento (savepoint)
+SAVEPOINT antes_do_update;
+UPDATE clientes SET salario = 6000 WHERE id = 1;
+-- Se algo der errado...
+ROLLBACK TO antes_do_update;</code></pre>
+
+    <hr class="section-break">
+    <h2>Exemplos Específicos do Oracle 23c</h2>
+    <pre><code>-- Usando o novo operador JSON_EQUAL
+SELECT * FROM pedidos 
+WHERE JSON_EQUAL(dados_pedido.forma_pagamento, '"cartao"');
+
+-- Consulta com o novo operador de agregação LISTAGG DISTINCT
+SELECT departamento_id, 
+       LISTAGG(DISTINCT cargo, ', ') WITHIN GROUP (ORDER BY cargo) AS cargos
+FROM empregados
+GROUP BY departamento_id;
+
+-- Usando o novo tipo de dados BOOLEAN (Oracle 23c)
+ALTER TABLE clientes ADD premium BOOLEAN DEFAULT FALSE;
+
+-- Atualizando com o novo tipo BOOLEAN
+UPDATE clientes SET premium = TRUE WHERE salario > 10000;</code></pre>
+
+    <hr class="section-break">
+    <footer>
+        <p><em>Documento gerado em 13 de junho de 2025.</em></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Python</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: orange;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff3e0; /* Um tom mais claro de laranja */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #ff9800; /* Laranja mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Python</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Python é uma linguagem de programação interpretada, de alto nível, criada por Guido van Rossum em 1991. É conhecida por sua sintaxe simples e legibilidade.</p>
+                <p><strong>Exemplo 1:</strong> Programa básico "Hello, World!".</p>
+                <pre>
+print("Hello, World!")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Verificação da versão do Python instalada.</p>
+                <pre>
+# Execute no terminal:
+# python --version
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem variáveis, tipos de dados e operações básicas.</p>
+                <p><strong>Exemplo 1:</strong> Declaração de variáveis e constantes.</p>
+                <pre>
+nome = "João"
+idade = 30
+PI = 3.14  # Constante (por convenção, em maiúsculas)
+print(nome, idade, PI)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Uso de módulos externos.</p>
+                <pre>
+import math
+print("Raiz quadrada de 16:", math.sqrt(16))
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conceitos Fundamentais</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Python organiza código em módulos e pacotes. A visibilidade é controlada pelo escopo das funções e classes.</p>
+                <p><strong>Exemplo 1:</strong> Organização de módulos.</p>
+                <pre>
+# Arquivo utils.py
+def somar(a, b):
+    return a + b
+
+# Arquivo main.py
+import utils
+print("Soma:", utils.somar(5, 3))
+                </pre>
+                <p><strong>Exemplo 2:</strong> Funções públicas e privadas.</p>
+                <pre>
+# Função pública
+def publica():
+    print("Função pública")
+
+# Função privada (por convenção, com underline)
+def _privada():
+    print("Função privada")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Tipos de Dados</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Python suporta tipos primitivos (inteiros, floats, strings, etc.), listas, tuplas, dicionários e conjuntos.</p>
+                <p><strong>Exemplo 1:</strong> Tipos primitivos.</p>
+                <pre>
+inteiro = 10
+decimal = 3.14
+texto = "Python é incrível!"
+print(inteiro, decimal, texto)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Listas e dicionários.</p>
+                <pre>
+# Lista
+numeros = [1, 2, 3]
+numeros.append(4)
+print("Lista:", numeros)
+
+# Dicionário
+pessoa = {"nome": "João", "idade": 30}
+print("Dicionário:", pessoa)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Operadores</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Python suporta operadores aritméticos, relacionais e lógicos.</p>
+                <p><strong>Exemplo 1:</strong> Operadores aritméticos.</p>
+                <pre>
+a = 10
+b = 3
+print("Soma:", a + b)
+print("Subtração:", a - b)
+print("Multiplicação:", a * b)
+print("Divisão:", a / b)
+print("Resto:", a % b)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operadores lógicos.</p>
+                <pre>
+x = True
+y = False
+print("AND:", x and y)
+print("OR:", x or y)
+print("NOT:", not x)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Memória</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Python gerencia memória automaticamente com garbage collection, mas também permite controle manual usando referências.</p>
+                <p><strong>Exemplo 1:</strong> Uso de referências.</p>
+                <pre>
+x = [1, 2, 3]
+y = x  # y aponta para o mesmo objeto que x
+y[0] = 10
+print("x:", x)  # Saída: [10, 2, 3]
+                </pre>
+                <p><strong>Exemplo 2:</strong> Cópia de objetos.</p>
+                <pre>
+import copy
+x = [1, 2, 3]
+y = copy.deepcopy(x)  # Faz uma cópia profunda
+y[0] = 10
+print("x:", x)  # Saída: [1, 2, 3]
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Controle de Fluxo</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `for` e `while` permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+idade = 18
+if idade >= 18:
+    print("Maior de idade")
+else:
+    print("Menor de idade")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `for`.</p>
+                <pre>
+for i in range(1, 6):
+    print("Número:", i)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Operadores Lógicos</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Operadores lógicos (`and`, `or`, `not`) são usados para combinar condições.</p>
+                <p><strong>Exemplo 1:</strong> Combinação de condições.</p>
+                <pre>
+x = 10
+y = 20
+if x > 5 and y < 30:
+    print("Ambas as condições são verdadeiras")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Negação lógica.</p>
+                <pre>
+ativo = False
+if not ativo:
+    print("Inativo")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arquivos Texto e Binário</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Python oferece suporte para leitura e escrita de arquivos texto e binários.</p>
+                <p><strong>Exemplo 1:</strong> Leitura de arquivo texto.</p>
+                <pre>
+with open("arquivo.txt", "r") as arquivo:
+    conteudo = arquivo.read()
+    print(conteudo)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Escrita em arquivo binário.</p>
+                <pre>
+with open("arquivo.bin", "wb") as arquivo:
+    arquivo.write(b"\x00\xFF")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Funções</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função com parâmetros e retorno.</p>
+                <pre>
+def soma(a, b):
+    return a + b
+
+print("Soma:", soma(5, 3))
+                </pre>
+                <p><strong>Exemplo 2:</strong> Função com múltiplos retornos.</p>
+                <pre>
+def dividir(a, b):
+    if b == 0:
+        return None, "Divisão por zero"
+    return a / b, None
+
+resultado, erro = dividir(10, 2)
+if erro:
+    print("Erro:", erro)
+else:
+    print("Resultado:", resultado)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Armazenamento</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Python suporta armazenamento em bancos de dados SQL e NoSQL, além de manipulação de dados em memória.</p>
+                <p><strong>Exemplo 1:</strong> Conexão com SQLite.</p>
+                <pre>
+import sqlite3
+conexao = sqlite3.connect("database.db")
+cursor = conexao.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY, nome TEXT)")
+conexao.commit()
+conexao.close()
+                </pre>
+                <p><strong>Exemplo 2:</strong> Armazenamento em memória com dicionários.</p>
+                <pre>
+cache = {}
+cache["chave1"] = 42
+print("Valor:", cache["chave1"])
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Programação Orientada a Objetos</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Python é uma linguagem orientada a objetos, com suporte a classes, herança e polimorfismo.</p>
+                <p><strong>Exemplo 1:</strong> Classes e métodos.</p>
+                <pre>
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def apresentar(self):
+        print(f"Olá, meu nome é {self.nome} e tenho {self.idade} anos.")
+
+pessoa = Pessoa("João", 30)
+pessoa.apresentar()
+                </pre>
+                <p><strong>Exemplo 2:</strong> Herança e polimorfismo.</p>
+                <pre>
+class Animal:
+    def falar(self):
+        pass
+
+class Cachorro(Animal):
+    def falar(self):
+        return "Au au!"
+
+class Gato(Animal):
+    def falar(self):
+        return "Miau!"
+
+animais = [Cachorro(), Gato()]
+for animal in animais:
+    print(animal.falar())
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

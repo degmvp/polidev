@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Backup Oracle 23c – RMAN e Data Pump</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+    main {
+      max-width: 1080px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      border-bottom: 1px solid white;
+      padding-bottom: .25rem;
+    }
+    pre {
+      background-color: #001f4d;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+    code {
+      color: #00ffff;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      text-align: center;
+      color: lightgray;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Backup Oracle 23c – RMAN, Data Pump e SQL</h1>
+
+  <h2>1. Backup com RMAN</h2>
+  <h3>1.1 Backup completo</h3>
+  <pre><code>rman target /
+BACKUP DATABASE PLUS ARCHIVELOG;</code></pre>
+
+  <h3>1.2 Backup de uma tablespace</h3>
+  <pre><code>BACKUP TABLESPACE users;</code></pre>
+
+  <h3>1.3 Backup de datafile específico</h3>
+  <pre><code>BACKUP DATAFILE 4 FORMAT '/u01/backup/df4_%d_%U.bkp';</code></pre>
+
+  <h3>1.4 Backup de control file e SPFILE</h3>
+  <pre><code>BACKUP CURRENT CONTROLFILE;
+BACKUP SPFILE;</code></pre>
+
+  <h2>2. Export com Data Pump</h2>
+  <h3>2.1 Export de schema BI</h3>
+  <pre><code>expdp system/password@FREE schemas=BI \
+  directory=DATA_PUMP_DIR \
+  dumpfile=backup_bi.dmp \
+  logfile=backup_bi.log \
+  compression=all</code></pre>
+
+  <h3>2.2 Export de tabelas específicas</h3>
+  <pre><code>expdp system/password@FREE \
+  tables=BI.EMPREGADOS,BI.CLIENTES \
+  directory=DATA_PUMP_DIR \
+  dumpfile=tabelas_bi.dmp \
+  logfile=tabelas_bi.log</code></pre>
+
+  <h3>2.3 Export de tablespace</h3>
+  <pre><code>expdp system/password@FREE \
+  tablespaces=USERS \
+  directory=DATA_PUMP_DIR \
+  dumpfile=tbs_users.dmp \
+  logfile=tbs_users.log</code></pre>
+
+  <h3>2.4 Export full do banco</h3>
+  <pre><code>expdp system/password@FREE \
+  full=y \
+  directory=DATA_PUMP_DIR \
+  dumpfile=fullbackup_%U.dmp \
+  logfile=fullbackup.log</code></pre>
+
+  <h2>3. Import com Data Pump</h2>
+  <pre><code>impdp system/password@FREE \
+  schemas=BI \
+  directory=DATA_PUMP_DIR \
+  dumpfile=backup_bi.dmp \
+  logfile=import_bi.log \
+  remap_schema=BI:BI_RESTORE</code></pre>
+
+  <h2>4. Backup lógico com SQL</h2>
+  <h3>4.1 Cópia com dados</h3>
+  <pre><code>CREATE TABLE BI.CLIENTES_BKP AS
+SELECT * FROM BI.CLIENTES;</code></pre>
+
+  <h3>4.2 Apenas estrutura</h3>
+  <pre><code>CREATE TABLE BI.CLIENTES_BKP AS
+SELECT * FROM BI.CLIENTES WHERE 1=0;</code></pre>
+
+  <h3>4.3 DDL via DBMS_METADATA</h3>
+  <pre><code>SELECT DBMS_METADATA.GET_DDL('TABLE', 'CLIENTES', 'BI') FROM DUAL;</code></pre>
+
+  <h2>5. Verificação de espaço</h2>
+  <pre><code>SELECT tablespace_name, file_name, bytes/1024/1024 AS MB
+FROM dba_data_files
+WHERE tablespace_name = 'BI_TBS';</code></pre>
+
+  <h2>6. Diretório lógico para backup</h2>
+  <pre><code>CREATE OR REPLACE DIRECTORY DATA_PUMP_DIR AS '/u01/backup/';
+GRANT READ, WRITE ON DIRECTORY DATA_PUMP_DIR TO system;</code></pre>
+
+  <footer>© 2025 – Backup Oracle 23c por DEGBAR BARBOSA</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: yellowgreen;
+            font-family: Arial, sans-serif;
+            color: black;
+        }
+        pre {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h2 {
+            color: darkgreen;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guia de Comandos MySQL</h1>
+
+<h2>1 - Conexão ao Banco</h2>
+<pre>
+# Conectar ao servidor MySQL local
+mysql -u root -p
+
+# Conectar a um servidor remoto
+mysql -h 192.168.1.100 -u usuario -p
+
+# Conectar a um banco específico
+mysql -u usuario -p nome_do_banco
+</pre>
+
+<h2>2 - Usuários e Schema</h2>
+<pre>
+# Criar um novo usuário
+CREATE USER 'novousuario'@'localhost' IDENTIFIED BY 'senha_segura';
+
+# Criar um novo banco de dados
+CREATE DATABASE meubanco;
+
+# Atribuir permissões a um usuário
+GRANT ALL PRIVILEGES ON meubanco.* TO 'novousuario'@'localhost';
+
+# Mostrar usuários existentes
+SELECT User, Host FROM mysql.user;
+
+# Mostrar bancos de dados disponíveis
+SHOW DATABASES;
+</pre>
+
+<h2>3 - Criação de Tabelas</h2>
+<pre>
+# Criar uma tabela simples
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    data_cadastro DATE DEFAULT CURRENT_DATE,
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+# Criar tabela com chave estrangeira
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT,
+    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    valor_total DECIMAL(10,2),
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+);
+</pre>
+
+<h2>4 - Procedures</h2>
+<pre>
+# Criar uma stored procedure
+DELIMITER //
+CREATE PROCEDURE atualizar_status_cliente(IN cliente_id INT, IN novo_status BOOLEAN)
+BEGIN
+    UPDATE clientes 
+    SET ativo = novo_status 
+    WHERE id = cliente_id;
+    
+    SELECT CONCAT('Status do cliente ', cliente_id, ' atualizado para ', 
+                  IF(novo_status, 'ativo', 'inativo')) AS mensagem;
+END //
+DELIMITER ;
+
+# Chamar a procedure
+CALL atualizar_status_cliente(1, FALSE);
+</pre>
+
+<h2>5 - Funções</h2>
+<pre>
+# Criar uma função personalizada
+DELIMITER //
+CREATE FUNCTION calcular_desconto(valor DECIMAL(10,2), desconto DECIMAL(5,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE valor_com_desconto DECIMAL(10,2);
+    SET valor_com_desconto = valor - (valor * desconto / 100);
+    RETURN valor_com_desconto;
+END //
+DELIMITER ;
+
+# Usar a função em uma consulta
+SELECT id, valor_total, calcular_desconto(valor_total, 10) AS valor_com_desconto
+FROM pedidos;
+</pre>
+
+<h2>6 - Views</h2>
+<pre>
+# Criar uma view
+CREATE VIEW view_clientes_ativos AS
+SELECT id, nome, email 
+FROM clientes 
+WHERE ativo = TRUE;
+
+# Consultar a view
+SELECT * FROM view_clientes_ativos;
+
+# Atualizar uma view
+CREATE OR REPLACE VIEW view_clientes_ativos AS
+SELECT id, nome, email, data_cadastro
+FROM clientes
+WHERE ativo = TRUE;
+</pre>
+
+<h2>7 - Formatação de Consultas (Queries)</h2>
+<pre>
+# Consulta com formatação de datas
+SELECT 
+    id,
+    nome,
+    DATE_FORMAT(data_cadastro, '%d/%m/%Y') AS data_formatada,
+    CONCAT('R$ ', FORMAT(valor_total, 2, 'pt_BR')) AS valor_formatado
+FROM pedidos
+JOIN clientes ON pedidos.cliente_id = clientes.id;
+
+# Consulta com CASE para categorização
+SELECT 
+    nome,
+    valor_total,
+    CASE 
+        WHEN valor_total > 1000 THEN 'Alto valor'
+        WHEN valor_total > 500 THEN 'Médio valor'
+        ELSE 'Baixo valor'
+    END AS categoria
+FROM pedidos
+JOIN clientes ON pedidos.cliente_id = clientes.id;
+</pre>
+
+<h2>8 - Criação e Gerenciamento de Índices</h2>
+<pre>
+# Adicionar índice a uma coluna
+CREATE INDEX idx_clientes_nome ON clientes(nome);
+
+# Criar índice único
+CREATE UNIQUE INDEX idx_clientes_email ON clientes(email);
+
+# Criar índice composto
+CREATE INDEX idx_pedidos_cliente_data ON pedidos(cliente_id, data_pedido);
+
+# Ver índices de uma tabela
+SHOW INDEX FROM clientes;
+
+# Remover um índice
+DROP INDEX idx_clientes_nome ON clientes;
+</pre>
+
+<h2>9 - Espaço em Disco</h2>
+<pre>
+# Ver tamanho dos bancos de dados
+SELECT 
+    table_schema AS "Banco de Dados", 
+    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "Tamanho (MB)"
+FROM information_schema.tables 
+GROUP BY table_schema;
+
+# Ver tamanho das tabelas de um banco específico
+SELECT 
+    table_name AS "Tabela",
+    ROUND(data_length / 1024 / 1024, 2) AS "Dados (MB)",
+    ROUND(index_length / 1024 / 1024, 2) AS "Índices (MB)",
+    ROUND((data_length + index_length) / 1024 / 1024, 2) AS "Total (MB)"
+FROM information_schema.tables
+WHERE table_schema = "meubanco"
+ORDER BY (data_length + index_length) DESC;
+</pre>
+
+<h2>10 - Particionamento de Tabelas</h2>
+<pre>
+# Criar tabela particionada por range (ano)
+CREATE TABLE vendas (
+    id INT AUTO_INCREMENT,
+    data_venda DATE,
+    valor DECIMAL(10,2),
+    regiao VARCHAR(50),
+    PRIMARY KEY (id, data_venda)
+) PARTITION BY RANGE (YEAR(data_venda)) (
+    PARTITION p2020 VALUES LESS THAN (2021),
+    PARTITION p2021 VALUES LESS THAN (2022),
+    PARTITION p2022 VALUES LESS THAN (2023),
+    PARTITION pmax VALUES LESS THAN MAXVALUE
+);
+
+# Adicionar novo particionamento
+ALTER TABLE vendas REORGANIZE PARTITION pmax INTO (
+    PARTITION p2023 VALUES LESS THAN (2024),
+    PARTITION pmax VALUES LESS THAN MAXVALUE
+);
+
+# Consultar informações de particionamento
+SELECT 
+    partition_name, 
+    table_rows 
+FROM information_schema.partitions 
+WHERE table_name = 'vendas';
+</pre>
+
+<h2>11 - Gerenciamento de Permissões Usuário e Objetos</h2>
+<pre>
+# Conceder permissões específicas
+GRANT SELECT, INSERT, UPDATE ON meubanco.* TO 'usuario'@'localhost';
+
+# Revogar permissões
+REVOKE INSERT, UPDATE ON meubanco.* FROM 'usuario'@'localhost';
+
+# Mostrar permissões de um usuário
+SHOW GRANTS FOR 'usuario'@'localhost';
+
+# Criar role e atribuir permissões
+CREATE ROLE 'leitura_escrita';
+GRANT SELECT, INSERT, UPDATE, DELETE ON meubanco.* TO 'leitura_escrita';
+
+# Atribuir role a um usuário
+GRANT 'leitura_escrita' TO 'usuario'@'localhost';
+SET DEFAULT ROLE 'leitura_escrita' TO 'usuario'@'localhost';
+</pre>
+
+<h2>12 - Backup de Tabelas e Bancos</h2>
+<pre>
+# Backup completo do banco (via linha de comando)
+mysqldump -u root -p --databases meubanco > backup_meubanco.sql
+
+# Backup apenas da estrutura
+mysqldump -u root -p --no-data meubanco > estrutura_meubanco.sql
+
+# Backup de tabelas específicas
+mysqldump -u root -p meubanco clientes pedidos > backup_tabelas.sql
+
+# Restaurar backup
+mysql -u root -p meubanco < backup_meubanco.sql
+
+# Backup com compressão
+mysqldump -u root -p meubanco | gzip > backup_meubanco.sql.gz
+</pre>
+
+<h2>13 - Metadados</h2>
+<pre>
+# Obter informações sobre colunas de uma tabela
+SELECT 
+    column_name, 
+    data_type, 
+    is_nullable, 
+    column_default
+FROM information_schema.columns
+WHERE table_schema = 'meubanco' AND table_name = 'clientes';
+
+# Ver constraints de uma tabela
+SELECT 
+    constraint_name, 
+    constraint_type
+FROM information_schema.table_constraints
+WHERE table_schema = 'meubanco' AND table_name = 'pedidos';
+
+# Ver triggers do banco
+SELECT 
+    trigger_name, 
+    event_object_table,
+    action_timing,
+    event_manipulation
+FROM information_schema.triggers
+WHERE trigger_schema = 'meubanco';
+</pre>
+
+<h2>14 - Catálogo do Sistema (Tabelas e Views)</h2>
+<pre>
+# Listar todas as tabelas do banco
+SELECT table_name 
+FROM information_schema.tables
+WHERE table_schema = 'meubanco' AND table_type = 'BASE TABLE';
+
+# Listar todas as views do banco
+SELECT table_name 
+FROM information_schema.tables
+WHERE table_schema = 'meubanco' AND table_type = 'VIEW';
+
+# Ver SQL de criação de uma tabela
+SHOW CREATE TABLE clientes;
+
+# Ver status das tabelas
+SHOW TABLE STATUS FROM meubanco;
+
+# Ver informações detalhadas de uma coluna
+DESCRIBE clientes;
+</pre>
+
+</body>
+</html>

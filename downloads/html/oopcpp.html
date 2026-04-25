@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Orientação a Objetos em C++</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: yellowgreen;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .example {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guia de Referência de Orientação a Objetos em C++</h1>
+
+    <h2>1. Descrição da Classe em C++</h2>
+    <p>Em C++, uma classe é um tipo de dado definido pelo usuário que contém:</p>
+    <ul>
+        <li><strong>Atributos/Membros dados</strong> - variáveis que armazenam o estado do objeto</li>
+        <li><strong>Métodos/Funções membro</strong> - funções que definem o comportamento do objeto</li>
+        <li><strong>Construtores e Destrutores</strong> - para inicialização e limpeza</li>
+        <li><strong>Modificadores de acesso</strong> - public, private e protected</li>
+    </ul>
+
+    <div class="example">
+        <h3>Estrutura básica de uma classe:</h3>
+        <pre><code>class NomeDaClasse {
+private:
+    // Atributos privados
+    tipo atributo1;
+    tipo atributo2;
+    
+public:
+    // Construtor
+    NomeDaClasse(tipo param1, tipo param2) {
+        // inicialização
+    }
+    
+    // Métodos públicos
+    tipo metodo1(tipo parametro) {
+        // implementação
+    }
+    
+    tipo metodo2() {
+        // implementação
+    }
+    
+    // Destrutor
+    ~NomeDaClasse() {
+        // limpeza
+    }
+};</code></pre>
+    </div>
+
+    <h2>2. Exemplo Prático: Cadastro de Produtos e Fornecedores</h2>
+
+    <h3>2.1 Classe Produto</h3>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class Produto {
+private:
+    int id;
+    string nome;
+    string descricao;
+    double preco;
+    int quantidadeEstoque;
+    int idFornecedor;
+
+public:
+    // Construtor
+    Produto(int id, string nome, string descricao, double preco, int quantidadeEstoque, int idFornecedor) {
+        this->id = id;
+        this->nome = nome;
+        this->descricao = descricao;
+        this->preco = preco;
+        this->quantidadeEstoque = quantidadeEstoque;
+        this->idFornecedor = idFornecedor;
+    }
+
+    // Getters
+    int getId() { return id; }
+    string getNome() { return nome; }
+    string getDescricao() { return descricao; }
+    double getPreco() { return preco; }
+    int getQuantidadeEstoque() { return quantidadeEstoque; }
+    int getIdFornecedor() { return idFornecedor; }
+
+    // Setters
+    void setNome(string nome) { this->nome = nome; }
+    void setDescricao(string descricao) { this->descricao = descricao; }
+    void setPreco(double preco) { this->preco = preco; }
+    void setQuantidadeEstoque(int quantidade) { this->quantidadeEstoque = quantidade; }
+    void setIdFornecedor(int id) { this->idFornecedor = id; }
+
+    // Método para exibir informações do produto
+    void exibirInformacoes() {
+        cout << "ID: " << id << endl;
+        cout << "Nome: " << nome << endl;
+        cout << "Descrição: " << descricao << endl;
+        cout << "Preço: R$ " << preco << endl;
+        cout << "Quantidade em estoque: " << quantidadeEstoque << endl;
+        cout << "ID Fornecedor: " << idFornecedor << endl;
+    }
+
+    // Método para atualizar estoque
+    void atualizarEstoque(int quantidade) {
+        quantidadeEstoque += quantidade;
+        if (quantidadeEstoque < 0) quantidadeEstoque = 0;
+    }
+};</code></pre>
+
+    <h3>2.2 Classe Fornecedor</h3>
+    <pre><code>class Fornecedor {
+private:
+    int id;
+    string nome;
+    string endereco;
+    string telefone;
+    string email;
+
+public:
+    // Construtor
+    Fornecedor(int id, string nome, string endereco, string telefone, string email) {
+        this->id = id;
+        this->nome = nome;
+        this->endereco = endereco;
+        this->telefone = telefone;
+        this->email = email;
+    }
+
+    // Getters
+    int getId() { return id; }
+    string getNome() { return nome; }
+    string getEndereco() { return endereco; }
+    string getTelefone() { return telefone; }
+    string getEmail() { return email; }
+
+    // Setters
+    void setNome(string nome) { this->nome = nome; }
+    void setEndereco(string endereco) { this->endereco = endereco; }
+    void setTelefone(string telefone) { this->telefone = telefone; }
+    void setEmail(string email) { this->email = email; }
+
+    // Método para exibir informações do fornecedor
+    void exibirInformacoes() {
+        cout << "ID: " << id << endl;
+        cout << "Nome: " << nome << endl;
+        cout << "Endereço: " << endereco << endl;
+        cout << "Telefone: " << telefone << endl;
+        cout << "Email: " << email << endl;
+    }
+};</code></pre>
+
+    <h3>2.3 Exemplo de uso das classes</h3>
+    <pre><code>int main() {
+    // Criando fornecedores
+    Fornecedor fornecedor1(1, "Distribuidora ABC", "Rua das Flores, 123", "(11) 1234-5678", "contato@abc.com");
+    Fornecedor fornecedor2(2, "Atacadão XYZ", "Av. Principal, 456", "(11) 9876-5432", "vendas@xyz.com");
+
+    // Criando produtos
+    Produto produto1(101, "Notebook", "Notebook i5 8GB RAM 512GB SSD", 3500.00, 10, 1);
+    Produto produto2(102, "Mouse sem fio", "Mouse óptico sem fio 1600DPI", 120.50, 25, 2);
+
+    // Exibindo informações
+    cout << "=== Fornecedores ===" << endl;
+    fornecedor1.exibirInformacoes();
+    cout << endl;
+    fornecedor2.exibirInformacoes();
+    cout << endl;
+
+    cout << "=== Produtos ===" << endl;
+    produto1.exibirInformacoes();
+    cout << endl;
+    produto2.exibirInformacoes();
+    cout << endl;
+
+    // Atualizando estoque
+    produto1.atualizarEstoque(-2); // Venda de 2 unidades
+    produto2.atualizarEstoque(10); // Compra de 10 unidades
+
+    cout << "=== Estoque atualizado ===" << endl;
+    cout << "Estoque do Notebook: " << produto1.getQuantidadeEstoque() << endl;
+    cout << "Estoque do Mouse: " << produto2.getQuantidadeEstoque() << endl;
+
+    return 0;
+}</code></pre>
+
+    <h2>3. Definição de Métodos e Funções</h2>
+
+    <h3>3.1 Métodos</h3>
+    <p>Métodos são funções definidas dentro de uma classe que operam nos dados da classe. Eles definem o comportamento dos objetos.</p>
+
+    <div class="example">
+        <h4>Tipos comuns de métodos:</h4>
+        <ul>
+            <li><strong>Construtores</strong> - Inicializam o objeto</li>
+            <li><strong>Destrutores</strong> - Liberam recursos</li>
+            <li><strong>Getters</strong> - Retornam valores de atributos</li>
+            <li><strong>Setters</strong> - Modificam valores de atributos</li>
+            <li><strong>Métodos de negócio</strong> - Implementam a lógica da aplicação</li>
+        </ul>
+    </div>
+
+    <h3>3.2 Exemplos Práticos</h3>
+
+    <h4>Método Construtor</h4>
+    <pre><code>Produto::Produto(int id, string nome, string descricao, double preco, int quantidadeEstoque, int idFornecedor) {
+    this->id = id;
+    this->nome = nome;
+    this->descricao = descricao;
+    this->preco = preco;
+    this->quantidadeEstoque = quantidadeEstoque;
+    this->idFornecedor = idFornecedor;
+}</code></pre>
+
+    <h4>Métodos Getter e Setter</h4>
+    <pre><code>// Getter
+string Produto::getNome() {
+    return nome;
+}
+
+// Setter
+void Produto::setNome(string nome) {
+    this->nome = nome;
+}</code></pre>
+
+    <h4>Método de Negócio</h4>
+    <pre><code>void Produto::atualizarEstoque(int quantidade) {
+    quantidadeEstoque += quantidade;
+    if (quantidadeEstoque < 0) {
+        quantidadeEstoque = 0;
+    }
+}</code></pre>
+
+    <h4>Método para Exibição</h4>
+    <pre><code>void Fornecedor::exibirInformacoes() {
+    cout << "ID: " << id << endl;
+    cout << "Nome: " << nome << endl;
+    cout << "Endereço: " << endereco << endl;
+    cout << "Telefone: " << telefone << endl;
+    cout << "Email: " << email << endl;
+}</code></pre>
+
+    <h2>4. Tabelas SQL para Produtos e Fornecedores</h2>
+
+    <h3>4.1 MySQL</h3>
+
+    <h4>Tabela Fornecedores</h4>
+    <pre><code>CREATE TABLE fornecedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(200),
+    telefone VARCHAR(20),
+    email VARCHAR(100)
+);</code></pre>
+
+    <h4>Tabela Produtos</h4>
+    <pre><code>CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade_estoque INT DEFAULT 0,
+    id_fornecedor INT,
+    FOREIGN KEY (id_fornecedor) REFERENCES fornecedores(id)
+);</code></pre>
+
+    <h3>4.2 SQL Server</h3>
+
+    <h4>Tabela Fornecedores</h4>
+    <pre><code>CREATE TABLE fornecedores (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome NVARCHAR(100) NOT NULL,
+    endereco NVARCHAR(200),
+    telefone NVARCHAR(20),
+    email NVARCHAR(100)
+);</code></pre>
+
+    <h4>Tabela Produtos</h4>
+    <pre><code>CREATE TABLE produtos (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome NVARCHAR(100) NOT NULL,
+    descricao NVARCHAR(MAX),
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade_estoque INT DEFAULT 0,
+    id_fornecedor INT,
+    FOREIGN KEY (id_fornecedor) REFERENCES fornecedores(id)
+);</code></pre>
+
+    <h2>5. Exemplo de Inserção de Dados</h2>
+
+    <h3>5.1 Inserindo Fornecedores</h3>
+    <pre><code>-- MySQL e SQL Server
+INSERT INTO fornecedores (nome, endereco, telefone, email)
+VALUES ('Distribuidora ABC', 'Rua das Flores, 123', '(11) 1234-5678', 'contato@abc.com');
+
+INSERT INTO fornecedores (nome, endereco, telefone, email)
+VALUES ('Atacadão XYZ', 'Av. Principal, 456', '(11) 9876-5432', 'vendas@xyz.com');</code></pre>
+
+    <h3>5.2 Inserindo Produtos</h3>
+    <pre><code>-- MySQL e SQL Server
+INSERT INTO produtos (nome, descricao, preco, quantidade_estoque, id_fornecedor)
+VALUES ('Notebook', 'Notebook i5 8GB RAM 512GB SSD', 3500.00, 10, 1);
+
+INSERT INTO produtos (nome, descricao, preco, quantidade_estoque, id_fornecedor)
+VALUES ('Mouse sem fio', 'Mouse óptico sem fio 1600DPI', 120.50, 25, 2);</code></pre>
+
+    <h2>6. Relacionamento entre Classes e Tabelas</h2>
+
+    <p>O relacionamento entre as classes <code>Produto</code> e <code>Fornecedor</code> é representado:</p>
+    <ul>
+        <li>No código C++: através do atributo <code>idFornecedor</code> na classe <code>Produto</code></li>
+        <li>No banco de dados: através da chave estrangeira <code>id_fornecedor</code> na tabela <code>produtos</code></li>
+    </ul>
+
+    <p>Este é um exemplo de relacionamento 1-N (um para muitos), onde um fornecedor pode fornecer muitos produtos, mas cada produto tem apenas um fornecedor.</p>
+</body>
+</html>

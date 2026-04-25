@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="amination: none;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Referência C++</title>
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 5px;
+        }
+        p {
+            margin: 10px 0;
+            color: #444;
+        }
+        pre {
+            background-color: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .sidebar {
+            width: 250px;
+            background-color:orange;
+            color: navy;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .sidebar h3 {
+            margin: 0;
+            padding: 10px 0;
+            cursor: pointer;
+            color: navy;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: none;
+        }
+        .sidebar ul li {
+            padding: 8px 15px;
+            cursor: pointer;
+            color: black;
+        }
+        .sidebar ul li:hover {
+            background-color: black;
+            color: #fff;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            width: calc(100% - 270px);
+            background-color: #fff;
+            min-height: 100vh;
+        }
+        .content-section {
+            display: none;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .content-section.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1 style="color: black; font-size: 1.5em;">Guia C++ by Degmar</h1>
+        <h3 onclick="toggleSubmenu('submenu1')">1. Variáveis e Tipos de Dados</h3>
+        <ul id="submenu1">
+            <li onclick="showContent('var-desc')">Descrição</li>
+            <li onclick="showContent('var-ex1')">Exemplo 1</li>
+            <li onclick="showContent('var-ex2')">Exemplo 2</li>
+            <li onclick="showContent('var-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu2')">2. Entrada e Saída (I/O)</h3>
+        <ul id="submenu2">
+            <li onclick="showContent('io-desc')">Descrição</li>
+            <li onclick="showContent('io-ex1')">Exemplo 1</li>
+            <li onclick="showContent('io-ex2')">Exemplo 2</li>
+            <li onclick="showContent('io-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu3')">3. Operadores</h3>
+        <ul id="submenu3">
+            <li onclick="showContent('op-desc')">Descrição</li>
+            <li onclick="showContent('op-ex1')">Exemplo 1</li>
+            <li onclick="showContent('op-ex2')">Exemplo 2</li>
+            <li onclick="showContent('op-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu4')">4. Estruturas Condicionais</h3>
+        <ul id="submenu4">
+            <li onclick="showContent('cond-desc')">Descrição</li>
+            <li onclick="showContent('cond-ex1')">Exemplo 1</li>
+            <li onclick="showContent('cond-ex2')">Exemplo 2</li>
+            <li onclick="showContent('cond-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu5')">5. Laços de Repetição</h3>
+        <ul id="submenu5">
+            <li onclick="showContent('loop-desc')">Descrição</li>
+            <li onclick="showContent('loop-ex1')">Exemplo 1</li>
+            <li onclick="showContent('loop-ex2')">Exemplo 2</li>
+            <li onclick="showContent('loop-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu6')">6. Funções</h3>
+        <ul id="submenu6">
+            <li onclick="showContent('func-desc')">Descrição</li>
+            <li onclick="showContent('func-ex1')">Exemplo 1</li>
+            <li onclick="showContent('func-ex2')">Exemplo 2</li>
+            <li onclick="showContent('func-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu7')">7. Arrays</h3>
+        <ul id="submenu7">
+            <li onclick="showContent('array-desc')">Descrição</li>
+            <li onclick="showContent('array-ex1')">Exemplo 1</li>
+            <li onclick="showContent('array-ex2')">Exemplo 2</li>
+            <li onclick="showContent('array-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu8')">8. Ponteiros</h3>
+        <ul id="submenu8">
+            <li onclick="showContent('ptr-desc')">Descrição</li>
+            <li onclick="showContent('ptr-ex1')">Exemplo 1</li>
+            <li onclick="showContent('ptr-ex2')">Exemplo 2</li>
+            <li onclick="showContent('ptr-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu9')">9. Strings</h3>
+        <ul id="submenu9">
+            <li onclick="showContent('str-desc')">Descrição</li>
+            <li onclick="showContent('str-ex1')">Exemplo 1</li>
+            <li onclick="showContent('str-ex2')">Exemplo 2</li>
+            <li onclick="showContent('str-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu10')">10. Estruturas (Structs)</h3>
+        <ul id="submenu10">
+            <li onclick="showContent('struct-desc')">Descrição</li>
+            <li onclick="showContent('struct-ex1')">Exemplo 1</li>
+            <li onclick="showContent('struct-ex2')">Exemplo 2</li>
+            <li onclick="showContent('struct-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu11')">11. Classes e Objetos</h3>
+        <ul id="submenu11">
+            <li onclick="showContent('class-desc')">Descrição</li>
+            <li onclick="showContent('class-ex1')">Exemplo 1</li>
+            <li onclick="showContent('class-ex2')">Exemplo 2</li>
+            <li onclick="showContent('class-details')">Detalhes Adicionais</li>
+        </ul>
+        <h3 onclick="toggleSubmenu('submenu12')">12. Gerenciamento de Exceções</h3>
+        <ul id="submenu12">
+            <li onclick="showContent('exc-desc')">Descrição</li>
+            <li onclick="showContent('exc-ex1')">Exemplo 1</li>
+            <li onclick="showContent('exc-ex2')">Exemplo 2</li>
+            <li onclick="showContent('exc-details')">Detalhes Adicionais</li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1>Guia de Referência C++</h1>
+
+        <!-- Variáveis e Tipos de Dados -->
+        <div id="var-desc" class="content-section">
+            <h2>1. Variáveis e Tipos de Dados</h2>
+            <p>Variáveis armazenam dados na memória, e cada variável possui um tipo que define o tipo de dado que pode conter (e.g., <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>bool</code>). C++ é uma linguagem fortemente tipada, exigindo declaração explícita do tipo. Escopo (local ou global) e tempo de vida também são importantes.</p>
+        </div>
+        <div id="var-ex1" class="content-section">
+            <h2>1. Variáveis e Tipos de Dados - Exemplo 1</h2>
+            <p><strong>Declaração e inicialização de variáveis</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int idade = 25; // Inteiro
+    float altura = 1.75; // Ponto flutuante
+    cout << "Idade: " << idade << ", Altura: " << altura << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="var-ex2" class="content-section">
+            <h2>1. Variáveis e Tipos de Dados - Exemplo 2</h2>
+            <p><strong>Variável com escopo local</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+void funcao() {
+    int temp = 10; // Só existe dentro da função
+    cout << "Temp: " << temp << endl;
+}
+int main() {
+    funcao();
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="var-details" class="content-section">
+            <h2>1. Variáveis e Tipos de Dados - Detalhes Adicionais</h2>
+            <p>Use <code>const</code> para variáveis imutáveis (e.g., <code>const int MAX = 100;</code>). Tipos como <code>unsigned int</code> ou <code>long long</code> são úteis para números não negativos ou muito grandes.</p>
+        </div>
+
+        <!-- Entrada e Saída (I/O) -->
+        <div id="io-desc" class="content-section">
+            <h2>2. Entrada e Saída (I/O)</h2>
+            <p>A biblioteca <code><iostream></code> permite entrada (<code>cin</code>) e saída (<code>cout</code>) de dados. Use <code>cout</code> para exibir informações no console e <code>cin</code> para capturar entrada do usuário. Os operadores <code><<</code> e <code>>></code> formatam a entrada/saída.</p>
+        </div>
+        <div id="io-ex1" class="content-section">
+            <h2>2. Entrada e Saída (I/O) - Exemplo 1</h2>
+            <p><strong>Saída simples</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    cout << "Bem-vindo ao C++!" << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="io-ex2" class="content-section">
+            <h2>2. Entrada e Saída (I/O) - Exemplo 2</h2>
+            <p><strong>Entrada e saída combinadas</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    string nome;
+    int idade;
+    cout << "Digite seu nome e idade: ";
+    cin >> nome >> idade;
+    cout << "Olá, " << nome << "! Você tem " << idade << " anos." << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="io-details" class="content-section">
+            <h2>2. Entrada e Saída (I/O) - Detalhes Adicionais</h2>
+            <p>Use <code>endl</code> para nova linha ou <code>\n</code> para maior eficiência. Para formatar a saída, inclua <code><iomanip></code> (e.g., <code>setw</code>, <code>setprecision</code>).</p>
+        </div>
+
+        <!-- Operadores -->
+        <div id="op-desc" class="content-section">
+            <h2>3. Operadores</h2>
+            <p>C++ suporta operadores aritméticos (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>), relacionais (<code>==</code>, <code>!=</code>, <code>></code>, <code><</code>), lógicos (<code>&&</code>, <code>||</code>, <code>!</code>) e de atribuição (<code>=</code>, <code>+=</code>, etc.). A precedência determina a ordem de avaliação, mas parênteses garantem clareza.</p>
+        </div>
+        <div id="op-ex1" class="content-section">
+            <h2>3. Operadores - Exemplo 1</h2>
+            <p><strong>Operadores aritméticos e relacionais</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int a = 10, b = 3;
+    cout << "Soma: " << a + b << ", Divisão: " << a / b << endl;
+    cout << "a > b? " << (a > b) << endl; // 1 (verdadeiro)
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="op-ex2" class="content-section">
+            <h2>3. Operadores - Exemplo 2</h2>
+            <p><strong>Operadores lógicos</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    bool x = true, y = false;
+    if (x && !y) {
+        cout << "Condição verdadeira!" << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="op-details" class="content-section">
+            <h2>3. Operadores - Detalhes Adicionais</h2>
+            <p>O operador <code>%</code> (módulo) só funciona com inteiros. Use <code>++</code> ou <code>--</code> para incremento/decremento (e.g., <code>i++</code> ou <code>++i</code>).</p>
+        </div>
+
+        <!-- Estruturas Condicionais -->
+        <div id="cond-desc" class="content-section">
+            <h2>4. Estruturas Condicionais</h2>
+            <p>Estruturas como <code>if</code>, <code>else if</code>, <code>else</code> e <code>switch</code> controlam o fluxo com base em condições. O <code>switch</code> é útil para comparar uma variável contra múltiplos valores constantes, enquanto <code>if</code> é mais flexível.</p>
+        </div>
+        <div id="cond-ex1" class="content-section">
+            <h2>4. Estruturas Condicionais - Exemplo 1</h2>
+            <p><strong>If-else</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int nota = 75;
+    if (nota >= 90) {
+        cout << "Aprovado com distinção!" << endl;
+    } else if (nota >= 60) {
+        cout << "Aprovado!" << endl;
+    } else {
+        cout << "Reprovado." << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="cond-ex2" class="content-section">
+            <h2>4. Estruturas Condicionais - Exemplo 2</h2>
+            <p><strong>Switch</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    char dia = '2';
+    switch (dia) {
+        case '1': cout << "Domingo" << endl; break;
+        case '2': cout << "Segunda" << endl; break;
+        default: cout << "Dia inválido" << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="cond-details" class="content-section">
+            <h2>4. Estruturas Condicionais - Detalhes Adicionais</h2>
+            <p>Sempre use <code>break</code> em <code>switch</code> para evitar "fall-through". Condições complexas podem combinar operadores lógicos.</p>
+        </div>
+
+        <!-- Laços de Repetição -->
+        <div id="loop-desc" class="content-section">
+            <h2>5. Laços de Repetição</h2>
+            <p>Laços como <code>for</code>, <code>while</code> e <code>do-while</code> executam blocos de código repetidamente. O <code>for</code> é ideal para iterações com contador, enquanto <code>while</code> e <code>do-while</code> são mais flexíveis para condições gerais.</p>
+        </div>
+        <div id="loop-ex1" class="content-section">
+            <h2>5. Laços de Repetição - Exemplo 1</h2>
+            <p><strong>Laço for</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        cout << "Iteração " << i << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="loop-ex2" class="content-section">
+            <h2>5. Laços de Repetição - Exemplo 2</h2>
+            <p><strong>Laço while</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int num = 10;
+    while (num > 0) {
+        cout << num << " ";
+        num -= 2;
+    }
+    cout << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="loop-details" class="content-section">
+            <h2>5. Laços de Repetição - Detalhes Adicionais</h2>
+            <p>Use <code>break</code> para sair de um laço e <code>continue</code> para pular para a próxima iteração. Evite laços infinitos verificando a condição de parada.</p>
+        </div>
+
+        <!-- Funções -->
+        <div id="func-desc" class="content-section">
+            <h2>6. Funções</h2>
+            <p>Funções dividem o código em blocos reutilizáveis. Elas têm um tipo de retorno (ou <code>void</code>), nome, parâmetros e corpo. Parâmetros podem ser passados por valor ou referência.</p>
+        </div>
+        <div id="func-ex1" class="content-section">
+            <h2>6. Funções - Exemplo 1</h2>
+            <p><strong>Função com retorno</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int quadrado(int x) {
+    return x * x;
+}
+int main() {
+    cout << "Quadrado de 5: " << quadrado(5) << endl; // 25
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="func-ex2" class="content-section">
+            <h2>6. Funções - Exemplo 2</h2>
+            <p><strong>Função com passagem por referência</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+void trocar(int& a, int& b) {
+    int temp = a; a = b; b = temp;
+}
+int main() {
+    int x = 10, y = 20;
+    trocar(x, y);
+    cout << "x: " << x << ", y: " << y << endl; // x: 20, y: 10
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="func-details" class="content-section">
+            <h2>6. Funções - Detalhes Adicionais</h2>
+            <p>Funções podem ser sobrecarregadas (mesmo nome, parâmetros diferentes). Declare protótipos no início do programa para organização.</p>
+        </div>
+
+        <!-- Arrays -->
+        <div id="array-desc" class="content-section">
+            <h2>7. Arrays</h2>
+            <p>Arrays armazenam múltiplos elementos do mesmo tipo em posições contíguas. O acesso é feito por índices (a partir de 0). Arrays têm tamanho fixo em C++ padrão, mas podem ser dinâmicos com <code>new</code>.</p>
+        </div>
+        <div id="array-ex1" class="content-section">
+            <h2>7. Arrays - Exemplo 1</h2>
+            <p><strong>Array simples</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int notas[5] = {85, 90, 78, 92, 88};
+    cout << "Primeira nota: " << notas[0] << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="array-ex2" class="content-section">
+            <h2>7. Arrays - Exemplo 2</h2>
+            <p><strong>Iterando sobre array</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int notas[5] = {85, 90, 78, 92, 88};
+    for (int i = 0; i < 5; i++) {
+        cout << "Nota " << i + 1 << ": " << notas[i] << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="array-details" class="content-section">
+            <h2>7. Arrays - Detalhes Adicionais</h2>
+            <p>Arrays fora dos limites causam comportamento indefinido. Para arrays dinâmicos, use <code>delete[]</code> após <code>new</code>.</p>
+        </div>
+
+        <!-- Ponteiros -->
+        <div id="ptr-desc" class="content-section">
+            <h2>8. Ponteiros</h2>
+            <p>Ponteiros armazenam endereços de memória. Use <code>*</code> para declarar um ponteiro e <code>&</code> para obter o endereço de uma variável. Ponteiros são úteis para gerenciamento dinâmico de memória e passagem por referência.</p>
+        </div>
+        <div id="ptr-ex1" class="content-section">
+            <h2>8. Ponteiros - Exemplo 1</h2>
+            <p><strong>Ponteiro básico</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int x = 10;
+    int* ptr = &x;
+    cout << "Valor de x: " << *ptr << endl; // 10
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="ptr-ex2" class="content-section">
+            <h2>8. Ponteiros - Exemplo 2</h2>
+            <p><strong>Alocação dinâmica</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    int* arr = new int[3];
+    arr[0] = 1; arr[1] = 2; arr[2] = 3;
+    cout << "Segundo elemento: " << arr[1] << endl;
+    delete[] arr; // Libera memória
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="ptr-details" class="content-section">
+            <h2>8. Ponteiros - Detalhes Adicionais</h2>
+            <p>Evite ponteiros nulos ou "dangling pointers". Use <code>nullptr</code> em vez de <code>NULL</code> para maior segurança.</p>
+        </div>
+
+        <!-- Strings -->
+        <div id="str-desc" class="content-section">
+            <h2>9. Strings</h2>
+            <p>A classe <code>string</code> (biblioteca <code><string></code>) facilita manipulação de texto, com métodos como <code>length()</code>, <code>substr()</code>, e <code>find()</code>. Strings em C (char arrays) são menos comuns, mas ainda usadas.</p>
+        </div>
+        <div id="str-ex1" class="content-section">
+            <h2>9. Strings - Exemplo 1</h2>
+            <p><strong>Operações com string</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    string texto = "Olá, mundo!";
+    cout << "Tamanho: " << texto.length() << endl;
+    cout << "Subtexto: " << texto.substr(0, 3) << endl; // Olá
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="str-ex2" class="content-section">
+            <h2>9. Strings - Exemplo 2</h2>
+            <p><strong>Concatenação</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    string nome = "Ana";
+    string saudacao = "Bem-vinda, " + nome + "!";
+    cout << saudacao << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="str-details" class="content-section">
+            <h2>9. Strings - Detalhes Adicionais</h2>
+            <p>Para entrada com espaços, use <code>getline(cin, str)</code>. Strings em C (e.g., <code>char texto[]</code>) exigem <code><cstring></code> para funções como <code>strlen</code>.</p>
+        </div>
+
+        <!-- Estruturas (Structs) -->
+        <div id="struct-desc" class="content-section">
+            <h2>10. Estruturas (Structs)</h2>
+            <p>Structs agrupam variáveis relacionadas sob um único nome. São úteis para representar objetos compostos, como registros. Em C++, structs podem incluir métodos, semelhantes a classes.</p>
+        </div>
+        <div id="struct-ex1" class="content-section">
+            <h2>10. Estruturas (Structs) - Exemplo 1</h2>
+            <p><strong>Struct simples</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+struct Pessoa {
+    string nome;
+    int idade;
+};
+int main() {
+    Pessoa p = {"João", 30};
+    cout << p.nome << " tem " << p.idade << " anos." << endl;
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="struct-ex2" class="content-section">
+            <h2>10. Estruturas (Structs) - Exemplo 2</h2>
+            <p><strong>Array de structs</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+struct Pessoa {
+    string nome;
+    int idade;
+};
+int main() {
+    Pessoa grupo[2] = {{"Ana", 25}, {"Carlos", 40}};
+    for (int i = 0; i < 2; i++) {
+        cout << grupo[i].nome << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="struct-details" class="content-section">
+            <h2>10. Estruturas (Structs) - Detalhes Adicionais</h2>
+            <p>Use <code>typedef</code> para aliases (e.g., <code>typedef struct {...} Pessoa;</code>). Structs são públicas por padrão, ao contrário de classes.</p>
+        </div>
+
+        <!-- Classes e Objetos -->
+        <div id="class-desc" class="content-section">
+            <h2>11. Classes e Objetos</h2>
+            <p>Classes definem tipos personalizados com atributos (dados) e métodos (funções). Objetos são instâncias de classes. Encapsulamento é obtido com modificadores como <code>private</code> e <code>public</code>.</p>
+        </div>
+        <div id="class-ex1" class="content-section">
+            <h2>11. Classes e Objetos - Exemplo 1</h2>
+            <p><strong>Classe simples</strong></p>
+            <pre><code>
+#include <iostream>
+#include <string>
+using namespace std;
+class Carro {
+public:
+    string marca;
+    int velocidade;
+    void acelerar() { velocidade += 10; }
+};
+int main() {
+    Carro c = {"Toyota", 100};
+    c.acelerar();
+    cout << "Velocidade: " << c.velocidade << endl; // 110
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="class-ex2" class="content-section">
+            <h2>11. Classes e Objetos - Exemplo 2</h2>
+            <p><strong>Encapsulamento</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+class Conta {
+private:
+    double saldo;
+public:
+    Conta(double s) : saldo(s) {}
+    void depositar(double valor) { saldo += valor; }
+    double getSaldo() { return saldo; }
+};
+int main() {
+    Conta conta(500.0);
+    conta.depositar(200.0);
+    cout << "Saldo: " << conta.getSaldo() << endl; // 700
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="class-details" class="content-section">
+            <h2>11. Classes e Objetos - Detalhes Adicionais</h2>
+            <p>Use construtores para inicializar objetos. Métodos <code>getter</code> e <code>setter</code> ajudam no encapsulamento.</p>
+        </div>
+
+        <!-- Gerenciamento de Exceções -->
+        <div id="exc-desc" class="content-section">
+            <h2>12. Gerenciamento de Exceções</h2>
+            <p>Exceções lidam com erros em tempo de execução usando <code>try</code>, <code>catch</code> e <code>throw</code>. Isso permite que o programa trate falhas sem travar, como divisões por zero ou acesso inválido.</p>
+        </div>
+        <div id="exc-ex1" class="content-section">
+            <h2>12. Gerenciamento de Exceções - Exemplo 1</h2>
+            <p><strong>Exceção simples</strong></p>
+            <pre><code>
+#include <iostream>
+using namespace std;
+int main() {
+    try {
+        int x = 10, y = 0;
+        if (y == 0) throw "Divisão por zero!";
+        cout << x / y << endl;
+    } catch (const char* msg) {
+        cout << "Erro: " << msg << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="exc-ex2" class="content-section">
+            <h2>12. Gerenciamento de Exceções - Exemplo 2</h2>
+            <p><strong>Exceção com std::exception</strong></p>
+            <pre><code>
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+int main() {
+    try {
+        int idade = -5;
+        if (idade < 0) throw invalid_argument("Idade inválida!");
+        cout << "Idade: " << idade << endl;
+    } catch (const invalid_argument& e) {
+        cout << "Erro: " << e.what() << endl;
+    }
+    return 0;
+}
+            </code></pre>
+        </div>
+        <div id="exc-details" class="content-section">
+            <h2>12. Gerenciamento de Exceções - Detalhes Adicionais</h2>
+            <p>Use exceções padrão como <code>std::runtime_error</code> ou <code>std::out_of_range</code>. Sempre limpe recursos no bloco <code>catch</code> para evitar vazamentos.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            const isDisplayed = submenu.style.display === 'block';
+            document.querySelectorAll('.sidebar ul').forEach(sub => sub.style.display = 'none');
+            submenu.style.display = isDisplayed ? 'none' : 'block';
+        }
+
+        function showContent(id) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.add('active');
+            }
+        }
+
+        // Mostrar a primeira seção por padrão
+        showContent('var-desc');
+    </script>
+</body>
+</html>

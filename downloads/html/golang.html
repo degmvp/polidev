@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Golang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: orange;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff3e0; /* Um tom mais claro de laranja */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #ff9800; /* Laranja mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Golang</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Go (ou Golang) foi criada pelo Google em 2007 por Robert Griesemer, Rob Pike e Ken Thompson. É uma linguagem compilada, de tipagem estática, projetada para ser simples, eficiente e fácil de manter.</p>
+                <p><strong>Exemplo 1:</strong> Programa básico "Hello, World!".</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    fmt.Println("Hello, World!")
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Verificação da versão do Go instalada.</p>
+                <pre>
+// Execute no terminal:
+// go version
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem a estrutura básica de um programa Go, como declarar variáveis, constantes e usar pacotes.</p>
+                <p><strong>Exemplo 1:</strong> Declaração de variáveis e constantes.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    var nome string = "João"
+    idade := 30
+    const anoAtual = 2023
+    fmt.Println("Nome:", nome, "Idade:", idade, "Ano:", anoAtual)
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Uso de pacotes externos.</p>
+                <pre>
+package main
+import (
+    "fmt"
+    "math"
+)
+func main() {
+    fmt.Println("Raiz quadrada de 16:", math.Sqrt(16))
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conceitos Fundamentais</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Go organiza código em pacotes e usa visibilidade baseada em maiúsculas/minúsculas para controlar o acesso.</p>
+                <p><strong>Exemplo 1:</strong> Organização de pacotes.</p>
+                <pre>
+// Arquivo utils.go
+package utils
+func Somar(a, b int) int {
+    return a + b
+}
+
+// Arquivo main.go
+package main
+import (
+    "fmt"
+    "./utils"
+)
+func main() {
+    fmt.Println("Soma:", utils.Somar(5, 3))
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Visibilidade de funções.</p>
+                <pre>
+// Função pública (exportada)
+func Publica() {
+    fmt.Println("Função pública")
+}
+
+// Função privada (não exportada)
+func privada() {
+    fmt.Println("Função privada")
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Tipos de Dados</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Go suporta tipos primitivos (inteiros, floats, strings, etc.), arrays, slices, structs e mapas.</p>
+                <p><strong>Exemplo 1:</strong> Tipos primitivos.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    var inteiro int = 10
+    var decimal float64 = 3.14
+    var texto string = "Go é incrível!"
+    fmt.Println(inteiro, decimal, texto)
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Arrays e slices.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    // Array fixo
+    numeros := [3]int{1, 2, 3}
+    fmt.Println("Array:", numeros)
+
+    // Slice dinâmico
+    slice := []int{4, 5, 6}
+    slice = append(slice, 7)
+    fmt.Println("Slice:", slice)
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Operadores</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Operadores aritméticos, relacionais e lógicos são usados para realizar operações matemáticas e comparações.</p>
+                <p><strong>Exemplo 1:</strong> Operadores aritméticos.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    a := 10
+    b := 3
+    fmt.Println("Soma:", a+b)
+    fmt.Println("Subtração:", a-b)
+    fmt.Println("Multiplicação:", a*b)
+    fmt.Println("Divisão:", a/b)
+    fmt.Println("Resto:", a%b)
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operadores lógicos.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    x := true
+    y := false
+    fmt.Println("AND:", x && y)
+    fmt.Println("OR:", x || y)
+    fmt.Println("NOT:", !x)
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Memória</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Go gerencia memória automaticamente com garbage collection, mas também permite controle manual usando ponteiros.</p>
+                <p><strong>Exemplo 1:</strong> Uso de ponteiros.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    x := 10
+    p := &x
+    fmt.Println("Valor de x:", *p)
+    *p = 20
+    fmt.Println("Novo valor de x:", x)
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Alocação de memória com `new`.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    x := new(int)
+    *x = 42
+    fmt.Println("Valor:", *x)
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Controle de Fluxo</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `switch` e `for` permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    idade := 18
+    if idade >= 18 {
+        fmt.Println("Maior de idade")
+    } else {
+        fmt.Println("Menor de idade")
+    }
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `for`.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    for i := 1; i <= 5; i++ {
+        fmt.Println("Número:", i)
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Operadores Lógicos</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Operadores lógicos (`&&`, `||`, `!`) são usados para combinar condições.</p>
+                <p><strong>Exemplo 1:</strong> Combinação de condições.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    x := 10
+    y := 20
+    if x > 5 && y < 30 {
+        fmt.Println("Ambas as condições são verdadeiras")
+    }
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Negação lógica.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    ativo := false
+    if !ativo {
+        fmt.Println("Inativo")
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arquivos Texto e Binário</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Go oferece suporte para leitura e escrita de arquivos texto e binários.</p>
+                <p><strong>Exemplo 1:</strong> Leitura de arquivo texto.</p>
+                <pre>
+package main
+import (
+    "fmt"
+    "io/ioutil"
+    "log"
+)
+func main() {
+    data, err := ioutil.ReadFile("arquivo.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(string(data))
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Escrita em arquivo binário.</p>
+                <pre>
+package main
+import (
+    "encoding/binary"
+    "os"
+)
+func main() {
+    file, _ := os.Create("arquivo.bin")
+    defer file.Close()
+    var numero uint32 = 12345
+    binary.Write(file, binary.LittleEndian, numero)
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Funções</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função com parâmetros e retorno.</p>
+                <pre>
+package main
+import "fmt"
+func soma(a, b int) int {
+    return a + b
+}
+func main() {
+    fmt.Println("Soma:", soma(5, 3))
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Função com múltiplos retornos.</p>
+                <pre>
+package main
+import "fmt"
+func dividir(a, b float64) (float64, error) {
+    if b == 0 {
+        return 0, fmt.Errorf("divisão por zero")
+    }
+    return a / b, nil
+}
+func main() {
+    resultado, err := dividir(10, 2)
+    if err != nil {
+        fmt.Println("Erro:", err)
+    } else {
+        fmt.Println("Resultado:", resultado)
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Armazenamento</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Go suporta armazenamento em bancos de dados SQL e NoSQL, além de manipulação de dados em memória.</p>
+                <p><strong>Exemplo 1:</strong> Conexão com SQLite.</p>
+                <pre>
+package main
+import (
+    "database/sql"
+    "fmt"
+    _ "github.com/mattn/go-sqlite3"
+)
+func main() {
+    db, _ := sql.Open("sqlite3", "./database.db")
+    defer db.Close()
+    _, err := db.Exec("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY, nome TEXT)")
+    if err != nil {
+        fmt.Println("Erro:", err)
+    }
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Armazenamento em memória com mapas.</p>
+                <pre>
+package main
+import "fmt"
+func main() {
+    cache := make(map[string]int)
+    cache["chave1"] = 42
+    fmt.Println("Valor:", cache["chave1"])
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Programação Orientada a Objetos</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Go não tem classes tradicionais, mas sim structs e métodos associados para simular orientação a objetos.</p>
+                <p><strong>Exemplo 1:</strong> Structs e métodos.</p>
+                <pre>
+package main
+import "fmt"
+type Pessoa struct {
+    Nome  string
+    Idade int
+}
+func (p Pessoa) apresentar() {
+    fmt.Printf("Olá, meu nome é %s e tenho %d anos.\n", p.Nome, p.Idade)
+}
+func main() {
+    pessoa := Pessoa{"João", 30}
+    pessoa.apresentar()
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Interfaces.</p>
+                <pre>
+package main
+import "fmt"
+type Forma interface {
+    Area() float64
+}
+type Retangulo struct {
+    Largura, Altura float64
+}
+func (r Retangulo) Area() float64 {
+    return r.Largura * r.Altura
+}
+func main() {
+    var forma Forma = Retangulo{Largura: 5, Altura: 3}
+    fmt.Println("Área:", forma.Area())
+}
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

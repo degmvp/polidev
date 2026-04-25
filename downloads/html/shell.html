@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Shell Script</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #8b453a; /* Salmon4 */
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #cd5c5c; /* Um tom mais claro de salmon4 */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: white;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #8b453a; /* Salmon4 mais escuro */
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #cd5c5c;
+            border: 1px solid #8b453a;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Shell Script</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Shell Script é uma linguagem de script usada para automatizar tarefas no terminal ou linha de comando. É amplamente utilizado em sistemas Unix/Linux.</p>
+                <p><strong>Exemplo 1:</strong> Primeiro programa em Shell Script.</p>
+                <pre>
+#!/bin/bash
+echo "Olá, mundo!"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Execução do script.</p>
+                <pre>
+# Salve o arquivo como script.sh
+# Torne-o executável:
+chmod +x script.sh
+
+# Execute:
+./script.sh
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem variáveis, comentários e operações básicas.</p>
+                <p><strong>Exemplo 1:</strong> Declaração de variáveis.</p>
+                <pre>
+#!/bin/bash
+nome="Shell Script"
+echo "Estou aprendendo $nome"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Comentários e operações matemáticas.</p>
+                <pre>
+#!/bin/bash
+# Isso é um comentário
+numero1=10
+numero2=5
+soma=$((numero1 + numero2))
+echo "A soma é: $soma"
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Controle de Fluxo</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `for` e `while` permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+#!/bin/bash
+idade=18
+if [ $idade -ge 18 ]; then
+    echo "Maior de idade"
+else
+    echo "Menor de idade"
+fi
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `for`.</p>
+                <pre>
+#!/bin/bash
+for i in {1..5}; do
+    echo "Número: $i"
+done
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Funções</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função básica.</p>
+                <pre>
+#!/bin/bash
+saudacao() {
+    echo "Olá, $1!"
+}
+saudacao "João"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Função com retorno.</p>
+                <pre>
+#!/bin/bash
+soma() {
+    local resultado=$(( $1 + $2 ))
+    echo $resultado
+}
+resultado=$(soma 5 3)
+echo "A soma é: $resultado"
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Manipulação de Arquivos</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Shell Script permite manipular arquivos e diretórios facilmente.</p>
+                <p><strong>Exemplo 1:</strong> Criando e lendo arquivos.</p>
+                <pre>
+#!/bin/bash
+echo "Este é um conteúdo de exemplo" > arquivo.txt
+cat arquivo.txt
+                </pre>
+                <p><strong>Exemplo 2:</strong> Verificando se um arquivo existe.</p>
+                <pre>
+#!/bin/bash
+if [ -f "arquivo.txt" ]; then
+    echo "O arquivo existe!"
+else
+    echo "O arquivo não existe."
+fi
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Comandos Úteis</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Alguns comandos úteis para manipulação de arquivos, processos e sistema.</p>
+                <p><strong>Exemplo 1:</strong> Listando arquivos.</p>
+                <pre>
+#!/bin/bash
+ls -l
+                </pre>
+                <p><strong>Exemplo 2:</strong> Monitorando processos.</p>
+                <pre>
+#!/bin/bash
+ps aux | grep bash
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Parâmetros de Linha de Comando</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Scripts podem receber parâmetros via linha de comando.</p>
+                <p><strong>Exemplo 1:</strong> Recebendo parâmetros.</p>
+                <pre>
+#!/bin/bash
+echo "Primeiro parâmetro: $1"
+echo "Segundo parâmetro: $2"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Contando parâmetros.</p>
+                <pre>
+#!/bin/bash
+echo "Número de parâmetros: $#"
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Entrada de Usuário</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Solicitar entrada do usuário durante a execução do script.</p>
+                <p><strong>Exemplo 1:</strong> Lendo entrada do usuário.</p>
+                <pre>
+#!/bin/bash
+echo "Qual é o seu nome?"
+read nome
+echo "Olá, $nome!"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Entrada silenciosa (sem eco).</p>
+                <pre>
+#!/bin/bash
+read -s -p "Digite sua senha: " senha
+echo ""
+echo "Senha recebida!"
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arrays</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Arrays são coleções ordenadas de elementos.</p>
+                <p><strong>Exemplo 1:</strong> Declaração e acesso a arrays.</p>
+                <pre>
+#!/bin/bash
+frutas=("Maçã" "Banana" "Laranja")
+echo "Primeira fruta: ${frutas[0]}"
+echo "Todas as frutas: ${frutas[@]}"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Iterando sobre arrays.</p>
+                <pre>
+#!/bin/bash
+frutas=("Maçã" "Banana" "Laranja")
+for fruta in "${frutas[@]}"; do
+    echo "Fruta: $fruta"
+done
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Tratamento de Erros</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Tratar erros e verificar o status de comandos.</p>
+                <p><strong>Exemplo 1:</strong> Verificando o status de saída.</p>
+                <pre>
+#!/bin/bash
+ls arquivo_inexistente
+if [ $? -ne 0 ]; then
+    echo "Erro ao listar o arquivo."
+fi
+                </pre>
+                <p><strong>Exemplo 2:</strong> Tratamento de erro com `set -e`.</p>
+                <pre>
+#!/bin/bash
+set -e
+comando_invalido
+echo "Este comando nunca será executado."
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Automatização de Tarefas</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Shell Script é ideal para automatizar tarefas repetitivas.</p>
+                <p><strong>Exemplo 1:</strong> Backup automático.</p>
+                <pre>
+#!/bin/bash
+data=$(date +%Y-%m-%d)
+cp -r /caminho/origem /caminho/destino/backup-$data
+echo "Backup concluído em backup-$data"
+                </pre>
+                <p><strong>Exemplo 2:</strong> Monitoramento de disco.</p>
+                <pre>
+#!/bin/bash
+uso=$(df / | grep / | awk '{print $5}' | sed 's/%//g')
+if [ $uso -gt 80 ]; then
+    echo "Atenção: Disco cheio ($uso%)!"
+fi
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Melhores Práticas</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Boas práticas incluem uso de shebang, modularização e tratamento de erros.</p>
+                <p><strong>Exemplo 1:</strong> Shebang correto.</p>
+                <pre>
+#!/bin/bash
+# Sempre use o shebang correto no início do script
+                </pre>
+                <p><strong>Exemplo 2:</strong> Modularização do código.</p>
+                <pre>
+#!/bin/bash
+# Função separada
+verificar_espaco_disco() {
+    uso=$(df / | grep / | awk '{print $5}' | sed 's/%//g')
+    if [ $uso -gt 80 ]; then
+        echo "Atenção: Disco cheio ($uso%)!"
+    fi
+}
+
+# Chamada da função
+verificar_espaco_disco
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

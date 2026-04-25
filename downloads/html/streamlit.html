@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Streamlit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: orange;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff3e0; /* Um tom mais claro de laranja */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #ff9800; /* Laranja mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Streamlit</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Biblioteca</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit é uma biblioteca Python para criar aplicativos web interativos rapidamente. É ideal para ciência de dados e machine learning.</p>
+                <p><strong>Exemplo 1:</strong> Instalação do Streamlit.</p>
+                <pre>
+# Execute no terminal:
+# pip install streamlit
+                </pre>
+                <p><strong>Exemplo 2:</strong> Execução de um app básico.</p>
+                <pre>
+# Crie um arquivo app.py com o seguinte conteúdo:
+import streamlit as st
+st.write("Hello, Streamlit!")
+
+# Execute no terminal:
+# streamlit run app.py
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem exibição de texto, números e dados simples.</p>
+                <p><strong>Exemplo 1:</strong> Exibição de texto e números.</p>
+                <pre>
+import streamlit as st
+st.title("Meu Primeiro App")
+st.header("Seção 1")
+st.subheader("Subseção 1.1")
+st.write("Este é um exemplo de texto.")
+st.write(42)  # Exibe um número
+                </pre>
+                <p><strong>Exemplo 2:</strong> Exibição de dados tabulares.</p>
+                <pre>
+import streamlit as st
+import pandas as pd
+data = {"Nome": ["João", "Maria"], "Idade": [25, 30]}
+df = pd.DataFrame(data)
+st.write(df)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conceitos Fundamentais</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Entenda como usar widgets interativos e layout personalizado.</p>
+                <p><strong>Exemplo 1:</strong> Widgets básicos.</p>
+                <pre>
+import streamlit as st
+nome = st.text_input("Digite seu nome:")
+idade = st.slider("Escolha sua idade:", 0, 100, 25)
+st.write(f"Olá, {nome}! Você tem {idade} anos.")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Layout com colunas.</p>
+                <pre>
+import streamlit as st
+col1, col2 = st.columns(2)
+with col1:
+    st.write("Coluna 1")
+with col2:
+    st.write("Coluna 2")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Tipos de Dados</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit suporta diferentes tipos de dados, como texto, números, gráficos e tabelas.</p>
+                <p><strong>Exemplo 1:</strong> Exibição de gráficos.</p>
+                <pre>
+import streamlit as st
+import matplotlib.pyplot as plt
+plt.plot([1, 2, 3], [4, 5, 6])
+st.pyplot(plt)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Upload de arquivos.</p>
+                <pre>
+import streamlit as st
+arquivo = st.file_uploader("Carregue um arquivo CSV")
+if arquivo:
+    st.write("Arquivo carregado!")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Operadores</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Use operações condicionais e lógicas para criar interatividade.</p>
+                <p><strong>Exemplo 1:</strong> Condições com botões.</p>
+                <pre>
+import streamlit as st
+if st.button("Clique aqui"):
+    st.write("Botão clicado!")
+else:
+    st.write("Aguardando clique...")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Combinação de condições.</p>
+                <pre>
+import streamlit as st
+opcao = st.selectbox("Escolha uma opção:", ["Opção 1", "Opção 2"])
+if opcao == "Opção 1":
+    st.write("Você escolheu Opção 1")
+else:
+    st.write("Você escolheu Opção 2")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Memória</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit não mantém estado entre execuções. Use `st.session_state` para persistir dados.</p>
+                <p><strong>Exemplo 1:</strong> Uso de `st.session_state`.</p>
+                <pre>
+import streamlit as st
+if "contador" not in st.session_state:
+    st.session_state.contador = 0
+if st.button("Incrementar"):
+    st.session_state.contador += 1
+st.write("Contador:", st.session_state.contador)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Reset de estado.</p>
+                <pre>
+import streamlit as st
+if st.button("Resetar"):
+    st.session_state.clear()
+st.write("Estado atual:", st.session_state)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Controle de Fluxo</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Use controle de fluxo para criar aplicativos dinâmicos.</p>
+                <p><strong>Exemplo 1:</strong> Uso de `st.stop()`.</p>
+                <pre>
+import streamlit as st
+if st.button("Parar execução"):
+    st.write("Execução parada!")
+    st.stop()
+st.write("Esta linha só será executada se o botão não for clicado.")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Loop com widgets.</p>
+                <pre>
+import streamlit as st
+for i in range(5):
+    st.write(f"Linha {i}")
+    if st.button(f"Parar em {i}"):
+        break
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Operadores Lógicos</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Use operadores lógicos para criar interatividade avançada.</p>
+                <p><strong>Exemplo 1:</strong> Combinação de condições.</p>
+                <pre>
+import streamlit as st
+cond1 = st.checkbox("Condição 1")
+cond2 = st.checkbox("Condição 2")
+if cond1 and cond2:
+    st.write("Ambas as condições são verdadeiras!")
+elif cond1 or cond2:
+    st.write("Pelo menos uma condição é verdadeira.")
+else:
+    st.write("Nenhuma condição é verdadeira.")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Negação lógica.</p>
+                <pre>
+import streamlit as st
+ativo = st.checkbox("Ativo")
+if not ativo:
+    st.write("Inativo")
+else:
+    st.write("Ativo")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arquivos Texto e Binário</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit permite upload e download de arquivos.</p>
+                <p><strong>Exemplo 1:</strong> Upload de arquivo.</p>
+                <pre>
+import streamlit as st
+arquivo = st.file_uploader("Carregue um arquivo")
+if arquivo:
+    st.write("Arquivo carregado!")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Download de arquivo.</p>
+                <pre>
+import streamlit as st
+texto = "Conteúdo do arquivo"
+st.download_button("Baixar arquivo", texto)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Funções</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit permite criar funções reutilizáveis para organizar o código.</p>
+                <p><strong>Exemplo 1:</strong> Função para exibir dados.</p>
+                <pre>
+import streamlit as st
+def exibir_dados(dados):
+    st.write("Dados recebidos:", dados)
+
+dados = {"A": [1, 2, 3], "B": [4, 5, 6]}
+exibir_dados(dados)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Função com widgets.</p>
+                <pre>
+import streamlit as st
+def calcular_soma(a, b):
+    return a + b
+
+a = st.number_input("Número 1")
+b = st.number_input("Número 2")
+st.write("Soma:", calcular_soma(a, b))
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Armazenamento</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit pode integrar-se com bancos de dados e APIs externas.</p>
+                <p><strong>Exemplo 1:</strong> Conexão com SQLite.</p>
+                <pre>
+import streamlit as st
+import sqlite3
+conexao = sqlite3.connect("database.db")
+cursor = conexao.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY, nome TEXT)")
+conexao.commit()
+conexao.close()
+st.write("Banco de dados criado!")
+                </pre>
+                <p><strong>Exemplo 2:</strong> Chamada de API.</p>
+                <pre>
+import streamlit as st
+import requests
+response = requests.get("https://jsonplaceholder.typicode.com/posts")
+st.write(response.json())
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Programação Orientada a Objetos</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Streamlit pode ser combinado com classes e objetos para criar aplicativos modulares.</p>
+                <p><strong>Exemplo 1:</strong> Classe para gerenciar dados.</p>
+                <pre>
+import streamlit as st
+class GerenciadorDados:
+    def __init__(self):
+        self.dados = []
+
+    def adicionar(self, valor):
+        self.dados.append(valor)
+
+    def exibir(self):
+        st.write("Dados:", self.dados)
+
+gerenciador = GerenciadorDados()
+valor = st.text_input("Adicionar dado:")
+if st.button("Adicionar"):
+    gerenciador.adicionar(valor)
+gerenciador.exibir()
+                </pre>
+                <p><strong>Exemplo 2:</strong> Herança de classes.</p>
+                <pre>
+import streamlit as st
+class BaseApp:
+    def exibir(self):
+        st.write("Aplicativo base")
+
+class AppPersonalizado(BaseApp):
+    def exibir(self):
+        st.write("Aplicativo personalizado")
+
+app = AppPersonalizado()
+app.exibir()
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

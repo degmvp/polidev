@@ -1,198 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Guia POLYDEV</title>
-
-<link rel="stylesheet" href="style.css">
+<title>POLYDEV | Status do Projeto</title>
 
 <style>
-
-body{
-    margin:0;
-    display:flex;
-    background-color:navy;
-    color:yellowgreen;
-    font-family:Arial;
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:  #FFD700;
+    color: black;
 }
 
-/* MENU LATERAL */
-.sidebar{
-    width:250px;
-    height:100vh;
-    background:black;
-    padding:20px;
-    position:fixed;
+header {
+    background-color: #FFD700;
+    color: black;
+    padding: 40px 20px;
+    text-align: center;
 }
 
-.sidebar h2{
-    color:yellowgreen;
+header h1 {
+    margin: 0;
+    font-size: 48px;
 }
 
-.sidebar a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    margin:10px 0;
+section {
+    max-width: 1000px;
+    margin: auto;
+    padding: 40px 20px;
 }
 
-.sidebar a:hover{
-    color:yellowgreen;
+h2 {
+    border-left: 10px solid white;
+    padding-left: 15px;
 }
 
-/* CONTEÚDO */
-.content{
-    margin-left:270px;
-    padding:20px;
-    width:100%;
+.box {
+    background-color: black;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 30px;
 }
 
-/* SEÇÕES */
-section{
-    margin-bottom:60px;
+footer {
+    background-color: black;
+    color: #FFD700;
+    text-align: center;
+    padding: 20px;
 }
-
-pre{
-    background:white;
-    color:black;
-    padding:10px;
-}
-
 </style>
+```
 
 </head>
 
 <body>
 
-<!-- MENU -->
-<div class="sidebar">
-    <h2>POLYDEV</h2>
+<header>
+    <h1>POLYDEV</h1>
+    <p>Status do Projeto e Avaliação Técnica</p>
+    <p><strong>Leia • Entenda • Execute seu código</strong></p>
+</header>
 
-    <a href="#visao">Visão Geral</a>
-    <a href="#arquitetura">Arquitetura</a>
-    <a href="#fluxo">Fluxo</a>
-    <a href="#dados">Dados</a>
-    <a href="#storage">Storage</a>
-    <a href="#funcionalidades">Funcionalidades</a>
-    <a href="#qualidade">Qualidade</a>
-    <a href="#nivel">Nível</a>
-    <a href="#mensagem">Mensagem</a>
+<section>
+
+<h2>🧠 Situação Atual do Projeto</h2>
+
+<p>
+O projeto POLYDEV evoluiu de uma ideia educacional para uma aplicação funcional baseada em arquitetura moderna e leve.
+Hoje o sistema opera sem backend dedicado, utilizando serviços cloud e integração direta via API.
+</p>
+
+<div class="box">
+<h3>Arquitetura implementada</h3>
+<ul>
+<li>Frontend: GitHub Pages (HTML + JavaScript)</li>
+<li>API: Supabase REST</li>
+<li>Banco de Dados: PostgreSQL</li>
+<li>Administração: DBeaver</li>
+<li>Modelo: Serverless</li>
+</ul>
 </div>
 
-<!-- CONTEÚDO -->
-<div class="content">
+---
 
-<h1>🚀 Guia POLYDEV</h1>
-<p>📅 11/04 🎂</p>
+<h2>⚙️ Funcionalidades já implementadas</h2>
 
-<section id="visao">
-<h2>📌 Visão Geral</h2>
-<p>
-Sistema web que funciona como biblioteca de conteúdos em nuvem,
-permitindo upload, gestão e download de arquivos.
-</p>
-</section>
-
-<section id="arquitetura">
-<h2>⚙️ Arquitetura</h2>
 <ul>
-<li>Frontend: HTML + JS</li>
-<li>Backend: Supabase</li>
-<li>Storage: Supabase Storage</li>
+<li>Cadastro de usuários funcional</li>
+<li>Integração completa com banco de dados</li>
+<li>Validação de formulário</li>
+<li>Registro de downloads</li>
+<li>Estrutura de conteúdos (scripts e materiais)</li>
+<li>Dashboard dinâmico com métricas reais</li>
 </ul>
-</section>
 
-<section id="fluxo">
-<h2>🔄 Fluxo</h2>
+---
+
+<h2>📊 Sistema Analítico (Destaque)</h2>
+
 <p>
-Upload → Storage → URL → Banco → Listagem → Download
+Um dos pontos mais importantes do projeto foi a criação de um sistema de análise de dados interno.
 </p>
-</section>
 
-<section id="dados">
-<h2>🧠 Dados</h2>
-
-<h3>conteudos</h3>
-<pre>
-id
-titulo
-categoria
-arquivo_url
-downloads
-</pre>
-
-<h3>downloads</h3>
-<pre>
-id
-conteudo_id
-email
-ip
-</pre>
-
-</section>
-
-<section id="storage">
-<h2>☁️ Storage</h2>
-<p>
-Arquivos armazenados no bucket downloads com acesso público.
-</p>
-</section>
-
-<section id="funcionalidades">
-<h2>📊 Funcionalidades</h2>
+<div class="box">
 <ul>
-<li>CRUD completo</li>
-<li>Upload automático</li>
-<li>Download com contador</li>
-<li>Dashboard</li>
-<li>Login (em evolução)</li>
+<li>Tabela analítica: <strong>dashgeral</strong></li>
+<li>Atualização automática via trigger</li>
+<li>Agregação por categoria, conteúdo e usuário</li>
+<li>Leitura simplificada via API REST</li>
 </ul>
-</section>
-
-<section id="qualidade">
-<h2>📈 Qualidade</h2>
-
-<p>
-✔ Arquitetura limpa<br>
-✔ Baixo acoplamento<br>
-✔ Escalável<br>
-✔ Base moderna
-</p>
-
-</section>
-
-<section id="nivel">
-<h2>🏆 Nível</h2>
-
-<p>
-Sistema equivalente a uma plataforma SaaS básica.
-</p>
-
-</section>
-
-<section id="mensagem">
-<h2>👨‍👩‍👧‍👦 Mensagem</h2>
-
-<p>
-Você construiu um sistema real.<br><br>
-
-Isso é mais que código — é evolução.
-</p>
-
-</section>
-
 </div>
 
-<!-- SCROLL SUAVE -->
-<script>
-document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", function(e){
-        e.preventDefault()
-        document.querySelector(this.getAttribute("href"))
-            .scrollIntoView({ behavior: "smooth" })
-    })
-})
-</script>
+<p>
+Isso transformou o projeto em algo além de um site — tornou-se uma pequena plataforma de dados.
+</p>
+
+---
+
+<h2>🚀 Avaliação Técnica</h2>
+
+<div class="box">
+<ul>
+<li>Arquitetura: ✔ Moderna (Serverless)</li>
+<li>Banco de dados: ✔ Bem estruturado</li>
+<li>Integração API: ✔ Funcional</li>
+<li>Automação (Trigger): ✔ Profissional</li>
+<li>Frontend: ✔ Leve e eficiente</li>
+</ul>
+</div>
+
+<p>
+A solução adotada (tabela materializada + trigger) foi uma decisão estratégica muito sólida,
+priorizando estabilidade, simplicidade e controle.
+</p>
+
+---
+
+<h2>📈 Nível do Projeto</h2>
+
+<p>
+O POLYDEV deixou de ser um projeto iniciante e passou a operar como:
+</p>
+
+<div class="box">
+<ul>
+<li>Plataforma educacional de código</li>
+<li>Biblioteca dinâmica de scripts</li>
+<li>Sistema com camada analítica integrada</li>
+</ul>
+</div>
+
+---
+
+<h2>🎯 Próximos Passos</h2>
+
+<ul>
+<li>Melhoria visual do dashboard</li>
+<li>Implementação de ranking (TOP downloads)</li>
+<li>Organização por categorias no frontend</li>
+<li>Expansão dos conteúdos (Python, SQL, HTML, etc.)</li>
+<li>Integração com canal educacional</li>
+</ul>
+
+---
+
+<h2>💬 Consideração Final</h2>
+
+<p>
+O projeto demonstra domínio prático de banco de dados, integração de sistemas e arquitetura moderna.
+A evolução foi consistente e as decisões técnicas mostram experiência real na área.
+</p>
+
+<div class="box">
+<p>
+Mais do que um projeto, o POLYDEV se tornou uma base sólida para ensino, prática e crescimento contínuo em programação.
+</p>
+</div>
+
+</section>
+
+<footer>
+    <p>POLYDEV © 2026</p>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
 
 </body>
 </html>
+```

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Node.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: yellowgreen;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #e8f5e9; /* Um tom mais claro de yellowgreen */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #8bc34a; /* Yellowgreen mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #8bc34a;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Node.js</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Linguagem</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Node.js é uma plataforma JavaScript baseada no motor V8 do Google Chrome. É usada para criar aplicativos backend, APIs e ferramentas CLI.</p>
+                <p><strong>Exemplo 1:</strong> Instalação do Node.js.</p>
+                <pre>
+# Execute no terminal:
+# npm install -g node
+                </pre>
+                <p><strong>Exemplo 2:</strong> Verificação da versão instalada.</p>
+                <pre>
+// Execute no terminal:
+// node --version
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem variáveis, funções e módulos.</p>
+                <p><strong>Exemplo 1:</strong> Variáveis e funções.</p>
+                <pre>
+const nome = "Node.js";
+function saudacao() {
+    console.log(`Olá, ${nome}!`);
+}
+saudacao();
+                </pre>
+                <p><strong>Exemplo 2:</strong> Importação de módulos.</p>
+                <pre>
+const fs = require("fs");
+fs.readFile("arquivo.txt", "utf8", (err, data) => {
+    if (err) throw err;
+    console.log(data);
+});
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conceitos Fundamentais</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Node.js usa um modelo assíncrono e não bloqueante para lidar com operações de I/O.</p>
+                <p><strong>Exemplo 1:</strong> Função assíncrona com `setTimeout`.</p>
+                <pre>
+console.log("Início");
+setTimeout(() => {
+    console.log("Executando após 2 segundos");
+}, 2000);
+console.log("Fim");
+                </pre>
+                <p><strong>Exemplo 2:</strong> Uso de Promises.</p>
+                <pre>
+const promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Sucesso!"), 1000);
+});
+promise.then((resultado) => {
+    console.log(resultado);
+});
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Tipos de Dados</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Node.js suporta tipos primitivos como strings, números, booleanos, além de objetos e arrays.</p>
+                <p><strong>Exemplo 1:</strong> Tipos primitivos.</p>
+                <pre>
+const texto = "Hello, Node.js";
+const numero = 42;
+const booleano = true;
+console.log(texto, numero, booleano);
+                </pre>
+                <p><strong>Exemplo 2:</strong> Objetos e arrays.</p>
+                <pre>
+const pessoa = { nome: "João", idade: 30 };
+const numeros = [1, 2, 3, 4];
+console.log(pessoa, numeros);
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Operadores</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Node.js suporta operadores aritméticos, relacionais e lógicos.</p>
+                <p><strong>Exemplo 1:</strong> Operadores aritméticos.</p>
+                <pre>
+const a = 10;
+const b = 3;
+console.log("Soma:", a + b);
+console.log("Subtração:", a - b);
+console.log("Multiplicação:", a * b);
+console.log("Divisão:", a / b);
+console.log("Resto:", a % b);
+                </pre>
+                <p><strong>Exemplo 2:</strong> Operadores lógicos.</p>
+                <pre>
+const x = true;
+const y = false;
+console.log("AND:", x && y);
+console.log("OR:", x || y);
+console.log("NOT:", !x);
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Memória</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Node.js gerencia memória automaticamente, mas permite controle manual usando referências e garbage collection.</p>
+                <p><strong>Exemplo 1:</strong> Uso de referências.</p>
+                <pre>
+const obj1 = { valor: 42 };
+const obj2 = obj1; // obj2 aponta para o mesmo objeto que obj1
+obj2.valor = 100;
+console.log(obj1.valor); // Saída: 100
+                </pre>
+                <p><strong>Exemplo 2:</strong> Limpeza de memória.</p>
+                <pre>
+let grandeObjeto = new Array(1000000).fill("dados");
+grandeObjeto = null; // Libera a memória
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Controle de Fluxo</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Estruturas de controle como `if`, `for` e `while` permitem controlar o fluxo de execução.</p>
+                <p><strong>Exemplo 1:</strong> Condicionais com `if`.</p>
+                <pre>
+const idade = 18;
+if (idade >= 18) {
+    console.log("Maior de idade");
+} else {
+    console.log("Menor de idade");
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Laços com `for`.</p>
+                <pre>
+for (let i = 1; i <= 5; i++) {
+    console.log("Número:", i);
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Operadores Lógicos</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Operadores lógicos (`&&`, `||`, `!`) são usados para combinar condições.</p>
+                <p><strong>Exemplo 1:</strong> Combinação de condições.</p>
+                <pre>
+const x = 10;
+const y = 20;
+if (x > 5 && y < 30) {
+    console.log("Ambas as condições são verdadeiras");
+}
+                </pre>
+                <p><strong>Exemplo 2:</strong> Negação lógica.</p>
+                <pre>
+const ativo = false;
+if (!ativo) {
+    console.log("Inativo");
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arquivos Texto e Binário</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Node.js oferece suporte para leitura e escrita de arquivos texto e binários.</p>
+                <p><strong>Exemplo 1:</strong> Leitura de arquivo texto.</p>
+                <pre>
+const fs = require("fs");
+fs.readFile("arquivo.txt", "utf8", (err, data) => {
+    if (err) throw err;
+    console.log(data);
+});
+                </pre>
+                <p><strong>Exemplo 2:</strong> Escrita em arquivo binário.</p>
+                <pre>
+const fs = require("fs");
+const buffer = Buffer.from([0x00, 0xFF]);
+fs.writeFile("arquivo.bin", buffer, (err) => {
+    if (err) throw err;
+    console.log("Arquivo binário criado!");
+});
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Funções</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Funções são blocos de código reutilizáveis que podem aceitar parâmetros e retornar valores.</p>
+                <p><strong>Exemplo 1:</strong> Função básica.</p>
+                <pre>
+function soma(a, b) {
+    return a + b;
+}
+console.log("Soma:", soma(5, 3));
+                </pre>
+                <p><strong>Exemplo 2:</strong> Função assíncrona.</p>
+                <pre>
+async function fetchData() {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+    const data = await response.json();
+    console.log(data);
+}
+fetchData();
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Armazenamento</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Node.js pode integrar-se com bancos de dados SQL e NoSQL.</p>
+                <p><strong>Exemplo 1:</strong> Conexão com MongoDB.</p>
+                <pre>
+const { MongoClient } = require("mongodb");
+async function main() {
+    const uri = "mongodb://localhost:27017";
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        console.log("Conectado ao MongoDB!");
+    } finally {
+        await client.close();
+    }
+}
+main().catch(console.error);
+                </pre>
+                <p><strong>Exemplo 2:</strong> Armazenamento em memória com objetos.</p>
+                <pre>
+const cache = {};
+cache["chave1"] = 42;
+console.log("Valor:", cache["chave1"]);
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Servidor HTTP</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Node.js é amplamente usado para criar servidores HTTP.</p>
+                <p><strong>Exemplo 1:</strong> Servidor HTTP básico.</p>
+                <pre>
+const http = require("http");
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Hello, World!");
+});
+server.listen(3000, () => {
+    console.log("Servidor rodando em http://localhost:3000");
+});
+                </pre>
+                <p><strong>Exemplo 2:</strong> Roteamento básico.</p>
+                <pre>
+const http = require("http");
+const server = http.createServer((req, res) => {
+    if (req.url === "/") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("Página inicial");
+    } else if (req.url === "/sobre") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("Sobre nós");
+    } else {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("Página não encontrada");
+    }
+});
+server.listen(3000, () => {
+    console.log("Servidor rodando em http://localhost:3000");
+});
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Pandas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: orange;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff3e0; /* Um tom mais claro de laranja */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            background-color: #ff9800; /* Laranja mais escuro */
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .item-content {
+            display: none;
+            padding: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .item-header {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guia Pandas</h1>
+
+        <!-- Item 1 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content1')">1. Introdução à Biblioteca</div>
+            <div id="content1" class="item-content">
+                <p><strong>Descrição:</strong> Pandas é uma biblioteca Python para análise e manipulação de dados. É amplamente usada em ciência de dados e aprendizado de máquina.</p>
+                <p><strong>Exemplo 1:</strong> Instalação do Pandas.</p>
+                <pre>
+# Execute no terminal:
+# pip install pandas
+                </pre>
+                <p><strong>Exemplo 2:</strong> Importação básica.</p>
+                <pre>
+import pandas as pd
+print("Pandas importado com sucesso!")
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content2')">2. Fundamentos</div>
+            <div id="content2" class="item-content">
+                <p><strong>Descrição:</strong> Os fundamentos incluem DataFrames e Series, as principais estruturas de dados do Pandas.</p>
+                <p><strong>Exemplo 1:</strong> Criando uma Series.</p>
+                <pre>
+import pandas as pd
+s = pd.Series([1, 2, 3, 4])
+print(s)
+                </pre>
+                <p><strong>Exemplo 2:</strong> Criando um DataFrame.</p>
+                <pre>
+import pandas as pd
+data = {"Nome": ["João", "Maria"], "Idade": [25, 30]}
+df = pd.DataFrame(data)
+print(df)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content3')">3. Conceitos Fundamentais</div>
+            <div id="content3" class="item-content">
+                <p><strong>Descrição:</strong> Entenda como trabalhar com índices, colunas e dados ausentes.</p>
+                <p><strong>Exemplo 1:</strong> Índices personalizados.</p>
+                <pre>
+import pandas as pd
+s = pd.Series([10, 20, 30], index=["a", "b", "c"])
+print(s["b"])  # Saída: 20
+                </pre>
+                <p><strong>Exemplo 2:</strong> Tratamento de dados ausentes.</p>
+                <pre>
+import pandas as pd
+data = {"A": [1, 2, None], "B": [4, None, 6]}
+df = pd.DataFrame(data)
+print(df.dropna())  # Remove linhas com NaN
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content4')">4. Tipos de Dados</div>
+            <div id="content4" class="item-content">
+                <p><strong>Descrição:</strong> Pandas suporta diferentes tipos de dados, como inteiros, floats, strings e datas.</p>
+                <p><strong>Exemplo 1:</strong> Conversão de tipos.</p>
+                <pre>
+import pandas as pd
+data = {"A": ["1", "2", "3"]}
+df = pd.DataFrame(data)
+df["A"] = df["A"].astype(int)
+print(df.dtypes)  # Saída: A    int32
+                </pre>
+                <p><strong>Exemplo 2:</strong> Manipulação de datas.</p>
+                <pre>
+import pandas as pd
+datas = pd.date_range("2023-01-01", periods=5)
+print(datas)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content5')">5. Operadores</div>
+            <div id="content5" class="item-content">
+                <p><strong>Descrição:</strong> Pandas permite operações aritméticas e lógicas em DataFrames e Series.</p>
+                <p><strong>Exemplo 1:</strong> Operações aritméticas.</p>
+                <pre>
+import pandas as pd
+s = pd.Series([1, 2, 3])
+print(s + 10)  # Saída: [11, 12, 13]
+                </pre>
+                <p><strong>Exemplo 2:</strong> Filtragem com operadores lógicos.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+print(df[df["A"] > 1])  # Filtra linhas onde A > 1
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content6')">6. Memória</div>
+            <div id="content6" class="item-content">
+                <p><strong>Descrição:</strong> Pandas oferece métodos para otimização de memória, como categorias e tipos reduzidos.</p>
+                <p><strong>Exemplo 1:</strong> Uso de categorias.</p>
+                <pre>
+import pandas as pd
+data = {"Categoria": ["A", "B", "A", "B"]}
+df = pd.DataFrame(data)
+df["Categoria"] = df["Categoria"].astype("category")
+print(df.memory_usage())
+                </pre>
+                <p><strong>Exemplo 2:</strong> Redução de tipos numéricos.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3]}, dtype="int8")
+print(df.dtypes)  # Saída: A    int8
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content7')">7. Controle de Fluxo</div>
+            <div id="content7" class="item-content">
+                <p><strong>Descrição:</strong> Use loops e condicionais para manipular dados em Pandas.</p>
+                <p><strong>Exemplo 1:</strong> Iteração com `iterrows`.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3]})
+for index, row in df.iterrows():
+    print(row["A"])
+                </pre>
+                <p><strong>Exemplo 2:</strong> Aplicação de funções.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3]})
+df["A"] = df["A"].apply(lambda x: x * 2)
+print(df)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content8')">8. Operadores Lógicos</div>
+            <div id="content8" class="item-content">
+                <p><strong>Descrição:</strong> Use operadores lógicos para filtrar e manipular dados.</p>
+                <p><strong>Exemplo 1:</strong> Combinação de condições.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+print(df[(df["A"] > 1) & (df["B"] < 6)])
+                </pre>
+                <p><strong>Exemplo 2:</strong> Negação lógica.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [True, False, True]})
+print(df[~df["A"]])  # Filtra valores falsos
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content9')">9. Arquivos Texto e Binário</div>
+            <div id="content9" class="item-content">
+                <p><strong>Descrição:</strong> Pandas suporta leitura e escrita de arquivos CSV, Excel, JSON, etc.</p>
+                <p><strong>Exemplo 1:</strong> Leitura de arquivo CSV.</p>
+                <pre>
+import pandas as pd
+df = pd.read_csv("dados.csv")
+print(df.head())
+                </pre>
+                <p><strong>Exemplo 2:</strong> Escrita em arquivo Excel.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3]})
+df.to_excel("dados.xlsx", index=False)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content10')">10. Funções</div>
+            <div id="content10" class="item-content">
+                <p><strong>Descrição:</strong> Pandas oferece diversas funções para análise de dados, como agregações e estatísticas.</p>
+                <p><strong>Exemplo 1:</strong> Agregação com `groupby`.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": ["foo", "bar", "foo"], "B": [1, 2, 3]})
+print(df.groupby("A").sum())
+                </pre>
+                <p><strong>Exemplo 2:</strong> Estatísticas descritivas.</p>
+                <pre>
+import pandas as pd
+df = pd.DataFrame({"A": [1, 2, 3]})
+print(df.describe())
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content11')">11. Armazenamento</div>
+            <div id="content11" class="item-content">
+                <p><strong>Descrição:</strong> Pandas permite armazenar dados em formatos eficientes, como HDF5 e Parquet.</p>
+                <p><strong>Exemplo 1:</strong> Armazenamento em HDF5.</p>
+                <pre>
+import pandas as pd
+
+# Criando um DataFrame
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+
+# Salvando em HDF5
+df.to_hdf("dados.h5", key="df", mode="w")
+
+# Lendo do HDF5
+df_lido = pd.read_hdf("dados.h5", key="df")
+print(df_lido)
+
+
+                </pre>
+                <p><strong>Exemplo 2:</strong> Armazenamento em Parquet.</p>
+                <pre>
+import pandas as pd
+
+# Criando um DataFrame
+df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+
+# Salvando em Parquet
+df.to_parquet("dados.parquet")
+
+# Lendo do Parquet
+df_lido = pd.read_parquet("dados.parquet")
+print(df_lido)
+                </pre>
+            </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="item">
+            <div class="item-header" onclick="toggleContent('content12')">12. Programação Orientada a Objetos</div>
+            <div id="content12" class="item-content">
+                <p><strong>Descrição:</strong> Pandas é construído sobre classes e objetos, permitindo extensão personalizada.</p>
+                <p><strong>Exemplo 1:</strong> Criação de classe personalizada.</p>
+                <pre>
+import pandas as pd
+class MeuDataFrame(pd.DataFrame):
+    def soma_colunas(self):
+        return self.sum(axis=1)
+
+df = MeuDataFrame({"A": [1, 2], "B": [3, 4]})
+print(df.soma_colunas())
+                </pre>
+                <p><strong>Exemplo 2:</strong> Herança de métodos.</p>
+                <pre>
+import pandas as pd
+class DataFrameFiltrado(pd.DataFrame):
+    def filtrar_positivos(self):
+        return self[self > 0]
+
+df = DataFrameFiltrado({"A": [-1, 2, 3]})
+print(df.filtrar_positivos())
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

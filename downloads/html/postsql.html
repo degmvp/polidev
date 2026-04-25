@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: yellowgreen;
+            font-family: Arial, sans-serif;
+            color: black;
+        }
+        pre {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h2 {
+            color: darkgreen;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guia de Comandos PostgreSQL</h1>
+
+<h2>1 - Conexão ao Banco</h2>
+<pre>
+# Conectar ao servidor PostgreSQL local
+psql -U usuario -d banco_de_dados
+
+# Conectar a um servidor remoto
+psql -h 192.168.1.100 -p 5432 -U usuario -d banco_de_dados
+
+# Conectar e executar comando diretamente
+psql -U usuario -c "SELECT version();"
+
+# Listar bancos de dados disponíveis
+psql -U usuario -l
+</pre>
+
+<h2>2 - Usuários e Schema</h2>
+<pre>
+# Criar um novo usuário
+CREATE USER novousuario WITH PASSWORD 'senha_segura';
+
+# Criar um novo banco de dados
+CREATE DATABASE meubanco OWNER novousuario;
+
+# Criar um schema
+CREATE SCHEMA meuschema AUTHORIZATION novousuario;
+
+# Mostrar usuários existentes
+\du
+
+# Alterar senha de usuário
+ALTER USER novousuario WITH PASSWORD 'nova_senha';
+</pre>
+
+<h2>3 - Criação de Tabelas</h2>
+<pre>
+# Criar uma tabela simples
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    data_cadastro DATE DEFAULT CURRENT_DATE,
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+# Criar tabela com chave estrangeira
+CREATE TABLE pedidos (
+    id SERIAL PRIMARY KEY,
+    cliente_id INTEGER REFERENCES clientes(id),
+    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    valor_total DECIMAL(10,2)
+);
+
+# Adicionar comentário à tabela
+COMMENT ON TABLE clientes IS 'Tabela de clientes do sistema';
+</pre>
+
+<h2>4 - Procedures</h2>
+<pre>
+# Criar uma stored procedure
+CREATE OR REPLACE PROCEDURE atualizar_status_cliente(
+    cliente_id INTEGER, 
+    novo_status BOOLEAN
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE clientes 
+    SET ativo = novo_status 
+    WHERE id = cliente_id;
+    
+    RAISE NOTICE 'Status do cliente % atualizado para %', 
+        cliente_id, 
+        CASE WHEN novo_status THEN 'ativo' ELSE 'inativo' END;
+END;
+$$;
+
+# Chamar a procedure
+CALL atualizar_status_cliente(1, FALSE);
+</pre>
+
+<h2>5 - Funções</h2>
+<pre>
+# Criar uma função personalizada
+CREATE OR REPLACE FUNCTION calcular_desconto(
+    valor DECIMAL(10,2), 
+    desconto DECIMAL(5,2)
+)
+RETURNS DECIMAL(10,2)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN valor - (valor * desconto / 100);
+END;
+$$;
+
+# Usar a função em uma consulta
+SELECT id, valor_total, calcular_desconto(valor_total, 10) AS valor_com_desconto
+FROM pedidos;
+
+# Função com retorno de tabela
+CREATE OR REPLACE FUNCTION clientes_ativos()
+RETURNS TABLE(id INTEGER, nome VARCHAR) AS $$
+BEGIN
+    RETURN QUERY SELECT c.id, c.nome FROM clientes c WHERE c.ativo = TRUE;
+END;
+$$ LANGUAGE plpgsql;
+</pre>
+
+<h2>6 - Views</h2>
+<pre>
+# Criar uma view
+CREATE VIEW view_clientes_ativos AS
+SELECT id, nome, email 
+FROM clientes 
+WHERE ativo = TRUE;
+
+# Criar view materializada
+CREATE MATERIALIZED VIEW mv_clientes_inativos AS
+SELECT id, nome, email, data_cadastro
+FROM clientes
+WHERE ativo = FALSE
+WITH DATA;
+
+# Atualizar view materializada
+REFRESH MATERIALIZED VIEW mv_clientes_inativos;
+
+# Consultar a view
+SELECT * FROM view_clientes_ativos;
+</pre>
+
+<h2>7 - Formatação de Consultas (Queries)</h2>
+<pre>
+# Consulta com formatação de datas
+SELECT 
+    id,
+    nome,
+    TO_CHAR(data_cadastro, 'DD/MM/YYYY') AS data_formatada,
+    CONCAT('R$ ', valor_total::numeric(10,2)) AS valor_formatado
+FROM pedidos
+JOIN clientes ON pedidos.cliente_id = clientes.id;
+
+# Consulta com CASE para categorização
+SELECT 
+    nome,
+    valor_total,
+    CASE 
+        WHEN valor_total > 1000 THEN 'Alto valor'
+        WHEN valor_total > 500 THEN 'Médio valor'
+        ELSE 'Baixo valor'
+    END AS categoria
+FROM pedidos
+JOIN clientes ON pedidos.cliente_id = clientes.id;
+
+# Funções de janela (window functions)
+SELECT 
+    nome,
+    valor_total,
+    RANK() OVER (ORDER BY valor_total DESC) AS ranking
+FROM pedidos
+JOIN clientes ON pedidos.cliente_id = clientes.id;
+</pre>
+
+<h2>8 - Criação e Gerenciamento de Índices</h2>
+<pre>
+# Adicionar índice a uma coluna
+CREATE INDEX idx_clientes_nome ON clientes(nome);
+
+# Criar índice único
+CREATE UNIQUE INDEX idx_clientes_email ON clientes(email);
+
+# Criar índice composto
+CREATE INDEX idx_pedidos_cliente_data ON pedidos(cliente_id, data_pedido);
+
+# Criar índice parcial (onde ativo = TRUE)
+CREATE INDEX idx_clientes_ativos ON clientes(id) WHERE ativo = TRUE;
+
+# Ver índices de uma tabela
+\di+ clientes
+
+# Remover um índice
+DROP INDEX idx_clientes_nome;
+</pre>
+
+<h2>9 - Espaço em Disco</h2>
+<pre>
+# Ver tamanho dos bancos de dados
+SELECT 
+    pg_database.datname AS "Banco de Dados", 
+    pg_size_pretty(pg_database_size(pg_database.datname)) AS "Tamanho"
+FROM pg_database
+ORDER BY pg_database_size(pg_database.datname) DESC;
+
+# Ver tamanho das tabelas de um banco específico
+SELECT 
+    table_name AS "Tabela",
+    pg_size_pretty(pg_total_relation_size(quote_ident(table_name))) AS "Tamanho Total",
+    pg_size_pretty(pg_relation_size(quote_ident(table_name))) AS "Dados",
+    pg_size_pretty(pg_indexes_size(quote_ident(table_name))) AS "Índices"
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY pg_total_relation_size(quote_ident(table_name)) DESC;
+</pre>
+
+<h2>10 - Particionamento de Tabelas</h2>
+<pre>
+# Criar tabela particionada por range (ano)
+CREATE TABLE vendas (
+    id SERIAL,
+    data_venda DATE,
+    valor DECIMAL(10,2),
+    regiao VARCHAR(50),
+    PRIMARY KEY (id, data_venda)
+) PARTITION BY RANGE (data_venda);
+
+# Criar partições
+CREATE TABLE vendas_2020 PARTITION OF vendas
+    FOR VALUES FROM ('2020-01-01') TO ('2021-01-01');
+
+CREATE TABLE vendas_2021 PARTITION OF vendas
+    FOR VALUES FROM ('2021-01-01') TO ('2022-01-01');
+
+CREATE TABLE vendas_2022 PARTITION OF vendas
+    FOR VALUES FROM ('2022-01-01') TO ('2023-01-01');
+
+# Adicionar nova partição
+CREATE TABLE vendas_2023 PARTITION OF vendas
+    FOR VALUES FROM ('2023-01-01') TO ('2024-01-01');
+
+# Consultar informações de particionamento
+SELECT 
+    nmsp_parent.nspname AS parent_schema,
+    parent.relname AS parent,
+    nmsp_child.nspname AS child_schema,
+    child.relname AS child
+FROM pg_inherits
+JOIN pg_class parent ON pg_inherits.inhparent = parent.oid
+JOIN pg_class child ON pg_inherits.inhrelid = child.oid
+JOIN pg_namespace nmsp_parent ON nmsp_parent.oid = parent.relnamespace
+JOIN pg_namespace nmsp_child ON nmsp_child.oid = child.relnamespace;
+</pre>
+
+<h2>11 - Gerenciamento de Permissões Usuário e Objetos</h2>
+<pre>
+# Conceder permissões específicas
+GRANT SELECT, INSERT, UPDATE ON clientes TO novousuario;
+
+# Conceder todas as permissões em um schema
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA meuschema TO novousuario;
+
+# Revogar permissões
+REVOKE INSERT, UPDATE ON clientes FROM novousuario;
+
+# Mostrar permissões de um usuário
+\z clientes
+
+# Criar role e atribuir permissões
+CREATE ROLE leitura_escrita;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO leitura_escrita;
+
+# Atribuir role a um usuário
+GRANT leitura_escrita TO novousuario;
+</pre>
+
+<h2>12 - Backup de Tabelas e Bancos</h2>
+<pre>
+# Backup completo do banco (via linha de comando)
+pg_dump -U usuario -d meubanco -f backup_meubanco.sql
+
+# Backup apenas da estrutura
+pg_dump -U usuario -d meubanco --schema-only > estrutura_meubanco.sql
+
+# Backup de dados apenas (sem estrutura)
+pg_dump -U usuario -d meubanco --data-only > dados_meubanco.sql
+
+# Backup de tabelas específicas
+pg_dump -U usuario -d meubanco -t clientes -t pedidos > backup_tabelas.sql
+
+# Restaurar backup
+psql -U usuario -d meubanco -f backup_meubanco.sql
+
+# Backup com compressão
+pg_dump -U usuario -d meubanco | gzip > backup_meubanco.sql.gz
+</pre>
+
+<h2>13 - Metadados</h2>
+<pre>
+# Obter informações sobre colunas de uma tabela
+SELECT 
+    column_name, 
+    data_type, 
+    is_nullable, 
+    column_default
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'clientes';
+
+# Ver constraints de uma tabela
+SELECT 
+    conname AS constraint_name, 
+    contype AS constraint_type
+FROM pg_constraint
+WHERE conrelid = 'clientes'::regclass;
+
+# Ver triggers do banco
+SELECT 
+    tgname AS trigger_name,
+    relname AS table_name
+FROM pg_trigger
+JOIN pg_class ON pg_trigger.tgrelid = pg_class.oid;
+
+# Ver funções armazenadas
+SELECT 
+    proname AS function_name,
+    prosrc AS function_definition
+FROM pg_proc
+WHERE pronamespace = (SELECT oid FROM pg_namespace WHERE nspname = 'public');
+</pre>
+
+<h2>14 - Catálogo do Sistema (Tabelas e Views)</h2>
+<pre>
+# Listar todas as tabelas do banco
+SELECT table_name 
+FROM information_schema.tables
+WHERE table_schema = 'public' AND table_type = 'BASE TABLE';
+
+# Listar todas as views do banco
+SELECT table_name 
+FROM information_schema.tables
+WHERE table_schema = 'public' AND table_type = 'VIEW';
+
+# Ver SQL de criação de uma tabela
+\d+ clientes
+
+# Ver informações detalhadas de uma tabela
+SELECT 
+    column_name, 
+    data_type, 
+    character_maximum_length,
+    is_nullable
+FROM information_schema.columns
+WHERE table_name = 'clientes';
+
+# Ver dependências de uma tabela
+SELECT 
+    dependent_ns.nspname AS dependent_schema,
+    dependent_view.relname AS dependent_view
+FROM pg_depend
+JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid
+JOIN pg_class AS dependent_view ON pg_rewrite.ev_class = dependent_view.oid
+JOIN pg_namespace AS dependent_ns ON dependent_view.relnamespace = dependent_ns.oid
+WHERE pg_depend.refobjid = 'clientes'::regclass;
+</pre>
+
+</body>
+</html>
