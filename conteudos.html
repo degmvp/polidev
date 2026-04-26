@@ -64,6 +64,7 @@ Carregando conteúdos...
 
 <script>
 
+const BASE = "/polidev"; // 🔥 ajuste para GitHub Pages
 const URL = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?select=*";
 const APIKEY = "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42";
 
@@ -108,7 +109,7 @@ console.log(e);
 }
 
 function abrir(url){
-window.open(url, "_blank");
+window.open(BASE + url, "_blank");
 }
 
 carregar();
