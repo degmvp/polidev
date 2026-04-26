@@ -1,53 +1,37 @@
 ```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Status do Projeto</title>
+<title>POLYDEV | Visão do Projeto</title>
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
     background-color: yellowgreen;
+    color: black;
+    font-family: Arial;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2, h3 {
     color: black;
 }
 
-header {
-    background-color: black;
-    color: yellowgreen;
-    padding: 40px;
-    text-align: center;
+p {
+    color: black;
 }
 
-section {
-    max-width: 1000px;
-    margin: auto;
-    padding: 40px 20px;
+pre {
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-h2 {
-    border-left: 10px solid black;
-    padding-left: 15px;
-}
-
-.box {
-    background-color: black;
-    color: yellowgreen;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-
-ul {
-    line-height: 1.8;
-}
-
-footer {
-    background-color: black;
-    color: yellowgreen;
-    text-align: center;
-    padding: 20px;
+hr {
+    margin: 30px 0;
 }
 </style>
 
@@ -55,134 +39,208 @@ footer {
 
 <body>
 
-<header>
-    <h1>POLYDEV</h1>
-    <p>Status do Projeto e Avaliação Técnica</p>
-    <p><strong>Leia • Entenda • Execute seu código</strong></p>
-</header>
+<h1>🧠 Situação Atual do Projeto POLYDEV</h1>
 
-<section>
+<h2>1️⃣ Arquitetura do Sistema</h2>
 
-<h2>🧠 Situação Atual do Projeto</h2>
-
-<p>
-O projeto POLYDEV evoluiu de uma ideia educacional para uma aplicação funcional baseada em arquitetura moderna e leve.
-Hoje o sistema opera sem backend dedicado, utilizando serviços cloud e integração direta via API.
-</p>
-
-<div class="box">
-<h3>Arquitetura implementada</h3>
-<ul>
-<li>Frontend: GitHub Pages (HTML + JavaScript)</li>
-<li>API: Supabase REST</li>
-<li>Banco de Dados: PostgreSQL</li>
-<li>Administração: DBeaver</li>
-<li>Modelo: Serverless</li>
-</ul>
-</div>
-
----
-
-<h2>⚙️ Funcionalidades já implementadas</h2>
-
-<ul>
-<li>Cadastro de usuários funcional</li>
-<li>Integração completa com banco de dados</li>
-<li>Validação de formulário</li>
-<li>Registro de downloads</li>
-<li>Estrutura de conteúdos (scripts e materiais)</li>
-<li>Dashboard dinâmico com métricas reais</li>
-</ul>
-
----
-
-<h2>📊 Sistema Analítico (Destaque)</h2>
+<pre>
+GitHub Pages
+      ↓
+HTML + JavaScript
+      ↓
+API REST
+      ↓
+Supabase
+      ↓
+PostgreSQL
+</pre>
 
 <p>
-Um dos pontos mais importantes do projeto foi a criação de um sistema de análise de dados interno.
+O projeto segue um modelo serverless moderno, sem backend próprio.
 </p>
 
-<div class="box">
+<hr>
+
+<h2>2️⃣ Landing Page Funcional</h2>
+
+<p>A página principal já realiza:</p>
+
 <ul>
-<li>Tabela analítica: <strong>dashgeral</strong></li>
-<li>Atualização automática via trigger</li>
-<li>Agregação por categoria, conteúdo e usuário</li>
-<li>Leitura simplificada via API REST</li>
+<li>Cadastro de usuários</li>
+<li>Gravação na tabela cadastros</li>
+<li>Integração com API Supabase</li>
+<li>Contador de inscritos</li>
 </ul>
-</div>
+
+<hr>
+
+<h2>3️⃣ Banco de Dados</h2>
+
+<h3>Tabela: cadastros</h3>
+<pre>
+id
+nome
+email
+telefone
+created_at
+</pre>
+
+<h3>Tabela: conteudos</h3>
+<pre>
+id
+titulo
+descricao
+categoria
+arquivo_url
+downloads
+created_at
+</pre>
+
+<h3>Tabela: downloads</h3>
+<pre>
+id
+conteudo_id
+email
+created_at
+</pre>
+
+<hr>
+
+<h2>4️⃣ Segurança</h2>
 
 <p>
-Isso transformou o projeto em algo além de um site — tornou-se uma pequena plataforma de dados.
+Uso de RLS (Row Level Security) no Supabase:
 </p>
 
----
+<pre>
+SELECT liberado
+INSERT cadastros
+INSERT downloads
+</pre>
 
-<h2>🚀 Avaliação Técnica</h2>
+<hr>
 
-<div class="box">
-<ul>
-<li>Arquitetura: ✔ Moderna (Serverless)</li>
-<li>Banco de dados: ✔ Bem estruturado</li>
-<li>Integração API: ✔ Funcional</li>
-<li>Automação (Trigger): ✔ Profissional</li>
-<li>Frontend: ✔ Leve e eficiente</li>
-</ul>
-</div>
+<h2>5️⃣ Biblioteca de Conteúdos</h2>
 
 <p>
-A solução adotada (tabela materializada + trigger) foi uma decisão estratégica muito sólida,
-priorizando estabilidade, simplicidade e controle.
+Foi criada a página dinâmica:
 </p>
 
----
-
-<h2>📈 Nível do Projeto</h2>
+<pre>
+conteudos.html
+</pre>
 
 <p>
-O POLYDEV deixou de ser um projeto iniciante e passou a operar como:
+Essa página:
 </p>
 
-<div class="box">
 <ul>
-<li>Plataforma educacional de código</li>
-<li>Biblioteca dinâmica de scripts</li>
-<li>Sistema com camada analítica integrada</li>
+<li>Consulta o Supabase</li>
+<li>Lista conteúdos automaticamente</li>
+<li>Abre arquivos hospedados no GitHub</li>
 </ul>
-</div>
 
----
+<hr>
+
+<h2>6️⃣ Estrutura de Arquivos</h2>
+
+<pre>
+/downloads/html/
+/downloads/python/
+/downloads/sql/
+/downloads/cpp/
+</pre>
+
+<p>
+Os arquivos são reais e armazenados no GitHub.
+O banco guarda apenas os links.
+</p>
+
+<hr>
+
+<h2>7️⃣ Dashboard</h2>
+
+<p>
+Foi criado o dashboard baseado em SQL:
+</p>
+
+<pre>
+dashgeral.html
+</pre>
+
+<p>Com métricas como:</p>
+
+<ul>
+<li>Downloads por categoria</li>
+<li>Conteúdos mais acessados</li>
+<li>Usuários</li>
+<li>Volume geral</li>
+</ul>
+
+<hr>
+
+<h2>8️⃣ Tecnologias Utilizadas</h2>
+
+<pre>
+HTML
+CSS
+JavaScript
+Supabase
+PostgreSQL
+GitHub Pages
+DBeaver
+</pre>
+
+<hr>
+
+<h2>📊 Avaliação do Projeto</h2>
+
+<pre>
+Infraestrutura  ✔ pronta
+Banco           ✔ pronto
+Cadastro        ✔ funcionando
+Conteúdos       ✔ dinâmicos
+Dashboard       ✔ funcional
+</pre>
+
+<hr>
+
+<h2>🚀 Evolução Recente</h2>
+
+<p>
+O sistema evoluiu de páginas estáticas para uma plataforma dinâmica:
+</p>
+
+<pre>
+GitHub (arquivos)
+        ↓
+Supabase (dados)
+        ↓
+Frontend dinâmico
+</pre>
+
+<hr>
 
 <h2>🎯 Próximos Passos</h2>
 
-<ul>
-<li>Melhoria visual do dashboard</li>
-<li>Implementação de ranking (TOP downloads)</li>
-<li>Organização por categorias no frontend</li>
-<li>Expansão dos conteúdos (Python, SQL, HTML, etc.)</li>
-<li>Integração com canal educacional</li>
-</ul>
+<pre>
+Download com registro
+      ↓
+Contador automático
+      ↓
+TOP Downloads
+      ↓
+Canal educacional
+</pre>
 
----
+<hr>
 
-<h2>💬 Consideração Final</h2>
+<h2>🏆 Conclusão</h2>
 
 <p>
-O projeto demonstra domínio prático de banco de dados, integração de sistemas e arquitetura moderna.
-A evolução foi consistente e as decisões técnicas mostram experiência real na área.
+O POLYDEV já funciona como uma biblioteca real de códigos para desenvolvedores,
+com base sólida para evolução em uma plataforma educacional completa.
 </p>
-
-<div class="box">
-<p>
-Mais do que um projeto, o POLYDEV se tornou uma base sólida para ensino, prática e crescimento contínuo em programação.
-</p>
-</div>
-
-</section>
-
-<footer>
-    <p>POLYDEV © 2026</p>
-    <p>Leia • Entenda • Execute seu código</p>
-</footer>
 
 </body>
 </html>
