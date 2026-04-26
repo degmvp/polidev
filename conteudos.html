@@ -1,136 +1,121 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
-<title>Conteúdos POLYDEV</title>
+<title>POLYDEV | Conteúdos</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body {
+    background: black;
+    color: #FFD700;
+    font-family: Arial;
+    margin: 0;
+}
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+header {
+    text-align: center;
+    padding: 25px;
+    border-bottom: 1px solid #FFD700;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.card {
+    background: #111;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 5px solid #FFD700;
+}
+
+h3 {
+    margin: 0;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #FFD700;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: gold;
+}
+</style>
 
 </head>
 
 <body>
 
-<h2>Lista de Conteúdos</h2>
+<header>
+    <h1>📚 Biblioteca POLYDEV</h1>
+</header>
 
-<table border="1">
-<thead>
-<tr>
-<th>Título</th>
-<th>Categoria</th>
-<th>Downloads</th>
-<th>Ação</th>
-</tr>
-</thead>
-
-<tbody id="tabela"></tbody>
-</table>
+<div class="container" id="lista">
+Carregando conteúdos...
+</div>
 
 <script>
 
-// 🔐 Verifica login
-async function verificarUsuario() {
-    const { data: { user } } = await db.auth.getUser()
+const URL = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?select=*";
+const APIKEY = "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42";
 
-    if (!user) {
-        alert("Você precisa fazer login")
-        window.location.href = "login.html"
-    }
-}
-verificarUsuario()
-
-// 📊 Carregar conteúdos + contagem
 async function carregar(){
 
-    const { data: conteudos, error: erro1 } = await db
-        .from("conteudos")
-        .select("*")
+try{
 
-    const { data: downloads, error: erro2 } = await db
-        .from("downloads")
-        .select("conteudo_id")
+const resp = await fetch(URL, {
+headers: {
+"apikey": APIKEY
+}
+});
 
-    if (erro1) {
-        console.log("Erro conteudos:", erro1)
-        return
-    }
+const data = await resp.json();
 
-    if (erro2) {
-        console.log("Erro downloads:", erro2)
-        return
-    }
+let html = "";
 
-    let tabela = document.getElementById("tabela")
-    tabela.innerHTML = ""
+data.forEach(c => {
 
-    // 🔢 Contagem manual
-    let contagem = {}
+html += `
+<div class="card">
+<h3>${c.titulo}</h3>
+<p>${c.descricao}</p>
 
-    downloads.forEach(d => {
-        contagem[d.conteudo_id] = (contagem[d.conteudo_id] || 0) + 1
-    })
+<button onclick="abrir('${c.arquivo_url}')">
+Abrir Conteúdo
+</button>
+</div>
+`;
 
-    // 📋 Montar tabela
-    conteudos.forEach(item => {
+});
 
-        let total = contagem[item.id] || 0
+document.getElementById("lista").innerHTML = html;
 
-        let linha = document.createElement("tr")
+}catch(e){
 
-        linha.innerHTML = `
-            <td>${item.titulo}</td>
-            <td>${item.categoria}</td>
-            <td>${total}</td>
-            <td>
-                <button onclick="baixar(${item.id}, '${item.arquivo_url}')">
-                    Download
-                </button>
-            </td>
-        `
-
-        tabela.appendChild(linha)
-    })
+document.getElementById("lista").innerHTML = "Erro ao carregar conteúdos";
+console.log(e);
 
 }
 
-// 🚀 Executa
-carregar()
-
-// 📥 Download + registro
-async function baixar(id, url) {
-
-    const { data: { user } } = await db.auth.getUser()
-
-    if (!user) {
-        alert("Faça login primeiro")
-        return
-    }
-
-    const { error } = await db
-        .from("downloads")
-        .insert([
-            {
-                conteudo_id: id,
-                email: user.email,
-                ip: "0.0.0.0"
-            }
-        ])
-
-    if (error) {
-        console.log("ERRO:", error)
-        alert("Erro ao registrar download")
-        return
-    }
-
-    alert("Download registrado com sucesso!")
-
-    let base = "https://degmvp.github.io/polidev/"
-    window.open(base + url, "_blank")
 }
+
+function abrir(url){
+window.open(url, "_blank");
+}
+
+carregar();
 
 </script>
 
 </body>
+
 </html>
+```
