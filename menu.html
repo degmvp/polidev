@@ -1,0 +1,73 @@
+```html id="6c3d6g"
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Python Programas</title>
+
+<style>
+body {
+    background: navy;
+    color: white;
+    font-family: Arial;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.card {
+    background: #FFD700;
+    color: black;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.card:hover {
+    background: gold;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>🐍 Python - Biblioteca de Programas</h2>
+
+<div class="grid" id="lista"></div>
+
+<script>
+
+const total = 34;
+const lista = document.getElementById("lista");
+
+for(let i=1; i<=total; i++){
+
+    let div = document.createElement("div");
+    div.className = "card";
+    div.innerText = "Programa " + i;
+
+    div.onclick = function(){
+        window.open("viewer_py.html?prog=" + i, "_blank");
+    }
+
+    lista.appendChild(div);
+}
+
+</script>
+
+</body>
+</html>
+```
