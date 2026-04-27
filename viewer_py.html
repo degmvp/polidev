@@ -99,38 +99,24 @@ function voltar(){
 function menu(){
     window.location.href = "menu.html";
 }
-
 async function baixar(){
 
     const prog = new URLSearchParams(window.location.search).get("prog");
 
-    console.log("Programa:", prog);
+    const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+        method: "POST",
+        headers: {
+            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            conteudo_id: parseInt(prog),
+            programa: "python_prog" + prog
+        })
+    });
 
-    try {
-
-        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
-            method: "POST",
-            headers: {
-                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                conteudo_id: parseInt(prog),
-                programa: "python_prog" + prog
-            })
-        });
-
-        console.log("STATUS:", resp.status);
-
-        const txt = await resp.text();
-        console.log("RESPOSTA:", txt);
-
-    } catch(e){
-        console.log("ERRO FETCH:", e);
-    }
-
-    window.open("/polidev/downloads/python/python_prog" + prog + ".py", "_blank");
+    alert("STATUS: " + resp.status);
 }
 
 // 👉 INICIA
