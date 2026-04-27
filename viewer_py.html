@@ -86,13 +86,12 @@ async function carregar(){
 }
 
 function voltar(){
-    if (document.referrer && document.referrer.includes("python_menu.html")) {
+    if (document.referrer && document.referrer.includes("/polidev/")) {
         window.history.back();
     } else {
-        window.location.href = "python_menu.html";
+        window.location.href = "menu.html";
     }
 }
-
 function baixar(){
     window.open(BASE + "python_prog" + prog + ".py", "_blank");
 }
