@@ -124,11 +124,8 @@ async function baixar(){
                 programa: "python_prog" + id
             })
         });
-
         const txt = await resp.text();
-
-        console.log("STATUS:", resp.status);
-        console.log("RESPOSTA:", txt);
+        alert("STATUS: " + resp.status + "\n\n" + txt);
 
         if (resp.status === 201) {
             console.log("✔ Registrado no Supabase");
