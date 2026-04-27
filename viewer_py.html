@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -9,7 +10,7 @@
 body {
     background: navy;
     color: white;
-    font-family: Consolas, monospace;
+    font-family: Consolas;
     margin: 0;
 }
 
@@ -48,13 +49,14 @@ button {
 <body>
 
 <header>
-<h2>🐍 Python - Visualizador de Código</h2>
+<h2>🐍 Python - Visualizador</h2>
 <p id="titulo"></p>
 </header>
 
 <div class="container">
 
 <button onclick="voltar()">⬅ Voltar</button>
+<button onclick="menu()">🏠 Menu</button>
 <button onclick="baixar()">⬇ Download</button>
 
 <pre id="codigo">Carregando código...</pre>
@@ -68,37 +70,74 @@ const prog = params.get("prog");
 
 const BASE = "/polidev/downloads/python/";
 
+// 👉 MOSTRA TÍTULO
 document.getElementById("titulo").innerText = "Programa " + prog;
 
+// 👉 CARREGA CÓDIGO
 async function carregar(){
 
     try{
-
         const resp = await fetch(BASE + "python_prog" + prog + ".py");
         const texto = await resp.text();
-
         document.getElementById("codigo").innerText = texto;
-
     }catch(e){
         document.getElementById("codigo").innerText = "Erro ao carregar código";
     }
 
 }
 
+// 👉 VOLTAR
 function voltar(){
-    if (document.referrer && document.referrer.includes("/polidev/")) {
+    if (document.referrer && document.referrer.includes("menu.html")) {
         window.history.back();
     } else {
         window.location.href = "menu.html";
     }
 }
-function baixar(){
+
+// 👉 MENU DIRETO
+function menu(){
+    window.location.href = "menu.html";
+}
+
+// 👉 DOWNLOAD + REGISTRO
+async function baixar(){
+
+    try {
+
+        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+            method: "POST",
+            headers: {
+                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                conteudo_id: parseInt(prog),
+                programa: "python_prog" + prog
+            })
+        });
+
+        if (!resp.ok) {
+            const erro = await resp.text();
+            console.log("ERRO SUPABASE:", erro);
+        } else {
+            console.log("✔ Download registrado");
+        }
+
+    } catch(e){
+        console.log("ERRO FETCH:", e);
+    }
+
+    // 👉 BAIXA O ARQUIVO
     window.open(BASE + "python_prog" + prog + ".py", "_blank");
 }
 
+// 👉 INICIA
 carregar();
 
 </script>
 
 </body>
 </html>
+```
