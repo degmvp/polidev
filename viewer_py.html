@@ -57,8 +57,7 @@ button {
 
 <button onclick="voltar()">⬅ Voltar</button>
 <button onclick="menu()">🏠 Menu</button>
-<button onclick="baixar()">⬇ Download</button>
-
+<button type="button" onclick="baixar()">⬇ Download</button>
 <pre id="codigo">Carregando...</pre>
 
 </div>
@@ -101,44 +100,26 @@ function menu(){
 }
 
 // 👉 DOWNLOAD + REGISTRO (VERSÃO FINAL)
-async function baixar(){
+async function baixar(event){
+
+    if (event) event.preventDefault();
 
     const id = parseInt(prog);
 
-    if (isNaN(id)) {
-        alert("Erro: programa inválido");
-        return;
-    }
+    const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+        method: "POST",
+        headers: {
+            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            conteudo_id: id,
+            programa: "python_prog" + id
+        })
+    });
 
-    try {
-
-        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
-            method: "POST",
-            headers: {
-                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                conteudo_id: id,
-                programa: "python_prog" + id
-            })
-        });
-        const txt = await resp.text();
-        alert("STATUS: " + resp.status + "\n\n" + txt);
-
-        if (resp.status === 201) {
-            console.log("✔ Registrado no Supabase");
-        } else {
-            console.log("❌ Erro ao registrar");
-        }
-
-    } catch(e){
-        console.log("ERRO FETCH:", e);
-    }
-
-    // 👉 download continua mesmo se falhar registro
-    window.open(BASE + "python_prog" + id + ".py", "_blank");
+    alert("STATUS: " + resp.status);
 }
 
 // 👉 inicia
