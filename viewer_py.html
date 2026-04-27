@@ -86,7 +86,11 @@ async function carregar(){
 }
 
 function voltar(){
-    window.history.back();
+    if (document.referrer && document.referrer.includes("python_menu.html")) {
+        window.history.back();
+    } else {
+        window.location.href = "python_menu.html";
+    }
 }
 
 function baixar(){

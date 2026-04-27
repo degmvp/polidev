@@ -60,8 +60,8 @@ for(let i=1; i<=total; i++){
     div.innerText = "Programa " + i;
 
     div.onclick = function(){
-        window.open("viewer_py.html?prog=" + i, "_blank");
-    }
+    window.location.href = "viewer_py.html?prog=" + i;
+}
 
     lista.appendChild(div);
 }
