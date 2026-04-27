@@ -100,8 +100,11 @@ function menu(){
     window.location.href = "menu.html";
 }
 
-// 👉 DOWNLOAD + REGISTRO
 async function baixar(){
+
+    const prog = new URLSearchParams(window.location.search).get("prog");
+
+    console.log("Programa:", prog);
 
     try {
 
@@ -118,19 +121,16 @@ async function baixar(){
             })
         });
 
-        if (!resp.ok) {
-            const erro = await resp.text();
-            console.log("ERRO SUPABASE:", erro);
-        } else {
-            console.log("✔ Download registrado");
-        }
+        console.log("STATUS:", resp.status);
+
+        const txt = await resp.text();
+        console.log("RESPOSTA:", txt);
 
     } catch(e){
         console.log("ERRO FETCH:", e);
     }
 
-    // 👉 BAIXA O ARQUIVO
-    window.open(BASE + "python_prog" + prog + ".py", "_blank");
+    window.open("/polidev/downloads/python/python_prog" + prog + ".py", "_blank");
 }
 
 // 👉 INICIA
