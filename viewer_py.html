@@ -15,7 +15,7 @@ body {
 }
 
 header {
-    background: #FFD700;
+    background: gold;
     color: black;
     padding: 15px;
     text-align: center;
@@ -28,16 +28,16 @@ header {
 pre {
     background: #2b2b2b;
     padding: 15px;
-    overflow: auto;
     border-radius: 5px;
-    max-height: 80vh;
+    max-height: 70vh;
+    overflow: auto;
     color: #00FF00;
 }
 
 button {
     padding: 8px 12px;
     margin-right: 10px;
-    background: #FFD700;
+    background: gold;
     border: none;
     cursor: pointer;
     font-weight: bold;
@@ -49,7 +49,7 @@ button {
 <body>
 
 <header>
-<h2>🐍 Python - Visualizador</h2>
+<h2>🐍 Python Viewer</h2>
 <p id="titulo"></p>
 </header>
 
@@ -59,23 +59,24 @@ button {
 <button onclick="menu()">🏠 Menu</button>
 <button onclick="baixar()">⬇ Download</button>
 
-<pre id="codigo">Carregando código...</pre>
+<pre id="codigo">Carregando...</pre>
 
 </div>
 
 <script>
 
+// 👉 pega parâmetro
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
+// 👉 pasta base
 const BASE = "/polidev/downloads/python/";
 
-// 👉 MOSTRA TÍTULO
+// 👉 título
 document.getElementById("titulo").innerText = "Programa " + prog;
 
-// 👉 CARREGA CÓDIGO
+// 👉 carregar código
 async function carregar(){
-
     try{
         const resp = await fetch(BASE + "python_prog" + prog + ".py");
         const texto = await resp.text();
@@ -83,10 +84,9 @@ async function carregar(){
     }catch(e){
         document.getElementById("codigo").innerText = "Erro ao carregar código";
     }
-
 }
 
-// 👉 VOLTAR
+// 👉 voltar
 function voltar(){
     if (document.referrer && document.referrer.includes("menu.html")) {
         window.history.back();
@@ -95,31 +95,56 @@ function voltar(){
     }
 }
 
-// 👉 MENU DIRETO
+// 👉 ir para menu
 function menu(){
     window.location.href = "menu.html";
 }
+
+// 👉 DOWNLOAD + REGISTRO (VERSÃO FINAL)
 async function baixar(){
 
-    const prog = new URLSearchParams(window.location.search).get("prog");
+    const id = parseInt(prog);
 
-    const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
-        method: "POST",
-        headers: {
-            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            conteudo_id: parseInt(prog),
-            programa: "python_prog" + prog
-        })
-    });
+    if (isNaN(id)) {
+        alert("Erro: programa inválido");
+        return;
+    }
 
-    alert("STATUS: " + resp.status);
+    try {
+
+        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+            method: "POST",
+            headers: {
+                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                conteudo_id: id,
+                programa: "python_prog" + id
+            })
+        });
+
+        const txt = await resp.text();
+
+        console.log("STATUS:", resp.status);
+        console.log("RESPOSTA:", txt);
+
+        if (resp.status === 201) {
+            console.log("✔ Registrado no Supabase");
+        } else {
+            console.log("❌ Erro ao registrar");
+        }
+
+    } catch(e){
+        console.log("ERRO FETCH:", e);
+    }
+
+    // 👉 download continua mesmo se falhar registro
+    window.open(BASE + "python_prog" + id + ".py", "_blank");
 }
 
-// 👉 INICIA
+// 👉 inicia
 carregar();
 
 </script>
