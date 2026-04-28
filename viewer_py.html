@@ -1,45 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Python Viewer</title>
+<title>Viewer Python</title>
 
 <style>
-body {
-    background: navy;
-    color: white;
-    font-family: Consolas;
-    margin: 0;
-}
-
-header {
-    background: gold;
-    color: black;
-    padding: 15px;
+body{
+    background-color: yellowgreen;
+    font-family: Arial;
     text-align: center;
 }
 
-.container {
+pre{
+    background: black;
+    color: white;
     padding: 20px;
-}
-
-pre {
-    background: #2b2b2b;
-    padding: 15px;
-    border-radius: 5px;
-    max-height: 70vh;
-    overflow: auto;
-    color: #00FF00;
-}
-
-button {
-    padding: 8px 12px;
-    margin-right: 10px;
-    background: gold;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+    margin: 20px;
+    text-align: left;
+    overflow-x: auto;
 }
 </style>
 
@@ -47,20 +25,12 @@ button {
 
 <body>
 
-<header>
-<h2>🐍 Python Viewer</h2>
-<p id="titulo"></p>
-</header>
+<h2>Visualizador de Código Python</h2>
 
-<div class="container">
-
-<button type="button" onclick="voltar()">⬅ Voltar</button>
-<button type="button" onclick="menu()">🏠 Menu</button>
-<button type="button" onclick="baixar()">⬇ Download</button>
+<button onclick="baixar()">Download</button>
+<button onclick="voltar()">Voltar</button>
 
 <pre id="codigo">Carregando...</pre>
-
-</div>
 
 <script>
 
@@ -68,12 +38,12 @@ const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
-const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
-const DOWNLOAD_API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads";
 
-const KEY = "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42";
+function voltar(){
+    window.location.href = "menu_py.html";
+}
 
-// 🔹 CARREGA O CÓDIGO NA TELA
+// 🔹 carregar código
 async function carregar(){
 
     if(!prog){
@@ -90,69 +60,15 @@ async function carregar(){
     }
 }
 
-// 🔹 BUSCA ID REAL NO BANCO
-async function buscarId(programa){
-
-    try{
-        const resp = await fetch(API + "?programa=eq." + programa, {
-            headers: {
-                "apikey": KEY,
-                "Authorization": "Bearer " + KEY
-            }
-        });
-
-        const data = await resp.json();
-
-        if(data.length === 0){
-            alert("Programa não encontrado no banco");
-            return null;
-        }
-
-        return data[0].id;
-
-    }catch{
-        alert("Erro ao buscar no banco");
-        return null;
-    }
-}
-
-// 🔹 DOWNLOAD + REGISTRO
+// 🔹 TESTE SIMPLES (SEM BANCO AINDA)
 function baixar(){
-    alert("CLIQUE OK");
-}
-async function baixar(){
-
-    alert("Iniciando download...");
-
-    const id = await buscarId(prog);
-
-    if(!id){
-        alert("❌ ERRO: programa não encontrado no banco → " + prog);
-        return;
-    }
-
-    alert("✔ ID encontrado: " + id);
-
-    const resp = await fetch(DOWNLOAD_API, {
-        method: "POST",
-        headers: {
-            "apikey": KEY,
-            "Authorization": "Bearer " + KEY,
-            "Content-Type": "application/json",
-            "Prefer": "return=minimal"
-        },
-        body: JSON.stringify({
-            conteudo_id: id,
-            programa: prog
-        })
-    });
-
-    alert("STATUS INSERT: " + resp.status);
-
-    // download
+    alert("Download funcionando ✔");
     window.open(BASE + prog + ".py", "_blank");
 }
-alert("SCRIPT CARREGADO");
+
+// inicia
+carregar();
+
 </script>
 
 </body>
