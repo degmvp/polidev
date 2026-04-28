@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -48,7 +49,7 @@ button {
 <body>
 
 <header>
-<h2>🐍 Python Viewer all</h2>
+<h2>🐍 Python Viewer</h2>
 <p id="titulo"></p>
 </header>
 
@@ -68,20 +69,35 @@ button {
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔹 BASE DOS ARQUIVOS
-const BASE = "/polidev/downloads/python/";
+// 🔹 BASE ABSOLUTA (CORREÇÃO CRÍTICA)
+const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
 // 🔹 TÍTULO
 document.getElementById("titulo").innerText = "Programa " + prog;
 
 // 🔹 CARREGAR CÓDIGO
 async function carregar(){
+
     try{
-        const resp = await fetch(BASE + "python_prog" + prog + ".py");
+
+        const url = BASE + "python_prog" + prog + ".py";
+        console.log("URL:", url);
+
+        const resp = await fetch(url);
+
+        if (!resp.ok) {
+            throw new Error("HTTP " + resp.status);
+        }
+
         const texto = await resp.text();
+
         document.getElementById("codigo").innerText = texto;
+
     }catch(e){
-        document.getElementById("codigo").innerText = "Erro ao carregar código";
+
+        document.getElementById("codigo").innerText =
+            "Erro ao carregar código\n\n" + e;
+
     }
 }
 
@@ -99,47 +115,21 @@ function menu(){
     window.location.href = "menu.html";
 }
 
-// 🔥 DOWNLOAD + SUPABASE (VERSÃO FINAL)
-async function baixar(){
+// 🔹 DOWNLOAD (SEM SUPABASE POR ENQUANTO - ESTÁVEL)
+function baixar(){
 
-    const id = parseInt(new URLSearchParams(window.location.search).get("prog"));
+    const id = parseInt(prog);
 
     if (isNaN(id)) {
         alert("Programa inválido");
         return;
     }
 
-    try {
-
-        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
-            method: "POST",
-            headers: {
-                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Prefer": "return=representation"
-            },
-            body: JSON.stringify([{
-                conteudo_id: id,
-                programa: "python_prog" + id
-            }])
-        });
-
-        const txt = await resp.text();
-
-        alert("STATUS: " + resp.status + "\n\n" + txt);
-
-    } catch(e){
-        alert("Erro: " + e);
-    }
-
-    // download continua normal
-    window.open("/polidev/downloads/python/python_prog" + id + ".py", "_blank");
-}
-
-    // 🔹 DOWNLOAD DO ARQUIVO
+    // 🔹 DOWNLOAD DIRETO
     window.open(BASE + "python_prog" + id + ".py", "_blank");
+
+    // 🔹 LOG LOCAL (sem risco)
+    console.log("Download realizado:", "python_prog" + id);
 }
 
 // 🔹 INIT
@@ -149,4 +139,4 @@ carregar();
 
 </body>
 </html>
-
+```
