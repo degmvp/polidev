@@ -46,17 +46,24 @@ function voltar(){
 // 🔹 carregar código
 async function carregar(){
 
-    if(!prog){
-        document.getElementById("codigo").innerText = "Programa não informado";
-        return;
-    }
+    const url = BASE + prog + ".py";
+
+    document.getElementById("codigo").innerText =
+        "PROG: " + prog + "\nURL: " + url;
 
     try{
-        const resp = await fetch(BASE + prog + ".py");
+        const resp = await fetch(url);
+
+        const status = resp.status;
+
         const txt = await resp.text();
-        document.getElementById("codigo").innerText = txt;
-    }catch{
-        document.getElementById("codigo").innerText = "Erro ao carregar código";
+
+        document.getElementById("codigo").innerText =
+            "STATUS: " + status + "\n\n" + txt;
+
+    }catch(e){
+        document.getElementById("codigo").innerText =
+            "ERRO FETCH\n" + e;
     }
 }
 
