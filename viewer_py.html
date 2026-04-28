@@ -46,34 +46,51 @@ function voltar(){
 // 🔹 carregar código
 async function carregar(){
 
-    const url = BASE + prog + ".py";
+    if(!prog){
+        document.getElementById("codigo").innerText = "Programa não informado";
+        return;
+    }
 
-    document.getElementById("codigo").innerText =
-        "PROG: " + prog + "\nURL: " + url;
+    const url = BASE + prog + ".py";
 
     try{
         const resp = await fetch(url);
 
-        const status = resp.status;
+        if(!resp.ok){
+            document.getElementById("codigo").innerText =
+                "Erro ao carregar: " + resp.status + "\n" + url;
+            return;
+        }
 
         const txt = await resp.text();
+        document.getElementById("codigo").innerText = txt;
 
+    }catch{
         document.getElementById("codigo").innerText =
-            "STATUS: " + status + "\n\n" + txt;
-
-    }catch(e){
-        document.getElementById("codigo").innerText =
-            "ERRO FETCH\n" + e;
+            "Erro de conexão\n" + url;
     }
 }
 
-// 🔹 TESTE SIMPLES (SEM BANCO AINDA)
+// 🔹 DOWNLOAD SIMPLES (SEM BANCO)
 function baixar(){
-    alert("Download funcionando ✔");
-    window.open(BASE + prog + ".py", "_blank");
+
+    if(!prog){
+        alert("Programa inválido");
+        return;
+    }
+
+    const url = BASE + prog + ".py";
+
+    // cria link real (não bloqueia popup)
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = prog + ".py";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
-// inicia
+// iniciar
 carregar();
 
 </script>
