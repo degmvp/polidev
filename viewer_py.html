@@ -119,12 +119,18 @@ async function buscarId(programa){
 // 🔹 DOWNLOAD + REGISTRO
 async function baixar(){
 
+    alert("Iniciando download...");
+
     const id = await buscarId(prog);
 
-    if(!id) return;
+    if(!id){
+        alert("❌ ERRO: programa não encontrado no banco → " + prog);
+        return;
+    }
 
-    // grava no banco (não bloqueia download)
-    fetch(DOWNLOAD_API, {
+    alert("✔ ID encontrado: " + id);
+
+    const resp = await fetch(DOWNLOAD_API, {
         method: "POST",
         headers: {
             "apikey": KEY,
@@ -138,12 +144,11 @@ async function baixar(){
         })
     });
 
+    alert("STATUS INSERT: " + resp.status);
+
     // download
     window.open(BASE + prog + ".py", "_blank");
 }
-
-// 🔹 INICIA
-carregar();
 
 </script>
 
