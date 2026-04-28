@@ -102,7 +102,7 @@ function menu(){
 // 🔥 DOWNLOAD + SUPABASE (VERSÃO FINAL)
 async function baixar(){
 
-    const id = parseInt(prog);
+    const id = parseInt(new URLSearchParams(window.location.search).get("prog"));
 
     if (isNaN(id)) {
         alert("Programa inválido");
@@ -117,25 +117,26 @@ async function baixar(){
                 "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
                 "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
                 "Content-Type": "application/json",
-                "Prefer": "return=minimal"
+                "Accept": "application/json",
+                "Prefer": "return=representation"
             },
-            body: JSON.stringify({
+            body: JSON.stringify([{
                 conteudo_id: id,
                 programa: "python_prog" + id
-            })
+            }])
         });
 
         const txt = await resp.text();
 
-        console.log("STATUS:", resp.status);
-        console.log("RESPOSTA:", txt);
-
-        alert("STATUS: " + resp.status);
+        alert("STATUS: " + resp.status + "\n\n" + txt);
 
     } catch(e){
-        console.log("ERRO FETCH:", e);
-        alert("Erro na conexão");
+        alert("Erro: " + e);
     }
+
+    // download continua normal
+    window.open("/polidev/downloads/python/python_prog" + id + ".py", "_blank");
+}
 
     // 🔹 DOWNLOAD DO ARQUIVO
     window.open(BASE + "python_prog" + id + ".py", "_blank");
