@@ -126,6 +126,28 @@ function baixar(){
     }
 
     // 🔹 DOWNLOAD DIRETO
+// 🔹 REGISTRO NO SUPABASE (NÃO BLOQUEIA NADA)
+fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+    method: "POST",
+    headers: {
+        "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+        "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+        conteudo_id: parseInt(prog),
+        programa: "python_prog" + prog
+    })
+})
+.then(r => console.log("Supabase status:", r.status))
+.catch(e => console.log("Erro Supabase:", e));
+
+
+
+
+
+
     window.open(BASE + "python_prog" + id + ".py", "_blank");
 
     // 🔹 LOG LOCAL (sem risco)
