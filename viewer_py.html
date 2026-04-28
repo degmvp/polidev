@@ -64,95 +64,85 @@ button {
 
 <script>
 
-// 🔹 PARÂMETRO
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔹 BASE ABSOLUTA (CORREÇÃO CRÍTICA)
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
+const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
+const DOWNLOAD_API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads";
 
-// 🔹 TÍTULO
-document.getElementById("titulo").innerText = "Programa " + prog;
+const KEY = "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42";
 
-// 🔹 CARREGAR CÓDIGO
+// 🔹 CARREGA O CÓDIGO NA TELA
 async function carregar(){
 
-    try{
-
-        const url = BASE + "python_prog" + prog + ".py";
-        console.log("URL:", url);
-
-        const resp = await fetch(url);
-
-        if (!resp.ok) {
-            throw new Error("HTTP " + resp.status);
-        }
-
-        const texto = await resp.text();
-
-        document.getElementById("codigo").innerText = texto;
-
-    }catch(e){
-
-        document.getElementById("codigo").innerText =
-            "Erro ao carregar código\n\n" + e;
-
-    }
-}
-
-// 🔹 VOLTAR
-function voltar(){
-    if (document.referrer && document.referrer.includes("menu.html")) {
-        window.history.back();
-    } else {
-        window.location.href = "menu.html";
-    }
-}
-
-// 🔹 MENU
-function menu(){
-    window.location.href = "menu.html";
-}
-
-// 🔹 DOWNLOAD (SEM SUPABASE POR ENQUANTO - ESTÁVEL)
-function baixar(){
-
-    const id = parseInt(prog);
-
-    if (isNaN(id)) {
-        alert("Programa inválido");
+    if(!prog){
+        document.getElementById("codigo").innerText = "Programa não informado";
         return;
     }
 
-    // 🔹 TENTA GRAVAR NO SUPABASE
-    fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+    try{
+        const resp = await fetch(BASE + prog + ".py");
+        const txt = await resp.text();
+        document.getElementById("codigo").innerText = txt;
+    }catch{
+        document.getElementById("codigo").innerText = "Erro ao carregar código";
+    }
+}
+
+// 🔹 BUSCA ID REAL NO BANCO
+async function buscarId(programa){
+
+    try{
+        const resp = await fetch(API + "?programa=eq." + programa, {
+            headers: {
+                "apikey": KEY,
+                "Authorization": "Bearer " + KEY
+            }
+        });
+
+        const data = await resp.json();
+
+        if(data.length === 0){
+            alert("Programa não encontrado no banco");
+            return null;
+        }
+
+        return data[0].id;
+
+    }catch{
+        alert("Erro ao buscar no banco");
+        return null;
+    }
+}
+
+// 🔹 DOWNLOAD + REGISTRO
+async function baixar(){
+
+    const id = await buscarId(prog);
+
+    if(!id) return;
+
+    // grava no banco (não bloqueia download)
+    fetch(DOWNLOAD_API, {
         method: "POST",
         headers: {
-            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "apikey": KEY,
+            "Authorization": "Bearer " + KEY,
             "Content-Type": "application/json",
             "Prefer": "return=minimal"
         },
         body: JSON.stringify({
             conteudo_id: id,
-            programa: "python_prog" + id
+            programa: prog
         })
-    })
-    .then(r => {
-        if (r.status === 201 || r.status === 204) {
-            alert("✔ Download registrado no banco");
-        } else {
-            alert("❌ Não gravou no banco (STATUS: " + r.status + ")");
-        }
-    })
-    .catch(() => {
-        alert("❌ Erro de conexão com Supabase");
     });
 
-    // 🔹 DOWNLOAD NORMAL (SEMPRE FUNCIONA)
-    window.open("https://degmvp.github.io/polidev/downloads/python/python_prog" + id + ".py", "_blank");
+    // download
+    window.open(BASE + prog + ".py", "_blank");
 }
-// 🔹 INIT
+
+// 🔹 INICIA
 carregar();
 
 </script>

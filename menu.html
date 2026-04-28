@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Python Programas</title>
+<title>POLYDEV | Python</title>
 
 <style>
-body {
-    background: navy;
-    color: white;
+body{
+    background-color: yellowgreen;
     font-family: Arial;
-    padding: 20px;
-}
-
-h2 {
     text-align: center;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.card {
-    background: #FFD700;
     color: black;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 8px;
 }
 
-.card:hover {
-    background: gold;
+h1{
+    margin-top: 40px;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.item{
+    background: black;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.item:hover{
+    background: white;
+    color: black;
 }
 </style>
 
@@ -43,30 +43,32 @@ h2 {
 
 <body>
 
-<h2>🐍 Python - Biblioteca de Programas</h2>
+<h1>🐍 PYTHON PROGRAMAS</h1>
+<p>Leia • Entenda • Execute seu código</p>
 
-<div class="grid" id="lista"></div>
+<div class="container" id="menu"></div>
 
 <script>
 
-const total = 34;
-const lista = document.getElementById("lista");
+// 🔹 cria os 34 programas automaticamente
+const container = document.getElementById("menu");
 
-for(let i=1; i<=total; i++){
+for(let i = 1; i <= 34; i++){
 
-    let div = document.createElement("div");
-    div.className = "card";
+    const nome = "python_prog" + i;
+
+    const div = document.createElement("div");
+    div.className = "item";
     div.innerText = "Programa " + i;
 
-    div.onclick = function(){
-    window.location.href = "viewer_py.html?prog=" + i;
-}
+    div.onclick = () => {
+        window.location.href = "viewer_py.html?prog=" + nome;
+    };
 
-    lista.appendChild(div);
+    container.appendChild(div);
 }
 
 </script>
 
 </body>
 </html>
-```
