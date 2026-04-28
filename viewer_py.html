@@ -72,7 +72,7 @@ async function carregar(){
 }
 
 // 🔹 DOWNLOAD SIMPLES (SEM BANCO)
-function baixar(){
+async function baixar(){
 
     if(!prog){
         alert("Programa inválido");
@@ -81,16 +81,60 @@ function baixar(){
 
     const url = BASE + prog + ".py";
 
-    // cria link real (não bloqueia popup)
+    // 🔹 1. tenta gravar no banco (sem travar)
+    try{
+
+        const respBusca = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + prog,
+            {
+                headers: {
+                    "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                    "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
+                }
+            }
+        );
+
+        const data = await respBusca.json();
+
+        if(data.length > 0){
+
+            const id = data[0].id;
+
+            await fetch(
+                "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads",
+                {
+                    method: "POST",
+                    headers: {
+                        "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                        "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        conteudo_id: id,
+                        programa: prog
+                    })
+                }
+            );
+        }
+
+    }catch(e){
+        console.log("Erro ao gravar (não bloqueia):", e);
+    }
+
+    // 🔹 2. download garantido
     const a = document.createElement("a");
     a.href = url;
     a.download = prog + ".py";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-}
 
-// iniciar
+    // 🔹 3. voltar automático após 1s
+    setTimeout(() => {
+        window.location.href = "menu_py.html";
+    }, 1000);
+}
 carregar();
 
 </script>
