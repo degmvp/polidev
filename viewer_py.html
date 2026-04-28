@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -55,26 +54,27 @@ button {
 
 <div class="container">
 
-<button onclick="voltar()">⬅ Voltar</button>
-<button onclick="menu()">🏠 Menu</button>
+<button type="button" onclick="voltar()">⬅ Voltar</button>
+<button type="button" onclick="menu()">🏠 Menu</button>
 <button type="button" onclick="baixar()">⬇ Download</button>
+
 <pre id="codigo">Carregando...</pre>
 
 </div>
 
 <script>
 
-// 👉 pega parâmetro
+// 🔹 PARÂMETRO
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 👉 pasta base
+// 🔹 BASE DOS ARQUIVOS
 const BASE = "/polidev/downloads/python/";
 
-// 👉 título
+// 🔹 TÍTULO
 document.getElementById("titulo").innerText = "Programa " + prog;
 
-// 👉 carregar código
+// 🔹 CARREGAR CÓDIGO
 async function carregar(){
     try{
         const resp = await fetch(BASE + "python_prog" + prog + ".py");
@@ -85,7 +85,7 @@ async function carregar(){
     }
 }
 
-// 👉 voltar
+// 🔹 VOLTAR
 function voltar(){
     if (document.referrer && document.referrer.includes("menu.html")) {
         window.history.back();
@@ -94,39 +94,58 @@ function voltar(){
     }
 }
 
-// 👉 ir para menu
+// 🔹 MENU
 function menu(){
     window.location.href = "menu.html";
 }
 
-// 👉 DOWNLOAD + REGISTRO (VERSÃO FINAL)
-async function baixar(event){
-
-    if (event) event.preventDefault();
+// 🔥 DOWNLOAD + SUPABASE (VERSÃO FINAL)
+async function baixar(){
 
     const id = parseInt(prog);
 
-    const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
-        method: "POST",
-        headers: {
-            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            conteudo_id: id,
-            programa: "python_prog" + id
-        })
-    });
+    if (isNaN(id)) {
+        alert("Programa inválido");
+        return;
+    }
 
-    alert("STATUS: " + resp.status);
+    try {
+
+        const resp = await fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+            method: "POST",
+            headers: {
+                "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({
+                conteudo_id: id,
+                programa: "python_prog" + id
+            })
+        });
+
+        const txt = await resp.text();
+
+        console.log("STATUS:", resp.status);
+        console.log("RESPOSTA:", txt);
+
+        alert("STATUS: " + resp.status);
+
+    } catch(e){
+        console.log("ERRO FETCH:", e);
+        alert("Erro na conexão");
+    }
+
+    // 🔹 DOWNLOAD DO ARQUIVO
+    window.open(BASE + "python_prog" + id + ".py", "_blank");
 }
 
-// 👉 inicia
+// 🔹 INIT
 carregar();
 
 </script>
 
 </body>
 </html>
-```
+
