@@ -34,18 +34,19 @@ pre{
 
 <script>
 
-// 🔥 COLE SUA CHAVE ANON (JWT grande)
-const KEY = "COLE_SUA_ANON_KEY_AQUI";
+// 🔥 SUA CHAVE ANON AQUI (OBRIGATÓRIO TROCAR)
+const KEY = "COLE_AQUI_SUA_ANON_PUBLIC_KEY";
 
 // 🔗 URLs
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
-const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
+const API_CONTEUDOS = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
+const API_DOWNLOADS = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads";
 
-// 📌 parâmetro
+// 📌 pega parâmetro da URL
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔙 voltar
+// 🔙 voltar menu
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
@@ -74,45 +75,24 @@ async function carregar(){
     }
 }
 
-// 🔥 incrementar contador (+1)
-async function incrementar(){
+// 🔍 buscar ID real no banco
+async function buscarId(){
 
-    try{
+    const resp = await fetch(API_CONTEUDOS + "?programa=eq." + prog, {
+        headers: {
+            "apikey": KEY,
+            "Authorization": "Bearer " + KEY
+        }
+    });
 
-        // 1. busca registro
-        const resp = await fetch(API + "?programa=eq." + prog, {
-            headers: {
-                "apikey": KEY,
-                "Authorization": "Bearer " + KEY
-            }
-        });
+    const data = await resp.json();
 
-        const data = await resp.json();
+    if(data.length === 0) return null;
 
-        if(data.length === 0) return;
-
-        const id = data[0].id;
-        const atual = data[0].downloads || 0;
-
-        // 2. atualiza somando +1
-        await fetch(API + "?id=eq." + id, {
-            method: "PATCH",
-            headers: {
-                "apikey": KEY,
-                "Authorization": "Bearer " + KEY,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                downloads: atual + 1
-            })
-        });
-
-    }catch(e){
-        console.log("Erro ao atualizar contador:", e);
-    }
+    return data[0].id;
 }
 
-// ⬇️ download + contador
+// ⬇️ download + gravação
 async function baixar(){
 
     if(!prog){
@@ -120,12 +100,36 @@ async function baixar(){
         return;
     }
 
-    // 🔹 incrementa antes
-    await incrementar();
-
-    // 🔹 download
     const url = BASE + prog + ".py";
 
+    try{
+
+        const id = await buscarId();
+
+        if(id){
+
+            await fetch(API_DOWNLOADS, {
+                method: "POST",
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Prefer": "return=representation"
+                },
+                body: JSON.stringify([{
+                    conteudo_id: id,
+                    programa: prog
+                }])
+            });
+
+        }
+
+    }catch(e){
+        console.log("Erro ao gravar:", e);
+    }
+
+    // download garantido
     const a = document.createElement("a");
     a.href = url;
     a.download = prog + ".py";
@@ -133,7 +137,7 @@ async function baixar(){
     a.click();
     document.body.removeChild(a);
 
-    // 🔹 volta ao menu
+    // voltar para menu
     setTimeout(() => {
         window.location.href = "/polidev/menu.html";
     }, 1000);
