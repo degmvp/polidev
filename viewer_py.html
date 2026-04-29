@@ -87,25 +87,46 @@ async function incrementar(){
 
     try{
 
-        const caminho = "/downloads/python/python_prog" + prog + ".py";
+        // 🔹 buscar ID correto
+        const resp = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + prog,
+            {
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY
+                }
+            }
+        );
 
-        await fetch(API_RPC, {
-            method: "POST",
-            headers: {
-                "apikey": KEY,
-                "Authorization": "Bearer " + KEY,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                p_programa: caminho
-            })
-        });
+        const data = await resp.json();
+
+        if(data.length === 0){
+            console.log("Registro não encontrado");
+            return;
+        }
+
+        const id = data[0].id;
+
+        // 🔹 chamar função RPC com ID
+        await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download",
+            {
+                method: "POST",
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    p_id: id
+                })
+            }
+        );
 
     }catch(e){
         console.log("Erro contador:", e);
     }
 }
-
 // ⬇️ DOWNLOAD + CONTADOR
 async function baixar(){
 
