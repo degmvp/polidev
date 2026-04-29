@@ -19,6 +19,12 @@ pre{
     text-align: left;
     overflow-x: auto;
 }
+
+button{
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
 </style>
 
 </head>
@@ -28,30 +34,31 @@ pre{
 <h2>Visualizador de Código Python</h2>
 
 <button onclick="baixar()">Download</button>
-<button onclick="voltar()">Voltar</button>
+<button onclick="voltar()">Voltar ao Menu</button>
 
 <pre id="codigo">Carregando...</pre>
 
 <script>
 
-// 🔥 SUA CHAVE ANON AQUI (OBRIGATÓRIO TROCAR)
-const KEY = "COLE_AQUI_SUA_ANON_PUBLIC_KEY";
+// 🔥 COLE SUA CHAVE ANON (JWT GRANDE)
+const KEY = "COLE_SUA_ANON_KEY_AQUI";
 
-// 🔗 URLs
+// 🔗 BASE DOS ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
-const API_CONTEUDOS = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
-const API_DOWNLOADS = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads";
 
-// 📌 pega parâmetro da URL
+// 🔗 API SUPABASE (RPC)
+const API_RPC = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download";
+
+// 📌 PEGAR PARÂMETRO
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔙 voltar menu
+// 🔙 VOLTAR
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
-// 📄 carregar código
+// 📄 CARREGAR CÓDIGO
 async function carregar(){
 
     if(!prog){
@@ -60,7 +67,7 @@ async function carregar(){
     }
 
     try{
-        const resp = await fetch(BASE + prog + ".py");
+        const resp = await fetch(BASE + "python_prog" + prog + ".py");
 
         if(!resp.ok){
             document.getElementById("codigo").innerText = "Erro " + resp.status;
@@ -75,24 +82,31 @@ async function carregar(){
     }
 }
 
-// 🔍 buscar ID real no banco
-async function buscarId(){
+// 🔥 INCREMENTAR CONTADOR (CORRETO)
+async function incrementar(){
 
-    const resp = await fetch(API_CONTEUDOS + "?programa=eq." + prog, {
-        headers: {
-            "apikey": KEY,
-            "Authorization": "Bearer " + KEY
-        }
-    });
+    try{
 
-    const data = await resp.json();
+        const caminho = "/downloads/python/python_prog" + prog + ".py";
 
-    if(data.length === 0) return null;
+        await fetch(API_RPC, {
+            method: "POST",
+            headers: {
+                "apikey": KEY,
+                "Authorization": "Bearer " + KEY,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                p_programa: caminho
+            })
+        });
 
-    return data[0].id;
+    }catch(e){
+        console.log("Erro contador:", e);
+    }
 }
 
-// ⬇️ download + gravação
+// ⬇️ DOWNLOAD + CONTADOR
 async function baixar(){
 
     if(!prog){
@@ -100,50 +114,19 @@ async function baixar(){
         return;
     }
 
-    const url = BASE + prog + ".py";
+    await incrementar();
 
-    try{
+    const url = BASE + "python_prog" + prog + ".py";
 
-        const id = await buscarId();
-
-        if(id){
-
-            await fetch(API_DOWNLOADS, {
-                method: "POST",
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Prefer": "return=representation"
-                },
-                body: JSON.stringify([{
-                    conteudo_id: id,
-                    programa: prog
-                }])
-            });
-
-        }
-
-    }catch(e){
-        console.log("Erro ao gravar:", e);
-    }
-
-    // download garantido
     const a = document.createElement("a");
     a.href = url;
-    a.download = prog + ".py";
+    a.download = "python_prog" + prog + ".py";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
-    // voltar para menu
-    setTimeout(() => {
-        window.location.href = "/polidev/menu.html";
-    }, 1000);
 }
 
-// 🚀 iniciar
+// 🚀 INICIAR
 carregar();
 
 </script>
