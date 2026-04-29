@@ -34,16 +34,23 @@ pre{
 
 <script>
 
+// 🔥 COLE SUA CHAVE ANON (JWT grande)
+const KEY = "COLE_SUA_ANON_KEY_AQUI";
+
+// 🔗 URLs
+const BASE = "https://degmvp.github.io/polidev/downloads/python/";
+const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos";
+
+// 📌 parâmetro
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-const BASE = "https://degmvp.github.io/polidev/downloads/python/";
-
+// 🔙 voltar
 function voltar(){
-    window.location.href = "menu_py.html";
+    window.location.href = "/polidev/menu.html";
 }
 
-// 🔹 carregar código
+// 📄 carregar código
 async function carregar(){
 
     if(!prog){
@@ -51,14 +58,11 @@ async function carregar(){
         return;
     }
 
-    const url = BASE + prog + ".py";
-
     try{
-        const resp = await fetch(url);
+        const resp = await fetch(BASE + prog + ".py");
 
         if(!resp.ok){
-            document.getElementById("codigo").innerText =
-                "Erro ao carregar: " + resp.status + "\n" + url;
+            document.getElementById("codigo").innerText = "Erro " + resp.status;
             return;
         }
 
@@ -66,12 +70,49 @@ async function carregar(){
         document.getElementById("codigo").innerText = txt;
 
     }catch{
-        document.getElementById("codigo").innerText =
-            "Erro de conexão\n" + url;
+        document.getElementById("codigo").innerText = "Erro ao carregar";
     }
 }
 
-// 🔹 DOWNLOAD SIMPLES (SEM BANCO)
+// 🔥 incrementar contador (+1)
+async function incrementar(){
+
+    try{
+
+        // 1. busca registro
+        const resp = await fetch(API + "?programa=eq." + prog, {
+            headers: {
+                "apikey": KEY,
+                "Authorization": "Bearer " + KEY
+            }
+        });
+
+        const data = await resp.json();
+
+        if(data.length === 0) return;
+
+        const id = data[0].id;
+        const atual = data[0].downloads || 0;
+
+        // 2. atualiza somando +1
+        await fetch(API + "?id=eq." + id, {
+            method: "PATCH",
+            headers: {
+                "apikey": KEY,
+                "Authorization": "Bearer " + KEY,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                downloads: atual + 1
+            })
+        });
+
+    }catch(e){
+        console.log("Erro ao atualizar contador:", e);
+    }
+}
+
+// ⬇️ download + contador
 async function baixar(){
 
     if(!prog){
@@ -79,50 +120,12 @@ async function baixar(){
         return;
     }
 
+    // 🔹 incrementa antes
+    await incrementar();
+
+    // 🔹 download
     const url = BASE + prog + ".py";
 
-    // 🔹 1. tenta gravar no banco (sem travar)
-    try{
-
-        const respBusca = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + prog,
-            {
-                headers: {
-                    "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                    "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42"
-                }
-            }
-        );
-
-        const data = await respBusca.json();
-
-        if(data.length > 0){
-
-            const id = data[0].id;
-
-            await fetch(
-                "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads",
-                {
-                    method: "POST",
-                    headers: {
-                        "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                        "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
-                        "Content-Type": "application/json",
-                        "Prefer": "return=minimal"
-                    },
-                    body: JSON.stringify({
-                        conteudo_id: id,
-                        programa: prog
-                    })
-                }
-            );
-        }
-
-    }catch(e){
-        console.log("Erro ao gravar (não bloqueia):", e);
-    }
-
-    // 🔹 2. download garantido
     const a = document.createElement("a");
     a.href = url;
     a.download = prog + ".py";
@@ -130,11 +133,13 @@ async function baixar(){
     a.click();
     document.body.removeChild(a);
 
-    // 🔹 3. voltar automático após 1s
-setTimeout(() => {
-    window.location.href = "/polidev/menu.html";
-}, 1000);
+    // 🔹 volta ao menu
+    setTimeout(() => {
+        window.location.href = "/polidev/menu.html";
+    }, 1000);
 }
+
+// 🚀 iniciar
 carregar();
 
 </script>

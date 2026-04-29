@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="testar()">TESTAR INSERT</button>
+
+<script>
+
+function testar(){
+
+    fetch("https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/downloads", {
+        method: "POST",
+        headers: {
+            "apikey": "sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Authorization": "Bearer sb_publishable_iCOZMw9xc0QZaGQWTHdxMQ_O33nfE42",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Prefer": "return=representation"
+        },
+        body: JSON.stringify([{
+            conteudo_id: 27,
+            programa: "teste_browser"
+        }])
+    })
+    .then(async r => {
+        const txt = await r.text();
+        alert("STATUS: " + r.status + "\n" + txt);
+    })
+    .catch(e => alert("ERRO"));
+
+}
+
+</script>
+
+</body>
+</html>

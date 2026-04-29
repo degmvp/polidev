@@ -1,0 +1,9 @@
+[
+  {
+    "timestamp": "2026-04-29T11:13:29.569852",
+    "module": "menu_isometrico",
+    "file_active": "menu8.html",
+    "status": "erro 400 em gravação de contador",
+    "next_step": "corrigir SQL delete sem WHERE"
+  }
+]
