@@ -67,7 +67,7 @@ async function carregar(){
     }
 
     try{
-        const resp = await fetch(BASE + "python_prog" + prog + ".py");
+        const resp = await fetch(BASE + prog + ".py");
 
         if(!resp.ok){
             document.getElementById("codigo").innerText = "Erro " + resp.status;
@@ -116,7 +116,7 @@ async function baixar(){
 
     await incrementar();
 
-    const url = BASE + "python_prog" + prog + ".py";
+    const url = BASE + prog + ".py";
 
     const a = document.createElement("a");
     a.href = url;
