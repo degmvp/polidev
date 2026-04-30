@@ -2,13 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Viewer Python</title>
+<title>Polydev - Viewer Python</title>
 
 <style>
 body{
     background-color: yellowgreen;
     font-family: Arial;
     text-align: center;
+}
+
+h2{
+    color: black;
 }
 
 pre{
@@ -18,12 +22,21 @@ pre{
     margin: 20px;
     text-align: left;
     overflow-x: auto;
+    border-radius: 10px;
 }
 
 button{
     margin: 10px;
     padding: 10px 20px;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+}
+
+button:hover{
+    background-color: #333;
 }
 </style>
 
@@ -33,23 +46,24 @@ button{
 
 <h2>Visualizador de Código Python</h2>
 
-<button onclick="baixar()">Download</button>
-<button onclick="voltar()">Voltar ao Menu</button>
+<button onclick="baixar()">⬇ Download</button>
+<button onclick="voltar()">⬅ Voltar ao Menu</button>
 
 <pre id="codigo">Carregando...</pre>
 
 <script>
 
-// 🔥 COLE SUA CHAVE ANON (JWT GRANDE)
-const KEY = "COLE_SUA_ANON_KEY_AQUI";
+// 🔑 COLE SUA CHAVE ANON AQUI (JWT LONGA)
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I
+";
 
 // 🔗 BASE DOS ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
-// 🔗 API SUPABASE (RPC)
-const API_RPC = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download";
+// 🔗 API RPC SUPABASE
+const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download";
 
-// 📌 PEGAR PARÂMETRO
+// 📌 PEGAR PARAMETRO ?prog=XX
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
@@ -67,7 +81,8 @@ async function carregar(){
     }
 
     try{
-        const resp = await fetch(BASE + prog + ".py");
+
+        const resp = await fetch(BASE + "python_prog" + prog + ".py");
 
         if(!resp.ok){
             document.getElementById("codigo").innerText = "Erro " + resp.status;
@@ -78,42 +93,55 @@ async function carregar(){
         document.getElementById("codigo").innerText = txt;
 
     }catch{
-        document.getElementById("codigo").innerText = "Erro ao carregar";
+        document.getElementById("codigo").innerText = "Erro ao carregar arquivo";
     }
 }
 
-// 🔥 INCREMENTAR CONTADOR (CORRETO)
+// 🔥 INCREMENTAR DOWNLOAD NO BANCO
 async function incrementar(){
 
     try{
 
         const programa = "python_prog" + prog;
 
-        const resp = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download",
+        // 1. buscar valor atual
+        const sel = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
             {
-                method: "POST",
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY
+                }
+            }
+        );
+
+        const dados = await sel.json();
+
+        if(!dados.length) return;
+
+        const atual = dados[0].downloads || 0;
+
+        // 2. atualizar
+        await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
+            {
+                method: "PATCH",
                 headers: {
                     "apikey": KEY,
                     "Authorization": "Bearer " + KEY,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    p_programa: programa
+                    downloads: atual + 1
                 })
             }
         );
 
-        const txt = await resp.text();
-
-        alert("STATUS: " + resp.status + "\n" + txt);
-
     }catch(e){
-        alert("Erro total");
+        console.log("erro contador", e);
     }
 }
-
-// ⬇️ DOWNLOAD + CONTADOR
+// ⬇ DOWNLOAD + CONTADOR
 async function baixar(){
 
     if(!prog){
@@ -121,9 +149,9 @@ async function baixar(){
         return;
     }
 
-    await incrementar();
+    await incrementar(); // grava no banco
 
-    const url = BASE + prog + ".py";
+    const url = BASE + "python_prog" + prog + ".py";
 
     const a = document.createElement("a");
     a.href = url;
@@ -133,7 +161,7 @@ async function baixar(){
     document.body.removeChild(a);
 }
 
-// 🚀 INICIAR
+// 🚀 INICIALIZAÇÃO
 carregar();
 
 </script>
