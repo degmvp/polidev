@@ -60,109 +60,65 @@ const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 // 🔗 BASE DOS ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
-// 🔗 API RPC SUPABASE
-const API = "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download";
 
-// 📌 PEGAR PARAMETRO ?prog=XX
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔙 VOLTAR
+// 🔙 voltar
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
-// 📄 CARREGAR CÓDIGO
+// 📄 carregar código (robusto)
 async function carregar(){
 
+    const tela = document.getElementById("codigo");
+
     if(!prog){
-        document.getElementById("codigo").innerText = "Programa não informado";
+        tela.innerText = "❌ parâmetro prog não informado";
         return;
     }
 
     try{
 
-        const resp = await fetch(BASE + "python_prog" + prog + ".py");
+        const url = BASE + "python_prog" + prog + ".py";
+
+        const resp = await fetch(url);
 
         if(!resp.ok){
-            document.getElementById("codigo").innerText = "Erro " + resp.status;
+            tela.innerText = "❌ erro ao carregar: " + resp.status;
             return;
         }
 
         const txt = await resp.text();
-        document.getElementById("codigo").innerText = txt;
 
-    }catch{
-        document.getElementById("codigo").innerText = "Erro ao carregar arquivo";
-    }
-}
-
-// 🔥 INCREMENTAR DOWNLOAD NO BANCO
-async function incrementar(){
-
-    try{
-
-        const programa = "python_prog" + prog;
-
-        // 1. buscar valor atual
-        const sel = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
-            {
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY
-                }
-            }
-        );
-
-        const dados = await sel.json();
-
-        if(!dados.length) return;
-
-        const atual = dados[0].downloads || 0;
-
-        // 2. atualizar
-        await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
-            {
-                method: "PATCH",
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    downloads: atual + 1
-                })
-            }
-        );
+        tela.innerText = txt || "arquivo vazio";
 
     }catch(e){
-        console.log("erro contador", e);
+        tela.innerText = "❌ erro de conexão";
     }
 }
-// ⬇ DOWNLOAD + CONTADOR
-async function baixar(){
+
+// ⬇ download (SEM banco por enquanto)
+function baixar(){
 
     if(!prog){
         alert("Programa inválido");
         return;
     }
 
-    await incrementar(); // grava no banco
-
     const url = BASE + "python_prog" + prog + ".py";
 
     const a = document.createElement("a");
     a.href = url;
     a.download = "python_prog" + prog + ".py";
-    document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
 }
 
-// 🚀 INICIALIZAÇÃO
+// 🚀 start
 carregar();
+
+</script>
 
 </script>
 
