@@ -55,13 +55,19 @@ button{
 
 <script>
 
+// 🔗 BASE ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
+
+// 🔑 SUA CHAVE (ANON)
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
+// 📌 PARAMETRO
 const params = new URLSearchParams(window.location.search);
 let prog = params.get("prog");
 
+// 🔧 NORMALIZAÇÃO (garante padrão correto)
 function normalizarPrograma(valor){
+
     if(!valor) return null;
 
     valor = valor.trim();
@@ -77,10 +83,12 @@ function normalizarPrograma(valor){
 
 prog = normalizarPrograma(prog);
 
+// 🔙 VOLTAR
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
+// 📄 CARREGAR CÓDIGO
 async function carregar(){
 
     const tela = document.getElementById("codigo");
@@ -97,7 +105,7 @@ async function carregar(){
         const resp = await fetch(url);
 
         if(!resp.ok){
-            tela.innerText = "Erro ao carregar: " + resp.status + "\n" + url;
+            tela.innerText = "Erro ao carregar: " + resp.status;
             return;
         }
 
@@ -109,7 +117,7 @@ async function carregar(){
     }
 }
 
-// 🔥 CONTADOR
+// 🔥 CONTADOR (produção)
 async function incrementar(){
 
     try{
@@ -128,23 +136,20 @@ async function incrementar(){
 
         const data = await resp.json();
 
-        alert("SELECT status: " + resp.status + "\nPrograma: " + programa + "\nRegistros: " + data.length);
-
         if(!data.length){
             return;
         }
 
         const atual = data[0].downloads || 0;
 
-        const upd = await fetch(
+        await fetch(
             "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
             {
                 method: "PATCH",
                 headers: {
                     "apikey": KEY,
                     "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json",
-                    "Prefer": "return=representation"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     downloads: atual + 1
@@ -152,12 +157,8 @@ async function incrementar(){
             }
         );
 
-        const txt = await upd.text();
-
-        alert("PATCH status: " + upd.status + "\n" + txt);
-
     }catch(e){
-        alert("Erro geral no contador");
+        console.log("erro contador");
     }
 }
 
@@ -169,7 +170,7 @@ async function baixar(){
         return;
     }
 
-    await incrementar(); // 🔥 AQUI
+    await incrementar();
 
     const arquivo = prog + ".py";
     const url = BASE + arquivo;
