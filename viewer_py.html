@@ -54,15 +54,41 @@ button{
 <pre id="codigo">Carregando...</pre>
 
 <script>
+
+// 🔗 BASE ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
-const params = new URLSearchParams(window.location.search);
-const prog = params.get("prog");
+// 🔑 SUA CHAVE (COLE AQUI)
+const KEY = "COLE_SUA_ANON_KEY_AQUI";
 
+// 📌 PARAMETRO
+const params = new URLSearchParams(window.location.search);
+let prog = params.get("prog");
+
+// 🔧 NORMALIZAÇÃO
+function normalizarPrograma(valor){
+
+    if(!valor) return null;
+
+    valor = valor.trim();
+    valor = valor.replace(".py", "");
+    valor = valor.replace("python_progpython_prog", "python_prog");
+
+    if(!valor.startsWith("python_prog")){
+        valor = "python_prog" + valor;
+    }
+
+    return valor;
+}
+
+prog = normalizarPrograma(prog);
+
+// 🔙 VOLTAR
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
+// 📄 CARREGAR CÓDIGO
 async function carregar(){
 
     const tela = document.getElementById("codigo");
@@ -72,12 +98,7 @@ async function carregar(){
         return;
     }
 
-    let arquivo = prog;
-
-    if(!arquivo.endsWith(".py")){
-        arquivo += ".py";
-    }
-
+    const arquivo = prog + ".py";
     const url = BASE + arquivo;
 
     try{
@@ -96,6 +117,7 @@ async function carregar(){
     }
 }
 
+// ⬇ DOWNLOAD
 function baixar(){
 
     if(!prog){
@@ -114,7 +136,31 @@ function baixar(){
     document.body.removeChild(a);
 }
 
+// 🧪 TESTE BANCO (NÃO ALTERA NADA)
+async function testeBanco(){
+
+    try{
+        const resp = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?limit=1",
+            {
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY
+                }
+            }
+        );
+
+        console.log("STATUS BANCO:", resp.status);
+
+    }catch(e){
+        console.log("Erro conexão banco");
+    }
+}
+
+// 🚀 START
 carregar();
+testeBanco();
+
 </script>
 
 </body>
