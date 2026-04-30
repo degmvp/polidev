@@ -2,13 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Polydev - Viewer Python</title>
+<title>POLYDEV | Viewer Python</title>
 
 <style>
 body{
     background-color: yellowgreen;
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    margin: 0;
+}
+
+header{
+    background-color: black;
+    color: #FFD700;
+    padding: 20px;
 }
 
 pre{
@@ -18,86 +25,91 @@ pre{
     margin: 20px;
     text-align: left;
     overflow-x: auto;
+    border-radius: 8px;
 }
 
 button{
     margin: 10px;
     padding: 10px 20px;
     cursor: pointer;
+    background: black;
+    color: #FFD700;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<h2>Visualizador de Código Python</h2>
+<header>
+    <h1>🐍 POLYDEV Python Viewer</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
 
-<button onclick="baixar()">Download</button>
-<button onclick="voltar()">Voltar</button>
+<button onclick="baixar()">⬇ Download</button>
+<button onclick="voltar()">⬅ Voltar ao Menu</button>
 
 <pre id="codigo">Carregando...</pre>
 
 <script>
-
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
 const params = new URLSearchParams(window.location.search);
 const prog = params.get("prog");
 
-// 🔙 voltar
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
-// 📄 carregar código
 async function carregar(){
 
     const tela = document.getElementById("codigo");
 
     if(!prog){
-        tela.innerText = "Programa não informado";
+        tela.innerText = "Programa não informado.";
         return;
     }
 
-    try{
-        const url = BASE + "python_prog" + prog + ".py";
+    const arquivo = "python_prog" + prog + ".py";
+    const url = BASE + arquivo;
 
+    try{
         const resp = await fetch(url);
 
         if(!resp.ok){
-            tela.innerText = "Erro ao carregar: " + resp.status;
+            tela.innerText = "Erro ao carregar arquivo: " + resp.status + "\n" + url;
             return;
         }
 
-        const txt = await resp.text();
-        tela.innerText = txt;
+        const texto = await resp.text();
+        tela.innerText = texto;
 
     }catch(e){
-        tela.innerText = "Erro de conexão";
+        tela.innerText = "Erro de conexão ao carregar:\n" + url;
     }
 }
 
-// ⬇ download simples
 function baixar(){
 
     if(!prog){
-        alert("Programa inválido");
+        alert("Programa inválido.");
         return;
     }
 
-    const url = BASE + "python_prog" + prog + ".py";
+    const arquivo = "python_prog" + prog + ".py";
+    const url = BASE + arquivo;
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "python_prog" + prog + ".py";
+    a.download = arquivo;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 }
 
-// 🚀 iniciar
 carregar();
-
 </script>
 
 </body>
