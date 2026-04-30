@@ -55,13 +55,19 @@ button{
 
 <script>
 
+// 🔗 BASE ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
+
+// 🔑 SUA CHAVE (COLE AQUI)
 const KEY = "COLE_SUA_ANON_KEY_AQUI";
 
+// 📌 PARAMETRO
 const params = new URLSearchParams(window.location.search);
 let prog = params.get("prog");
 
+// 🔧 NORMALIZAÇÃO
 function normalizarPrograma(valor){
+
     if(!valor) return null;
 
     valor = valor.trim();
@@ -77,10 +83,12 @@ function normalizarPrograma(valor){
 
 prog = normalizarPrograma(prog);
 
+// 🔙 VOLTAR
 function voltar(){
     window.location.href = "/polidev/menu.html";
 }
 
+// 📄 CARREGAR CÓDIGO
 async function carregar(){
 
     const tela = document.getElementById("codigo");
@@ -109,67 +117,13 @@ async function carregar(){
     }
 }
 
-// 🔥 CONTADOR
-async function incrementar(){
-
-    try{
-
-        const programa = prog;
-
-        const resp = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
-            {
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY
-                }
-            }
-        );
-
-        const data = await resp.json();
-
-        alert("SELECT status: " + resp.status + "\nPrograma: " + programa + "\nRegistros: " + data.length);
-
-        if(!data.length){
-            return;
-        }
-
-        const atual = data[0].downloads || 0;
-
-        const upd = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
-            {
-                method: "PATCH",
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json",
-                    "Prefer": "return=representation"
-                },
-                body: JSON.stringify({
-                    downloads: atual + 1
-                })
-            }
-        );
-
-        const txt = await upd.text();
-
-        alert("PATCH status: " + upd.status + "\n" + txt);
-
-    }catch(e){
-        alert("Erro geral no contador");
-    }
-}
-
-// ⬇ DOWNLOAD + CONTADOR
-async function baixar(){
+// ⬇ DOWNLOAD
+function baixar(){
 
     if(!prog){
         alert("Programa inválido.");
         return;
     }
-
-    await incrementar(); // 🔥 AQUI
 
     const arquivo = prog + ".py";
     const url = BASE + arquivo;
@@ -182,8 +136,30 @@ async function baixar(){
     document.body.removeChild(a);
 }
 
+// 🧪 TESTE BANCO (NÃO ALTERA NADA)
+async function testeBanco(){
+
+    try{
+        const resp = await fetch(
+            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?limit=1",
+            {
+                headers: {
+                    "apikey": KEY,
+                    "Authorization": "Bearer " + KEY
+                }
+            }
+        );
+
+        console.log("STATUS BANCO:", resp.status);
+
+    }catch(e){
+        console.log("Erro conexão banco");
+    }
+}
+
 // 🚀 START
 carregar();
+testeBanco();
 
 </script>
 
