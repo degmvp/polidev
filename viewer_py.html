@@ -87,10 +87,9 @@ async function incrementar(){
 
     try{
 
-        // 🔹 monta o valor EXATO do banco
         const programa = "python_prog" + prog;
 
-        await fetch(
+        const resp = await fetch(
             "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/rpc/incrementar_download",
             {
                 method: "POST",
@@ -105,8 +104,12 @@ async function incrementar(){
             }
         );
 
+        const txt = await resp.text();
+
+        alert("STATUS: " + resp.status + "\n" + txt);
+
     }catch(e){
-        console.log("Erro contador:", e);
+        alert("Erro total");
     }
 }
 
