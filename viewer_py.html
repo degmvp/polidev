@@ -72,14 +72,19 @@ async function carregar(){
         return;
     }
 
-    const arquivo = prog + ".py";
+    let arquivo = prog;
+
+    if(!arquivo.endsWith(".py")){
+        arquivo += ".py";
+    }
+
     const url = BASE + arquivo;
 
     try{
         const resp = await fetch(url);
 
         if(!resp.ok){
-            tela.innerText = "Erro ao carregar arquivo: " + resp.status + "\n" + url;
+            tela.innerText = "Erro ao carregar: " + resp.status + "\n" + url;
             return;
         }
 
@@ -87,7 +92,7 @@ async function carregar(){
         tela.innerText = texto;
 
     }catch(e){
-        tela.innerText = "Erro de conexão ao carregar:\n" + url;
+        tela.innerText = "Erro de conexão";
     }
 }
 
