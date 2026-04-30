@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - Conteúdos</title>
+<title>POLYDEV Conteúdos</title>
 
 <style>
 body{
@@ -23,17 +23,8 @@ h2{
     padding-bottom:8px;
 }
 
-.container{
-    background:#001f3f;
-    border:1px solid yellowgreen;
-    border-radius:10px;
-    padding:15px;
-    margin-bottom:25px;
-}
-
 .card{
     background:black;
-    color:white;
     border:1px solid yellowgreen;
     border-radius:8px;
     padding:12px;
@@ -42,7 +33,7 @@ h2{
 
 .card a{
     display:inline-block;
-    margin-top:10px;
+    margin-top:8px;
     background:yellowgreen;
     color:black;
     padding:8px 12px;
@@ -55,65 +46,55 @@ h2{
     background:lightgreen;
 }
 
-.status{
-    text-align:center;
-    color:yellowgreen;
-    font-weight:bold;
+small{
+    color:#cccccc;
 }
 </style>
 </head>
 
 <body>
 
-<h1>📚 POLYDEV - GUIAS DISPONÍVEIS</h1>
+<h1>📚 Conteúdos POLYDEV</h1>
 
-<div id="status" class="status">Carregando conteúdos...</div>
+<h2>🗄️ Bancos de Dados</h2>
+<div id="bancos"></div>
 
-<div class="container">
-    <h2>🗄️ Guias de Bancos de Dados</h2>
-    <div id="bancos"></div>
-</div>
-
-<div class="container">
-    <h2>💻 Guias de Linguagens</h2>
-    <div id="linguagens"></div>
-</div>
+<h2>💻 Linguagens</h2>
+<div id="linguagens"></div>
 
 <script>
 
-/*
-    ATENÇÃO:
-    Este código usa o caminho atual encontrado no GitHub:
-
-    downloads/test_supa.html/bancos/
-    downloads/test_supa.html/linguagens/
-
-    Depois, quando reorganizar o Git, basta trocar BASE.
-*/
-
 const BASE = "downloads/test_supa.html";
 
-const guiasBancos = [
-    { titulo: "Guia SQL Server", arquivo: "guia_sqlserver.html" },
-    { titulo: "Guia MySQL", arquivo: "guia_mysql.html" },
-    { titulo: "Guia PostgreSQL", arquivo: "guia_postgresql.html" },
-    { titulo: "Guia Oracle", arquivo: "guia_oracle.html" }
+const bancos = [
+    { titulo: "Guia MySQL", arquivo: "html_mysql_guia.html" },
+    { titulo: "Backup Oracle 23", arquivo: "html_ora23_backup.html" },
+    { titulo: "Comandos Oracle 23", arquivo: "html_ora23_cmd.html" },
+    { titulo: "Guia Oracle 23", arquivo: "html_ora23_guia.html" },
+    { titulo: "PL/SQL Oracle 23", arquivo: "html_ora23_pl.html" },
+    { titulo: "Guia PostgreSQL", arquivo: "html_postgres_guia.html" },
+    { titulo: "Guia SQL Server", arquivo: "html_sqlserver_guia.html" }
 ];
 
-const guiasLinguagens = [
-    { titulo: "Guia Python", arquivo: "guia_python.html" },
-    { titulo: "Guia Java", arquivo: "guia_java.html" },
-    { titulo: "Guia C", arquivo: "guia_c.html" },
-    { titulo: "Guia C++", arquivo: "guia_cpp.html" },
-    { titulo: "Guia JavaScript", arquivo: "guia_javascript.html" },
-    { titulo: "Guia Rust", arquivo: "guia_rust.html" },
-    { titulo: "Guia Go", arquivo: "guia_go.html" },
-    { titulo: "Guia Node.js", arquivo: "guia_nodejs.html" }
+const linguagens = [
+    { titulo: "C++", arquivo: "html_cpp_prog1.html" },
+    { titulo: "Go", arquivo: "html_go_prog1.html" },
+    { titulo: "JavaScript", arquivo: "html_js_prog1.html" },
+    { titulo: "Knex", arquivo: "html_knex_prog1.html" },
+    { titulo: "Node.js", arquivo: "html_nodejs_prog1.html" },
+    { titulo: "OOP C++", arquivo: "html_oopcpp_prog1.html" },
+    { titulo: "OOP Go", arquivo: "html_oopgo_prog1.html" },
+    { titulo: "OOP Python", arquivo: "html_ooppy_prog1.html" },
+    { titulo: "OOP Rust", arquivo: "html_ooprust_prog1.html" },
+    { titulo: "Pandas", arquivo: "html_pandas_prog1.html" },
+    { titulo: "Python", arquivo: "html_python_prog1.html" },
+    { titulo: "Ruby", arquivo: "html_ruby_prog1.html" },
+    { titulo: "Rust", arquivo: "html_rust_rog1.html" }
 ];
 
-function montarLista(id, pasta, lista){
+function montar(lista, pasta, destino){
 
-    const area = document.getElementById(id);
+    const area = document.getElementById(destino);
     area.innerHTML = "";
 
     lista.forEach(item => {
@@ -124,10 +105,8 @@ function montarLista(id, pasta, lista){
         card.className = "card";
 
         card.innerHTML = `
-            <strong>${item.titulo}</strong>
-            <br>
-            <small>${caminho}</small>
-            <br>
+            <strong>${item.titulo}</strong><br>
+            <small>${caminho}</small><br>
             <a href="${caminho}" target="_blank">Abrir Guia</a>
         `;
 
@@ -135,15 +114,8 @@ function montarLista(id, pasta, lista){
     });
 }
 
-try{
-    montarLista("bancos", "bancos", guiasBancos);
-    montarLista("linguagens", "linguagens", guiasLinguagens);
-
-    document.getElementById("status").innerText = "Conteúdos carregados com sucesso.";
-}catch(e){
-    document.getElementById("status").innerText = "Erro ao carregar conteúdos.";
-    console.log(e);
-}
+montar(bancos, "bancos", "bancos");
+montar(linguagens, "linguagens", "linguagens");
 
 </script>
 
