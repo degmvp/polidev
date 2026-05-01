@@ -151,31 +151,24 @@ function voltar(){
     document.getElementById("frame").src = "";
     atual = null;
 }
-
 async function registrarDownload(item){
 
     try{
 
-        const { data, error } = await db
+        const { error } = await db
             .from("downloads")
             .insert([
                 { conteudo_id: item.id }
-            ])
-            .select();
+            ]);
 
         if(error){
             alert("Erro ao registrar download: " + error.message);
-            console.log("ERRO DOWNLOAD:", error);
-            return false;
+            console.log("ERRO:", error);
         }
-
-        console.log("DOWNLOAD REGISTRADO:", data);
-        return true;
 
     }catch(e){
         alert("Erro inesperado: " + e.message);
         console.log("ERRO JS:", e);
-        return false;
     }
 }
 
