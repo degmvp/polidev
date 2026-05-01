@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - CONTEÚDOS</title>
+<title>POLYDEV - GUIAS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -10,7 +10,7 @@
 body{
     background:navy;
     color:white;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
     margin:20px;
 }
 
@@ -60,7 +60,6 @@ button:hover{
 
 #areaViewer{
     display:none;
-    margin-top:20px;
 }
 
 #viewer{
@@ -97,6 +96,7 @@ button:hover{
 </div>
 
 <script>
+
 // 🔥 CONFIG SUPABASE (USE O SEU)
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
@@ -106,22 +106,21 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const BASE_URL = "https://degmvp.github.io/polidev/";
 
 function pegarArquivo(item){
-    return item.downloads || item.download || item.arquivo || item.url || "";
+    return item.downloads || item.arquivo || "";
 }
 
 function pegarNome(item){
     return item.nome || item.titulo || item.descricao || "Guia sem nome";
 }
 
-function montarCaminho(item){
+function montarUrl(item){
     let arquivo = pegarArquivo(item);
 
     if(!arquivo){
         return "";
     }
 
-    arquivo = arquivo.trim();
-    arquivo = arquivo.replace(/^\/+/, "");
+    arquivo = arquivo.trim().replace(/^\/+/, "");
 
     if(arquivo.startsWith("http")){
         return arquivo;
@@ -131,24 +130,14 @@ function montarCaminho(item){
         return BASE_URL + arquivo;
     }
 
-    if(item.categoria === "bancos" || item.categoria === "sql"){
-        return BASE_URL + "downloads/bancos/" + arquivo;
-    }
-
-    if(item.categoria === "linguagens"){
-        return BASE_URL + "downloads/linguagens/" + arquivo;
-    }
-
     return BASE_URL + "downloads/bancos/" + arquivo;
 }
 
 function exibirGuia(item){
-    const url = montarCaminho(item);
-
-    console.log("ABRINDO:", url);
+    const url = montarUrl(item);
 
     if(!url){
-        alert("Arquivo não encontrado neste registro.");
+        alert("Arquivo do guia não encontrado.");
         return;
     }
 
@@ -157,7 +146,7 @@ function exibirGuia(item){
     document.getElementById("areaViewer").style.display = "block";
 
     document.getElementById("btnDownloadAtual").onclick = function(){
-        downloadArquivo(item);
+        downloadGuia(item);
     };
 }
 
@@ -167,14 +156,12 @@ function voltar(){
     document.getElementById("areaLista").style.display = "block";
 }
 
-function downloadArquivo(item){
-    const url = montarCaminho(item);
+function downloadGuia(item){
+    const url = montarUrl(item);
     const arquivo = pegarArquivo(item).split("/").pop();
 
-    console.log("DOWNLOAD:", url);
-
     if(!url){
-        alert("Arquivo não encontrado para download.");
+        alert("Arquivo do guia não encontrado.");
         return;
     }
 
@@ -187,19 +174,18 @@ function downloadArquivo(item){
 }
 
 async function carregarGuias(){
+
     const { data, error } = await db
         .from("conteudos")
         .select("*")
+        .eq("categoria", "sql")
         .order("id", { ascending:true });
 
     if(error){
-        console.error("ERRO SUPABASE:", error);
+        console.error(error);
         document.querySelector("#areaLista h2").innerText = "Erro ao carregar guias";
         return;
     }
-
-    console.log("COLUNAS DO BANCO:", data && data.length ? Object.keys(data[0]) : []);
-    console.log("REGISTROS:", data);
 
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
@@ -209,13 +195,8 @@ async function carregarGuias(){
         return;
     }
 
-    let totalExibidos = 0;
-
     data.forEach(item => {
         const arquivo = pegarArquivo(item);
-
-        console.log("ITEM:", item);
-        console.log("ARQUIVO DETECTADO:", arquivo);
 
         if(!arquivo){
             return;
@@ -224,36 +205,26 @@ async function carregarGuias(){
         const card = document.createElement("div");
         card.className = "card";
 
-        const titulo = document.createElement("h3");
-        titulo.innerText = pegarNome(item);
+        card.innerHTML = `
+            <h3>${pegarNome(item)}</h3>
+            <button>📖 Exibir</button>
+            <button>⬇ Download</button>
+        `;
 
-        const btnExibir = document.createElement("button");
-        btnExibir.innerText = "📖 Exibir";
-        btnExibir.onclick = function(){
+        const botoes = card.querySelectorAll("button");
+
+        botoes[0].onclick = function(){
             exibirGuia(item);
         };
 
-        const btnDownload = document.createElement("button");
-        btnDownload.innerText = "⬇ Download";
-        btnDownload.onclick = function(){
-            downloadArquivo(item);
+        botoes[1].onclick = function(){
+            downloadGuia(item);
         };
 
-        card.appendChild(titulo);
-        card.appendChild(btnExibir);
-        card.appendChild(btnDownload);
-
         lista.appendChild(card);
-        totalExibidos++;
     });
 
-    if(totalExibidos === 0){
-        document.querySelector("#areaLista h2").innerText =
-            "Registros encontrados, mas nenhum campo downloads/arquivo foi localizado";
-    }else{
-        document.querySelector("#areaLista h2").innerText =
-            "Selecione um guia";
-    }
+    document.querySelector("#areaLista h2").innerText = "Selecione um guia";
 }
 
 carregarGuias();
