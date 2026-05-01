@@ -19,28 +19,32 @@ h1{
 
 h2{
     color:yellowgreen;
-    margin-top:20px;
+    text-align:center;
 }
 
-.container{
-    display:flex;
-    gap:20px;
+#status{
+    margin:15px 0;
+    color:lightgreen;
+    font-weight:bold;
+    text-align:center;
 }
 
-.menu{
-    width:30%;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:15px;
+}
+
+.card{
     background:black;
     border:1px solid yellowgreen;
-    padding:15px;
     border-radius:10px;
+    padding:15px;
+    text-align:center;
 }
 
-.viewer{
-    width:70%;
-    background:white;
-    border:3px solid yellowgreen;
-    border-radius:10px;
-    padding:10px;
+.card h3{
+    color:lightgreen;
 }
 
 button{
@@ -58,17 +62,8 @@ button:hover{
     background:lightgreen;
 }
 
-iframe{
-    width:100%;
-    height:650px;
-    border:0;
-    border-radius:10px;
-}
-
-#status{
-    margin-bottom:10px;
-    color:lightgreen;
-    font-weight:bold;
+#areaViewer{
+    display:none;
 }
 
 .acoes{
@@ -79,29 +74,34 @@ iframe{
 
 .acoes button{
     width:auto;
-    min-width:140px;
+    min-width:160px;
+}
+
+.viewer{
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+    padding:10px;
+}
+
+iframe{
+    width:100%;
+    height:700px;
+    border:0;
+    border-radius:10px;
 }
 
 @media(max-width:800px){
-    .container{
-        flex-direction:column;
-    }
-
-    .menu,
-    .viewer{
-        width:100%;
-    }
-
-    iframe{
-        height:600px;
-    }
-
     .acoes{
         flex-direction:column;
     }
 
     .acoes button{
         width:100%;
+    }
+
+    iframe{
+        height:620px;
     }
 }
 </style>
@@ -111,27 +111,28 @@ iframe{
 
 <h1>📚 POLYDEV - GUIAS</h1>
 
-<div id="status">Escolha um guia no menu.</div>
+<div id="status">Escolha um guia.</div>
 
-<div class="container">
+<div id="areaMenu">
 
-<div class="menu">
-    <h2>🗄️ Bancos</h2>
-    <div id="bancos"></div>
+    <h2>🗄️ Bancos de Dados</h2>
+    <div id="bancos" class="grid"></div>
 
     <h2>💻 Linguagens</h2>
-    <div id="linguagens"></div>
+    <div id="linguagens" class="grid"></div>
+
 </div>
 
-<div class="viewer">
+<div id="areaViewer">
 
     <div class="acoes">
         <button onclick="voltar()">⬅ Voltar</button>
-        <button onclick="baixarGuia()">📥 Download Guia</button>
+        <button onclick="baixarGuiaAtual()">📥 Download Guia</button>
     </div>
 
-    <iframe id="viewer"></iframe>
-</div>
+    <div class="viewer">
+        <iframe id="viewer"></iframe>
+    </div>
 
 </div>
 
@@ -141,54 +142,54 @@ const BASE = "downloads";
 
 let guiaAtual = null;
 
-// 🔹 BANCOS
-// IMPORTANTE: ajuste os IDs conforme a tabela conteudos
+// IDs devem bater com a tabela conteudos
 const bancos = [
-{ id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
-{ id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
-{ id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
-{ id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
-{ id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
-{ id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
-{ id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
+    { id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
+    { id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
+    { id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
+    { id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
+    { id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
+    { id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
+    { id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
 ];
 
-// 🔹 LINGUAGENS
-// Aqui continua exibindo guia individual. ZIP é outro fluxo.
 const linguagens = [
-{ id:8, nome:"Python", arq:"html_python_prog1.html" },
-{ id:9, nome:"C++", arq:"html_cpp_prog1.html" },
-{ id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
-{ id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
-{ id:12, nome:"Go", arq:"html_go_prog1.html" },
-{ id:13, nome:"Rust", arq:"html_rust_prog1.html" },
-{ id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
-{ id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
+    { id:8, nome:"Python", arq:"html_python_prog1.html" },
+    { id:9, nome:"C++", arq:"html_cpp_prog1.html" },
+    { id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
+    { id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
+    { id:12, nome:"Go", arq:"html_go_prog1.html" },
+    { id:13, nome:"Rust", arq:"html_rust_prog1.html" },
+    { id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
+    { id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
 ];
 
-// 🔥 ABRIR GUIA SEM INCREMENTAR
-function abrir(pasta, item){
-    const caminho = `${BASE}/${pasta}/${item.arq}`;
+function obterSupabase(){
+    if(window.supabaseClient && typeof window.supabaseClient.rpc === "function"){
+        return window.supabaseClient;
+    }
 
-    guiaAtual = {
-        id: item.id,
-        nome: item.nome,
-        caminho: caminho
-    };
+    if(window.db && typeof window.db.rpc === "function"){
+        return window.db;
+    }
 
-    document.getElementById("viewer").src = caminho;
-    document.getElementById("status").innerText = "Exibindo: " + item.nome;
+    if(window.supabase && typeof window.supabase.rpc === "function"){
+        return window.supabase;
+    }
+
+    console.error("Cliente Supabase não encontrado.");
+    alert("Supabase não encontrado no programa.");
+    return null;
 }
 
-// 🔥 INCREMENTAR DOWNLOAD
 async function incrementarDownload(id){
+    const db = obterSupabase();
 
-    if(typeof supabase === "undefined"){
-        alert("Supabase não encontrado no programa.");
+    if(!db){
         return false;
     }
 
-    const { error } = await supabase.rpc("incrementar_download", {
+    const { error } = await db.rpc("incrementar_download", {
         p_id: id
     });
 
@@ -201,9 +202,30 @@ async function incrementarDownload(id){
     return true;
 }
 
-// 🔥 DOWNLOAD DO GUIA ATUAL
-async function baixarGuia(){
+function abrirGuia(pasta, item){
+    const caminho = `${BASE}/${pasta}/${item.arq}`;
 
+    guiaAtual = {
+        id: item.id,
+        nome: item.nome,
+        caminho: caminho
+    };
+
+    document.getElementById("areaMenu").style.display = "none";
+    document.getElementById("areaViewer").style.display = "block";
+    document.getElementById("viewer").src = caminho;
+    document.getElementById("status").innerText = "Exibindo: " + item.nome;
+}
+
+function voltar(){
+    document.getElementById("viewer").src = "";
+    document.getElementById("areaViewer").style.display = "none";
+    document.getElementById("areaMenu").style.display = "block";
+    document.getElementById("status").innerText = "Escolha um guia.";
+    guiaAtual = null;
+}
+
+async function baixarGuiaAtual(){
     if(!guiaAtual){
         alert("Escolha um guia primeiro.");
         return;
@@ -211,7 +233,9 @@ async function baixarGuia(){
 
     const ok = await incrementarDownload(guiaAtual.id);
 
-    if(!ok) return;
+    if(!ok){
+        return;
+    }
 
     const link = document.createElement("a");
     link.href = guiaAtual.caminho;
@@ -225,34 +249,42 @@ async function baixarGuia(){
         "Download registrado: " + guiaAtual.nome;
 }
 
-// 🔙 VOLTAR
-function voltar(){
-    document.getElementById("viewer").src = "";
-    document.getElementById("status").innerText = "Escolha um guia no menu.";
-    guiaAtual = null;
-}
-
-// 🔧 MONTAR MENU
-function montar(lista, pasta, destino){
-
+function montarMenu(lista, pasta, destino){
     const area = document.getElementById(destino);
+    area.innerHTML = "";
 
     lista.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-        const btn = document.createElement("button");
-        btn.innerText = item.nome;
+        card.innerHTML = `
+            <h3>${item.nome}</h3>
+            <button onclick='abrirGuia("${pasta}", ${JSON.stringify(item)})'>
+                📖 Ler Guia
+            </button>
+            <button onclick='downloadDireto("${pasta}", ${JSON.stringify(item)})'>
+                📥 Download Guia
+            </button>
+        `;
 
-        btn.onclick = function(){
-            abrir(pasta, item);
-        };
-
-        area.appendChild(btn);
+        area.appendChild(card);
     });
 }
 
-// 🚀 EXECUÇÃO
-montar(bancos, "bancos", "bancos");
-montar(linguagens, "linguagens", "linguagens");
+async function downloadDireto(pasta, item){
+    const caminho = `${BASE}/${pasta}/${item.arq}`;
+
+    guiaAtual = {
+        id: item.id,
+        nome: item.nome,
+        caminho: caminho
+    };
+
+    await baixarGuiaAtual();
+}
+
+montarMenu(bancos, "bancos", "bancos");
+montarMenu(linguagens, "linguagens", "linguagens");
 
 </script>
 
