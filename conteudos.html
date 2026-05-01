@@ -14,17 +14,14 @@ body{
     font-family:Arial;
     margin:20px;
 }
-
 h1{
     text-align:center;
     color:lightgreen;
 }
-
 #lista{
     max-width:900px;
     margin:auto;
 }
-
 .card{
     background:black;
     border:1px solid yellowgreen;
@@ -32,7 +29,6 @@ h1{
     padding:15px;
     margin:10px 0;
 }
-
 button{
     background:yellowgreen;
     border:0;
@@ -41,7 +37,6 @@ button{
     cursor:pointer;
     margin:5px;
 }
-
 #viewer{
     display:none;
     max-width:1000px;
@@ -51,6 +46,13 @@ button{
     padding:20px;
     border-radius:10px;
     border:3px solid yellowgreen;
+}
+.erro{
+    background:#300;
+    color:white;
+    padding:15px;
+    border:1px solid red;
+    border-radius:8px;
 }
 </style>
 </head>
@@ -69,44 +71,72 @@ button{
 </div>
 
 <script>
-
 const BASE = "https://degmvp.github.io/polidev/";
 
+const banco =
+    window.db ||
+    window.supabaseClient ||
+    window.client ||
+    (typeof db !== "undefined" ? db : null);
+
+function erroTela(msg){
+    document.getElementById("lista").innerHTML =
+        `<div class="erro">${msg}</div>`;
+}
+
 function montarCaminho(arquivo){
-    if(!arquivo) return null;
-    arquivo = arquivo.trim().replace(/^\/+/, "");
+    arquivo = String(arquivo || "").trim();
+
+    if(!arquivo){
+        return "";
+    }
+
+    if(arquivo.startsWith("http")){
+        return arquivo;
+    }
+
+    arquivo = arquivo.replace(/^\/+/, "");
+
     return BASE + arquivo;
 }
 
 async function carregar(){
 
     const lista = document.getElementById("lista");
-    lista.innerHTML = "Carregando...";
+
+    if(!banco){
+        erroTela(`
+            ERRO: cliente Supabase não encontrado.<br><br>
+            O arquivo <b>config.js</b> foi carregado, mas não criou uma variável global chamada
+            <b>db</b>, <b>supabaseClient</b> ou <b>client</b>.
+        `);
+        return;
+    }
+
+    lista.innerHTML = "Carregando conteúdos do banco...";
 
     try{
-
-        const { data, error } = await db
+        const { data, error } = await banco
             .from("conteudos")
             .select("*")
-            .order("id");
+            .order("id", { ascending:true });
 
         if(error){
-            throw error;
-        }
-
-        if(!data || data.length === 0){
-            lista.innerHTML = "Sem dados";
+            console.error(error);
+            erroTela("Erro ao consultar a tabela conteudos. Veja o console.");
             return;
         }
 
-        console.log("DADOS:", data);
+        if(!data || data.length === 0){
+            lista.innerHTML = "Nenhum conteúdo encontrado.";
+            return;
+        }
 
         lista.innerHTML = "";
 
         data.forEach(item => {
 
             if(!item.arquivo){
-                console.log("IGNORADO (sem arquivo):", item);
                 return;
             }
 
@@ -115,9 +145,9 @@ async function carregar(){
 
             div.innerHTML = `
                 <h2>${item.titulo || item.nome || item.arquivo}</h2>
-                <p>${item.arquivo}</p>
-                <p>Downloads: ${item.downloads || 0}</p>
-                <button>Exibir</button>
+                <p><b>Arquivo:</b> ${item.arquivo}</p>
+                <p><b>Downloads:</b> ${item.downloads || 0}</p>
+                <button>Exibir guia</button>
             `;
 
             div.querySelector("button").onclick = () => abrir(item);
@@ -125,31 +155,26 @@ async function carregar(){
             lista.appendChild(div);
         });
 
+        if(lista.innerHTML.trim() === ""){
+            lista.innerHTML = "Nenhum guia com campo arquivo foi encontrado.";
+        }
+
     }catch(e){
-        console.error("ERRO GERAL:", e);
-        lista.innerHTML = "<p style='color:red'>Erro ao carregar (ver console)</p>";
+        console.error(e);
+        erroTela("Erro geral ao carregar conteúdos. Veja o console.");
     }
 }
 
 async function abrir(item){
 
-    const viewer = document.getElementById("viewer");
-    const lista = document.getElementById("lista");
-
-    lista.style.display = "none";
-    viewer.style.display = "block";
+    document.getElementById("lista").style.display = "none";
+    document.getElementById("viewer").style.display = "block";
 
     const caminho = montarCaminho(item.arquivo);
 
-    console.log("ABRINDO:", caminho);
-
-    if(!caminho){
-        document.getElementById("conteudo").innerHTML = "Arquivo inválido";
-        return;
-    }
+    document.getElementById("conteudo").innerHTML = "Carregando guia...";
 
     try{
-
         const r = await fetch(caminho);
 
         if(!r.ok){
@@ -160,9 +185,9 @@ async function abrir(item){
         document.getElementById("conteudo").innerHTML = html;
 
     }catch(e){
-        console.error("ERRO FETCH:", e);
+        console.error(e);
         document.getElementById("conteudo").innerHTML =
-            "<p style='color:red'>Erro ao abrir:<br>" + caminho + "</p>";
+            `<p style="color:red">Erro ao abrir:<br>${caminho}</p>`;
     }
 
     document.getElementById("btnDownload").onclick = () => baixar(item);
@@ -171,6 +196,7 @@ async function abrir(item){
 function voltar(){
     document.getElementById("viewer").style.display = "none";
     document.getElementById("lista").style.display = "block";
+    document.getElementById("conteudo").innerHTML = "";
 }
 
 async function baixar(item){
@@ -180,32 +206,33 @@ async function baixar(item){
     const a = document.createElement("a");
     a.href = caminho;
     a.download = item.arquivo.split("/").pop();
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
 
     try{
+        const atual = item.downloads || 0;
+        const novo = atual + 1;
 
-        const { data } = await db
-            .from("conteudos")
-            .select("downloads")
-            .eq("id", item.id)
-            .single();
-
-        const novo = (data.downloads || 0) + 1;
-
-        await db
+        const { error } = await banco
             .from("conteudos")
             .update({ downloads: novo })
             .eq("id", item.id);
 
-        console.log("OK download:", novo);
+        if(error){
+            console.error(error);
+            return;
+        }
+
+        item.downloads = novo;
 
     }catch(e){
-        console.error("ERRO UPDATE:", e);
+        console.error(e);
     }
 }
 
 carregar();
-
 </script>
+
 </body>
 </html>
