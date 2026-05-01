@@ -92,7 +92,6 @@ const dados = [
     { id:5, titulo:"Oracle Backup", pasta:"bancos", arquivo:"html_ora23_backup.html" },
     { id:6, titulo:"Oracle Comandos", pasta:"bancos", arquivo:"html_ora23_cmd.html" },
     { id:7, titulo:"Oracle PL/SQL", pasta:"bancos", arquivo:"html_ora23_pl.html" },
-
     { id:8, titulo:"Python", pasta:"linguagens", arquivo:"html_python_prog1.html" },
     { id:9, titulo:"C++", pasta:"linguagens", arquivo:"html_cpp_prog1.html" },
     { id:10, titulo:"JavaScript", pasta:"linguagens", arquivo:"html_js_prog1.html" },
@@ -156,11 +155,27 @@ function voltar(){
 async function registrarDownload(item){
 
     try{
-        await db
+
+        const { data, error } = await db
             .from("downloads")
-            .insert([{ conteudo_id:item.id }]);
+            .insert([
+                { conteudo_id: item.id }
+            ])
+            .select();
+
+        if(error){
+            alert("Erro ao registrar download: " + error.message);
+            console.log("ERRO DOWNLOAD:", error);
+            return false;
+        }
+
+        console.log("DOWNLOAD REGISTRADO:", data);
+        return true;
+
     }catch(e){
-        console.log("Erro ao registrar download:", e);
+        alert("Erro inesperado: " + e.message);
+        console.log("ERRO JS:", e);
+        return false;
     }
 }
 
@@ -180,7 +195,11 @@ async function baixarArquivo(item){
 
     const caminho = `${BASE}/${item.pasta}/${item.arquivo}`;
 
-    await registrarDownload(item);
+const ok = await registrarDownload(item);
+
+if(!ok){
+    console.log("Download não registrado no banco.");
+}
 
     const resposta = await fetch(caminho);
     const blob = await resposta.blob();
