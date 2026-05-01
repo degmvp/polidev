@@ -195,6 +195,7 @@ async function carregarGuias(){
     }
 
     console.log("REGISTROS:", data);
+    console.log("REGISTRO COMPLETO:", item);
 
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
@@ -215,6 +216,7 @@ async function carregarGuias(){
 
         const titulo = document.createElement("h3");
         titulo.innerText = pegarNome(item);
+        titulo.innerText = JSON.stringify(item);
 
         const btnExibir = document.createElement("button");
         btnExibir.innerText = "📖 Exibir";
