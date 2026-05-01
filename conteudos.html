@@ -9,16 +9,63 @@ body{background:navy;color:white;font-family:Arial;margin:20px;}
 h1{color:lightgreen;text-align:center;}
 h2{color:yellowgreen;text-align:center;}
 #status{text-align:center;color:lightgreen;font-weight:bold;margin:15px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;}
-.card{background:black;border:1px solid yellowgreen;border-radius:10px;padding:15px;text-align:center;}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.card{
+    background:black;
+    border:1px solid yellowgreen;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+}
+
 .card h3{color:lightgreen;}
-button{width:100%;margin:6px 0;padding:10px;background:yellowgreen;border:0;font-weight:bold;cursor:pointer;border-radius:6px;}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:yellowgreen;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:6px;
+}
+
 button:hover{background:lightgreen;}
+
 #areaViewer{display:none;}
-.acoes{display:flex;gap:10px;margin-bottom:10px;}
-.acoes button{width:auto;min-width:160px;}
-.viewer{background:white;border:3px solid yellowgreen;border-radius:10px;padding:10px;}
-iframe{width:100%;height:700px;border:0;border-radius:10px;}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.acoes button{
+    width:auto;
+    min-width:160px;
+}
+
+.viewer{
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+    padding:10px;
+}
+
+iframe{
+    width:100%;
+    height:700px;
+    border:0;
+    border-radius:10px;
+}
 
 @media(max-width:800px){
     .acoes{flex-direction:column;}
@@ -35,14 +82,17 @@ iframe{width:100%;height:700px;border:0;border-radius:10px;}
 <div id="status">Escolha um guia.</div>
 
 <div id="areaMenu">
+
     <h2>🗄️ Bancos de Dados</h2>
     <div id="bancos" class="grid"></div>
 
     <h2>💻 Linguagens</h2>
     <div id="linguagens" class="grid"></div>
+
 </div>
 
 <div id="areaViewer">
+
     <div class="acoes">
         <button onclick="voltar()">⬅ Voltar</button>
         <button onclick="baixarGuiaAtual()">📥 Download Guia</button>
@@ -51,20 +101,16 @@ iframe{width:100%;height:700px;border:0;border-radius:10px;}
     <div class="viewer">
         <iframe id="viewer"></iframe>
     </div>
+
 </div>
 
-<!-- ORDEM CORRETA -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <script>
-const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
 const BASE = "downloads";
 let guiaAtual = null;
+let db = null;
 
 const bancos = [
     { id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
@@ -87,18 +133,54 @@ const linguagens = [
     { id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
 ];
 
-async function incrementarDownload(id){
-    const { error } = await supabase.rpc("incrementar_download", {
-        p_id: id
-    });
+function iniciarSupabase(){
+    try{
+        if(typeof SUPABASE_URL === "undefined" || typeof SUPABASE_KEY === "undefined"){
+            console.warn("config.js não carregou SUPABASE_URL ou SUPABASE_KEY.");
+            return;
+        }
 
-    if(error){
-        console.error(error);
-        alert("Erro ao registrar download.");
-        return false;
+        if(!window.supabase){
+            console.warn("Biblioteca Supabase não carregada.");
+            return;
+        }
+
+        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase inicializado.");
+    }catch(e){
+        console.error("Erro ao iniciar Supabase:", e);
     }
+}
 
-    return true;
+function montarMenu(lista, pasta, destino){
+    const area = document.getElementById(destino);
+    area.innerHTML = "";
+
+    lista.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const titulo = document.createElement("h3");
+        titulo.innerText = item.nome;
+
+        const btnLer = document.createElement("button");
+        btnLer.innerText = "📖 Ler Guia";
+        btnLer.onclick = function(){
+            abrirGuia(pasta, item);
+        };
+
+        const btnDownload = document.createElement("button");
+        btnDownload.innerText = "📥 Download Guia";
+        btnDownload.onclick = function(){
+            downloadDireto(pasta, item);
+        };
+
+        card.appendChild(titulo);
+        card.appendChild(btnLer);
+        card.appendChild(btnDownload);
+
+        area.appendChild(card);
+    });
 }
 
 function abrirGuia(pasta, item){
@@ -124,6 +206,25 @@ function voltar(){
     guiaAtual = null;
 }
 
+async function incrementarDownload(id){
+    if(!db){
+        alert("Supabase não inicializado. Verifique o arquivo config.js.");
+        return false;
+    }
+
+    const { error } = await db.rpc("incrementar_download", {
+        p_id: id
+    });
+
+    if(error){
+        console.error("Erro ao incrementar download:", error);
+        alert("Erro ao registrar download.");
+        return false;
+    }
+
+    return true;
+}
+
 async function baixarGuiaAtual(){
     if(!guiaAtual){
         alert("Escolha um guia primeiro.");
@@ -131,7 +232,10 @@ async function baixarGuiaAtual(){
     }
 
     const ok = await incrementarDownload(guiaAtual.id);
-    if(!ok) return;
+
+    if(!ok){
+        return;
+    }
 
     const link = document.createElement("a");
     link.href = guiaAtual.caminho;
@@ -157,28 +261,7 @@ async function downloadDireto(pasta, item){
     await baixarGuiaAtual();
 }
 
-function montarMenu(lista, pasta, destino){
-    const area = document.getElementById(destino);
-    area.innerHTML = "";
-
-    lista.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-            <h3>${item.nome}</h3>
-            <button onclick='abrirGuia("${pasta}", ${JSON.stringify(item)})'>
-                📖 Ler Guia
-            </button>
-            <button onclick='downloadDireto("${pasta}", ${JSON.stringify(item)})'>
-                📥 Download Guia
-            </button>
-        `;
-
-        area.appendChild(card);
-    });
-}
-
+iniciarSupabase();
 montarMenu(bancos, "bancos", "bancos");
 montarMenu(linguagens, "linguagens", "linguagens");
 </script>
