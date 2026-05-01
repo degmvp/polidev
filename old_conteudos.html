@@ -4,13 +4,11 @@
 <meta charset="UTF-8">
 <title>POLYDEV - CONTEÚDOS</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
 <style>
 body{
     background:navy;
     color:white;
-    font-family:Arial;
+    font-family:Arial, sans-serif;
     margin:20px;
 }
 
@@ -39,18 +37,29 @@ h2{
     text-align:center;
 }
 
+.card h3{
+    color:lightgreen;
+    margin-bottom:15px;
+}
+
 button{
-    padding:10px;
+    padding:10px 18px;
     margin:6px;
     background:yellowgreen;
+    color:black;
     border:0;
-    border-radius:6px;
+    border-radius:8px;
     font-weight:bold;
     cursor:pointer;
 }
 
+button:hover{
+    background:limegreen;
+}
+
 #areaViewer{
     display:none;
+    margin-top:20px;
 }
 
 #viewer{
@@ -58,6 +67,12 @@ button{
     height:650px;
     background:white;
     border:3px solid yellowgreen;
+    border-radius:10px;
+}
+
+.barra{
+    text-align:center;
+    margin-bottom:15px;
 }
 </style>
 </head>
@@ -67,97 +82,102 @@ button{
 <h1>POLYDEV - GUIAS</h1>
 
 <div id="areaLista">
-    <h2>Carregando guias...</h2>
+    <h2>Selecione um guia para leitura ou download</h2>
     <div id="listaGuias"></div>
 </div>
 
 <div id="areaViewer">
-    <div style="text-align:center;margin:10px;">
+    <div class="barra">
         <button onclick="voltar()">⬅ Voltar</button>
-        <button id="btnDownload">⬇ Download</button>
+        <button id="btnDownloadAtual">⬇ Download</button>
     </div>
 
     <iframe id="viewer"></iframe>
 </div>
 
 <script>
-
-// 🔥 CONFIG SUPABASE (USE O SEU)
-const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
-
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// 🔥 BASE GITHUB
 const BASE_URL = "https://degmvp.github.io/polidev/";
 
 let guiaAtual = null;
 
-// 🔥 CAMINHO CERTO
+const dados = [
+    {
+        id: 1,
+        nome: "Guia MySQL",
+        categoria: "bancos",
+        arquivo: "html_mysql_guia.html"
+    }
+
+    /*
+    Adicione os outros guias aqui:
+
+    {
+        id: 2,
+        nome: "Guia SQL Server",
+        categoria: "bancos",
+        arquivo: "html_sqlserver_guia.html"
+    },
+    {
+        id: 3,
+        nome: "Guia PostgreSQL",
+        categoria: "bancos",
+        arquivo: "html_postgresql_guia.html"
+    }
+    */
+];
+
 function montarCaminho(item){
+    if(!item || !item.arquivo) return "";
+
     if(item.categoria === "bancos"){
         return `downloads/bancos/${item.arquivo}`;
     }
+
     return `downloads/${item.arquivo}`;
 }
 
-// 🔥 EXIBIR
 function exibirGuia(item){
     guiaAtual = item;
 
-    const url = BASE_URL + montarCaminho(item);
+    const caminho = montarCaminho(item);
+    const url = BASE_URL + caminho;
+
+    console.log("ABRINDO:", url);
 
     document.getElementById("viewer").src = url;
     document.getElementById("areaLista").style.display = "none";
     document.getElementById("areaViewer").style.display = "block";
 
-    document.getElementById("btnDownload").onclick = () => downloadArquivo(item);
+    document.getElementById("btnDownloadAtual").onclick = function(){
+        downloadArquivo(item);
+    };
 }
 
-// 🔥 VOLTAR
 function voltar(){
+    document.getElementById("viewer").src = "";
     document.getElementById("areaViewer").style.display = "none";
     document.getElementById("areaLista").style.display = "block";
 }
 
-// 🔥 DOWNLOAD
 function downloadArquivo(item){
-    const url = BASE_URL + montarCaminho(item);
+    const caminho = montarCaminho(item);
+    const url = BASE_URL + caminho;
+
+    console.log("DOWNLOAD:", url);
 
     const a = document.createElement("a");
     a.href = url;
     a.download = item.arquivo;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
 }
 
-// 🔥 CARREGAR DO BANCO
-async function carregarGuias(){
-
-    const { data, error } = await db
-        .from("conteudos")
-        .select("*")
-        .order("id");
-
-    if(error){
-        console.error(error);
-        document.querySelector("#areaLista h2").innerText = "Erro ao carregar";
-        return;
-    }
-
-    if(!data || data.length === 0){
-        document.querySelector("#areaLista h2").innerText = "Nenhum guia encontrado";
-        return;
-    }
-
-    document.querySelector("#areaLista h2").innerText = "Selecione um guia";
-
+function carregarGuias(){
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
 
-    data.forEach(item => {
-
-        if(!item.arquivo) return; // evita erro
-
+    dados.forEach(item => {
         const card = document.createElement("div");
         card.className = "card";
 
@@ -172,7 +192,6 @@ async function carregarGuias(){
 }
 
 carregarGuias();
-
 </script>
 
 </body>
