@@ -5,24 +5,100 @@
 <title>POLYDEV - GUIAS</title>
 
 <style>
-body{background:navy;color:white;font-family:Arial;margin:20px;}
-h1{color:lightgreen;text-align:center;}
-h2{color:yellowgreen;text-align:center;}
-#status{text-align:center;color:lightgreen;font-weight:bold;margin:15px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-bottom:30px;}
-.card{background:black;border:1px solid yellowgreen;border-radius:10px;padding:15px;text-align:center;}
-.card h3{color:lightgreen;}
-button{width:100%;margin:6px 0;padding:10px;background:yellowgreen;border:0;font-weight:bold;cursor:pointer;border-radius:6px;}
-button:hover{background:lightgreen;}
-#areaViewer{display:none;}
-.acoes{display:flex;gap:10px;margin-bottom:10px;}
-.acoes button{width:auto;min-width:160px;}
-.viewer{background:white;border:3px solid yellowgreen;border-radius:10px;padding:10px;}
-iframe{width:100%;height:700px;border:0;border-radius:10px;}
+body{
+    background:navy;
+    color:white;
+    font-family:Arial;
+    margin:20px;
+}
+
+h1{
+    color:lightgreen;
+    text-align:center;
+}
+
+h2{
+    color:yellowgreen;
+    margin-top:20px;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+}
+
+.menu{
+    width:30%;
+    background:black;
+    border:1px solid yellowgreen;
+    padding:15px;
+    border-radius:10px;
+}
+
+.viewer{
+    width:70%;
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+    padding:10px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:yellowgreen;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:lightgreen;
+}
+
+iframe{
+    width:100%;
+    height:650px;
+    border:0;
+    border-radius:10px;
+}
+
+#status{
+    margin-bottom:10px;
+    color:lightgreen;
+    font-weight:bold;
+}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.acoes button{
+    width:auto;
+    min-width:150px;
+}
+
 @media(max-width:800px){
-    .acoes{flex-direction:column;}
-    .acoes button{width:100%;}
-    iframe{height:620px;}
+    .container{
+        flex-direction:column;
+    }
+
+    .menu,
+    .viewer{
+        width:100%;
+    }
+
+    .acoes{
+        flex-direction:column;
+    }
+
+    .acoes button{
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -30,131 +106,71 @@ iframe{width:100%;height:700px;border:0;border-radius:10px;}
 <body>
 
 <h1>📚 POLYDEV - GUIAS</h1>
-<div id="status">Escolha um guia.</div>
 
-<div id="areaMenu">
-    <h2>🗄️ Bancos de Dados</h2>
-    <div id="bancos" class="grid"></div>
+<div id="status">Escolha um guia no menu.</div>
+
+<div class="container">
+
+<div class="menu">
+    <h2>🗄️ Bancos</h2>
+    <div id="bancos"></div>
 
     <h2>💻 Linguagens</h2>
-    <div id="linguagens" class="grid"></div>
+    <div id="linguagens"></div>
 </div>
 
-<div id="areaViewer">
+<div class="viewer">
     <div class="acoes">
         <button onclick="voltar()">⬅ Voltar</button>
-        <button onclick="baixarGuiaAtual()">📥 Download Guia</button>
+        <button onclick="baixarGuia()">📥 Download Guia</button>
     </div>
 
-    <div class="viewer">
-        <iframe id="viewer"></iframe>
-    </div>
+    <iframe id="viewer"></iframe>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <script>
+
 const BASE = "downloads";
 let guiaAtual = null;
+
 let db = null;
 
+try {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+    console.error("Erro ao iniciar Supabase:", e);
+}
+
+// 🔹 BANCOS
 const bancos = [
-    { id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
-    { id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
-    { id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
-    { id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
-    { id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
-    { id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
-    { id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
+{ id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
+{ id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
+{ id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
+{ id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
+{ id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
+{ id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
+{ id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
 ];
 
+// 🔹 LINGUAGENS
 const linguagens = [
-    { id:8, nome:"Python", arq:"html_python_prog1.html" },
-    { id:9, nome:"C++", arq:"html_cpp_prog1.html" },
-    { id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
-    { id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
-    { id:12, nome:"Go", arq:"html_go_prog1.html" },
-    { id:13, nome:"Rust", arq:"html_rust_prog1.html" },
-    { id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
-    { id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
+{ id:8, nome:"Python", arq:"html_python_prog1.html" },
+{ id:9, nome:"C++", arq:"html_cpp_prog1.html" },
+{ id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
+{ id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
+{ id:12, nome:"Go", arq:"html_go_prog1.html" },
+{ id:13, nome:"Rust", arq:"html_rust_prog1.html" },
+{ id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
+{ id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
 ];
 
-function valorGlobal(nome){
-    try {
-        return window[nome];
-    } catch(e) {
-        return undefined;
-    }
-}
-
-function iniciarSupabase(){
-    try{
-        if(window.supabaseClient && typeof window.supabaseClient.rpc === "function"){
-            db = window.supabaseClient;
-            console.log("Supabase via window.supabaseClient");
-            return;
-        }
-
-        if(window.db && typeof window.db.rpc === "function"){
-            db = window.db;
-            console.log("Supabase via window.db");
-            return;
-        }
-
-        const url =
-            valorGlobal("SUPABASE_URL") ||
-            valorGlobal("supabaseUrl");
-
-        const key =
-            valorGlobal("SUPABASE_KEY") ||
-            valorGlobal("SUPABASE_ANON_KEY") ||
-            valorGlobal("supabaseKey") ||
-            valorGlobal("supabaseAnonKey");
-
-        if(url && key && window.supabase){
-            db = window.supabase.createClient(url, key);
-            console.log("Supabase inicializado via config.js");
-        } else {
-            console.warn("Supabase não inicializado. Verifique config.js.");
-        }
-
-    }catch(e){
-        console.error("Erro ao iniciar Supabase:", e);
-    }
-}
-
-function montarMenu(lista, pasta, destino){
-    const area = document.getElementById(destino);
-    area.innerHTML = "";
-
-    lista.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const titulo = document.createElement("h3");
-        titulo.innerText = item.nome;
-
-        const btnLer = document.createElement("button");
-        btnLer.innerText = "📖 Ler Guia";
-        btnLer.onclick = function(){
-            abrirGuia(pasta, item);
-        };
-
-        const btnDownload = document.createElement("button");
-        btnDownload.innerText = "📥 Download Guia";
-        btnDownload.onclick = function(){
-            downloadDireto(pasta, item);
-        };
-
-        card.appendChild(titulo);
-        card.appendChild(btnLer);
-        card.appendChild(btnDownload);
-        area.appendChild(card);
-    });
-}
-
-function abrirGuia(pasta, item){
+// 🔥 ABRIR GUIA
+function abrir(pasta, item){
     const caminho = `${BASE}/${pasta}/${item.arq}`;
 
     guiaAtual = {
@@ -163,23 +179,15 @@ function abrirGuia(pasta, item){
         caminho: caminho
     };
 
-    document.getElementById("areaMenu").style.display = "none";
-    document.getElementById("areaViewer").style.display = "block";
     document.getElementById("viewer").src = caminho;
     document.getElementById("status").innerText = "Exibindo: " + item.nome;
 }
 
-function voltar(){
-    document.getElementById("viewer").src = "";
-    document.getElementById("areaViewer").style.display = "none";
-    document.getElementById("areaMenu").style.display = "block";
-    document.getElementById("status").innerText = "Escolha um guia.";
-    guiaAtual = null;
-}
-
+// 🔥 INCREMENTAR DOWNLOAD
 async function incrementarDownload(id){
+
     if(!db){
-        alert("Supabase não inicializado. O menu funciona, mas o download não consegue registrar.");
+        alert("Supabase não inicializado. Verifique config.js.");
         return false;
     }
 
@@ -188,7 +196,7 @@ async function incrementarDownload(id){
     });
 
     if(error){
-        console.error("Erro ao incrementar download:", error);
+        console.error("Erro ao registrar download:", error);
         alert("Erro ao registrar download.");
         return false;
     }
@@ -196,13 +204,16 @@ async function incrementarDownload(id){
     return true;
 }
 
-async function baixarGuiaAtual(){
+// 📥 DOWNLOAD GUIA
+async function baixarGuia(){
+
     if(!guiaAtual){
         alert("Escolha um guia primeiro.");
         return;
     }
 
     const ok = await incrementarDownload(guiaAtual.id);
+
     if(!ok) return;
 
     const link = document.createElement("a");
@@ -217,19 +228,35 @@ async function baixarGuiaAtual(){
         "Download registrado: " + guiaAtual.nome;
 }
 
-async function downloadDireto(pasta, item){
-    guiaAtual = {
-        id: item.id,
-        nome: item.nome,
-        caminho: `${BASE}/${pasta}/${item.arq}`
-    };
-
-    await baixarGuiaAtual();
+// 🔙 VOLTAR
+function voltar(){
+    document.getElementById("viewer").src = "";
+    document.getElementById("status").innerText = "Escolha um guia no menu.";
+    guiaAtual = null;
 }
 
-montarMenu(bancos, "bancos", "bancos");
-montarMenu(linguagens, "linguagens", "linguagens");
-iniciarSupabase();
+// 🔧 MONTAR MENU
+function montar(lista, pasta, destino){
+
+    const area = document.getElementById(destino);
+
+    lista.forEach(item => {
+
+        const btn = document.createElement("button");
+        btn.innerText = item.nome;
+
+        btn.onclick = function(){
+            abrir(pasta, item);
+        };
+
+        area.appendChild(btn);
+    });
+}
+
+// 🚀 EXECUÇÃO
+montar(bancos, "bancos", "bancos");
+montar(linguagens, "linguagens", "linguagens");
+
 </script>
 
 </body>
