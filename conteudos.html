@@ -2,9 +2,13 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - GUIAS</title>
+<title>POLYDEV - CONTEÚDOS</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 
 <style>
+
 body{
     background:navy;
     color:white;
@@ -17,35 +21,24 @@ h1{
     text-align:center;
 }
 
-h2{
-    color:yellowgreen;
-    margin-top:20px;
-}
-
-.container{
-    display:flex;
-    gap:20px;
-}
-
-.menu{
-    width:30%;
+#lista, #viewer{
     background:black;
     border:1px solid yellowgreen;
-    padding:15px;
     border-radius:10px;
+    padding:15px;
 }
 
-.viewer{
-    width:70%;
-    background:white;
-    border:3px solid yellowgreen;
-    border-radius:10px;
+.card{
+    background:#001f3f;
+    border:1px solid yellowgreen;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
 }
 
 button{
-    width:100%;
-    margin:6px 0;
-    padding:10px;
+    margin:5px;
+    padding:8px 12px;
     background:yellowgreen;
     border:0;
     font-weight:bold;
@@ -59,97 +52,120 @@ button:hover{
 
 iframe{
     width:100%;
-    height:700px;
+    height:650px;
     border:0;
-    border-radius:10px;
+    background:white;
 }
 
-#status{
+.topbar{
     margin-bottom:10px;
-    color:lightgreen;
-    font-weight:bold;
 }
+
+@media (max-width: 768px){
+    iframe{
+        height:400px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>📚 POLYDEV - GUIAS</h1>
+<h1>📚 POLYDEV - CONTEÚDOS</h1>
 
-<div id="status">Escolha um guia no menu.</div>
+<div id="lista"></div>
 
-<div class="container">
-
-<div class="menu">
-    <h2>🗄️ Bancos</h2>
-    <div id="bancos"></div>
-
-    <h2>💻 Linguagens</h2>
-    <div id="linguagens"></div>
-</div>
-
-<div class="viewer">
-    <iframe id="viewer"></iframe>
-</div>
-
+<div id="viewer" style="display:none;">
+    <div class="topbar">
+        <button onclick="voltar()">⬅ Voltar</button>
+        <button onclick="downloadAtual()">⬇ Download</button>
+    </div>
+    <iframe id="frame"></iframe>
 </div>
 
 <script>
 
+// BASE CORRETA
 const BASE = "downloads";
 
-// 🔹 BANCOS
-const bancos = [
-{ nome:"MySQL", arq:"html_mysql_guia.html" },
-{ nome:"SQL Server", arq:"html_sqlserver_guia.html" },
-{ nome:"PostgreSQL", arq:"html_postgres_guia.html" },
-{ nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
-{ nome:"Oracle Backup", arq:"html_ora23_backup.html" },
-{ nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
-{ nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
+// DADOS (ligado ao banco depois se quiser)
+const dados = [
+    { id:1, titulo:"MySQL", pasta:"bancos", arquivo:"html_mysql_guia.html" },
+    { id:2, titulo:"SQL Server", pasta:"bancos", arquivo:"html_sqlserver_guia.html" },
+    { id:3, titulo:"PostgreSQL", pasta:"bancos", arquivo:"html_postgres_guia.html" },
+    { id:4, titulo:"Python", pasta:"linguagens", arquivo:"html_python_prog1.html" },
+    { id:5, titulo:"C++", pasta:"linguagens", arquivo:"html_cpp_prog1.html" },
+    { id:6, titulo:"JavaScript", pasta:"linguagens", arquivo:"html_js_prog1.html" }
 ];
 
-// 🔹 LINGUAGENS
-const linguagens = [
-{ nome:"Python", arq:"html_python_prog1.html" },
-{ nome:"C++", arq:"html_cpp_prog1.html" },
-{ nome:"JavaScript", arq:"html_js_prog1.html" },
-{ nome:"Node.js", arq:"html_nodejs_prog1.html" },
-{ nome:"Go", arq:"html_go_prog1.html" },
-{ nome:"Rust", arq:"html_rust_prog1.html" },
-{ nome:"Ruby", arq:"html_ruby_prog1.html" },
-{ nome:"Pandas", arq:"html_pandas_prog1.html" }
-];
+let atual = null;
 
-// 🔥 ABRIR GUIA
-function abrir(pasta, arquivo, nome){
-    const caminho = `${BASE}/${pasta}/${arquivo}`;
+// 🔹 MONTAR LISTA
+function montar(){
 
-    document.getElementById("viewer").src = caminho;
-    document.getElementById("status").innerText = "Exibindo: " + nome;
-}
+    const area = document.getElementById("lista");
+    area.innerHTML = "";
 
-// 🔧 MONTAR MENU
-function montar(lista, pasta, destino){
+    dados.forEach(item => {
 
-    const area = document.getElementById(destino);
+        const card = document.createElement("div");
+        card.className = "card";
 
-    lista.forEach(item => {
+        card.innerHTML = `
+            <strong>${item.titulo}</strong><br>
+            <button onclick="abrir(${item.id})">Abrir</button>
+        `;
 
-        const btn = document.createElement("button");
-        btn.innerText = item.nome;
-
-        btn.onclick = function(){
-            abrir(pasta, item.arq, item.nome);
-        };
-
-        area.appendChild(btn);
+        area.appendChild(card);
     });
 }
 
-// 🚀 EXECUÇÃO
-montar(bancos, "bancos", "bancos");
-montar(linguagens, "linguagens", "linguagens");
+// 🔹 ABRIR GUIA
+function abrir(id){
+
+    const item = dados.find(x => x.id === id);
+    atual = item;
+
+    const caminho = `${BASE}/${item.pasta}/${item.arquivo}`;
+
+    document.getElementById("frame").src = caminho;
+
+    document.getElementById("lista").style.display = "none";
+    document.getElementById("viewer").style.display = "block";
+}
+
+// 🔹 VOLTAR
+function voltar(){
+    document.getElementById("viewer").style.display = "none";
+    document.getElementById("lista").style.display = "block";
+}
+
+// 🔹 DOWNLOAD + INCREMENTO
+async function downloadAtual(){
+
+    if (!atual) return;
+
+    const caminho = `${BASE}/${atual.pasta}/${atual.arquivo}`;
+
+    // 🔥 abrir download
+    window.open(caminho, "_blank");
+
+    try{
+
+        // 🔥 incrementa no banco
+        await db
+            .from("conteudos")
+            .update({ downloads: db.raw("downloads + 1") })
+            .eq("id", atual.id);
+
+    }catch(e){
+        console.log("Erro ao incrementar:", e);
+    }
+}
+
+// INIT
+montar();
 
 </script>
 
