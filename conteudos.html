@@ -5,12 +5,13 @@
 <title>POLYDEV - Conteúdos</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 
 <style>
 body{
     background:navy;
     color:white;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
     margin:20px;
 }
 
@@ -21,7 +22,7 @@ h1{
 
 #lista{
     max-width:900px;
-    margin:20px auto;
+    margin:auto;
 }
 
 .card{
@@ -29,39 +30,27 @@ h1{
     border:1px solid yellowgreen;
     border-radius:10px;
     padding:15px;
-    margin-bottom:12px;
+    margin:10px 0;
 }
 
-.card button,
-#viewer button{
+button{
     background:yellowgreen;
-    color:black;
     border:0;
-    padding:10px 14px;
-    border-radius:6px;
+    padding:10px;
     font-weight:bold;
     cursor:pointer;
     margin:5px;
 }
 
-.card button:hover,
-#viewer button:hover{
-    background:lightgreen;
-}
-
 #viewer{
     display:none;
-    background:white;
-    color:black;
     max-width:1000px;
     margin:20px auto;
+    background:white;
+    color:black;
     padding:20px;
     border-radius:10px;
     border:3px solid yellowgreen;
-}
-
-#conteudo-html{
-    margin-top:15px;
 }
 </style>
 </head>
@@ -70,26 +59,24 @@ h1{
 
 <h1>POLYDEV - GUIAS</h1>
 
-<div id="lista"></div>
+<div id="lista">Carregando...</div>
 
 <div id="viewer">
     <button onclick="voltar()">⬅ Voltar</button>
     <button id="btnDownload">⬇ Download</button>
     <hr>
-    <div id="conteudo-html"></div>
+    <div id="conteudo"></div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// 🔹 BASE DO PROJETO
+const BASE = window.location.origin + "/polidev/";
 
-let itemAtual = null;
+// 🔹 CARREGAR LISTA
+async function carregar(){
 
-async function carregarGuias(){
     const lista = document.getElementById("lista");
-    lista.innerHTML = "<p>Carregando guias...</p>";
 
     const { data, error } = await db
         .from("conteudos")
@@ -97,153 +84,105 @@ async function carregarGuias(){
         .order("id", { ascending:true });
 
     if(error){
-        lista.innerHTML = "<p style='color:red'>Erro ao carregar conteúdos.</p>";
+        lista.innerHTML = "Erro ao carregar";
         console.error(error);
-        return;
-    }
-
-    if(!data || data.length === 0){
-        lista.innerHTML = "<p>Nenhum guia encontrado.</p>";
         return;
     }
 
     lista.innerHTML = "";
 
     data.forEach(item => {
+
         const titulo =
             item.titulo ||
             item.nome ||
-            item.descricao ||
             item.arquivo ||
-            "Guia sem título";
+            "Sem título";
 
         const div = document.createElement("div");
         div.className = "card";
 
         div.innerHTML = `
             <h2>${titulo}</h2>
-            <p><b>Categoria:</b> ${item.categoria || "-"}</p>
-            <p><b>Downloads:</b> ${item.downloads ?? 0}</p>
+            <p><b>Arquivo:</b> ${item.arquivo}</p>
+            <p><b>Downloads:</b> ${item.downloads || 0}</p>
             <button>Exibir guia</button>
         `;
 
-        div.querySelector("button").onclick = () => exibirGuia(item);
+        div.querySelector("button").onclick = () => abrir(item);
 
         lista.appendChild(div);
     });
 }
 
-async function exibirGuia(item){
-    itemAtual = item;
+// 🔹 ABRIR GUIA
+async function abrir(item){
 
-    const lista = document.getElementById("lista");
-    const viewer = document.getElementById("viewer");
-    const conteudo = document.getElementById("conteudo-html");
-    const btnDownload = document.getElementById("btnDownload");
+    document.getElementById("lista").style.display = "none";
+    document.getElementById("viewer").style.display = "block";
 
-    lista.style.display = "none";
-    viewer.style.display = "block";
+    const caminho = BASE + item.arquivo;
 
-    const arquivo =
-        item.arquivo ||
-        item.url ||
-        item.link ||
-        item.caminho;
-
-    if(!arquivo){
-        conteudo.innerHTML = "<p style='color:red'>Arquivo do guia não definido no banco.</p>";
-        return;
-    }
-
-    conteudo.innerHTML = "<p>Carregando guia...</p>";
+    document.getElementById("conteudo").innerHTML = "Carregando...";
 
     try{
-        const resp = await fetch(arquivo);
+        const r = await fetch(caminho);
 
-        if(!resp.ok){
-            throw new Error("Erro ao abrir arquivo: " + resp.status);
+        if(!r.ok){
+            throw new Error("HTTP " + r.status);
         }
 
-        const html = await resp.text();
-        conteudo.innerHTML = html;
+        const html = await r.text();
+        document.getElementById("conteudo").innerHTML = html;
 
     }catch(e){
-        conteudo.innerHTML = `
-            <p style="color:red">
-                Não foi possível exibir o guia.
-            </p>
-            <p>${arquivo}</p>
-        `;
+        document.getElementById("conteudo").innerHTML =
+            "<p style='color:red'>Erro ao abrir:<br>" + caminho + "</p>";
         console.error(e);
     }
 
-    btnDownload.onclick = () => baixarGuia(item);
+    document.getElementById("btnDownload").onclick = () => baixar(item);
 }
 
+// 🔹 VOLTAR
 function voltar(){
     document.getElementById("viewer").style.display = "none";
     document.getElementById("lista").style.display = "block";
-    document.getElementById("conteudo-html").innerHTML = "";
-    itemAtual = null;
 }
 
-async function baixarGuia(item){
-    const arquivo =
-        item.download_url ||
-        item.arquivo ||
-        item.url ||
-        item.link ||
-        item.caminho;
+// 🔹 DOWNLOAD + INCREMENTO
+async function baixar(item){
 
-    if(!arquivo){
-        alert("Arquivo de download não definido.");
-        return;
-    }
+    const caminho = BASE + item.arquivo;
 
     const a = document.createElement("a");
-    a.href = arquivo;
-    a.download = arquivo.split("/").pop();
-    document.body.appendChild(a);
+    a.href = caminho;
+    a.download = item.arquivo.split("/").pop();
     a.click();
-    document.body.removeChild(a);
 
-    await registrarDownload(item.id);
+    try{
+
+        const { data } = await db
+            .from("conteudos")
+            .select("downloads")
+            .eq("id", item.id)
+            .single();
+
+        const novo = (data.downloads || 0) + 1;
+
+        await db
+            .from("conteudos")
+            .update({ downloads: novo })
+            .eq("id", item.id);
+
+    }catch(e){
+        console.error(e);
+    }
 }
 
-async function registrarDownload(id){
-    if(!id){
-        console.error("ID indefinido para registrar download.");
-        return;
-    }
+// START
+carregar();
 
-    const { data, error } = await db
-        .from("conteudos")
-        .select("id, downloads")
-        .eq("id", id)
-        .single();
-
-    if(error){
-        console.error("Erro ao buscar downloads:", error);
-        return;
-    }
-
-    const atual = data.downloads || 0;
-    const novoValor = atual + 1;
-
-    const { error:updateError } = await db
-        .from("conteudos")
-        .update({ downloads: novoValor })
-        .eq("id", id);
-
-    if(updateError){
-        console.error("Erro ao atualizar downloads:", updateError);
-        return;
-    }
-
-    console.log("Download registrado:", novoValor);
-}
-
-carregarGuias();
 </script>
 
 </body>
