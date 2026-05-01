@@ -134,50 +134,62 @@ iframe{
 <script src="config.js"></script>
 
 <script>
-
 const BASE = "downloads";
 let guiaAtual = null;
-
-// 🔹 BANCOS
-const bancos = [
-{ id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
-{ id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
-{ id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
-{ id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
-{ id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
-{ id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
-{ id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
-];
-
-// 🔹 LINGUAGENS
-const linguagens = [
-{ id:8, nome:"Python", arq:"html_python_prog1.html" },
-{ id:9, nome:"C++", arq:"html_cpp_prog1.html" },
-{ id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
-{ id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
-{ id:12, nome:"Go", arq:"html_go_prog1.html" },
-{ id:13, nome:"Rust", arq:"html_rust_prog1.html" },
-{ id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
-{ id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
-];
-
-// 🔥 INICIAR SUPABASE (USA config.js)
 let db = null;
 
-window.onload = function(){
+const bancos = [
+    { id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
+    { id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
+    { id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
+    { id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
+    { id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
+    { id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
+    { id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
+];
 
-    try{
-        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log("Supabase OK");
-    }catch(e){
-        console.error("Erro Supabase:", e);
-    }
+const linguagens = [
+    { id:8, nome:"Python", arq:"html_python_prog1.html" },
+    { id:9, nome:"C++", arq:"html_cpp_prog1.html" },
+    { id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
+    { id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
+    { id:12, nome:"Go", arq:"html_go_prog1.html" },
+    { id:13, nome:"Rust", arq:"html_rust_prog1.html" },
+    { id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
+    { id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
+];
+
+document.addEventListener("DOMContentLoaded", function(){
 
     montar(bancos, "bancos", "bancos");
     montar(linguagens, "linguagens", "linguagens");
-};
 
-// 🔥 ABRIR GUIA
+    try{
+        if(typeof SUPABASE_URL !== "undefined" && typeof SUPABASE_KEY !== "undefined"){
+            db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            console.log("Supabase OK");
+        }else{
+            console.warn("config.js não carregou SUPABASE_URL ou SUPABASE_KEY");
+        }
+    }catch(e){
+        console.error("Erro Supabase:", e);
+    }
+});
+
+function montar(lista, pasta, destino){
+    const area = document.getElementById(destino);
+    area.innerHTML = "";
+
+    lista.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerText = item.nome;
+        btn.onclick = function(){
+            abrir(pasta, item);
+        };
+        area.appendChild(btn);
+    });
+}
+
 function abrir(pasta, item){
     const caminho = `${BASE}/${pasta}/${item.arq}`;
 
@@ -191,11 +203,9 @@ function abrir(pasta, item){
     document.getElementById("status").innerText = "Exibindo: " + item.nome;
 }
 
-// 🔥 INCREMENTAR DOWNLOAD
 async function incrementarDownload(id){
-
     if(!db){
-        alert("Supabase não carregado");
+        alert("Supabase não carregado. Verifique config.js");
         return false;
     }
 
@@ -212,16 +222,13 @@ async function incrementarDownload(id){
     return true;
 }
 
-// 📥 DOWNLOAD
 async function baixarGuia(){
-
     if(!guiaAtual){
         alert("Escolha um guia primeiro.");
         return;
     }
 
     const ok = await incrementarDownload(guiaAtual.id);
-
     if(!ok) return;
 
     const link = document.createElement("a");
@@ -236,30 +243,11 @@ async function baixarGuia(){
         "Download registrado: " + guiaAtual.nome;
 }
 
-// 🔙 VOLTAR
 function voltar(){
     document.getElementById("viewer").src = "";
     document.getElementById("status").innerText = "Escolha um guia no menu.";
     guiaAtual = null;
 }
-
-// 🔧 MENU (CORRIGIDO)
-function montar(lista, pasta, destino){
-
-    const area = document.getElementById(destino);
-    area.innerHTML = "";
-
-    lista.forEach(item => {
-
-        const btn = document.createElement("button");
-        btn.innerText = item.nome;
-
-        btn.onclick = () => abrir(pasta, item);
-
-        area.appendChild(btn);
-    });
-}
-
 </script>
 
 </body>
