@@ -70,84 +70,86 @@ button{
 
 <script>
 
-// 🔥 BASE FIXA (SEM ERRO)
 const BASE = "https://degmvp.github.io/polidev/";
 
-// 🔧 FUNÇÃO CENTRAL DE CAMINHO (RESOLVE 404)
 function montarCaminho(arquivo){
-
-    arquivo = String(arquivo || "").trim();
-
-    // se já vier completo
-    if(arquivo.startsWith("http")){
-        return arquivo;
-    }
-
-    // remove barra inicial se houver
-    arquivo = arquivo.replace(/^\/+/, "");
-
+    if(!arquivo) return null;
+    arquivo = arquivo.trim().replace(/^\/+/, "");
     return BASE + arquivo;
 }
 
-// 🔹 CARREGAR LISTA
 async function carregar(){
 
     const lista = document.getElementById("lista");
+    lista.innerHTML = "Carregando...";
 
-    const { data, error } = await db
-        .from("conteudos")
-        .select("*")
-        .order("id", { ascending:true });
+    try{
 
-    if(error){
-        lista.innerHTML = "Erro ao carregar";
-        console.error(error);
-        return;
-    }
+        const { data, error } = await db
+            .from("conteudos")
+            .select("*")
+            .order("id");
 
-    lista.innerHTML = "";
+        if(error){
+            throw error;
+        }
 
-    data.forEach(item => {
-
-        // 🔒 garante que só entra quem tem caminho válido
-        if(!item.arquivo){
+        if(!data || data.length === 0){
+            lista.innerHTML = "Sem dados";
             return;
         }
 
-        const titulo =
-            item.titulo ||
-            item.nome ||
-            item.arquivo;
+        console.log("DADOS:", data);
 
-        const div = document.createElement("div");
-        div.className = "card";
+        lista.innerHTML = "";
 
-        div.innerHTML = `
-            <h2>${titulo}</h2>
-            <p><b>Arquivo:</b> ${item.arquivo}</p>
-            <p><b>Downloads:</b> ${item.downloads || 0}</p>
-            <button>Exibir guia</button>
-        `;
+        data.forEach(item => {
 
-        div.querySelector("button").onclick = () => abrir(item);
+            if(!item.arquivo){
+                console.log("IGNORADO (sem arquivo):", item);
+                return;
+            }
 
-        lista.appendChild(div);
-    });
+            const div = document.createElement("div");
+            div.className = "card";
+
+            div.innerHTML = `
+                <h2>${item.titulo || item.nome || item.arquivo}</h2>
+                <p>${item.arquivo}</p>
+                <p>Downloads: ${item.downloads || 0}</p>
+                <button>Exibir</button>
+            `;
+
+            div.querySelector("button").onclick = () => abrir(item);
+
+            lista.appendChild(div);
+        });
+
+    }catch(e){
+        console.error("ERRO GERAL:", e);
+        lista.innerHTML = "<p style='color:red'>Erro ao carregar (ver console)</p>";
+    }
 }
 
-// 🔹 ABRIR GUIA
 async function abrir(item){
 
-    document.getElementById("lista").style.display = "none";
-    document.getElementById("viewer").style.display = "block";
+    const viewer = document.getElementById("viewer");
+    const lista = document.getElementById("lista");
+
+    lista.style.display = "none";
+    viewer.style.display = "block";
 
     const caminho = montarCaminho(item.arquivo);
 
     console.log("ABRINDO:", caminho);
 
-    document.getElementById("conteudo").innerHTML = "Carregando...";
+    if(!caminho){
+        document.getElementById("conteudo").innerHTML = "Arquivo inválido";
+        return;
+    }
 
     try{
+
         const r = await fetch(caminho);
 
         if(!r.ok){
@@ -158,32 +160,28 @@ async function abrir(item){
         document.getElementById("conteudo").innerHTML = html;
 
     }catch(e){
+        console.error("ERRO FETCH:", e);
         document.getElementById("conteudo").innerHTML =
             "<p style='color:red'>Erro ao abrir:<br>" + caminho + "</p>";
-        console.error(e);
     }
 
     document.getElementById("btnDownload").onclick = () => baixar(item);
 }
 
-// 🔹 VOLTAR
 function voltar(){
     document.getElementById("viewer").style.display = "none";
     document.getElementById("lista").style.display = "block";
 }
 
-// 🔹 DOWNLOAD + INCREMENTO
 async function baixar(item){
 
     const caminho = montarCaminho(item.arquivo);
 
-    // download
     const a = document.createElement("a");
     a.href = caminho;
     a.download = item.arquivo.split("/").pop();
     a.click();
 
-    // incremento
     try{
 
         const { data } = await db
@@ -199,17 +197,15 @@ async function baixar(item){
             .update({ downloads: novo })
             .eq("id", item.id);
 
-        console.log("Download atualizado:", novo);
+        console.log("OK download:", novo);
 
     }catch(e){
-        console.error(e);
+        console.error("ERRO UPDATE:", e);
     }
 }
 
-// 🚀 START
 carregar();
 
 </script>
-
 </body>
 </html>
