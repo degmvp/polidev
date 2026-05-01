@@ -2,10 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - Conteúdos</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<title>POLYDEV - GUIAS</title>
 
 <style>
 body{
@@ -14,45 +11,46 @@ body{
     font-family:Arial;
     margin:20px;
 }
+
 h1{
-    text-align:center;
     color:lightgreen;
+    text-align:center;
 }
-#lista{
-    max-width:900px;
-    margin:auto;
+
+.container{
+    display:flex;
+    gap:20px;
 }
-.card{
+
+.menu{
+    width:30%;
     background:black;
     border:1px solid yellowgreen;
-    border-radius:10px;
     padding:15px;
-    margin:10px 0;
+    border-radius:10px;
 }
+
+.viewer{
+    width:70%;
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+    height:600px;
+}
+
 button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
     background:yellowgreen;
     border:0;
-    padding:10px;
     font-weight:bold;
     cursor:pointer;
-    margin:5px;
+    border-radius:6px;
 }
-#viewer{
-    display:none;
-    max-width:1000px;
-    margin:20px auto;
-    background:white;
-    color:black;
-    padding:20px;
-    border-radius:10px;
-    border:3px solid yellowgreen;
-}
-.erro{
-    background:#300;
-    color:white;
-    padding:15px;
-    border:1px solid red;
-    border-radius:8px;
+
+button:hover{
+    background:limegreen;
 }
 </style>
 </head>
@@ -61,177 +59,84 @@ button{
 
 <h1>POLYDEV - GUIAS</h1>
 
-<div id="lista">Carregando...</div>
+<div class="container">
 
-<div id="viewer">
-    <button onclick="voltar()">⬅ Voltar</button>
-    <button id="btnDownload">⬇ Download</button>
-    <hr>
-    <div id="conteudo"></div>
+    <div class="menu" id="menu"></div>
+
+    <iframe class="viewer" id="viewer"></iframe>
+
 </div>
 
 <script>
-const BASE = "https://degmvp.github.io/polidev/";
 
-const banco =
-    window.db ||
-    window.supabaseClient ||
-    window.client ||
-    (typeof db !== "undefined" ? db : null);
+// 🔥 BASE DO GITHUB
+const BASE_URL = "https://degmvp.github.io/polidev/";
 
-function erroTela(msg){
-    document.getElementById("lista").innerHTML =
-        `<div class="erro">${msg}</div>`;
-}
+// 🔥 DADOS (SIMULANDO BANCO POR ENQUANTO)
+const dados = [
+    {id:1, nome:"Guia MySQL", categoria:"bancos", arquivo:"html_mysql_guia.html"},
+    {id:2, nome:"Programa C++ 1", categoria:"linguagens", arquivo:"html_cpp_prog1.html"}
+];
 
-function montarCaminho(arquivo){
-    arquivo = String(arquivo || "").trim();
+// 🔥 MONTA CAMINHO CORRETO
+function montarCaminho(item){
+    if(!item.arquivo) return "";
 
-    if(!arquivo){
-        return "";
+    if(item.categoria === "bancos"){
+        return `downloads/bancos/${item.arquivo}`;
     }
 
-    if(arquivo.startsWith("http")){
-        return arquivo;
+    if(item.categoria === "linguagens"){
+        return `downloads/linguagens/${item.arquivo}`;
     }
 
-    arquivo = arquivo.replace(/^\/+/, "");
-
-    return BASE + arquivo;
+    return `downloads/${item.arquivo}`;
 }
 
-async function carregar(){
+// 🔥 EXIBIR NO VIEWER
+function exibir(item){
+    const caminho = montarCaminho(item);
+    const url = BASE_URL + caminho;
 
-    const lista = document.getElementById("lista");
+    console.log("ABRINDO:", url);
 
-    if(!banco){
-        erroTela(`
-            ERRO: cliente Supabase não encontrado.<br><br>
-            O arquivo <b>config.js</b> foi carregado, mas não criou uma variável global chamada
-            <b>db</b>, <b>supabaseClient</b> ou <b>client</b>.
-        `);
-        return;
-    }
-
-    lista.innerHTML = "Carregando conteúdos do banco...";
-
-    try{
-        const { data, error } = await banco
-            .from("conteudos")
-            .select("*")
-            .order("id", { ascending:true });
-
-        if(error){
-            console.error(error);
-            erroTela("Erro ao consultar a tabela conteudos. Veja o console.");
-            return;
-        }
-
-        if(!data || data.length === 0){
-            lista.innerHTML = "Nenhum conteúdo encontrado.";
-            return;
-        }
-
-        lista.innerHTML = "";
-
-        data.forEach(item => {
-
-            if(!item.arquivo){
-                return;
-            }
-
-            const div = document.createElement("div");
-            div.className = "card";
-
-            div.innerHTML = `
-                <h2>${item.titulo || item.nome || item.arquivo}</h2>
-                <p><b>Arquivo:</b> ${item.arquivo}</p>
-                <p><b>Downloads:</b> ${item.downloads || 0}</p>
-                <button>Exibir guia</button>
-            `;
-
-            div.querySelector("button").onclick = () => abrir(item);
-
-            lista.appendChild(div);
-        });
-
-        if(lista.innerHTML.trim() === ""){
-            lista.innerHTML = "Nenhum guia com campo arquivo foi encontrado.";
-        }
-
-    }catch(e){
-        console.error(e);
-        erroTela("Erro geral ao carregar conteúdos. Veja o console.");
-    }
+    document.getElementById("viewer").src = url;
 }
 
-async function abrir(item){
-
-    document.getElementById("lista").style.display = "none";
-    document.getElementById("viewer").style.display = "block";
-
-    const caminho = montarCaminho(item.arquivo);
-
-    document.getElementById("conteudo").innerHTML = "Carregando guia...";
-
-    try{
-        const r = await fetch(caminho);
-
-        if(!r.ok){
-            throw new Error("HTTP " + r.status);
-        }
-
-        const html = await r.text();
-        document.getElementById("conteudo").innerHTML = html;
-
-    }catch(e){
-        console.error(e);
-        document.getElementById("conteudo").innerHTML =
-            `<p style="color:red">Erro ao abrir:<br>${caminho}</p>`;
-    }
-
-    document.getElementById("btnDownload").onclick = () => baixar(item);
-}
-
-function voltar(){
-    document.getElementById("viewer").style.display = "none";
-    document.getElementById("lista").style.display = "block";
-    document.getElementById("conteudo").innerHTML = "";
-}
-
-async function baixar(item){
-
-    const caminho = montarCaminho(item.arquivo);
+// 🔥 DOWNLOAD REAL
+function downloadArquivo(item){
+    const caminho = montarCaminho(item);
+    const url = BASE_URL + caminho;
 
     const a = document.createElement("a");
-    a.href = caminho;
-    a.download = item.arquivo.split("/").pop();
-    document.body.appendChild(a);
+    a.href = url;
+    a.download = item.arquivo;
     a.click();
-    document.body.removeChild(a);
-
-    try{
-        const atual = item.downloads || 0;
-        const novo = atual + 1;
-
-        const { error } = await banco
-            .from("conteudos")
-            .update({ downloads: novo })
-            .eq("id", item.id);
-
-        if(error){
-            console.error(error);
-            return;
-        }
-
-        item.downloads = novo;
-
-    }catch(e){
-        console.error(e);
-    }
 }
 
-carregar();
+// 🔥 CRIAR MENU
+function carregarMenu(){
+
+    const menu = document.getElementById("menu");
+
+    dados.forEach(item => {
+
+        const btnExibir = document.createElement("button");
+        btnExibir.innerText = "📖 " + item.nome;
+        btnExibir.onclick = () => exibir(item);
+
+        const btnDownload = document.createElement("button");
+        btnDownload.innerText = "⬇ Download";
+        btnDownload.onclick = () => downloadArquivo(item);
+
+        menu.appendChild(btnExibir);
+        menu.appendChild(btnDownload);
+
+    });
+}
+
+carregarMenu();
+
 </script>
 
 </body>
