@@ -41,6 +41,12 @@ h2{
 
 .card h3{
     color:lightgreen;
+    margin-bottom:15px;
+}
+
+.card p{
+    color:white;
+    font-size:14px;
 }
 
 button{
@@ -97,51 +103,37 @@ button:hover{
 </div>
 
 <script>
+
 // 🔥 CONFIG SUPABASE (USE O SEU)
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
-
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const BASE_URL = "https://degmvp.github.io/polidev/";
 
 function pegarNome(item){
-    return item.nome || item.titulo || item.descricao || "Guia sem nome";
+    return item.titulo || "Guia sem título";
 }
 
 function montarUrl(item){
-    let caminho = item.downloads;
-
-    if(!caminho){
+    if(!item.arquivo_url){
         return "";
     }
 
-    caminho = String(caminho).trim().replace(/^\/+/, "");
+    let caminho = String(item.arquivo_url).trim();
+    caminho = caminho.replace(/^\/+/, "");
 
-    if(caminho.startsWith("http")){
-        return caminho;
-    }
-
-    if(caminho.startsWith("downloads/")){
-        return BASE_URL + caminho;
-    }
-
-    return BASE_URL + "downloads/bancos/" + caminho;
+    return BASE_URL + caminho;
 }
 
 function exibirGuia(item){
-    alert(
-        "ID: " + item.id + "\n" +
-        "NOME: " + item.nome + "\n" +
-        "DOWNLOADS: " + item.downloads + "\n" +
-        "URL FINAL: " + montarUrl(item)
-    );
-
     const url = montarUrl(item);
 
+    console.log("EXIBIR:", url);
+
     if(!url){
-        alert("Campo downloads vazio neste guia.");
+        alert("Este guia não possui arquivo_url definido.");
         return;
     }
 
@@ -166,11 +158,11 @@ function downloadGuia(item){
     console.log("DOWNLOAD:", url);
 
     if(!url){
-        alert("Campo downloads vazio neste guia.");
+        alert("Este guia não possui arquivo_url definido.");
         return;
     }
 
-    const nomeArquivo = String(item.downloads).split("/").pop();
+    const nomeArquivo = String(item.arquivo_url).split("/").pop();
 
     const a = document.createElement("a");
     a.href = url;
@@ -184,8 +176,9 @@ async function carregarGuias(){
 
     const { data, error } = await db
         .from("conteudos")
-        .select("*")
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
         .eq("categoria", "sql")
+        .eq("ativo", true)
         .order("id", { ascending:true });
 
     if(error){
@@ -194,8 +187,7 @@ async function carregarGuias(){
         return;
     }
 
-    console.log("REGISTROS:", data);
-    console.log("REGISTRO COMPLETO:", item);
+    console.log("GUIAS:", data);
 
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
@@ -207,7 +199,7 @@ async function carregarGuias(){
 
     data.forEach(item => {
 
-        if(!item.downloads){
+        if(!item.arquivo_url){
             return;
         }
 
@@ -216,7 +208,9 @@ async function carregarGuias(){
 
         const titulo = document.createElement("h3");
         titulo.innerText = pegarNome(item);
-        titulo.innerText = JSON.stringify(item);
+
+        const info = document.createElement("p");
+        info.innerText = "Downloads: " + (item.downloads || 0);
 
         const btnExibir = document.createElement("button");
         btnExibir.innerText = "📖 Exibir";
@@ -231,6 +225,7 @@ async function carregarGuias(){
         };
 
         card.appendChild(titulo);
+        card.appendChild(info);
         card.appendChild(btnExibir);
         card.appendChild(btnDownload);
 
