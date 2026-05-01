@@ -1,226 +1,259 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POLYDEV - Guias SQL</title>
+<title>POLYDEV - GUIAS</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: yellowgreen;
-  color: black;
+body{
+    background:navy;
+    color:white;
+    font-family:Arial;
+    margin:20px;
 }
 
-header {
-  background: #111;
-  color: white;
-  padding: 20px;
-  text-align: center;
+h1{
+    color:lightgreen;
+    text-align:center;
 }
 
-.container {
-  width: 95%;
-  max-width: 1200px;
-  margin: 20px auto;
+h2{
+    color:yellowgreen;
+    margin-top:20px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 15px;
+.container{
+    display:flex;
+    gap:20px;
 }
 
-.card {
-  background: #111;
-  color: white;
-  padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px #0006;
+.menu{
+    width:30%;
+    background:black;
+    border:1px solid yellowgreen;
+    padding:15px;
+    border-radius:10px;
 }
 
-.card h3 {
-  margin-top: 0;
-  color: lightgreen;
+.viewer{
+    width:70%;
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+    padding:10px;
 }
 
-.card p {
-  color: #ddd;
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:yellowgreen;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:6px;
 }
 
-button {
-  background: gold;
-  color: black;
-  border: none;
-  padding: 10px 14px;
-  margin: 5px 4px 0 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+button:hover{
+    background:lightgreen;
 }
 
-button:hover {
-  background: orange;
+iframe{
+    width:100%;
+    height:650px;
+    border:0;
+    border-radius:10px;
 }
 
-#viewer {
-  display: none;
-  background: #111;
-  padding: 15px;
-  border-radius: 12px;
+#status{
+    margin-bottom:10px;
+    color:lightgreen;
+    font-weight:bold;
 }
 
-iframe {
-  width: 100%;
-  height: 75vh;
-  background: white;
-  border: none;
-  border-radius: 8px;
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
 }
 
-.info {
-  color: white;
-  margin-bottom: 10px;
+.acoes button{
+    width:auto;
+    min-width:140px;
 }
 
-@media (max-width: 700px) {
-  iframe {
-    height: 70vh;
-  }
+@media(max-width:800px){
+    .container{
+        flex-direction:column;
+    }
 
-  button {
-    width: 100%;
-    margin-top: 8px;
-  }
+    .menu,
+    .viewer{
+        width:100%;
+    }
+
+    iframe{
+        height:600px;
+    }
+
+    .acoes{
+        flex-direction:column;
+    }
+
+    .acoes button{
+        width:100%;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>POLYDEV</h1>
-  <h2>Guias SQL Individuais</h2>
-</header>
+<h1>📚 POLYDEV - GUIAS</h1>
+
+<div id="status">Escolha um guia no menu.</div>
 
 <div class="container">
 
-  <div id="lista" class="grid"></div>
+<div class="menu">
+    <h2>🗄️ Bancos</h2>
+    <div id="bancos"></div>
 
-  <div id="viewer">
-    <div class="info">
-      <strong id="tituloGuia"></strong>
-      <br><br>
-      <button onclick="voltarLista()">⬅ Voltar</button>
-      <button onclick="baixarGuiaAtual()">📥 Download do Guia</button>
+    <h2>💻 Linguagens</h2>
+    <div id="linguagens"></div>
+</div>
+
+<div class="viewer">
+
+    <div class="acoes">
+        <button onclick="voltar()">⬅ Voltar</button>
+        <button onclick="baixarGuia()">📥 Download Guia</button>
     </div>
 
-    <iframe id="frameGuia"></iframe>
-  </div>
+    <iframe id="viewer"></iframe>
+</div>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const SUPABASE_URL = "COLE_AQUI_SUA_URL_SUPABASE";
-const SUPABASE_KEY = "COLE_AQUI_SUA_CHAVE_ANON";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const BASE = "downloads";
 
 let guiaAtual = null;
 
-async function carregarGuias() {
-  const { data, error } = await supabase
-    .from("conteudos")
-    .select("id, descricao, categoria, arquivo, downloads")
-    .eq("categoria", "sql")
-    .order("id", { ascending: true });
+// 🔹 BANCOS
+// IMPORTANTE: ajuste os IDs conforme a tabela conteudos
+const bancos = [
+{ id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
+{ id:2, nome:"SQL Server", arq:"html_sqlserver_guia.html" },
+{ id:3, nome:"PostgreSQL", arq:"html_postgres_guia.html" },
+{ id:4, nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
+{ id:5, nome:"Oracle Backup", arq:"html_ora23_backup.html" },
+{ id:6, nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
+{ id:7, nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
+];
 
-  if (error) {
-    console.error(error);
-    alert("Erro ao carregar guias");
-    return;
-  }
+// 🔹 LINGUAGENS
+// Aqui continua exibindo guia individual. ZIP é outro fluxo.
+const linguagens = [
+{ id:8, nome:"Python", arq:"html_python_prog1.html" },
+{ id:9, nome:"C++", arq:"html_cpp_prog1.html" },
+{ id:10, nome:"JavaScript", arq:"html_js_prog1.html" },
+{ id:11, nome:"Node.js", arq:"html_nodejs_prog1.html" },
+{ id:12, nome:"Go", arq:"html_go_prog1.html" },
+{ id:13, nome:"Rust", arq:"html_rust_prog1.html" },
+{ id:14, nome:"Ruby", arq:"html_ruby_prog1.html" },
+{ id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
+];
 
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
+// 🔥 ABRIR GUIA SEM INCREMENTAR
+function abrir(pasta, item){
+    const caminho = `${BASE}/${pasta}/${item.arq}`;
 
-  data.forEach(guia => {
-    const card = document.createElement("div");
-    card.className = "card";
+    guiaAtual = {
+        id: item.id,
+        nome: item.nome,
+        caminho: caminho
+    };
 
-    card.innerHTML = `
-      <h3>${guia.descricao}</h3>
-      <p>Categoria: ${guia.categoria}</p>
-      <p>Downloads: ${guia.downloads ?? 0}</p>
-
-      <button onclick="exibirGuia(${guia.id}, '${guia.descricao}', '${guia.arquivo}')">
-        Ler Guia
-      </button>
-
-      <button onclick="registrarEBaixar(${guia.id}, '${guia.arquivo}')">
-        📥 Download
-      </button>
-    `;
-
-    lista.appendChild(card);
-  });
+    document.getElementById("viewer").src = caminho;
+    document.getElementById("status").innerText = "Exibindo: " + item.nome;
 }
 
-function exibirGuia(id, descricao, arquivo) {
-  guiaAtual = { id, descricao, arquivo };
+// 🔥 INCREMENTAR DOWNLOAD
+async function incrementarDownload(id){
 
-  document.getElementById("lista").style.display = "none";
-  document.getElementById("viewer").style.display = "block";
-  document.getElementById("tituloGuia").innerText = descricao;
-  document.getElementById("frameGuia").src = arquivo;
+    if(typeof supabase === "undefined"){
+        alert("Supabase não encontrado no programa.");
+        return false;
+    }
+
+    const { error } = await supabase.rpc("incrementar_download", {
+        p_id: id
+    });
+
+    if(error){
+        console.error("Erro ao incrementar download:", error);
+        alert("Erro ao registrar download.");
+        return false;
+    }
+
+    return true;
 }
 
-function voltarLista() {
-  document.getElementById("viewer").style.display = "none";
-  document.getElementById("lista").style.display = "grid";
-  document.getElementById("frameGuia").src = "";
-  carregarGuias();
+// 🔥 DOWNLOAD DO GUIA ATUAL
+async function baixarGuia(){
+
+    if(!guiaAtual){
+        alert("Escolha um guia primeiro.");
+        return;
+    }
+
+    const ok = await incrementarDownload(guiaAtual.id);
+
+    if(!ok) return;
+
+    const link = document.createElement("a");
+    link.href = guiaAtual.caminho;
+    link.download = guiaAtual.caminho.split("/").pop();
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    document.getElementById("status").innerText =
+        "Download registrado: " + guiaAtual.nome;
 }
 
-async function incrementarDownload(id) {
-  const { error } = await supabase.rpc("incrementar_download", {
-    p_id: id
-  });
-
-  if (error) {
-    console.error("Erro ao incrementar:", error);
-    alert("Erro ao registrar download");
-    return false;
-  }
-
-  return true;
+// 🔙 VOLTAR
+function voltar(){
+    document.getElementById("viewer").src = "";
+    document.getElementById("status").innerText = "Escolha um guia no menu.";
+    guiaAtual = null;
 }
 
-async function registrarEBaixar(id, arquivo) {
-  const ok = await incrementarDownload(id);
+// 🔧 MONTAR MENU
+function montar(lista, pasta, destino){
 
-  if (!ok) return;
+    const area = document.getElementById(destino);
 
-  const link = document.createElement("a");
-  link.href = arquivo;
-  link.download = arquivo.split("/").pop();
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    lista.forEach(item => {
 
-  carregarGuias();
+        const btn = document.createElement("button");
+        btn.innerText = item.nome;
+
+        btn.onclick = function(){
+            abrir(pasta, item);
+        };
+
+        area.appendChild(btn);
+    });
 }
 
-async function baixarGuiaAtual() {
-  if (!guiaAtual) return;
+// 🚀 EXECUÇÃO
+montar(bancos, "bancos", "bancos");
+montar(linguagens, "linguagens", "linguagens");
 
-  await registrarEBaixar(guiaAtual.id, guiaAtual.arquivo);
-}
-
-carregarGuias();
 </script>
 
 </body>
