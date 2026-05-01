@@ -2,190 +2,235 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | LANG</title>
+<title>POLYDEV - GUIAS LANG</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
     background:#FFD700;
     color:black;
+    font-family:Arial;
+    margin:20px;
 }
-
-header{
-    background:#FFD700;
+h1{
     color:black;
-    padding:30px 20px;
     text-align:center;
 }
 
-header h1{
-    margin:0;
-    font-size:42px;
+h2{
+    color:black;
+    text-align:center;
+}
+#listaGuias{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:18px;
+    margin-top:25px;
 }
 
-.container{
-    display:flex;
-    gap:20px;
-    padding:20px;
-}
-
-.menu{
-    width:30%;
+.card{
     background:black;
-    color:white;
-    padding:15px;
-    border-radius:10px;
+    border:2px solid yellowgreen;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
 }
 
-.viewer{
-    width:70%;
-    background:white;
-    border:3px solid black;
-    border-radius:10px;
-    padding:10px;
+.card h3{
+    color:lightgreen;
+    margin-bottom:15px;
+}
+
+.card p{
+    color:white;
+    font-size:14px;
 }
 
 button{
-    width:100%;
-    margin:6px 0;
-    padding:10px;
-    background:#FFD700;
+    padding:10px 18px;
+    margin:6px;
+    background:yellowgreen;
     color:black;
     border:0;
+    border-radius:8px;
     font-weight:bold;
     cursor:pointer;
-    border-radius:6px;
 }
 
 button:hover{
-    background:goldenrod;
+    background:limegreen;
 }
 
-iframe{
-    width:100%;
-    height:650px;
-    border:0;
-}
-
-footer{
-    background:black;
-    color:#FFD700;
-    text-align:center;
-    padding:20px;
+#areaViewer{
+    display:none;
     margin-top:20px;
 }
 
-.status{
-    color:#FFD700;
-    font-weight:bold;
-    margin-top:10px;
+#viewer{
+    width:100%;
+    height:650px;
+    background:white;
+    border:3px solid yellowgreen;
+    border-radius:10px;
+}
+
+.barra{
+    text-align:center;
+    margin-bottom:15px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>POLYDEV</h1>
-    <p>GUIAS DE LINGUAGENS</p>
-    <p><strong>Leia • Entenda • Execute seu código</strong></p>
-</header>
+<h1>POLYDEV - GUIAS</h1>
 
-<div class="container">
-
-    <div class="menu">
-        <h2>LANG</h2>
-
-        <div id="listaGuias">
-            <p class="status">Carregando guias...</p>
-        </div>
-
-        <hr>
-
-        <button onclick="window.location.href='sql.html'">
-            🔙 Voltar para GUIAS SQL
-        </button>
-    </div>
-
-    <div class="viewer">
-        <iframe id="frame"></iframe>
-    </div>
-
+<div id="areaLista">
+    <h2>Carregando guias...</h2>
+    <div id="listaGuias"></div>
 </div>
 
-<footer>
-    <p>POLYDEV © 2026</p>
-    <p>Leia • Entenda • Execute seu código</p>
-</footer>
+<div id="areaViewer">
+    <div class="barra">
+        <button onclick="voltar()">⬅ Voltar</button>
+        <button id="btnDownloadAtual">⬇ Download</button>
+    </div>
+
+    <iframe id="viewer"></iframe>
+</div>
 
 <script>
+
 // 🔥 CONFIG SUPABASE (USE O SEU)
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function carregarGuias(){
-    const lista = document.getElementById("listaGuias");
+const BASE_URL = "https://degmvp.github.io/polidev/";
 
-    try{
-        const url = `${SUPABASE_URL}/rest/v1/conteudos?select=id,titulo,categoria,url,downloads&categoria=eq.lang&order=id.asc`;
-
-        const resp = await fetch(url, {
-            headers:{
-                "apikey": SUPABASE_KEY,
-                "Authorization": "Bearer " + SUPABASE_KEY
-            }
-        });
-
-        const data = await resp.json();
-
-        if(!Array.isArray(data) || data.length === 0){
-            lista.innerHTML = "<p class='status'>Nenhum guia LANG encontrado.</p>";
-            return;
-        }
-
-        lista.innerHTML = "";
-
-        data.forEach(item => {
-            const btn = document.createElement("button");
-            btn.textContent = item.titulo;
-            btn.onclick = () => abrirGuia(item);
-            lista.appendChild(btn);
-        });
-
-    }catch(erro){
-        console.error("Erro ao carregar guias:", erro);
-        lista.innerHTML = "<p class='status'>Erro ao carregar guias.</p>";
-    }
+function pegarNome(item){
+    return item.titulo || "Guia sem título";
 }
 
-function limparCaminho(urlBanco){
-    if(!urlBanco) return "";
-
-    let caminho = urlBanco.trim();
-
-    caminho = caminho.replace("/downloads/html/bancos/", "downloads/lang/");
-    caminho = caminho.replace("downloads/html/bancos/", "downloads/lang/");
-    caminho = caminho.replace("/downloads/bancos/", "downloads/lang/");
-    caminho = caminho.replace("downloads/bancos/", "downloads/lang/");
-
-    if(caminho.startsWith("/")){
-        caminho = caminho.substring(1);
+function montarUrl(item){
+    if(!item.arquivo_url){
+        return "";
     }
 
-    return caminho;
+    let caminho = String(item.arquivo_url).trim();
+    caminho = caminho.replace(/^\/+/, "");
+
+    return BASE_URL + caminho;
 }
 
-function abrirGuia(item){
-    const caminho = limparCaminho(item.url);
+function exibirGuia(item){
+    const url = montarUrl(item);
 
-    if(!caminho){
-        alert("Guia sem URL cadastrada.");
+    console.log("EXIBIR:", url);
+
+    if(!url){
+        alert("Este guia não possui arquivo_url definido.");
         return;
     }
 
-    document.getElementById("frame").src = caminho;
+    document.getElementById("viewer").src = url;
+    document.getElementById("areaLista").style.display = "none";
+    document.getElementById("areaViewer").style.display = "block";
+
+    document.getElementById("btnDownloadAtual").onclick = function(){
+        downloadGuia(item);
+    };
+}
+
+function voltar(){
+    document.getElementById("viewer").src = "";
+    document.getElementById("areaViewer").style.display = "none";
+    document.getElementById("areaLista").style.display = "block";
+}
+
+function downloadGuia(item){
+    const url = montarUrl(item);
+
+    console.log("DOWNLOAD:", url);
+
+    if(!url){
+        alert("Este guia não possui arquivo_url definido.");
+        return;
+    }
+
+    const nomeArquivo = String(item.arquivo_url).split("/").pop();
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nomeArquivo;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+async function carregarGuias(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+        .eq("categoria", "lang")
+        .eq("ativo", true)
+        .order("id", { ascending:true });
+
+    if(error){
+        console.error("ERRO SUPABASE:", error);
+        document.querySelector("#areaLista h2").innerText = "Erro ao carregar guias";
+        return;
+    }
+
+    console.log("GUIAS:", data);
+
+    const lista = document.getElementById("listaGuias");
+    lista.innerHTML = "";
+
+    if(!data || data.length === 0){
+        document.querySelector("#areaLista h2").innerText = "Nenhum guia encontrado";
+        return;
+    }
+
+    data.forEach(item => {
+
+        if(!item.arquivo_url){
+            return;
+        }
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const titulo = document.createElement("h3");
+        titulo.innerText = pegarNome(item);
+
+        const info = document.createElement("p");
+        info.innerText = "Downloads: " + (item.downloads || 0);
+
+        const btnExibir = document.createElement("button");
+        btnExibir.innerText = "📖 Exibir";
+        btnExibir.onclick = function(){
+            exibirGuia(item);
+        };
+
+        const btnDownload = document.createElement("button");
+        btnDownload.innerText = "⬇ Download";
+        btnDownload.onclick = function(){
+            downloadGuia(item);
+        };
+
+        card.appendChild(titulo);
+        card.appendChild(info);
+        card.appendChild(btnExibir);
+        card.appendChild(btnDownload);
+
+        lista.appendChild(card);
+    });
+
+    document.querySelector("#areaLista h2").innerText = "Selecione um guia";
 }
 
 carregarGuias();
