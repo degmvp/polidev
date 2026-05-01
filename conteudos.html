@@ -153,22 +153,14 @@ function voltar(){
 }
 async function registrarDownload(item){
 
-    try{
+    const { error } = await db
+        .from("downloads")
+        .insert([
+            { conteudo_id: item.id }
+        ]);
 
-        const { error } = await db
-            .from("downloads")
-            .insert([
-                { conteudo_id: item.id }
-            ]);
-
-        if(error){
-            alert("Erro ao registrar download: " + error.message);
-            console.log("ERRO:", error);
-        }
-
-    }catch(e){
-        alert("Erro inesperado: " + e.message);
-        console.log("ERRO JS:", e);
+    if(error){
+        console.log("ERRO DOWNLOAD:", error.message);
     }
 }
 
