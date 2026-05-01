@@ -70,8 +70,24 @@ button{
 
 <script>
 
-// 🔹 BASE DO PROJETO
-const BASE = window.location.origin + "/polidev/";
+// 🔥 BASE FIXA (SEM ERRO)
+const BASE = "https://degmvp.github.io/polidev/";
+
+// 🔧 FUNÇÃO CENTRAL DE CAMINHO (RESOLVE 404)
+function montarCaminho(arquivo){
+
+    arquivo = String(arquivo || "").trim();
+
+    // se já vier completo
+    if(arquivo.startsWith("http")){
+        return arquivo;
+    }
+
+    // remove barra inicial se houver
+    arquivo = arquivo.replace(/^\/+/, "");
+
+    return BASE + arquivo;
+}
 
 // 🔹 CARREGAR LISTA
 async function carregar(){
@@ -93,11 +109,15 @@ async function carregar(){
 
     data.forEach(item => {
 
+        // 🔒 garante que só entra quem tem caminho válido
+        if(!item.arquivo){
+            return;
+        }
+
         const titulo =
             item.titulo ||
             item.nome ||
-            item.arquivo ||
-            "Sem título";
+            item.arquivo;
 
         const div = document.createElement("div");
         div.className = "card";
@@ -121,7 +141,9 @@ async function abrir(item){
     document.getElementById("lista").style.display = "none";
     document.getElementById("viewer").style.display = "block";
 
-    const caminho = BASE + item.arquivo;
+    const caminho = montarCaminho(item.arquivo);
+
+    console.log("ABRINDO:", caminho);
 
     document.getElementById("conteudo").innerHTML = "Carregando...";
 
@@ -153,13 +175,15 @@ function voltar(){
 // 🔹 DOWNLOAD + INCREMENTO
 async function baixar(item){
 
-    const caminho = BASE + item.arquivo;
+    const caminho = montarCaminho(item.arquivo);
 
+    // download
     const a = document.createElement("a");
     a.href = caminho;
     a.download = item.arquivo.split("/").pop();
     a.click();
 
+    // incremento
     try{
 
         const { data } = await db
@@ -175,12 +199,14 @@ async function baixar(item){
             .update({ downloads: novo })
             .eq("id", item.id);
 
+        console.log("Download atualizado:", novo);
+
     }catch(e){
         console.error(e);
     }
 }
 
-// START
+// 🚀 START
 carregar();
 
 </script>
