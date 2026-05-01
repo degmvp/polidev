@@ -131,9 +131,14 @@ function montarUrl(item){
 }
 
 function exibirGuia(item){
-    const url = montarUrl(item);
+    alert(
+        "ID: " + item.id + "\n" +
+        "NOME: " + item.nome + "\n" +
+        "DOWNLOADS: " + item.downloads + "\n" +
+        "URL FINAL: " + montarUrl(item)
+    );
 
-    console.log("EXIBIR:", url);
+    const url = montarUrl(item);
 
     if(!url){
         alert("Campo downloads vazio neste guia.");
