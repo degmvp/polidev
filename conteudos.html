@@ -138,14 +138,6 @@ iframe{
 const BASE = "downloads";
 let guiaAtual = null;
 
-let db = null;
-
-try {
-    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} catch(e) {
-    console.error("Erro ao iniciar Supabase:", e);
-}
-
 // 🔹 BANCOS
 const bancos = [
 { id:1, nome:"MySQL", arq:"html_mysql_guia.html" },
@@ -169,6 +161,22 @@ const linguagens = [
 { id:15, nome:"Pandas", arq:"html_pandas_prog1.html" }
 ];
 
+// 🔥 INICIAR SUPABASE (USA config.js)
+let db = null;
+
+window.onload = function(){
+
+    try{
+        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase OK");
+    }catch(e){
+        console.error("Erro Supabase:", e);
+    }
+
+    montar(bancos, "bancos", "bancos");
+    montar(linguagens, "linguagens", "linguagens");
+};
+
 // 🔥 ABRIR GUIA
 function abrir(pasta, item){
     const caminho = `${BASE}/${pasta}/${item.arq}`;
@@ -187,7 +195,7 @@ function abrir(pasta, item){
 async function incrementarDownload(id){
 
     if(!db){
-        alert("Supabase não inicializado. Verifique config.js.");
+        alert("Supabase não carregado");
         return false;
     }
 
@@ -196,15 +204,15 @@ async function incrementarDownload(id){
     });
 
     if(error){
-        console.error("Erro ao registrar download:", error);
-        alert("Erro ao registrar download.");
+        console.error(error);
+        alert("Erro ao registrar download");
         return false;
     }
 
     return true;
 }
 
-// 📥 DOWNLOAD GUIA
+// 📥 DOWNLOAD
 async function baixarGuia(){
 
     if(!guiaAtual){
@@ -235,27 +243,22 @@ function voltar(){
     guiaAtual = null;
 }
 
-// 🔧 MONTAR MENU
+// 🔧 MENU (CORRIGIDO)
 function montar(lista, pasta, destino){
 
     const area = document.getElementById(destino);
+    area.innerHTML = "";
 
     lista.forEach(item => {
 
         const btn = document.createElement("button");
         btn.innerText = item.nome;
 
-        btn.onclick = function(){
-            abrir(pasta, item);
-        };
+        btn.onclick = () => abrir(pasta, item);
 
         area.appendChild(btn);
     });
 }
-
-// 🚀 EXECUÇÃO
-montar(bancos, "bancos", "bancos");
-montar(linguagens, "linguagens", "linguagens");
 
 </script>
 
