@@ -10,7 +10,7 @@
 body{
     background:navy;
     color:white;
-    font-family:Arial;
+    font-family:Arial, sans-serif;
     margin:20px;
 }
 
@@ -60,6 +60,7 @@ button:hover{
 
 #areaViewer{
     display:none;
+    margin-top:20px;
 }
 
 #viewer{
@@ -96,48 +97,46 @@ button:hover{
 </div>
 
 <script>
-
 // 🔥 CONFIG SUPABASE (USE O SEU)
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
+
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const BASE_URL = "https://degmvp.github.io/polidev/";
-
-function pegarArquivo(item){
-    return item.downloads || item.arquivo || "";
-}
 
 function pegarNome(item){
     return item.nome || item.titulo || item.descricao || "Guia sem nome";
 }
 
 function montarUrl(item){
-    let arquivo = pegarArquivo(item);
+    let caminho = item.downloads;
 
-    if(!arquivo){
+    if(!caminho){
         return "";
     }
 
-    arquivo = arquivo.trim().replace(/^\/+/, "");
+    caminho = String(caminho).trim().replace(/^\/+/, "");
 
-    if(arquivo.startsWith("http")){
-        return arquivo;
+    if(caminho.startsWith("http")){
+        return caminho;
     }
 
-    if(arquivo.startsWith("downloads/")){
-        return BASE_URL + arquivo;
+    if(caminho.startsWith("downloads/")){
+        return BASE_URL + caminho;
     }
 
-    return BASE_URL + "downloads/bancos/" + arquivo;
+    return BASE_URL + "downloads/bancos/" + caminho;
 }
 
 function exibirGuia(item){
     const url = montarUrl(item);
 
+    console.log("EXIBIR:", url);
+
     if(!url){
-        alert("Arquivo do guia não encontrado.");
+        alert("Campo downloads vazio neste guia.");
         return;
     }
 
@@ -158,16 +157,19 @@ function voltar(){
 
 function downloadGuia(item){
     const url = montarUrl(item);
-    const arquivo = pegarArquivo(item).split("/").pop();
+
+    console.log("DOWNLOAD:", url);
 
     if(!url){
-        alert("Arquivo do guia não encontrado.");
+        alert("Campo downloads vazio neste guia.");
         return;
     }
 
+    const nomeArquivo = String(item.downloads).split("/").pop();
+
     const a = document.createElement("a");
     a.href = url;
-    a.download = arquivo;
+    a.download = nomeArquivo;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -182,10 +184,12 @@ async function carregarGuias(){
         .order("id", { ascending:true });
 
     if(error){
-        console.error(error);
+        console.error("ERRO SUPABASE:", error);
         document.querySelector("#areaLista h2").innerText = "Erro ao carregar guias";
         return;
     }
+
+    console.log("REGISTROS:", data);
 
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
@@ -196,30 +200,32 @@ async function carregarGuias(){
     }
 
     data.forEach(item => {
-        const arquivo = pegarArquivo(item);
 
-        if(!arquivo){
+        if(!item.downloads){
             return;
         }
 
         const card = document.createElement("div");
         card.className = "card";
 
-        card.innerHTML = `
-            <h3>${pegarNome(item)}</h3>
-            <button>📖 Exibir</button>
-            <button>⬇ Download</button>
-        `;
+        const titulo = document.createElement("h3");
+        titulo.innerText = pegarNome(item);
 
-        const botoes = card.querySelectorAll("button");
-
-        botoes[0].onclick = function(){
+        const btnExibir = document.createElement("button");
+        btnExibir.innerText = "📖 Exibir";
+        btnExibir.onclick = function(){
             exibirGuia(item);
         };
 
-        botoes[1].onclick = function(){
+        const btnDownload = document.createElement("button");
+        btnDownload.innerText = "⬇ Download";
+        btnDownload.onclick = function(){
             downloadGuia(item);
         };
+
+        card.appendChild(titulo);
+        card.appendChild(btnExibir);
+        card.appendChild(btnDownload);
 
         lista.appendChild(card);
     });
