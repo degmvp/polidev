@@ -2,13 +2,13 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV Conteúdos</title>
+<title>POLYDEV - Guias</title>
 
 <style>
 body{
     background:navy;
     color:white;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
     margin:20px;
 }
 
@@ -19,103 +19,134 @@ h1{
 
 h2{
     color:yellowgreen;
-    border-bottom:1px solid yellowgreen;
-    padding-bottom:8px;
 }
 
-.card{
+.container{
+    display:flex;
+    gap:20px;
+}
+
+.menu{
+    width:32%;
     background:black;
     border:1px solid yellowgreen;
-    border-radius:8px;
-    padding:12px;
-    margin:10px 0;
+    padding:15px;
 }
 
-.card a{
-    display:inline-block;
-    margin-top:8px;
+.viewer{
+    width:68%;
+    background:white;
+    color:black;
+    border:3px solid yellowgreen;
+    min-height:600px;
+}
+
+button{
+    display:block;
+    width:100%;
+    margin:8px 0;
+    padding:10px;
     background:yellowgreen;
     color:black;
-    padding:8px 12px;
-    text-decoration:none;
+    border:0;
     font-weight:bold;
-    border-radius:6px;
+    cursor:pointer;
 }
 
-.card a:hover{
+button:hover{
     background:lightgreen;
 }
 
-small{
-    color:#cccccc;
+iframe{
+    width:100%;
+    height:650px;
+    border:0;
+}
+
+#status{
+    color:lightgreen;
+    font-weight:bold;
+    margin-bottom:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>📚 Conteúdos POLYDEV</h1>
+<h1>📚 POLYDEV - GUIAS</h1>
 
-<h2>🗄️ Bancos de Dados</h2>
-<div id="bancos"></div>
+<div id="status">Escolha um guia para visualizar.</div>
 
-<h2>💻 Linguagens</h2>
-<div id="linguagens"></div>
+<div class="container">
+
+    <div class="menu">
+        <h2>🗄️ Bancos</h2>
+        <div id="bancos"></div>
+
+        <h2>💻 Linguagens</h2>
+        <div id="linguagens"></div>
+    </div>
+
+    <div class="viewer">
+        <iframe id="visualizador"></iframe>
+    </div>
+
+</div>
 
 <script>
 
-const BASE = "downloads/test_supa.html";
+const BASE = "downloads";
 
 const bancos = [
-    { titulo: "Guia MySQL", arquivo: "html_mysql_guia.html" },
-    { titulo: "Backup Oracle 23", arquivo: "html_ora23_backup.html" },
-    { titulo: "Comandos Oracle 23", arquivo: "html_ora23_cmd.html" },
-    { titulo: "Guia Oracle 23", arquivo: "html_ora23_guia.html" },
-    { titulo: "PL/SQL Oracle 23", arquivo: "html_ora23_pl.html" },
-    { titulo: "Guia PostgreSQL", arquivo: "html_postgres_guia.html" },
-    { titulo: "Guia SQL Server", arquivo: "html_sqlserver_guia.html" }
+    { titulo:"MySQL", arquivo:"bancos/html_mysql_guia.html" },
+    { titulo:"Oracle 23 Backup", arquivo:"bancos/html_ora23_backup.html" },
+    { titulo:"Oracle 23 Comandos", arquivo:"bancos/html_ora23_cmd.html" },
+    { titulo:"Oracle 23 Guia", arquivo:"bancos/html_ora23_guia.html" },
+    { titulo:"Oracle 23 PL/SQL", arquivo:"bancos/html_ora23_pl.html" },
+    { titulo:"PostgreSQL", arquivo:"bancos/html_postgres_guia.html" },
+    { titulo:"SQL Server", arquivo:"bancos/html_sqlserver_guia.html" }
 ];
 
 const linguagens = [
-    { titulo: "C++", arquivo: "html_cpp_prog1.html" },
-    { titulo: "Go", arquivo: "html_go_prog1.html" },
-    { titulo: "JavaScript", arquivo: "html_js_prog1.html" },
-    { titulo: "Knex", arquivo: "html_knex_prog1.html" },
-    { titulo: "Node.js", arquivo: "html_nodejs_prog1.html" },
-    { titulo: "OOP C++", arquivo: "html_oopcpp_prog1.html" },
-    { titulo: "OOP Go", arquivo: "html_oopgo_prog1.html" },
-    { titulo: "OOP Python", arquivo: "html_ooppy_prog1.html" },
-    { titulo: "OOP Rust", arquivo: "html_ooprust_prog1.html" },
-    { titulo: "Pandas", arquivo: "html_pandas_prog1.html" },
-    { titulo: "Python", arquivo: "html_python_prog1.html" },
-    { titulo: "Ruby", arquivo: "html_ruby_prog1.html" },
-    { titulo: "Rust", arquivo: "html_rust_rog1.html" }
+    { titulo:"C++", arquivo:"linguagens/html_cpp_prog1.html" },
+    { titulo:"Go", arquivo:"linguagens/html_go_prog1.html" },
+    { titulo:"JavaScript", arquivo:"linguagens/html_js_prog1.html" },
+    { titulo:"Knex", arquivo:"linguagens/html_knex_prog1.html" },
+    { titulo:"Node.js", arquivo:"linguagens/html_nodejs_prog1.html" },
+    { titulo:"OOP C++", arquivo:"linguagens/html_oopcpp_prog1.html" },
+    { titulo:"OOP Go", arquivo:"linguagens/html_oopgo_prog1.html" },
+    { titulo:"OOP Python", arquivo:"linguagens/html_ooppy_prog1.html" },
+    { titulo:"OOP Rust", arquivo:"linguagens/html_ooprust_prog1.html" },
+    { titulo:"Pandas", arquivo:"linguagens/html_pandas_prog1.html" },
+    { titulo:"Python", arquivo:"linguagens/html_python_prog1.html" },
+    { titulo:"Ruby", arquivo:"linguagens/html_ruby_prog1.html" },
+    { titulo:"Rust", arquivo:"linguagens/html_rust_rog1.html" }
 ];
 
-function montar(lista, pasta, destino){
+function abrirGuia(caminho, titulo){
+    document.getElementById("visualizador").src = caminho;
+    document.getElementById("status").innerText = "Exibindo: " + titulo;
+}
 
+function montarMenu(lista, destino){
     const area = document.getElementById(destino);
     area.innerHTML = "";
 
     lista.forEach(item => {
+        const caminho = BASE + "/" + item.arquivo;
 
-        const caminho = `${BASE}/${pasta}/${item.arquivo}`;
+        const botao = document.createElement("button");
+        botao.innerText = item.titulo;
+        botao.onclick = function(){
+            abrirGuia(caminho, item.titulo);
+        };
 
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-            <strong>${item.titulo}</strong><br>
-            <small>${caminho}</small><br>
-            <a href="${caminho}" target="_blank">Abrir Guia</a>
-        `;
-
-        area.appendChild(card);
+        area.appendChild(botao);
     });
 }
 
-montar(bancos, "bancos", "bancos");
-montar(linguagens, "linguagens", "linguagens");
+montarMenu(bancos, "bancos");
+montarMenu(linguagens, "linguagens");
 
 </script>
 
