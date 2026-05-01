@@ -1,52 +1,227 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste Download Guia</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV - Guias SQL</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: yellowgreen;
+  color: black;
+}
+
+header {
+  background: #111;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #111;
+  color: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px #0006;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: lightgreen;
+}
+
+.card p {
+  color: #ddd;
+}
+
+button {
+  background: gold;
+  color: black;
+  border: none;
+  padding: 10px 14px;
+  margin: 5px 4px 0 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: orange;
+}
+
+#viewer {
+  display: none;
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+iframe {
+  width: 100%;
+  height: 75vh;
+  background: white;
+  border: none;
+  border-radius: 8px;
+}
+
+.info {
+  color: white;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 700px) {
+  iframe {
+    height: 70vh;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+</style>
 </head>
+
 <body>
 
-  <h1>Teste Guia Individual</h1>
+<header>
+  <h1>POLYDEV</h1>
+  <h2>Guias SQL Individuais</h2>
+</header>
 
-  <button onclick="baixarGuia(1, 'guias/mysql.html')">
-    Baixar Guia MySQL
-  </button>
+<div class="container">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div id="lista" class="grid"></div>
 
-  <script>
-    const SUPABASE_URL = "SUA_URL_SUPABASE";
-    const SUPABASE_KEY = "SUA_CHAVE_ANON";
+  <div id="viewer">
+    <div class="info">
+      <strong id="tituloGuia"></strong>
+      <br><br>
+      <button onclick="voltarLista()">⬅ Voltar</button>
+      <button onclick="baixarGuiaAtual()">📥 Download do Guia</button>
+    </div>
 
-    const supabase = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+    <iframe id="frameGuia"></iframe>
+  </div>
 
-    async function baixarGuia(id, arquivo) {
-      console.log("ID do guia:", id);
-      console.log("Arquivo:", arquivo);
+</div>
 
-      const { error } = await supabase.rpc("incrementar_download", {
-        p_id: id
-      });
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      if (error) {
-        console.error("Erro ao incrementar download:", error);
-        alert("Erro ao registrar download");
-        return;
-      }
+<script>
+const SUPABASE_URL = "COLE_AQUI_SUA_URL_SUPABASE";
+const SUPABASE_KEY = "COLE_AQUI_SUA_CHAVE_ANON";
 
-      console.log("Download registrado com sucesso");
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      const link = document.createElement("a");
-      link.href = arquivo;
-      link.download = arquivo.split("/").pop();
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  </script>
+let guiaAtual = null;
+
+async function carregarGuias() {
+  const { data, error } = await supabase
+    .from("conteudos")
+    .select("id, descricao, categoria, arquivo, downloads")
+    .eq("categoria", "sql")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    alert("Erro ao carregar guias");
+    return;
+  }
+
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  data.forEach(guia => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${guia.descricao}</h3>
+      <p>Categoria: ${guia.categoria}</p>
+      <p>Downloads: ${guia.downloads ?? 0}</p>
+
+      <button onclick="exibirGuia(${guia.id}, '${guia.descricao}', '${guia.arquivo}')">
+        Ler Guia
+      </button>
+
+      <button onclick="registrarEBaixar(${guia.id}, '${guia.arquivo}')">
+        📥 Download
+      </button>
+    `;
+
+    lista.appendChild(card);
+  });
+}
+
+function exibirGuia(id, descricao, arquivo) {
+  guiaAtual = { id, descricao, arquivo };
+
+  document.getElementById("lista").style.display = "none";
+  document.getElementById("viewer").style.display = "block";
+  document.getElementById("tituloGuia").innerText = descricao;
+  document.getElementById("frameGuia").src = arquivo;
+}
+
+function voltarLista() {
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("lista").style.display = "grid";
+  document.getElementById("frameGuia").src = "";
+  carregarGuias();
+}
+
+async function incrementarDownload(id) {
+  const { error } = await supabase.rpc("incrementar_download", {
+    p_id: id
+  });
+
+  if (error) {
+    console.error("Erro ao incrementar:", error);
+    alert("Erro ao registrar download");
+    return false;
+  }
+
+  return true;
+}
+
+async function registrarEBaixar(id, arquivo) {
+  const ok = await incrementarDownload(id);
+
+  if (!ok) return;
+
+  const link = document.createElement("a");
+  link.href = arquivo;
+  link.download = arquivo.split("/").pop();
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  carregarGuias();
+}
+
+async function baixarGuiaAtual() {
+  if (!guiaAtual) return;
+
+  await registrarEBaixar(guiaAtual.id, guiaAtual.arquivo);
+}
+
+carregarGuias();
+</script>
 
 </body>
 </html>
