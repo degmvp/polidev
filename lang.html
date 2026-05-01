@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | LANG</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#FFD700;
+    color:black;
+}
+
+header{
+    background:#FFD700;
+    color:black;
+    padding:30px 20px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:20px;
+}
+
+.menu{
+    width:30%;
+    background:black;
+    color:white;
+    padding:15px;
+    border-radius:10px;
+}
+
+.viewer{
+    width:70%;
+    background:white;
+    border:3px solid black;
+    border-radius:10px;
+    padding:10px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:#FFD700;
+    color:black;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:goldenrod;
+}
+
+iframe{
+    width:100%;
+    height:650px;
+    border:0;
+}
+
+footer{
+    background:black;
+    color:#FFD700;
+    text-align:center;
+    padding:20px;
+    margin-top:20px;
+}
+
+.status{
+    color:#FFD700;
+    font-weight:bold;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV</h1>
+    <p>GUIAS DE LINGUAGENS</p>
+    <p><strong>Leia • Entenda • Execute seu código</strong></p>
+</header>
+
+<div class="container">
+
+    <div class="menu">
+        <h2>LANG</h2>
+
+        <div id="listaGuias">
+            <p class="status">Carregando guias...</p>
+        </div>
+
+        <hr>
+
+        <button onclick="window.location.href='sql.html'">
+            🔙 Voltar para GUIAS SQL
+        </button>
+    </div>
+
+    <div class="viewer">
+        <iframe id="frame"></iframe>
+    </div>
+
+</div>
+
+<footer>
+    <p>POLYDEV © 2026</p>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+// 🔥 CONFIG SUPABASE (USE O SEU)
+const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
+
+
+async function carregarGuias(){
+    const lista = document.getElementById("listaGuias");
+
+    try{
+        const url = `${SUPABASE_URL}/rest/v1/conteudos?select=id,titulo,categoria,url,downloads&categoria=eq.lang&order=id.asc`;
+
+        const resp = await fetch(url, {
+            headers:{
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY
+            }
+        });
+
+        const data = await resp.json();
+
+        if(!Array.isArray(data) || data.length === 0){
+            lista.innerHTML = "<p class='status'>Nenhum guia LANG encontrado.</p>";
+            return;
+        }
+
+        lista.innerHTML = "";
+
+        data.forEach(item => {
+            const btn = document.createElement("button");
+            btn.textContent = item.titulo;
+            btn.onclick = () => abrirGuia(item);
+            lista.appendChild(btn);
+        });
+
+    }catch(erro){
+        console.error("Erro ao carregar guias:", erro);
+        lista.innerHTML = "<p class='status'>Erro ao carregar guias.</p>";
+    }
+}
+
+function limparCaminho(urlBanco){
+    if(!urlBanco) return "";
+
+    let caminho = urlBanco.trim();
+
+    caminho = caminho.replace("/downloads/html/bancos/", "downloads/lang/");
+    caminho = caminho.replace("downloads/html/bancos/", "downloads/lang/");
+    caminho = caminho.replace("/downloads/bancos/", "downloads/lang/");
+    caminho = caminho.replace("downloads/bancos/", "downloads/lang/");
+
+    if(caminho.startsWith("/")){
+        caminho = caminho.substring(1);
+    }
+
+    return caminho;
+}
+
+function abrirGuia(item){
+    const caminho = limparCaminho(item.url);
+
+    if(!caminho){
+        alert("Guia sem URL cadastrada.");
+        return;
+    }
+
+    document.getElementById("frame").src = caminho;
+}
+
+carregarGuias();
+</script>
+
+</body>
+</html>
