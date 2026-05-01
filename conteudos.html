@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - Guias</title>
+<title>POLYDEV - GUIAS</title>
 
 <style>
 body{
@@ -19,6 +19,7 @@ h1{
 
 h2{
     color:yellowgreen;
+    margin-top:20px;
 }
 
 .container{
@@ -27,30 +28,29 @@ h2{
 }
 
 .menu{
-    width:32%;
+    width:30%;
     background:black;
     border:1px solid yellowgreen;
     padding:15px;
+    border-radius:10px;
 }
 
 .viewer{
-    width:68%;
+    width:70%;
     background:white;
-    color:black;
     border:3px solid yellowgreen;
-    min-height:600px;
+    border-radius:10px;
 }
 
 button{
-    display:block;
     width:100%;
-    margin:8px 0;
+    margin:6px 0;
     padding:10px;
     background:yellowgreen;
-    color:black;
     border:0;
     font-weight:bold;
     cursor:pointer;
+    border-radius:6px;
 }
 
 button:hover{
@@ -59,14 +59,15 @@ button:hover{
 
 iframe{
     width:100%;
-    height:650px;
+    height:700px;
     border:0;
+    border-radius:10px;
 }
 
 #status{
+    margin-bottom:10px;
     color:lightgreen;
     font-weight:bold;
-    margin-bottom:10px;
 }
 </style>
 </head>
@@ -75,21 +76,21 @@ iframe{
 
 <h1>📚 POLYDEV - GUIAS</h1>
 
-<div id="status">Escolha um guia para visualizar.</div>
+<div id="status">Escolha um guia no menu.</div>
 
 <div class="container">
 
-    <div class="menu">
-        <h2>🗄️ Bancos</h2>
-        <div id="bancos"></div>
+<div class="menu">
+    <h2>🗄️ Bancos</h2>
+    <div id="bancos"></div>
 
-        <h2>💻 Linguagens</h2>
-        <div id="linguagens"></div>
-    </div>
+    <h2>💻 Linguagens</h2>
+    <div id="linguagens"></div>
+</div>
 
-    <div class="viewer">
-        <iframe id="visualizador"></iframe>
-    </div>
+<div class="viewer">
+    <iframe id="viewer"></iframe>
+</div>
 
 </div>
 
@@ -97,56 +98,58 @@ iframe{
 
 const BASE = "downloads";
 
+// 🔹 BANCOS
 const bancos = [
-    { titulo:"MySQL", arquivo:"bancos/html_mysql_guia.html" },
-    { titulo:"Oracle 23 Backup", arquivo:"bancos/html_ora23_backup.html" },
-    { titulo:"Oracle 23 Comandos", arquivo:"bancos/html_ora23_cmd.html" },
-    { titulo:"Oracle 23 Guia", arquivo:"bancos/html_ora23_guia.html" },
-    { titulo:"Oracle 23 PL/SQL", arquivo:"bancos/html_ora23_pl.html" },
-    { titulo:"PostgreSQL", arquivo:"bancos/html_postgres_guia.html" },
-    { titulo:"SQL Server", arquivo:"bancos/html_sqlserver_guia.html" }
+{ nome:"MySQL", arq:"html_mysql_guia.html" },
+{ nome:"SQL Server", arq:"html_sqlserver_guia.html" },
+{ nome:"PostgreSQL", arq:"html_postgres_guia.html" },
+{ nome:"Oracle 23 Guia", arq:"html_ora23_guia.html" },
+{ nome:"Oracle Backup", arq:"html_ora23_backup.html" },
+{ nome:"Oracle Comandos", arq:"html_ora23_cmd.html" },
+{ nome:"Oracle PL/SQL", arq:"html_ora23_pl.html" }
 ];
 
+// 🔹 LINGUAGENS
 const linguagens = [
-    { titulo:"C++", arquivo:"linguagens/html_cpp_prog1.html" },
-    { titulo:"Go", arquivo:"linguagens/html_go_prog1.html" },
-    { titulo:"JavaScript", arquivo:"linguagens/html_js_prog1.html" },
-    { titulo:"Knex", arquivo:"linguagens/html_knex_prog1.html" },
-    { titulo:"Node.js", arquivo:"linguagens/html_nodejs_prog1.html" },
-    { titulo:"OOP C++", arquivo:"linguagens/html_oopcpp_prog1.html" },
-    { titulo:"OOP Go", arquivo:"linguagens/html_oopgo_prog1.html" },
-    { titulo:"OOP Python", arquivo:"linguagens/html_ooppy_prog1.html" },
-    { titulo:"OOP Rust", arquivo:"linguagens/html_ooprust_prog1.html" },
-    { titulo:"Pandas", arquivo:"linguagens/html_pandas_prog1.html" },
-    { titulo:"Python", arquivo:"linguagens/html_python_prog1.html" },
-    { titulo:"Ruby", arquivo:"linguagens/html_ruby_prog1.html" },
-    { titulo:"Rust", arquivo:"linguagens/html_rust_rog1.html" }
+{ nome:"Python", arq:"html_python_prog1.html" },
+{ nome:"C++", arq:"html_cpp_prog1.html" },
+{ nome:"JavaScript", arq:"html_js_prog1.html" },
+{ nome:"Node.js", arq:"html_nodejs_prog1.html" },
+{ nome:"Go", arq:"html_go_prog1.html" },
+{ nome:"Rust", arq:"html_rust_prog1.html" },
+{ nome:"Ruby", arq:"html_ruby_prog1.html" },
+{ nome:"Pandas", arq:"html_pandas_prog1.html" }
 ];
 
-function abrirGuia(caminho, titulo){
-    document.getElementById("visualizador").src = caminho;
-    document.getElementById("status").innerText = "Exibindo: " + titulo;
+// 🔥 ABRIR GUIA
+function abrir(pasta, arquivo, nome){
+    const caminho = `${BASE}/${pasta}/${arquivo}`;
+
+    document.getElementById("viewer").src = caminho;
+    document.getElementById("status").innerText = "Exibindo: " + nome;
 }
 
-function montarMenu(lista, destino){
+// 🔧 MONTAR MENU
+function montar(lista, pasta, destino){
+
     const area = document.getElementById(destino);
-    area.innerHTML = "";
 
     lista.forEach(item => {
-        const caminho = BASE + "/" + item.arquivo;
 
-        const botao = document.createElement("button");
-        botao.innerText = item.titulo;
-        botao.onclick = function(){
-            abrirGuia(caminho, item.titulo);
+        const btn = document.createElement("button");
+        btn.innerText = item.nome;
+
+        btn.onclick = function(){
+            abrir(pasta, item.arq, item.nome);
         };
 
-        area.appendChild(botao);
+        area.appendChild(btn);
     });
 }
 
-montarMenu(bancos, "bancos");
-montarMenu(linguagens, "linguagens");
+// 🚀 EXECUÇÃO
+montar(bancos, "bancos", "bancos");
+montar(linguagens, "linguagens", "linguagens");
 
 </script>
 
