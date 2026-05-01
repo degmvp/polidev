@@ -8,7 +8,6 @@
 <script src="config.js"></script>
 
 <style>
-
 body{
     background:navy;
     color:white;
@@ -21,26 +20,24 @@ h1{
     text-align:center;
 }
 
-#lista, #viewer{
-    background:black;
-    border:1px solid yellowgreen;
-    border-radius:10px;
-    padding:15px;
+h2{
+    color:yellowgreen;
 }
 
 .card{
-    background:#001f3f;
+    background:black;
     border:1px solid yellowgreen;
-    padding:10px;
-    margin:8px 0;
     border-radius:8px;
+    padding:12px;
+    margin:10px 0;
 }
 
 button{
-    margin:5px;
-    padding:8px 12px;
     background:yellowgreen;
+    color:black;
     border:0;
+    padding:8px 12px;
+    margin:5px;
     font-weight:bold;
     cursor:pointer;
     border-radius:6px;
@@ -50,23 +47,22 @@ button:hover{
     background:lightgreen;
 }
 
+#viewer{
+    display:none;
+}
+
 iframe{
     width:100%;
-    height:650px;
-    border:0;
+    height:700px;
     background:white;
+    border:3px solid yellowgreen;
 }
 
-.topbar{
-    margin-bottom:10px;
-}
-
-@media (max-width: 768px){
+@media(max-width:768px){
     iframe{
-        height:400px;
+        height:450px;
     }
 }
-
 </style>
 </head>
 
@@ -76,20 +72,17 @@ iframe{
 
 <div id="lista"></div>
 
-<div id="viewer" style="display:none;">
-    <div class="topbar">
-        <button onclick="voltar()">⬅ Voltar</button>
-        <button onclick="downloadAtual()">⬇ Download</button>
-    </div>
+<div id="viewer">
+    <button onclick="voltar()">⬅ Voltar</button>
+    <button onclick="baixar()">⬇ Download</button>
+    <h2 id="tituloAtual"></h2>
     <iframe id="frame"></iframe>
 </div>
 
 <script>
 
-// BASE CORRETA
 const BASE = "downloads";
 
-// DADOS (ligado ao banco depois se quiser)
 const dados = [
     { id:1, titulo:"MySQL", pasta:"bancos", arquivo:"html_mysql_guia.html" },
     { id:2, titulo:"SQL Server", pasta:"bancos", arquivo:"html_sqlserver_guia.html" },
@@ -116,11 +109,10 @@ const dados = [
 
 let atual = null;
 
-// 🔹 MONTAR LISTA
-function montar(){
+function montarLista(){
 
-    const area = document.getElementById("lista");
-    area.innerHTML = "";
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
 
     dados.forEach(item => {
 
@@ -129,56 +121,83 @@ function montar(){
 
         card.innerHTML = `
             <strong>${item.titulo}</strong><br>
-            <button onclick="abrir(${item.id})">Abrir</button>
+            <small>${item.pasta}/${item.arquivo}</small><br>
+            <button onclick="abrir(${item.id})">Ler Guia</button>
+            <button onclick="baixarDireto(${item.id})">Download</button>
         `;
 
-        area.appendChild(card);
+        lista.appendChild(card);
     });
 }
 
-// 🔹 ABRIR GUIA
 function abrir(id){
 
-    const item = dados.find(x => x.id === id);
-    atual = item;
+    atual = dados.find(x => x.id === id);
 
-    const caminho = `${BASE}/${item.pasta}/${item.arquivo}`;
+    const caminho = `${BASE}/${atual.pasta}/${atual.arquivo}`;
 
     document.getElementById("frame").src = caminho;
+    document.getElementById("tituloAtual").innerText = atual.titulo;
 
     document.getElementById("lista").style.display = "none";
     document.getElementById("viewer").style.display = "block";
 }
 
-// 🔹 VOLTAR
 function voltar(){
+
     document.getElementById("viewer").style.display = "none";
     document.getElementById("lista").style.display = "block";
+
+    document.getElementById("frame").src = "";
+    atual = null;
 }
 
-// 🔹 DOWNLOAD + INCREMENTO
-async function downloadAtual(){
-
-    if (!atual) return;
-
-    const caminho = `${BASE}/${atual.pasta}/${atual.arquivo}`;
+async function registrarDownload(item){
 
     try{
-        await db.rpc("incrementar_download", { conteudo_id: atual.id });
+        await db
+            .from("downloads")
+            .insert([{ conteudo_id:item.id }]);
     }catch(e){
-        console.log("Erro ao incrementar:", e);
+        console.log("Erro ao registrar download:", e);
     }
-
-    const link = document.createElement("a");
-    link.href = caminho;
-    link.download = atual.arquivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
 
-// INIT
-montar();
+async function baixar(){
+
+    if(!atual) return;
+    await baixarArquivo(atual);
+}
+
+async function baixarDireto(id){
+
+    const item = dados.find(x => x.id === id);
+    await baixarArquivo(item);
+}
+
+async function baixarArquivo(item){
+
+    const caminho = `${BASE}/${item.pasta}/${item.arquivo}`;
+
+    await registrarDownload(item);
+
+    const resposta = await fetch(caminho);
+    const blob = await resposta.blob();
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = item.arquivo;
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    window.URL.revokeObjectURL(url);
+}
+
+montarLista();
 
 </script>
 
