@@ -2,13 +2,15 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - MENU</title>
+<title>POLYDEV - Conteúdos</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
     background:navy;
     color:white;
-    font-family:Arial;
+    font-family:Arial, sans-serif;
     margin:20px;
 }
 
@@ -17,74 +19,231 @@ h1{
     color:lightgreen;
 }
 
-.container{
-    display:flex;
-    gap:20px;
+#lista{
+    max-width:900px;
+    margin:20px auto;
 }
 
-.menu{
-    width:30%;
+.card{
     background:black;
-    padding:15px;
+    border:1px solid yellowgreen;
     border-radius:10px;
+    padding:15px;
+    margin-bottom:12px;
 }
 
-.viewer{
-    width:70%;
-    background:white;
-    color:black;
-    padding:15px;
-    border-radius:10px;
-}
-
-button{
-    width:100%;
-    margin:5px 0;
-    padding:10px;
+.card button,
+#viewer button{
     background:yellowgreen;
+    color:black;
     border:0;
+    padding:10px 14px;
+    border-radius:6px;
     font-weight:bold;
     cursor:pointer;
+    margin:5px;
+}
+
+.card button:hover,
+#viewer button:hover{
+    background:lightgreen;
+}
+
+#viewer{
+    display:none;
+    background:white;
+    color:black;
+    max-width:1000px;
+    margin:20px auto;
+    padding:20px;
+    border-radius:10px;
+    border:3px solid yellowgreen;
+}
+
+#conteudo-html{
+    margin-top:15px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>POLYDEV</h1>
+<h1>POLYDEV - GUIAS</h1>
 
-<div class="container">
+<div id="lista"></div>
 
-    <div class="menu">
-        <h2>Bancos</h2>
-        <button onclick="abrir('sql.html')">Guia SQL</button>
-        <button onclick="abrir('mysql.html')">Guia MySQL</button>
-
-        <h2>Linguagens</h2>
-        <button onclick="abrir('python.html')">Python</button>
-        <button onclick="abrir('cpp.html')">C++</button>
-    </div>
-
-    <div class="viewer" id="viewer">
-        <h2>Selecione um guia</h2>
-    </div>
-
+<div id="viewer">
+    <button onclick="voltar()">⬅ Voltar</button>
+    <button id="btnDownload">⬇ Download</button>
+    <hr>
+    <div id="conteudo-html"></div>
 </div>
 
 <script>
-function abrir(arquivo){
-    fetch(arquivo)
-    .then(r => r.text())
-    .then(html => {
-        document.getElementById("viewer").innerHTML =
-            `<button onclick="voltar()">⬅ Voltar</button><hr>` + html;
+const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let itemAtual = null;
+
+async function carregarGuias(){
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "<p>Carregando guias...</p>";
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+        .order("id", { ascending:true });
+
+    if(error){
+        lista.innerHTML = "<p style='color:red'>Erro ao carregar conteúdos.</p>";
+        console.error(error);
+        return;
+    }
+
+    if(!data || data.length === 0){
+        lista.innerHTML = "<p>Nenhum guia encontrado.</p>";
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    data.forEach(item => {
+        const titulo =
+            item.titulo ||
+            item.nome ||
+            item.descricao ||
+            item.arquivo ||
+            "Guia sem título";
+
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+            <h2>${titulo}</h2>
+            <p><b>Categoria:</b> ${item.categoria || "-"}</p>
+            <p><b>Downloads:</b> ${item.downloads ?? 0}</p>
+            <button>Exibir guia</button>
+        `;
+
+        div.querySelector("button").onclick = () => exibirGuia(item);
+
+        lista.appendChild(div);
     });
 }
 
-function voltar(){
-    document.getElementById("viewer").innerHTML =
-        "<h2>Selecione um guia</h2>";
+async function exibirGuia(item){
+    itemAtual = item;
+
+    const lista = document.getElementById("lista");
+    const viewer = document.getElementById("viewer");
+    const conteudo = document.getElementById("conteudo-html");
+    const btnDownload = document.getElementById("btnDownload");
+
+    lista.style.display = "none";
+    viewer.style.display = "block";
+
+    const arquivo =
+        item.arquivo ||
+        item.url ||
+        item.link ||
+        item.caminho;
+
+    if(!arquivo){
+        conteudo.innerHTML = "<p style='color:red'>Arquivo do guia não definido no banco.</p>";
+        return;
+    }
+
+    conteudo.innerHTML = "<p>Carregando guia...</p>";
+
+    try{
+        const resp = await fetch(arquivo);
+
+        if(!resp.ok){
+            throw new Error("Erro ao abrir arquivo: " + resp.status);
+        }
+
+        const html = await resp.text();
+        conteudo.innerHTML = html;
+
+    }catch(e){
+        conteudo.innerHTML = `
+            <p style="color:red">
+                Não foi possível exibir o guia.
+            </p>
+            <p>${arquivo}</p>
+        `;
+        console.error(e);
+    }
+
+    btnDownload.onclick = () => baixarGuia(item);
 }
+
+function voltar(){
+    document.getElementById("viewer").style.display = "none";
+    document.getElementById("lista").style.display = "block";
+    document.getElementById("conteudo-html").innerHTML = "";
+    itemAtual = null;
+}
+
+async function baixarGuia(item){
+    const arquivo =
+        item.download_url ||
+        item.arquivo ||
+        item.url ||
+        item.link ||
+        item.caminho;
+
+    if(!arquivo){
+        alert("Arquivo de download não definido.");
+        return;
+    }
+
+    const a = document.createElement("a");
+    a.href = arquivo;
+    a.download = arquivo.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    await registrarDownload(item.id);
+}
+
+async function registrarDownload(id){
+    if(!id){
+        console.error("ID indefinido para registrar download.");
+        return;
+    }
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id, downloads")
+        .eq("id", id)
+        .single();
+
+    if(error){
+        console.error("Erro ao buscar downloads:", error);
+        return;
+    }
+
+    const atual = data.downloads || 0;
+    const novoValor = atual + 1;
+
+    const { error:updateError } = await db
+        .from("conteudos")
+        .update({ downloads: novoValor })
+        .eq("id", id);
+
+    if(updateError){
+        console.error("Erro ao atualizar downloads:", updateError);
+        return;
+    }
+
+    console.log("Download registrado:", novoValor);
+}
+
+carregarGuias();
 </script>
 
 </body>
