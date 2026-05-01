@@ -94,9 +94,24 @@ const dados = [
     { id:1, titulo:"MySQL", pasta:"bancos", arquivo:"html_mysql_guia.html" },
     { id:2, titulo:"SQL Server", pasta:"bancos", arquivo:"html_sqlserver_guia.html" },
     { id:3, titulo:"PostgreSQL", pasta:"bancos", arquivo:"html_postgres_guia.html" },
-    { id:4, titulo:"Python", pasta:"linguagens", arquivo:"html_python_prog1.html" },
-    { id:5, titulo:"C++", pasta:"linguagens", arquivo:"html_cpp_prog1.html" },
-    { id:6, titulo:"JavaScript", pasta:"linguagens", arquivo:"html_js_prog1.html" }
+    { id:4, titulo:"Oracle 23 Guia", pasta:"bancos", arquivo:"html_ora23_guia.html" },
+    { id:5, titulo:"Oracle Backup", pasta:"bancos", arquivo:"html_ora23_backup.html" },
+    { id:6, titulo:"Oracle Comandos", pasta:"bancos", arquivo:"html_ora23_cmd.html" },
+    { id:7, titulo:"Oracle PL/SQL", pasta:"bancos", arquivo:"html_ora23_pl.html" },
+
+    { id:8, titulo:"Python", pasta:"linguagens", arquivo:"html_python_prog1.html" },
+    { id:9, titulo:"C++", pasta:"linguagens", arquivo:"html_cpp_prog1.html" },
+    { id:10, titulo:"JavaScript", pasta:"linguagens", arquivo:"html_js_prog1.html" },
+    { id:11, titulo:"Node.js", pasta:"linguagens", arquivo:"html_nodejs_prog1.html" },
+    { id:12, titulo:"Go", pasta:"linguagens", arquivo:"html_go_prog1.html" },
+    { id:13, titulo:"Rust", pasta:"linguagens", arquivo:"html_rust_prog1.html" },
+    { id:14, titulo:"Ruby", pasta:"linguagens", arquivo:"html_ruby_prog1.html" },
+    { id:15, titulo:"Pandas", pasta:"linguagens", arquivo:"html_pandas_prog1.html" },
+    { id:16, titulo:"Knex", pasta:"linguagens", arquivo:"html_knex_prog1.html" },
+    { id:17, titulo:"OOP Python", pasta:"linguagens", arquivo:"html_ooppy_prog1.html" },
+    { id:18, titulo:"OOP C++", pasta:"linguagens", arquivo:"html_oopcpp_prog1.html" },
+    { id:19, titulo:"OOP Go", pasta:"linguagens", arquivo:"html_oopgo_prog1.html" },
+    { id:20, titulo:"OOP Rust", pasta:"linguagens", arquivo:"html_ooprust_prog1.html" }
 ];
 
 let atual = null;
@@ -148,20 +163,18 @@ async function downloadAtual(){
 
     const caminho = `${BASE}/${atual.pasta}/${atual.arquivo}`;
 
-    // 🔥 abrir download
-    window.open(caminho, "_blank");
-
     try{
-
-        // 🔥 incrementa no banco
-        await db
-            .from("conteudos")
-            .update({ downloads: db.raw("downloads + 1") })
-            .eq("id", atual.id);
-
+        await db.rpc("incrementar_download", { conteudo_id: atual.id });
     }catch(e){
         console.log("Erro ao incrementar:", e);
     }
+
+    const link = document.createElement("a");
+    link.href = caminho;
+    link.download = atual.arquivo;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // INIT
