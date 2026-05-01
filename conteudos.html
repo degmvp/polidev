@@ -1,210 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>POLYDEV - CONTEÚDOS</title>
-<h2 style="color:red;text-align:center;">VERSÃO NOVA 30-04</h2>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-
-<style>
-body{
-    background:navy;
-    color:white;
-    font-family:Arial;
-    margin:20px;
-}
-
-h1{
-    color:lightgreen;
-    text-align:center;
-}
-
-h2{
-    color:yellowgreen;
-}
-
-.card{
-    background:black;
-    border:1px solid yellowgreen;
-    border-radius:8px;
-    padding:12px;
-    margin:10px 0;
-}
-
-button{
-    background:yellowgreen;
-    color:black;
-    border:0;
-    padding:8px 12px;
-    margin:5px;
-    font-weight:bold;
-    cursor:pointer;
-    border-radius:6px;
-}
-
-button:hover{
-    background:lightgreen;
-}
-
-#viewer{
-    display:none;
-}
-
-iframe{
-    width:100%;
-    height:700px;
-    background:white;
-    border:3px solid yellowgreen;
-}
-
-@media(max-width:768px){
-    iframe{
-        height:450px;
-    }
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Teste Download Guia</title>
 </head>
-
 <body>
 
-<h1>📚 POLYDEV - CONTEÚDOS</h1>
+  <h1>Teste Guia Individual</h1>
 
-<div id="lista"></div>
+  <button onclick="baixarGuia(1, 'guias/mysql.html')">
+    Baixar Guia MySQL
+  </button>
 
-<div id="viewer">
-    <button onclick="voltar()">⬅ Voltar</button>
-    <button onclick="baixar()">⬇ Download</button>
-    <h2 id="tituloAtual"></h2>
-    <iframe id="frame"></iframe>
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
+  <script>
+    const SUPABASE_URL = "SUA_URL_SUPABASE";
+    const SUPABASE_KEY = "SUA_CHAVE_ANON";
 
-const BASE = "downloads";
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-const dados = [
-    { id:1, titulo:"MySQL", pasta:"bancos", arquivo:"html_mysql_guia.html" },
-    { id:2, titulo:"SQL Server", pasta:"bancos", arquivo:"html_sqlserver_guia.html" },
-    { id:3, titulo:"PostgreSQL", pasta:"bancos", arquivo:"html_postgres_guia.html" },
-    { id:4, titulo:"Oracle 23 Guia", pasta:"bancos", arquivo:"html_ora23_guia.html" },
-    { id:5, titulo:"Oracle Backup", pasta:"bancos", arquivo:"html_ora23_backup.html" },
-    { id:6, titulo:"Oracle Comandos", pasta:"bancos", arquivo:"html_ora23_cmd.html" },
-    { id:7, titulo:"Oracle PL/SQL", pasta:"bancos", arquivo:"html_ora23_pl.html" },
-    { id:8, titulo:"Python", pasta:"linguagens", arquivo:"html_python_prog1.html" },
-    { id:9, titulo:"C++", pasta:"linguagens", arquivo:"html_cpp_prog1.html" },
-    { id:10, titulo:"JavaScript", pasta:"linguagens", arquivo:"html_js_prog1.html" },
-    { id:11, titulo:"Node.js", pasta:"linguagens", arquivo:"html_nodejs_prog1.html" },
-    { id:12, titulo:"Go", pasta:"linguagens", arquivo:"html_go_prog1.html" },
-    { id:13, titulo:"Rust", pasta:"linguagens", arquivo:"html_rust_prog1.html" },
-    { id:14, titulo:"Ruby", pasta:"linguagens", arquivo:"html_ruby_prog1.html" },
-    { id:15, titulo:"Pandas", pasta:"linguagens", arquivo:"html_pandas_prog1.html" },
-    { id:16, titulo:"Knex", pasta:"linguagens", arquivo:"html_knex_prog1.html" },
-    { id:17, titulo:"OOP Python", pasta:"linguagens", arquivo:"html_ooppy_prog1.html" },
-    { id:18, titulo:"OOP C++", pasta:"linguagens", arquivo:"html_oopcpp_prog1.html" },
-    { id:19, titulo:"OOP Go", pasta:"linguagens", arquivo:"html_oopgo_prog1.html" },
-    { id:20, titulo:"OOP Rust", pasta:"linguagens", arquivo:"html_ooprust_prog1.html" }
-];
+    async function baixarGuia(id, arquivo) {
+      console.log("ID do guia:", id);
+      console.log("Arquivo:", arquivo);
 
-let atual = null;
+      const { error } = await supabase.rpc("incrementar_download", {
+        p_id: id
+      });
 
-function montarLista(){
+      if (error) {
+        console.error("Erro ao incrementar download:", error);
+        alert("Erro ao registrar download");
+        return;
+      }
 
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
+      console.log("Download registrado com sucesso");
 
-    dados.forEach(item => {
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-            <strong>${item.titulo}</strong><br>
-            <small>${item.pasta}/${item.arquivo}</small><br>
-            <button onclick="abrir(${item.id})">Ler Guia</button>
-            <button onclick="baixarDireto(${item.id})">Download</button>
-        `;
-
-        lista.appendChild(card);
-    });
-}
-
-function abrir(id){
-
-    atual = dados.find(x => x.id === id);
-
-    const caminho = `${BASE}/${atual.pasta}/${atual.arquivo}`;
-
-    document.getElementById("frame").src = caminho;
-    document.getElementById("tituloAtual").innerText = atual.titulo;
-
-    document.getElementById("lista").style.display = "none";
-    document.getElementById("viewer").style.display = "block";
-}
-
-function voltar(){
-
-    document.getElementById("viewer").style.display = "none";
-    document.getElementById("lista").style.display = "block";
-
-    document.getElementById("frame").src = "";
-    atual = null;
-}
-async function registrarDownload(item){
-
-    const { error } = await db
-        .from("downloads")
-        .insert([
-            { conteudo_id: item.id }
-        ]);
-
-    if(error){
-        console.log("ERRO DOWNLOAD:", error.message);
+      const link = document.createElement("a");
+      link.href = arquivo;
+      link.download = arquivo.split("/").pop();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
-}
-
-async function baixar(){
-
-    if(!atual) return;
-    await baixarArquivo(atual);
-}
-
-async function baixarDireto(id){
-
-    const item = dados.find(x => x.id === id);
-    await baixarArquivo(item);
-}
-
-async function baixarArquivo(item){
-
-    const caminho = `${BASE}/${item.pasta}/${item.arquivo}`;
-
-const ok = await registrarDownload(item);
-
-if(!ok){
-    console.log("Download não registrado no banco.");
-}
-
-    const resposta = await fetch(caminho);
-    const blob = await resposta.blob();
-
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = item.arquivo;
-
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    window.URL.revokeObjectURL(url);
-}
-
-montarLista();
-
-</script>
+  </script>
 
 </body>
 </html>
