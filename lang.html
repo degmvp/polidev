@@ -146,24 +146,20 @@ function montarUrl(item){
 }
 
 function exibirGuia(item){
+    console.log("ITEM COMPLETO:", item);
+    console.log("ARQUIVO_URL DO BANCO:", item.arquivo_url);
+
     const url = montarUrl(item);
 
-    console.log("EXIBIR:", url);
+    console.log("URL FINAL GERADA:", url);
 
     if(!url){
         alert("Este guia não possui arquivo_url definido.");
         return;
     }
 
-    document.getElementById("viewer").src = url;
-    document.getElementById("areaLista").style.display = "none";
-    document.getElementById("areaViewer").style.display = "block";
-
-    document.getElementById("btnDownloadAtual").onclick = function(){
-        downloadGuia(item);
-    };
+    window.open(url, "_blank");
 }
-
 
 function voltar(){
     document.getElementById("viewer").src = "";
