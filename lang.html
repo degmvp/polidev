@@ -110,32 +110,28 @@ button:hover{
 
 <script>
 
-// 🔥 CONFIG SUPABASE (USE O SEU)
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const BASE_URL = "https://degmvp.github.io/polidev/";
+
+let guiaAtual = null;
 
 function pegarNome(item){
     return item.titulo || "Guia sem título";
 }
 
 function montarUrl(item){
-    if(!item.arquivo_url){
-        return "";
-    }
+    if(!item.arquivo_url) return "";
 
     let caminho = String(item.arquivo_url).trim();
 
-    if(caminho.startsWith("http://") || caminho.startsWith("https://")){
-        return caminho;
-    }
+    if(caminho.startsWith("http")) return caminho;
 
     caminho = caminho.replace(/^\/+/, "");
 
-    // remove prefixo lógico salvo no banco
     caminho = caminho.replace(/^python\//, "");
     caminho = caminho.replace(/^sql\//, "");
     caminho = caminho.replace(/^lang\//, "");
@@ -143,8 +139,24 @@ function montarUrl(item){
     return BASE_URL + caminho;
 }
 
+function abrirGuia(item){
+    guiaAtual = item;
 
+    const url = montarUrl(item);
 
+    alert("Abrindo: " + url);
+    console.log("ITEM:", item);
+    console.log("URL FINAL:", url);
+
+    if(!url){
+        alert("Arquivo não definido.");
+        return;
+    }
+
+    document.getElementById("viewer").src = url;
+    document.getElementById("areaLista").style.display = "none";
+    document.getElementById("areaViewer").style.display = "block";
+}
 
 function voltar(){
     document.getElementById("viewer").src = "";
@@ -155,15 +167,12 @@ function voltar(){
 async function downloadGuia(item){
     const url = montarUrl(item);
 
-    console.log("DOWNLOAD:", url);
-
     if(!url){
-        alert("Este guia não possui arquivo_url definido.");
+        alert("Arquivo não definido.");
         return;
     }
 
-    const atual = Number(item.downloads || 0);
-    const novoTotal = atual + 1;
+    const novoTotal = Number(item.downloads || 0) + 1;
 
     const { error } = await db
         .from("conteudos")
@@ -171,8 +180,8 @@ async function downloadGuia(item){
         .eq("id", item.id);
 
     if(error){
-        console.error("ERRO AO INCREMENTAR:", error);
-        alert("Erro ao registrar download.");
+        console.error("ERRO DOWNLOAD:", error);
+        alert("Erro ao incrementar download.");
         return;
     }
 
@@ -190,7 +199,6 @@ async function downloadGuia(item){
 }
 
 async function carregarGuias(){
-
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
@@ -204,8 +212,6 @@ async function carregarGuias(){
         return;
     }
 
-    console.log("GUIAS:", data);
-
     const lista = document.getElementById("listaGuias");
     lista.innerHTML = "";
 
@@ -215,11 +221,6 @@ async function carregarGuias(){
     }
 
     data.forEach(item => {
-
-        if(!item.arquivo_url){
-            return;
-        }
-
         const card = document.createElement("div");
         card.className = "card";
 
@@ -231,15 +232,15 @@ async function carregarGuias(){
 
         const btnExibir = document.createElement("button");
         btnExibir.innerText = "📖 Exibir";
-        btnExibir.onclick = function(){
+        btnExibir.addEventListener("click", function(){
             abrirGuia(item);
-        };
+        });
 
         const btnDownload = document.createElement("button");
         btnDownload.innerText = "⬇ Download";
-        btnDownload.onclick = function(){
+        btnDownload.addEventListener("click", function(){
             downloadGuia(item);
-        };
+        });
 
         card.appendChild(titulo);
         card.appendChild(info);
@@ -248,6 +249,12 @@ async function carregarGuias(){
 
         lista.appendChild(card);
     });
+
+    document.getElementById("btnDownloadAtual").onclick = function(){
+        if(guiaAtual){
+            downloadGuia(guiaAtual);
+        }
+    };
 
     document.querySelector("#areaLista h2").innerText = "Selecione um guia";
 }
