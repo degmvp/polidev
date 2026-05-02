@@ -129,37 +129,17 @@ function montarUrl(item){
 
     let caminho = String(item.arquivo_url).trim();
 
-    // Se já vier URL completa, usa direto
     if(caminho.startsWith("http://") || caminho.startsWith("https://")){
         return caminho;
     }
 
-    // Remove barras iniciais
     caminho = caminho.replace(/^\/+/, "");
-
-    // Correção de segurança para caminho antigo, se existir no banco
-    caminho = caminho.replace("downloads/html/bancos/", "downloads/lang/");
-    caminho = caminho.replace("downloads/html/linguagens/", "downloads/lang/");
-    caminho = caminho.replace("downloads/linguagens/", "downloads/lang/");
 
     return BASE_URL + caminho;
 }
 
-function exibirGuia(item){
-    console.log("ITEM COMPLETO:", item);
-    console.log("ARQUIVO_URL DO BANCO:", item.arquivo_url);
 
-    const url = montarUrl(item);
 
-    console.log("URL FINAL GERADA:", url);
-
-    if(!url){
-        alert("Este guia não possui arquivo_url definido.");
-        return;
-    }
-
-    window.open(url, "_blank");
-}
 
 function voltar(){
     document.getElementById("viewer").src = "";
