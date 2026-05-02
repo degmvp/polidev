@@ -135,6 +135,11 @@ function montarUrl(item){
 
     caminho = caminho.replace(/^\/+/, "");
 
+    // remove prefixo lógico salvo no banco
+    caminho = caminho.replace(/^python\//, "");
+    caminho = caminho.replace(/^sql\//, "");
+    caminho = caminho.replace(/^lang\//, "");
+
     return BASE_URL + caminho;
 }
 
