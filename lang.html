@@ -15,34 +15,40 @@ body{
 }
 
 h1{
-    color:lightgreen;
+    color:black;
     text-align:center;
 }
 
 h2{
-    color:yellowgreen;
+    color:black;
     text-align:center;
 }
 
+
 #listaGuias{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:16px;
     margin-top:25px;
 }
+
 
 .card{
     background:black;
     border:2px solid yellowgreen;
     border-radius:12px;
-    padding:18px;
+    padding:14px;
     text-align:center;
+    min-height:150px;
 }
 
+
 .card h3{
-    color:lightgreen;
-    margin-bottom:15px;
+    color:#FFD700;
+    margin-bottom:12px;
+    font-size:18px;
 }
+
 
 .card p{
     color:white;
@@ -122,7 +128,19 @@ function montarUrl(item){
     }
 
     let caminho = String(item.arquivo_url).trim();
+
+    // Se já vier URL completa, usa direto
+    if(caminho.startsWith("http://") || caminho.startsWith("https://")){
+        return caminho;
+    }
+
+    // Remove barras iniciais
     caminho = caminho.replace(/^\/+/, "");
+
+    // Correção de segurança para caminho antigo, se existir no banco
+    caminho = caminho.replace("downloads/html/bancos/", "downloads/lang/");
+    caminho = caminho.replace("downloads/html/linguagens/", "downloads/lang/");
+    caminho = caminho.replace("downloads/linguagens/", "downloads/lang/");
 
     return BASE_URL + caminho;
 }
@@ -146,13 +164,14 @@ function exibirGuia(item){
     };
 }
 
+
 function voltar(){
     document.getElementById("viewer").src = "";
     document.getElementById("areaViewer").style.display = "none";
     document.getElementById("areaLista").style.display = "block";
 }
 
-function downloadGuia(item){
+async function downloadGuia(item){
     const url = montarUrl(item);
 
     console.log("DOWNLOAD:", url);
@@ -162,11 +181,28 @@ function downloadGuia(item){
         return;
     }
 
+    const atual = Number(item.downloads || 0);
+    const novoTotal = atual + 1;
+
+    const { error } = await db
+        .from("conteudos")
+        .update({ downloads: novoTotal })
+        .eq("id", item.id);
+
+    if(error){
+        console.error("ERRO AO INCREMENTAR:", error);
+        alert("Erro ao registrar download.");
+        return;
+    }
+
+    item.downloads = novoTotal;
+
     const nomeArquivo = String(item.arquivo_url).split("/").pop();
 
     const a = document.createElement("a");
     a.href = url;
     a.download = nomeArquivo;
+    a.target = "_blank";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
