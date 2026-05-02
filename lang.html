@@ -8,8 +8,8 @@
 
 <style>
 body{
-    background:navy;
-    color:white;
+    background-color: #FFD700; /* gold */
+    color: black;
     font-family:Arial, sans-serif;
     margin:20px;
 }
@@ -177,7 +177,7 @@ async function carregarGuias(){
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
-        .eq("categoria", "sql")
+        .eq("categoria", "lang")
         .eq("ativo", true)
         .order("id", { ascending:true });
 
