@@ -2,14 +2,14 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV - GUIAS LANG</title>
+<title>POLYDEV - GUIAS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 body{
-    background-color:#FFD700;
-    color:black;
+    background-color: #FFD700; /* gold */
+    color: black;
     font-family:Arial, sans-serif;
     margin:20px;
 }
@@ -24,12 +24,14 @@ h2{
     text-align:center;
 }
 
+
 #listaGuias{
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
     gap:16px;
     margin-top:25px;
 }
+
 
 .card{
     background:black;
@@ -40,11 +42,13 @@ h2{
     min-height:150px;
 }
 
+
 .card h3{
     color:#FFD700;
     margin-bottom:12px;
     font-size:18px;
 }
+
 
 .card p{
     color:white;
@@ -75,7 +79,7 @@ button:hover{
     width:100%;
     height:650px;
     background:white;
-    border:3px solid black;
+    border:3px solid yellowgreen;
     border-radius:10px;
 }
 
@@ -88,7 +92,7 @@ button:hover{
 
 <body>
 
-<h1>POLYDEV - GUIAS DE LINGUAGENS</h1>
+<h1>POLYDEV - GUIAS</h1>
 
 <div id="areaLista">
     <h2>Carregando guias...</h2>
@@ -109,6 +113,7 @@ button:hover{
 const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
+
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const BASE_URL = "https://degmvp.github.io/polidev/";
 
@@ -119,15 +124,11 @@ function pegarNome(item){
 }
 
 function montarUrl(item){
-    if(!item.arquivo_url){
-        return "";
-    }
+    if(!item.arquivo_url) return "";
 
     let caminho = String(item.arquivo_url).trim();
 
-    if(caminho.startsWith("http://") || caminho.startsWith("https://")){
-        return caminho;
-    }
+    if(caminho.startsWith("http")) return caminho;
 
     caminho = caminho.replace(/^\/+/, "");
 
@@ -143,7 +144,12 @@ function abrirGuia(item){
 
     const url = montarUrl(item);
 
+    alert("Abrindo: " + url);
+    console.log("ITEM:", item);
+    console.log("URL FINAL:", url);
+
     if(!url){
+        alert("Arquivo não definido.");
         return;
     }
 
@@ -162,6 +168,7 @@ async function downloadGuia(item){
     const url = montarUrl(item);
 
     if(!url){
+        alert("Arquivo não definido.");
         return;
     }
 
@@ -173,6 +180,7 @@ async function downloadGuia(item){
         .eq("id", item.id);
 
     if(error){
+        console.error("ERRO DOWNLOAD:", error);
         alert("Erro ao incrementar download.");
         return;
     }
@@ -199,6 +207,7 @@ async function carregarGuias(){
         .order("id", { ascending:true });
 
     if(error){
+        console.error("ERRO SUPABASE:", error);
         document.querySelector("#areaLista h2").innerText = "Erro ao carregar guias";
         return;
     }
