@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Viewer Genérico</title>
+
+<script src="config.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:yellowgreen;
+    color:black;
+    text-align:center;
+}
+
+header{
+    background:black;
+    color:#FFD700;
+    padding:20px;
+}
+
+h1{
+    margin:0;
+}
+
+.container{
+    display:flex;
+    gap:15px;
+    padding:15px;
+}
+
+.menu{
+    width:30%;
+    background:black;
+    color:white;
+    padding:15px;
+    border-radius:10px;
+    max-height:75vh;
+    overflow-y:auto;
+}
+
+.viewer{
+    width:70%;
+    background:white;
+    border:3px solid black;
+    border-radius:10px;
+    padding:10px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:yellowgreen;
+    color:black;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#FFD700;
+}
+
+.action{
+    width:auto;
+    padding:10px 20px;
+    background:black;
+    color:#FFD700;
+    margin:10px;
+}
+
+iframe{
+    width:100%;
+    height:65vh;
+    border:none;
+    background:white;
+}
+
+pre{
+    background:black;
+    color:white;
+    text-align:left;
+    padding:20px;
+    overflow:auto;
+    height:60vh;
+    border-radius:8px;
+}
+
+.status{
+    font-weight:bold;
+    color:black;
+    margin:15px;
+}
+
+@media(max-width:800px){
+    .container{
+        flex-direction:column;
+    }
+
+    .menu,.viewer{
+        width:auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 POLYDEV Viewer</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="status" id="status">Carregando conteúdos...</div>
+
+<div class="container">
+
+    <div class="menu">
+        <h2 id="tituloMenu">Conteúdos</h2>
+        <div id="lista"></div>
+    </div>
+
+    <div class="viewer">
+        <h2 id="tituloViewer">Selecione um conteúdo</h2>
+
+        <button class="action" onclick="baixarAtual()">⬇ Download</button>
+        <button class="action" onclick="voltar()">⬅ Voltar</button>
+
+        <div id="areaViewer">
+            <p>Nenhum conteúdo selecionado.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let conteudos = [];
+let itemAtual = null;
+
+function getCategoria(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("categoria") || "lang";
+}
+
+function normalizarCaminho(caminho){
+    if(!caminho) return "";
+
+    caminho = caminho.trim();
+
+    caminho = caminho.replace(/^\/+/, "");
+
+    caminho = caminho.replace("downloads/html/bancos/", "downloads/bancos/");
+    caminho = caminho.replace("/downloads/html/bancos/", "downloads/bancos/");
+    caminho = caminho.replace("html/bancos/", "bancos/");
+
+    return caminho;
+}
+
+function caminhoCompleto(caminho){
+    caminho = normalizarCaminho(caminho);
+
+    if(caminho.startsWith("http")){
+        return caminho;
+    }
+
+    return caminho;
+}
+
+async function carregarConteudos(){
+    const categoria = getCategoria();
+
+    document.getElementById("tituloMenu").innerText =
+        categoria === "sql" ? "Guias SQL / Bancos" : "Guias / Linguagens";
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+        .eq("categoria", categoria)
+        .eq("ativo", true)
+        .order("id", { ascending:true });
+
+    if(error){
+        document.getElementById("status").innerText = "Erro ao carregar conteúdos.";
+        console.error(error);
+        return;
+    }
+
+    conteudos = data || [];
+
+    if(conteudos.length === 0){
+        document.getElementById("status").innerText = "Nenhum conteúdo encontrado.";
+        return;
+    }
+
+    montarMenu();
+    document.getElementById("status").innerText =
+        "Categoria carregada: " + categoria + " | Total: " + conteudos.length;
+}
+
+function montarMenu(){
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    conteudos.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerText = item.titulo + " (" + (item.downloads || 0) + ")";
+        btn.onclick = () => exibirItem(item);
+        lista.appendChild(btn);
+    });
+}
+
+async function exibirItem(item){
+    itemAtual = item;
+
+    const titulo = document.getElementById("tituloViewer");
+    const area = document.getElementById("areaViewer");
+
+    titulo.innerText = item.titulo;
+
+    const arquivo = caminhoCompleto(item.arquivo_url);
+
+    if(!arquivo){
+        area.innerHTML = "<p>Este conteúdo não possui arquivo_url.</p>";
+        return;
+    }
+
+    const ext = arquivo.split(".").pop().toLowerCase();
+
+    if(ext === "html" || ext === "htm"){
+        area.innerHTML = `<iframe src="${arquivo}"></iframe>`;
+    }else{
+        try{
+            const resp = await fetch(arquivo);
+            const texto = await resp.text();
+            area.innerHTML = `<pre>${escapeHtml(texto)}</pre>`;
+        }catch(e){
+            area.innerHTML = "<p>Erro ao exibir arquivo.</p>";
+            console.error(e);
+        }
+    }
+}
+
+async function baixarAtual(){
+    if(!itemAtual){
+        alert("Selecione um conteúdo primeiro.");
+        return;
+    }
+
+    const arquivo = caminhoCompleto(itemAtual.arquivo_url);
+
+    if(!arquivo){
+        alert("Arquivo não encontrado.");
+        return;
+    }
+
+    await incrementarDownload(itemAtual);
+
+    const a = document.createElement("a");
+    a.href = arquivo;
+    a.download = arquivo.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    await carregarConteudos();
+}
+
+async function incrementarDownload(item){
+    const atual = item.downloads || 0;
+    const novoValor = atual + 1;
+
+    const { error } = await db
+        .from("conteudos")
+        .update({ downloads: novoValor })
+        .eq("id", item.id);
+
+    if(error){
+        console.error("Erro ao incrementar download:", error);
+        alert("Download feito, mas houve erro ao atualizar contador.");
+        return;
+    }
+
+    item.downloads = novoValor;
+}
+
+function voltar(){
+    itemAtual = null;
+    document.getElementById("tituloViewer").innerText = "Selecione um conteúdo";
+    document.getElementById("areaViewer").innerHTML = "<p>Nenhum conteúdo selecionado.</p>";
+}
+
+function escapeHtml(texto){
+    return texto
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+carregarConteudos();
+</script>
+
+</body>
+</html>

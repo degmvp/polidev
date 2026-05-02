@@ -26,6 +26,7 @@ pre{
     text-align: left;
     overflow-x: auto;
     border-radius: 8px;
+    min-height: 400px;
 }
 
 button{
@@ -37,6 +38,10 @@ button{
     border: none;
     border-radius: 5px;
     font-weight: bold;
+}
+
+button:hover{
+    background: #222;
 }
 </style>
 </head>
@@ -54,20 +59,16 @@ button{
 <pre id="codigo">Carregando...</pre>
 
 <script>
-
-// 🔗 BASE ARQUIVOS
 const BASE = "https://degmvp.github.io/polidev/downloads/python/";
 
-// 🔑 SUA CHAVE (ANON)
+const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
+
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
 
-// 📌 PARAMETRO
 const params = new URLSearchParams(window.location.search);
 let prog = params.get("prog");
 
-// 🔧 NORMALIZAÇÃO (garante padrão correto)
 function normalizarPrograma(valor){
-
     if(!valor) return null;
 
     valor = valor.trim();
@@ -83,14 +84,11 @@ function normalizarPrograma(valor){
 
 prog = normalizarPrograma(prog);
 
-// 🔙 VOLTAR
 function voltar(){
-    window.location.href = "/polidev/menu.html";
+    window.location.href = "menu.html";
 }
 
-// 📄 CARREGAR CÓDIGO
 async function carregar(){
-
     const tela = document.getElementById("codigo");
 
     if(!prog){
@@ -105,7 +103,7 @@ async function carregar(){
         const resp = await fetch(url);
 
         if(!resp.ok){
-            tela.innerText = "Erro ao carregar: " + resp.status;
+            tela.innerText = "Erro ao carregar arquivo: " + resp.status + "\n" + url;
             return;
         }
 
@@ -113,43 +111,45 @@ async function carregar(){
         tela.innerText = texto;
 
     }catch(e){
-        tela.innerText = "Erro de conexão";
+        tela.innerText = "Erro de conexão ao carregar o programa.";
     }
 }
 
-// 🔥 CONTADOR (produção)
 async function incrementar(){
-
     try{
+        const arquivo = prog + ".py";
 
-        const programa = prog;
+        const consulta =
+            SUPABASE_URL +
+            "/rest/v1/conteudos?select=id,downloads,arquivo_url&arquivo_url=ilike.*" +
+            arquivo;
 
-        const resp = await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
-            {
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY
-                }
+        const resp = await fetch(consulta, {
+            headers: {
+                "apikey": KEY,
+                "Authorization": "Bearer " + KEY
             }
-        );
+        });
 
         const data = await resp.json();
 
-        if(!data.length){
+        if(!Array.isArray(data) || data.length === 0){
+            console.log("Conteúdo não encontrado no banco para:", arquivo);
             return;
         }
 
-        const atual = data[0].downloads || 0;
+        const item = data[0];
+        const atual = item.downloads || 0;
 
         await fetch(
-            "https://vdpucrilxzlnxxnaohdh.supabase.co/rest/v1/conteudos?programa=eq." + programa,
+            SUPABASE_URL + "/rest/v1/conteudos?id=eq." + item.id,
             {
                 method: "PATCH",
                 headers: {
                     "apikey": KEY,
                     "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Prefer": "return=minimal"
                 },
                 body: JSON.stringify({
                     downloads: atual + 1
@@ -158,13 +158,11 @@ async function incrementar(){
         );
 
     }catch(e){
-        console.log("erro contador");
+        console.log("Erro contador:", e);
     }
 }
 
-// ⬇ DOWNLOAD + CONTADOR
 async function baixar(){
-
     if(!prog){
         alert("Programa inválido.");
         return;
@@ -183,9 +181,7 @@ async function baixar(){
     document.body.removeChild(a);
 }
 
-// 🚀 START
 carregar();
-
 </script>
 
 </body>
