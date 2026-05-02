@@ -165,14 +165,26 @@ async function downloadGuia(item){
         return;
     }
 
-    const novoTotal = Number(item.downloads || 0) + 1;
+    const { data, error: erroBusca } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", item.id)
+        .single();
 
-    const { error } = await db
+    if(erroBusca){
+        alert("Erro ao consultar contador atual.");
+        return;
+    }
+
+    const atual = Number(data.downloads || 0);
+    const novoTotal = atual + 1;
+
+    const { error: erroUpdate } = await db
         .from("conteudos")
         .update({ downloads: novoTotal })
         .eq("id", item.id);
 
-    if(error){
+    if(erroUpdate){
         alert("Erro ao incrementar download.");
         return;
     }
