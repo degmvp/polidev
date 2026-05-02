@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <title>POLYDEV | Viewer Genérico</title>
 
-<!-- 🔴 O QUE FALTAVA -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <style>
 body{
     margin:0;
-    font-family:Arial;
+    font-family:Arial, Helvetica, sans-serif;
     background:yellowgreen;
+    color:black;
     text-align:center;
 }
 
@@ -22,20 +22,29 @@ header{
     padding:20px;
 }
 
+header h1{
+    margin:0;
+}
+
+.status{
+    margin:10px;
+    font-weight:bold;
+}
+
 .container{
     display:flex;
-    gap:10px;
-    padding:10px;
+    gap:12px;
+    padding:12px;
 }
 
 .menu{
     width:30%;
     background:black;
     color:white;
-    padding:10px;
+    padding:12px;
     border-radius:10px;
-    overflow-y:auto;
     max-height:75vh;
+    overflow-y:auto;
 }
 
 .viewer{
@@ -43,15 +52,17 @@ header{
     background:white;
     border:3px solid black;
     border-radius:10px;
-    padding:10px;
+    padding:12px;
 }
 
 button{
     width:100%;
-    margin:5px 0;
+    margin:6px 0;
     padding:10px;
     background:yellowgreen;
-    border:0;
+    color:black;
+    border:none;
+    border-radius:6px;
     font-weight:bold;
     cursor:pointer;
 }
@@ -62,28 +73,37 @@ button:hover{
 
 .action{
     width:auto;
-    margin:10px;
     background:black;
     color:#FFD700;
+    padding:10px 20px;
+    margin:10px;
 }
 
 iframe{
     width:100%;
-    height:60vh;
-    border:0;
+    height:65vh;
+    border:none;
+    background:white;
 }
 
 pre{
     background:black;
     color:white;
-    padding:15px;
+    text-align:left;
+    padding:20px;
     overflow:auto;
     height:60vh;
+    border-radius:8px;
 }
 
-.status{
-    margin:10px;
-    font-weight:bold;
+@media(max-width:800px){
+    .container{
+        flex-direction:column;
+    }
+
+    .menu,.viewer{
+        width:auto;
+    }
 }
 </style>
 </head>
@@ -92,6 +112,7 @@ pre{
 
 <header>
     <h1>📚 POLYDEV Viewer</h1>
+    <p>Leia • Entenda • Execute seu código</p>
 </header>
 
 <div class="status" id="status">Carregando conteúdos...</div>
@@ -99,7 +120,7 @@ pre{
 <div class="container">
 
     <div class="menu">
-        <h2 id="tituloMenu"></h2>
+        <h2 id="tituloMenu">Conteúdos</h2>
         <div id="lista"></div>
     </div>
 
@@ -109,127 +130,160 @@ pre{
         <button class="action" onclick="baixar()">⬇ Download</button>
         <button class="action" onclick="voltar()">⬅ Voltar</button>
 
-        <div id="conteudo">Nenhum conteúdo</div>
+        <div id="conteudo">
+            <p>Nenhum conteúdo</p>
+        </div>
     </div>
 
 </div>
 
 <script>
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let dados = [];
 let atual = null;
 
 function getCategoria(){
-    const p = new URLSearchParams(window.location.search);
-    return p.get("categoria") || "lang";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("categoria") || "lang";
 }
 
-function limparPath(p){
-    if(!p) return "";
+function limparPath(path){
+    if(!path) return "";
 
-    p = p.trim();
-    p = p.replace(/^\/+/, "");
+    path = path.trim();
+    path = path.replace(/^\/+/, "");
 
-    p = p.replace("downloads/html/bancos/","downloads/bancos/");
-    p = p.replace("/downloads/html/bancos/","downloads/bancos/");
+    path = path.replace("downloads/html/bancos/", "downloads/bancos/");
+    path = path.replace("/downloads/html/bancos/", "downloads/bancos/");
 
-    return p;
+    return path;
 }
 
 async function carregar(){
-
-    const cat = getCategoria();
+    const categoria = getCategoria();
 
     document.getElementById("tituloMenu").innerText =
-        cat === "sql" ? "Guias SQL" : "Linguagens";
+        categoria === "sql" ? "Guias SQL / Bancos" : "Guias Linguagens";
 
     const { data, error } = await db
         .from("conteudos")
-        .select("*")
-        .eq("categoria", cat)
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+        .eq("categoria", categoria)
         .eq("ativo", true)
-        .order("id");
+        .order("id", { ascending:true });
 
     if(error){
-        console.error(error);
-        document.getElementById("status").innerText = "Erro banco";
+        console.error("ERRO SUPABASE:", error);
+        document.getElementById("status").innerText = "Erro ao carregar conteúdos.";
         return;
     }
 
-    dados = data;
+    dados = data || [];
+
+    if(dados.length === 0){
+        document.getElementById("status").innerText =
+            "Nenhum conteúdo encontrado para categoria: " + categoria;
+        return;
+    }
 
     montarMenu();
 
     document.getElementById("status").innerText =
-        "OK - " + dados.length + " itens";
+        "Categoria: " + categoria + " | Itens: " + dados.length;
 }
 
 function montarMenu(){
-    const div = document.getElementById("lista");
-    div.innerHTML = "";
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
 
-    dados.forEach(i=>{
-        const b = document.createElement("button");
-        b.innerText = i.titulo + " ("+(i.downloads||0)+")";
-        b.onclick = ()=>abrir(i);
-        div.appendChild(b);
+    dados.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerText = item.titulo + " (" + (item.downloads || 0) + ")";
+        btn.onclick = () => abrir(item);
+        lista.appendChild(btn);
     });
 }
 
-async function abrir(i){
+async function abrir(item){
+    atual = item;
 
-    atual = i;
+    document.getElementById("tituloViewer").innerText = item.titulo;
 
-    document.getElementById("tituloViewer").innerText = i.titulo;
+    const arquivo = limparPath(item.arquivo_url);
 
-    let arq = limparPath(i.arquivo_url);
-
-    if(!arq){
-        document.getElementById("conteudo").innerHTML = "Sem arquivo";
+    if(!arquivo){
+        document.getElementById("conteudo").innerHTML =
+            "<p>Este conteúdo não possui arquivo_url.</p>";
         return;
     }
 
-    const ext = arq.split(".").pop();
+    const ext = arquivo.split(".").pop().toLowerCase();
 
-    if(ext === "html"){
+    if(ext === "html" || ext === "htm"){
         document.getElementById("conteudo").innerHTML =
-            `<iframe src="${arq}"></iframe>`;
+            `<iframe src="${arquivo}"></iframe>`;
     }else{
-        const r = await fetch(arq);
-        const t = await r.text();
+        try{
+            const resp = await fetch(arquivo);
+            const texto = await resp.text();
 
-        document.getElementById("conteudo").innerHTML =
-            `<pre>${t.replace(/</g,"&lt;")}</pre>`;
+            document.getElementById("conteudo").innerHTML =
+                `<pre>${escapeHtml(texto)}</pre>`;
+        }catch(e){
+            console.error("ERRO AO ABRIR ARQUIVO:", e);
+            document.getElementById("conteudo").innerHTML =
+                "<p>Erro ao exibir arquivo.</p>";
+        }
     }
 }
 
 async function baixar(){
-
     if(!atual){
-        alert("Selecione um item");
+        alert("Selecione um conteúdo primeiro.");
         return;
     }
 
-    let arq = limparPath(atual.arquivo_url);
+    const arquivo = limparPath(atual.arquivo_url);
 
-    await db
+    if(!arquivo){
+        alert("Arquivo não encontrado.");
+        return;
+    }
+
+    const novoValor = (atual.downloads || 0) + 1;
+
+    const { error } = await db
         .from("conteudos")
-        .update({ downloads: (atual.downloads||0)+1 })
+        .update({ downloads: novoValor })
         .eq("id", atual.id);
 
-    const a = document.createElement("a");
-    a.href = arq;
-    a.download = "";
-    a.click();
+    if(error){
+        console.error("ERRO AO INCREMENTAR:", error);
+        alert("Download feito, mas erro ao atualizar contador.");
+    }else{
+        atual.downloads = novoValor;
+    }
 
-    carregar();
+    const a = document.createElement("a");
+    a.href = arquivo;
+    a.download = arquivo.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    await carregar();
 }
 
 function voltar(){
     atual = null;
-    document.getElementById("conteudo").innerHTML = "Nenhum conteúdo";
+    document.getElementById("tituloViewer").innerText = "Selecione";
+    document.getElementById("conteudo").innerHTML = "<p>Nenhum conteúdo</p>";
+}
+
+function escapeHtml(texto){
+    return texto
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }
 
 carregar();
