@@ -152,21 +152,45 @@ function voltar(){
     document.getElementById("areaLista").style.display = "block";
 }
 
-function downloadGuia(item){
+async function downloadGuia(item){
     const url = montarUrl(item);
 
-    console.log("DOWNLOAD:", url);
-
     if(!url){
-        alert("Este guia não possui arquivo_url definido.");
         return;
     }
+
+    const { data, error: erroBusca } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", item.id)
+        .single();
+
+    if(erroBusca){
+        alert("Erro ao consultar contador.");
+        return;
+    }
+
+    const atual = Number(data.downloads || 0);
+    const novoTotal = atual + 1;
+
+    const { error: erroUpdate } = await db
+        .from("conteudos")
+        .update({ downloads: novoTotal })
+        .eq("id", item.id);
+
+    if(erroUpdate){
+        alert("Erro ao incrementar download.");
+        return;
+    }
+
+    item.downloads = novoTotal;
 
     const nomeArquivo = String(item.arquivo_url).split("/").pop();
 
     const a = document.createElement("a");
     a.href = url;
     a.download = nomeArquivo;
+    a.target = "_blank";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
