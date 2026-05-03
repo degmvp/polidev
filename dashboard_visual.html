@@ -9,103 +9,21 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:yellowgreen;
-    color:black;
-}
-
-header{
-    background:black;
-    color:#FFD700;
-    text-align:center;
-    padding:25px;
-}
-
-.container{
-    max-width:1100px;
-    margin:25px auto;
-    padding:20px;
-}
-
-.card{
-    background:black;
-    color:white;
-    border-radius:14px;
-    padding:20px;
-    margin-bottom:25px;
-    box-shadow:0 4px 12px rgba(0,0,0,.35);
-}
-
-h2{
-    color:#FFD700;
-    text-align:center;
-}
-
-.resumo{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.box{
-    background:#111;
-    border:2px solid yellowgreen;
-    border-radius:12px;
-    padding:20px;
-    text-align:center;
-}
-
-.numero{
-    font-size:38px;
-    color:#FFD700;
-    font-weight:bold;
-}
-
-canvas{
-    background:white;
-    border-radius:12px;
-    padding:15px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
-}
-
-th,td{
-    border:1px solid yellowgreen;
-    padding:10px;
-    text-align:left;
-}
-
-th{
-    background:#222;
-    color:#FFD700;
-}
-
-button{
-    background:black;
-    color:#FFD700;
-    border:2px solid #FFD700;
-    padding:12px 20px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#FFD700;
-    color:black;
-}
-
-footer{
-    text-align:center;
-    padding:20px;
-    font-weight:bold;
-}
+body{margin:0;font-family:Arial;background:yellowgreen;color:black;}
+header{background:black;color:#FFD700;text-align:center;padding:25px;}
+.container{max-width:1100px;margin:25px auto;padding:20px;}
+.card{background:black;color:white;border-radius:14px;padding:20px;margin-bottom:25px;}
+h2{color:#FFD700;text-align:center;}
+.box{background:#111;border:2px solid yellowgreen;border-radius:12px;padding:20px;text-align:center;}
+.resumo{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;}
+.numero{font-size:38px;color:#FFD700;font-weight:bold;}
+canvas{background:white;border-radius:12px;padding:15px;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+th,td{border:1px solid yellowgreen;padding:10px;}
+th{background:#222;color:#FFD700;}
+button{background:black;color:#FFD700;border:2px solid #FFD700;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;}
+.erro{background:#300;color:#fff;border:2px solid red;padding:15px;border-radius:10px;margin:15px 0;}
+.ok{background:#063;color:white;padding:12px;border-radius:10px;margin:15px 0;}
 </style>
 </head>
 
@@ -118,63 +36,79 @@ footer{
 
 <div class="container">
 
-    <button onclick="location.href='index.html'">⬅ Voltar</button>
+<button onclick="location.href='index.html'">⬅ Voltar</button>
 
-    <div class="card">
-        <h2>Resumo Geral</h2>
-        <div class="resumo">
-            <div class="box">
-                <div>Total de Conteúdos</div>
-                <div class="numero" id="totalConteudos">0</div>
-            </div>
-            <div class="box">
-                <div>Total de Downloads</div>
-                <div class="numero" id="totalDownloads">0</div>
-            </div>
-            <div class="box">
-                <div>Categorias</div>
-                <div class="numero" id="totalCategorias">0</div>
-            </div>
+<div id="status" class="ok">Carregando dados do Supabase...</div>
+
+<div class="card">
+    <h2>Resumo Geral</h2>
+    <div class="resumo">
+        <div class="box">
+            <div>Total de Conteúdos</div>
+            <div class="numero" id="totalConteudos">0</div>
+        </div>
+        <div class="box">
+            <div>Total de Downloads</div>
+            <div class="numero" id="totalDownloads">0</div>
+        </div>
+        <div class="box">
+            <div>Categorias</div>
+            <div class="numero" id="totalCategorias">0</div>
         </div>
     </div>
+</div>
 
-    <div class="card">
-        <h2>Downloads por Categoria</h2>
-        <canvas id="graficoCategorias"></canvas>
-    </div>
+<div class="card">
+    <h2>Downloads por Categoria</h2>
+    <canvas id="graficoCategorias"></canvas>
+</div>
 
-    <div class="card">
-        <h2>Top Conteúdos</h2>
-        <canvas id="graficoTop"></canvas>
-    </div>
+<div class="card">
+    <h2>Top Conteúdos</h2>
+    <canvas id="graficoTop"></canvas>
+</div>
 
-    <div class="card">
-        <h2>Tabela Geral</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Categoria</th>
-                    <th>Total Downloads</th>
-                </tr>
-            </thead>
-            <tbody id="tabelaCategorias"></tbody>
-        </table>
-    </div>
+<div class="card">
+    <h2>Tabela Geral</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Total Downloads</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaCategorias"></tbody>
+    </table>
+</div>
 
 </div>
 
-<footer>
-    POLYDEV V1.0 — Dashboard Visual
-</footer>
-
 <script>
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const statusBox = document.getElementById("status");
 
-let graficoCategorias = null;
-let graficoTop = null;
+function mostrarErro(msg, erro){
+    statusBox.className = "erro";
+    statusBox.innerHTML = "<b>Erro:</b> " + msg;
+    console.error(msg, erro || "");
+}
 
-async function carregarDashboard(){
+function mostrarOk(msg){
+    statusBox.className = "ok";
+    statusBox.innerHTML = msg;
+}
+
+if(typeof SUPABASE_URL === "undefined" || typeof SUPABASE_KEY === "undefined"){
+    mostrarErro("config.js não carregou SUPABASE_URL ou SUPABASE_KEY.");
+} else if(typeof supabase === "undefined"){
+    mostrarErro("Biblioteca Supabase não carregou.");
+} else {
+    iniciar();
+}
+
+async function iniciar(){
+
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const { data, error } = await db
         .from("conteudos")
@@ -182,15 +116,18 @@ async function carregarDashboard(){
         .order("downloads", { ascending:false });
 
     if(error){
-        alert("Erro ao carregar dados: " + error.message);
-        console.error(error);
+        mostrarErro(error.message, error);
         return;
     }
 
+    console.log("DADOS RECEBIDOS:", data);
+
     if(!data || data.length === 0){
-        alert("Nenhum conteúdo encontrado.");
+        mostrarErro("Consulta executou, mas retornou zero registros.");
         return;
     }
+
+    mostrarOk("Dados carregados com sucesso: " + data.length + " registros.");
 
     let totalConteudos = data.length;
     let totalDownloads = data.reduce((soma,item) => soma + Number(item.downloads || 0), 0);
@@ -202,41 +139,33 @@ async function carregarDashboard(){
         categorias[cat] = (categorias[cat] || 0) + Number(item.downloads || 0);
     });
 
-    let nomesCategorias = Object.keys(categorias);
+    let labelsCategorias = Object.keys(categorias);
     let valoresCategorias = Object.values(categorias);
 
     document.getElementById("totalConteudos").innerText = totalConteudos;
     document.getElementById("totalDownloads").innerText = totalDownloads;
-    document.getElementById("totalCategorias").innerText = nomesCategorias.length;
+    document.getElementById("totalCategorias").innerText = labelsCategorias.length;
 
-    montarTabelaCategorias(nomesCategorias, valoresCategorias);
-    montarGraficoCategorias(nomesCategorias, valoresCategorias);
+    montarTabela(labelsCategorias, valoresCategorias);
+    montarGraficoCategorias(labelsCategorias, valoresCategorias);
     montarGraficoTop(data.slice(0,10));
 }
 
-function montarTabelaCategorias(nomes, valores){
+function montarTabela(labels, valores){
     const tbody = document.getElementById("tabelaCategorias");
     tbody.innerHTML = "";
 
-    nomes.forEach((nome, i) => {
+    labels.forEach((label, i) => {
         tbody.innerHTML += `
-            <tr>
-                <td>${nome}</td>
-                <td>${valores[i]}</td>
-            </tr>
-        `;
+        <tr>
+            <td>${label}</td>
+            <td>${valores[i]}</td>
+        </tr>`;
     });
 }
 
 function montarGraficoCategorias(labels, valores){
-
-    const ctx = document.getElementById("graficoCategorias");
-
-    if(graficoCategorias){
-        graficoCategorias.destroy();
-    }
-
-    graficoCategorias = new Chart(ctx, {
+    new Chart(document.getElementById("graficoCategorias"), {
         type: "bar",
         data: {
             labels: labels,
@@ -247,29 +176,15 @@ function montarGraficoCategorias(labels, valores){
         },
         options: {
             responsive:true,
-            plugins:{
-                legend:{
-                    display:false
-                }
-            },
             scales:{
-                y:{
-                    beginAtZero:true
-                }
+                y:{beginAtZero:true}
             }
         }
     });
 }
 
 function montarGraficoTop(lista){
-
-    const ctx = document.getElementById("graficoTop");
-
-    if(graficoTop){
-        graficoTop.destroy();
-    }
-
-    graficoTop = new Chart(ctx, {
+    new Chart(document.getElementById("graficoTop"), {
         type: "bar",
         data: {
             labels: lista.map(x => x.titulo),
@@ -281,21 +196,12 @@ function montarGraficoTop(lista){
         options: {
             indexAxis:"y",
             responsive:true,
-            plugins:{
-                legend:{
-                    display:false
-                }
-            },
             scales:{
-                x:{
-                    beginAtZero:true
-                }
+                x:{beginAtZero:true}
             }
         }
     });
 }
-
-carregarDashboard();
 </script>
 
 </body>
