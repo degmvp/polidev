@@ -127,7 +127,7 @@ async function iniciar(){
         return;
     }
 
-    mostrarOk("Dados carregados com sucesso: " + data.length + " registros.");
+    mostrarOk("Dashboard atualizado com sucesso: " + data.length + " registros.");
 
     let totalConteudos = data.length;
     let totalDownloads = data.reduce((soma,item) => soma + Number(item.downloads || 0), 0);
