@@ -178,7 +178,7 @@ async function iniciar(){
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads")
         .order("downloads", { ascending:false })
-        .limit(20);
+        .limit(100);
 
     if(error){
         mostrarErro("Erro ao carregar dados: " + error.message);
@@ -216,10 +216,11 @@ function montarTabela(lista){
         `;
     });
 }
-
 function abrirConteudo(id){
-    location.href = "viewer.html?id=" + id;
+    location.href = "vw.html?id=" + id;
 }
+
+
 </script>
 
 </body>
