@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Dashboard Visual</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:yellowgreen;
+    color:black;
+}
+
+header{
+    background:black;
+    color:#FFD700;
+    text-align:center;
+    padding:25px;
+}
+
+.container{
+    max-width:1100px;
+    margin:25px auto;
+    padding:20px;
+}
+
+.card{
+    background:black;
+    color:white;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:25px;
+    box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+
+h2{
+    color:#FFD700;
+    text-align:center;
+}
+
+.resumo{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.box{
+    background:#111;
+    border:2px solid yellowgreen;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.numero{
+    font-size:38px;
+    color:#FFD700;
+    font-weight:bold;
+}
+
+canvas{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid yellowgreen;
+    padding:10px;
+    text-align:left;
+}
+
+th{
+    background:#222;
+    color:#FFD700;
+}
+
+button{
+    background:black;
+    color:#FFD700;
+    border:2px solid #FFD700;
+    padding:12px 20px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#FFD700;
+    color:black;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📊 POLYDEV Dashboard Visual</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="container">
+
+    <button onclick="location.href='index.html'">⬅ Voltar</button>
+
+    <div class="card">
+        <h2>Resumo Geral</h2>
+        <div class="resumo">
+            <div class="box">
+                <div>Total de Conteúdos</div>
+                <div class="numero" id="totalConteudos">0</div>
+            </div>
+            <div class="box">
+                <div>Total de Downloads</div>
+                <div class="numero" id="totalDownloads">0</div>
+            </div>
+            <div class="box">
+                <div>Categorias</div>
+                <div class="numero" id="totalCategorias">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Downloads por Categoria</h2>
+        <canvas id="graficoCategorias"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Top Conteúdos</h2>
+        <canvas id="graficoTop"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Tabela Geral</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Total Downloads</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaCategorias"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<footer>
+    POLYDEV V1.0 — Dashboard Visual
+</footer>
+
+<script>
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let graficoCategorias = null;
+let graficoTop = null;
+
+async function carregarDashboard(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,categoria,downloads")
+        .eq("ativo", true)
+        .order("downloads", { ascending:false });
+
+    if(error){
+        alert("Erro ao carregar dados: " + error.message);
+        console.error(error);
+        return;
+    }
+
+    if(!data || data.length === 0){
+        alert("Nenhum conteúdo encontrado.");
+        return;
+    }
+
+    let totalConteudos = data.length;
+    let totalDownloads = data.reduce((soma,item) => soma + Number(item.downloads || 0), 0);
+
+    let categorias = {};
+
+    data.forEach(item => {
+        let cat = item.categoria || "sem categoria";
+        categorias[cat] = (categorias[cat] || 0) + Number(item.downloads || 0);
+    });
+
+    let nomesCategorias = Object.keys(categorias);
+    let valoresCategorias = Object.values(categorias);
+
+    document.getElementById("totalConteudos").innerText = totalConteudos;
+    document.getElementById("totalDownloads").innerText = totalDownloads;
+    document.getElementById("totalCategorias").innerText = nomesCategorias.length;
+
+    montarTabelaCategorias(nomesCategorias, valoresCategorias);
+    montarGraficoCategorias(nomesCategorias, valoresCategorias);
+    montarGraficoTop(data.slice(0,10));
+}
+
+function montarTabelaCategorias(nomes, valores){
+    const tbody = document.getElementById("tabelaCategorias");
+    tbody.innerHTML = "";
+
+    nomes.forEach((nome, i) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${nome}</td>
+                <td>${valores[i]}</td>
+            </tr>
+        `;
+    });
+}
+
+function montarGraficoCategorias(labels, valores){
+
+    const ctx = document.getElementById("graficoCategorias");
+
+    if(graficoCategorias){
+        graficoCategorias.destroy();
+    }
+
+    graficoCategorias = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Downloads",
+                data: valores
+            }]
+        },
+        options: {
+            responsive:true,
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+            scales:{
+                y:{
+                    beginAtZero:true
+                }
+            }
+        }
+    });
+}
+
+function montarGraficoTop(lista){
+
+    const ctx = document.getElementById("graficoTop");
+
+    if(graficoTop){
+        graficoTop.destroy();
+    }
+
+    graficoTop = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: lista.map(x => x.titulo),
+            datasets: [{
+                label: "Downloads",
+                data: lista.map(x => Number(x.downloads || 0))
+            }]
+        },
+        options: {
+            indexAxis:"y",
+            responsive:true,
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+            scales:{
+                x:{
+                    beginAtZero:true
+                }
+            }
+        }
+    });
+}
+
+carregarDashboard();
+</script>
+
+</body>
+</html>
