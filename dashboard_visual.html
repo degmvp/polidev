@@ -179,7 +179,6 @@ async function carregarDashboard(){
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,downloads")
-        .eq("ativo", true)
         .order("downloads", { ascending:false });
 
     if(error){
