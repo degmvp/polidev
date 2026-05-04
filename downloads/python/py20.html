@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py20.html - Decorators: Contador de Chamadas + Cache</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 20</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Neste exemplo, implementamos dois decorators: um para <strong>memorizar resultados</strong> de chamadas (`@memorize`) e outro para <strong>contar quantas vezes uma função é chamada</strong> (`@countcalls`).
+  </p>
+
+  <h2>✅ Cabeçalho</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB05 
+# ✅ Python 3.6 alterado: 2017/08/13 
+# ✅ Objetivo: decorator → contar chamadas de função 
+#---------------------------------------
+''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Decorator memorize (cache de chamadas)</h2>
+  <pre><code>
+class memorize(dict):
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args):
+        return self[args]
+
+    def __missing__(self, key):
+        result = self[key] = self.func(*key)
+        return result
+  </code></pre>
+
+  <h2>✅ Decorator countcalls (contagem de chamadas)</h2>
+  <pre><code>
+class countcalls(object):
+    "Decorator que conta quantas vezes a função foi chamada."
+
+    __instances = {}
+
+    def __init__(self, f):
+        self.__f = f
+        self.__numcalls = 0
+        countcalls.__instances[f] = self
+
+    def __call__(self, *args, **kwargs):
+        self.__numcalls += 1
+        return self.__f(*args, **kwargs)
+
+    def count(self):
+        "Retorna o número de chamadas da função decorada."
+        return countcalls.__instances[self.__f].__numcalls
+
+    @staticmethod
+    def counts():
+        "Retorna um dicionário com {função: número de chamadas}."
+        return {
+            f.__name__: countcalls.__instances[f].__numcalls
+            for f in countcalls.__instances
+        }
+  </code></pre>
+
+  <h2>✅ Exemplo com função simples</h2>
+  <pre><code>
+@countcalls
+def f():
+    print('f called')
+
+f()
+f()
+  </code></pre>
+
+  <h2>✅ Combinação de Decorators</h2>
+  <p style="color:lightgreen">
+    A função <code>foo(a, b)</code> é decorada com <code>@countcalls</code> e <code>@memorize</code>. Ela realiza multiplicações com cache e contagem.
+  </p>
+  <pre><code>
+@memorize
+@countcalls
+def foo(a, b):
+    return a * b
+
+print('Efetua 3 operações com a função foo(a, b): 2x4, 12x4, 12x12')
+print('e armazena os resultados no decorador memorize (dicionário)')
+print(foo(2, 4))
+print(foo(12, 4))
+print(foo(12, 12))
+print(foo)
+  </code></pre>
+
+  <h2>✅ Relatório de Chamadas</h2>
+  <pre><code>
+print(countcalls.counts())
+  </code></pre>
+
+</body>
+</html>

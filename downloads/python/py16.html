@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py16.html - Geração de Strings, Expressões Lógicas e Fibonacci</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 16</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script utiliza os módulos <code>random</code> e <code>string</code> para gerar identificadores aleatórios, faz expressões booleanas com funções lógicas, e implementa a sequência de Fibonacci com abordagem iterativa.
+  </p>
+
+  <h2>✅ Impressão de caracteres do módulo string</h2>
+  <pre><code>
+import random, string
+
+print('-' * 50)
+print(string.ascii_letters)
+print(string.ascii_lowercase)
+print(string.ascii_uppercase)
+print(string.hexdigits)
+print(string.printable)
+print(string.__all__)
+print('-' * 50)
+  </code></pre>
+
+  <h2>✅ Gerador de identificadores</h2>
+  <p style="color:lightgreen">
+    A função <code>generator()</code> retorna uma string aleatória formada por letras e dígitos hexadecimais.
+  </p>
+  <pre><code>
+def generator():
+    letter1 = random.choice(string.ascii_uppercase)
+    letter2 = random.choice(string.ascii_uppercase)
+    letter3 = random.choice(string.ascii_uppercase)
+    letter4 = random.choice(string.ascii_lowercase)
+    letter5 = random.choice(string.ascii_lowercase)
+    number1 = random.choice(string.hexdigits)
+    number2 = random.choice(string.hexdigits)
+    number3 = random.choice(string.hexdigits)
+    name = letter1 + letter2 + number1 + number2 + number3 + letter3 + letter4 + letter5
+    return name
+
+print(generator())
+  </code></pre>
+
+  <h2>✅ Função Lógica com AND e NOT</h2>
+  <pre><code>
+def V_and_F(var_v, var_f):
+    return var_v and not var_f
+
+print(V_and_F(True, False))  # True
+print(V_and_F(True, True))   # False
+
+a = True
+b = False
+print(V_and_F(a, b))         # True
+print(V_and_F(b, a))         # False
+print(V_and_F(a, a))         # False
+  </code></pre>
+
+  <h2>✅ Expressão matemática com retorno booleano</h2>
+  <p style="color:lightgreen">
+    A função retorna se <code>c</code> é maior que <code>d + e</code>.
+  </p>
+  <pre><code>
+def c_maior_d_plus_e(c, d, e):
+    return c > d + e
+
+print(c_maior_d_plus_e(4, 1, 2))  # True
+  </code></pre>
+
+  <h2>✅ Fibonacci com programação dinâmica (iterativa)</h2>
+  <p style="color:lightgreen">
+    Implementação da sequência de Fibonacci sem recursão, utilizando iteração para maior eficiência.
+  </p>
+  <pre><code>
+def fib_dyn(n):
+    if n == 1 or n == 2:
+        return 1
+    f1 = 1
+    f2 = 1
+    for i in range(3, n + 1):
+        f = f1 + f2
+        f2 = f1
+        f1 = f
+    return f1
+
+print(fib_dyn(7))  # Saída: 13
+  </code></pre>
+
+</body>
+</html>

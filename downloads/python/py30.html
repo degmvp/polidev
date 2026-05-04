@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY30 - Funções Lambda em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1> Mix-Adv 30 - Funções Lambda em Python</h1>
+
+  <h2>O que são funções lambda?</h2>
+  <p style="color:lightgreen">
+    Funções <strong>lambda</strong> são funções anônimas (sem nome) escritas em uma única linha, geralmente usadas para tarefas simples e rápidas.
+  </p>
+
+  <h2>Sintaxe</h2>
+  <pre>
+lambda argumentos: expressão
+  </pre>
+
+  <h2>Exemplo simples</h2>
+  <pre>
+dobro = lambda x: x * 2
+print(dobro(5))  # Saída: 10
+  </pre>
+
+  <h2>Com múltiplos argumentos</h2>
+  <pre>
+soma = lambda a, b: a + b
+print(soma(3, 4))  # Saída: 7
+  </pre>
+
+  <h2>Usando lambda com sorted()</h2>
+  <pre>
+nomes = ["Carlos", "Ana", "Beatriz", "Daniel"]
+ordenados = sorted(nomes, key=lambda nome: len(nome))
+print(ordenados)
+  </pre>
+
+  <p style="color:lightgreen">
+    A função lambda nesse exemplo é usada para ordenar a lista com base no comprimento de cada nome.
+  </p>
+
+  <h2>Usando lambda com map() e filter()</h2>
+  <pre>
+numeros = [1, 2, 3, 4, 5]
+
+dobrados = list(map(lambda x: x * 2, numeros))
+pares = list(filter(lambda x: x % 2 == 0, numeros))
+
+print("Dobro:", dobrados)
+print("Pares:", pares)
+  </pre>
+
+  <h2>Quando usar lambda?</h2>
+  <p style="color:lightgreen">
+    Use lambda quando precisar de uma função simples e rápida, sem a necessidade de defini-la com <code>def</code>.
+    Para funções mais complexas, prefira o uso tradicional com <code>def</code>.
+  </p>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py10 - Bitwise e Permissões</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 10</h1>
+<h1>Documentação Didática: Operações Bitwise e Controle de Permissões</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">
+Este exemplo mostra como usar operações bit a bit (bitwise) em Python. 
+Também aplicamos essas operações para controlar permissões de usuários em um sistema.
+</p>
+
+<h2>🔁 Conversões Binárias e Hexadecimais</h2>
+<pre>
+print("9 em binário -->", bin(9))
+print("0b1001 em decimal -->", int("0b1001", 2))
+
+print("147 em hexadecimal -->", hex(147))
+print("0x93 em decimal -->", int("0x93", 16))
+</pre>
+
+<h2>➡️ Operadores de Shift</h2>
+<pre>
+print("0b0010100 >> 2 -->", 0b0010100 >> 2)
+print("0b0010100 << 2 -->", 0b0010100 << 2)
+</pre>
+
+<h2>⚙️ Operações Bitwise</h2>
+<p class="explicacao">
+As operações bitwise comparam bits de dois valores. São comuns em programação de baixo nível e manipulação de permissões.
+</p>
+
+<h3>AND (&)</h3>
+<pre>
+a = 42  # 00101010
+b = 15  # 00001111
+print("a & b -->", a & b)  # 00001010 = 10
+</pre>
+
+<h3>OR (|)</h3>
+<pre>
+print("a | b -->", a | b)  # 00101111 = 47
+</pre>
+
+<h3>XOR (^)</h3>
+<pre>
+print("a ^ b -->", a ^ b)  # 00100101 = 37
+</pre>
+
+<h2>🔐 Controle de Permissões com Bits</h2>
+<p class="explicacao">
+Utilizando bits para representar permissões:
+<ul>
+  <li>view = 1</li>
+  <li>edit = 2</li>
+  <li>create = 4</li>
+</ul>
+</p>
+
+<pre>
+class User:
+    def __init__(self, rights):
+        self.rights = rights
+
+    def can_view(self):
+        return view & self.rights
+
+    def can_edit(self):
+        return edit & self.rights
+
+    def can_create(self):
+        return create & self.rights
+</pre>
+
+<h2>👥 Usuários e Acessos</h2>
+<pre>
+usr = User(view)
+adm = User(view | edit)
+dba = User(view | edit | create)
+
+print(usr.can_view())    # True
+print(usr.can_edit())    # False
+print(adm.can_edit())    # True
+print(dba.can_create())  # True
+</pre>
+
+<h2>✅ Conclusão</h2>
+<p class="explicacao">
+A manipulação de bits é útil em aplicações que exigem controle detalhado de permissões ou representação compacta de estados.
+<br>
+Este exemplo também mostra como aplicar POO para organizar e reutilizar essa lógica.
+</p>
+
+</body>
+</html>

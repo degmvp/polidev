@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py09 - Arquivos Binários</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 09</h1>
+<h1>Documentação Didática: Manipulação de Arquivos Binários</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">
+Neste exemplo, são utilizados arquivos binários para gravar e ler dados com segurança usando o módulo <code>pickle</code>.
+<br>Essa técnica permite armazenar objetos Python diretamente no disco.
+</p>
+
+<h2>📂 Classe <code>Pessoa</code> e Métodos com Pickle</h2>
+<p class="explicacao">A classe <code>Pessoa</code> possui atributos simples e métodos para salvar e carregar usando arquivos binários.</p>
+
+<pre>
+import pickle
+
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def __str__(self):
+        return f"Nome: {self.nome} - Idade: {self.idade}"
+</pre>
+
+<h2>💾 Salvando Objetos em Arquivo Binário</h2>
+<p class="explicacao">Usamos <code>pickle.dump</code> para armazenar uma lista de objetos no arquivo <code>pessoas.dat</code>.</p>
+
+<pre>
+pessoas = [
+    Pessoa("João", 30),
+    Pessoa("Maria", 25),
+    Pessoa("Carlos", 40)
+]
+
+with open("pessoas.dat", "wb") as f:
+    pickle.dump(pessoas, f)
+
+print("Arquivo binário salvo com sucesso.")
+</pre>
+
+<h2>📥 Lendo o Arquivo Binário</h2>
+<p class="explicacao">Com <code>pickle.load</code> recuperamos os dados gravados e exibimos os objetos armazenados.</p>
+
+<pre>
+with open("pessoas.dat", "rb") as f:
+    pessoas_carregadas = pickle.load(f)
+
+for p in pessoas_carregadas:
+    print(p)
+</pre>
+
+<h2>✅ Conclusão</h2>
+<p class="explicacao">
+O uso de arquivos binários com <code>pickle</code> permite persistir objetos Python de forma prática.
+<br>
+É ideal para armazenar estruturas de dados complexas que precisam ser reabertas em execuções futuras.
+</p>
+
+</body>
+</html>

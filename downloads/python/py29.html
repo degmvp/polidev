@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY29 - Funções em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1> Mix-Adv 29 - Funções em Python</h1>
+
+  <h2>Introdução</h2>
+  <p style="color:lightgreen">
+    Funções são blocos de código reutilizáveis que realizam uma tarefa específica. Em Python, funções são definidas com a palavra-chave <code>def</code>.
+  </p>
+
+  <h2>Sintaxe de uma função</h2>
+  <pre>
+def nome_da_funcao(parâmetros):
+    # bloco de código
+    return resultado
+  </pre>
+
+  <h2>Exemplo de função simples</h2>
+  <pre>
+def saudacao():
+    print("Olá, bem-vindo ao curso de Python!")
+
+saudacao()
+  </pre>
+
+  <h2>Função com parâmetros</h2>
+  <pre>
+def somar(a, b):
+    return a + b
+
+resultado = somar(5, 3)
+print("Soma:", resultado)
+  </pre>
+
+  <h2>Parâmetro com valor padrão</h2>
+  <pre>
+def apresentar(nome, saudacao="Olá"):
+    print(saudacao, nome)
+
+apresentar("Carlos")
+apresentar("Ana", "Oi")
+  </pre>
+
+  <h2>Função com retorno</h2>
+  <p style="color:lightgreen">
+    A instrução <code>return</code> é usada para devolver um valor ao ponto onde a função foi chamada.
+  </p>
+
+  <h2>Funções como objetos</h2>
+  <p style="color:lightgreen">
+    Em Python, funções podem ser passadas como argumentos, atribuídas a variáveis e armazenadas em estruturas de dados.
+  </p>
+
+  <pre>
+def dobro(x):
+    return x * 2
+
+operacao = dobro
+print(operacao(10))
+  </pre>
+
+</body>
+</html>

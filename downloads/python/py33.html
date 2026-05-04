@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY33 - Listas em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1>  Mix-Adv 33 - Listas em Python</h1>
+
+  <h2>O que são listas?</h2>
+  <p style="color:lightgreen">
+    Listas são estruturas de dados que armazenam múltiplos elementos em uma única variável, permitindo modificar, adicionar e remover itens.
+  </p>
+
+  <h2>Como criar uma lista</h2>
+  <pre>
+frutas = ["maçã", "banana", "laranja"]
+numeros = [1, 2, 3, 4, 5]
+lista_mista = [1, "texto", True, 3.14]
+  </pre>
+
+  <h2>Acessando elementos</h2>
+  <pre>
+print(frutas[0])  # maçã
+print(numeros[-1])  # 5 (último elemento)
+  </pre>
+
+  <h2>Adicionando elementos</h2>
+  <pre>
+frutas.append("uva")
+frutas.insert(1, "morango")
+  </pre>
+
+  <h2>Removendo elementos</h2>
+  <pre>
+frutas.remove("banana")  # remove pela primeira ocorrência
+del frutas[0]  # remove pelo índice
+frutas.pop()  # remove o último elemento
+  </pre>
+
+  <h2>Iterando sobre listas</h2>
+  <pre>
+for fruta in frutas:
+    print(fruta)
+  </pre>
+
+  <h2>Funções úteis</h2>
+  <ul>
+    <li><code>len(lista)</code> — retorna o tamanho da lista.</li>
+    <li><code>min(lista)</code> e <code>max(lista)</code> — menor e maior elemento.</li>
+    <li><code>sorted(lista)</code> — retorna a lista ordenada.</li>
+  </ul>
+
+  <h2>Resumo</h2>
+  <p style="color:lightgreen">
+    Listas são versáteis e fundamentais para manipulação de coleções em Python.
+  </p>
+
+</body>
+</html>

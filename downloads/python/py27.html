@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY27 - Laços de Repetição: while</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1> Mix-Adv 27 - Laços de Repetição: while</h1>
+
+  <h2>Introdução</h2>
+  <p style="color:lightgreen">
+    O laço <strong>while</strong> permite repetir um bloco de código enquanto uma condição for verdadeira.
+  </p>
+
+  <h2>Sintaxe</h2>
+  <pre>
+while condição:
+    # bloco de código a ser repetido
+  </pre>
+
+  <h2>Exemplo Básico</h2>
+  <pre>
+contador = 1
+
+while contador <= 5:
+    print("Contador:", contador)
+    contador += 1
+  </pre>
+
+  <h2>Loop Infinito</h2>
+  <p style="color:lightgreen">
+    Se a condição nunca for falsa, o laço entra em loop infinito:
+  </p>
+  <pre>
+while True:
+    comando = input("Digite 'sair' para encerrar: ")
+    if comando == "sair":
+        break
+  </pre>
+
+  <h2>Comando break</h2>
+  <p style="color:lightgreen">
+    <strong>break</strong> é usado para interromper o laço mesmo que a condição ainda seja verdadeira.
+  </p>
+
+  <h2>Comando continue</h2>
+  <p style="color:lightgreen">
+    <strong>continue</strong> pula a iteração atual e vai para a próxima repetição do laço.
+  </p>
+  <pre>
+num = 0
+
+while num < 10:
+    num += 1
+    if num == 5:
+        continue
+    print(num)
+  </pre>
+
+</body>
+</html>

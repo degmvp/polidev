@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY34 - Tuplas em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1>  Mix-Adv 34 - Tuplas em Python</h1>
+
+  <h2>O que são tuplas?</h2>
+  <p style="color:lightgreen">
+    Tuplas são coleções ordenadas e imutáveis de elementos. Diferente das listas, não podem ser modificadas após a criação.
+  </p>
+
+  <h2>Como criar tuplas</h2>
+  <pre>
+tupla1 = (1, 2, 3)
+tupla2 = ("maçã", "banana", "laranja")
+tupla3 = (1, "texto", True, 3.14)
+tupla_vazia = ()
+tupla_um_elemento = (5,)
+  </pre>
+
+  <h2>Acessando elementos</h2>
+  <pre>
+print(tupla1[0])    # 1
+print(tupla2[-1])   # laranja
+  </pre>
+
+  <h2>Tuplas são imutáveis</h2>
+  <p style="color:lightgreen">
+    Você não pode adicionar, remover ou alterar elementos de uma tupla depois de criada.
+  </p>
+
+  <h2>Uso comum de tuplas</h2>
+  <ul>
+    <li>Retornar múltiplos valores de uma função.</li>
+    <li>Garantir que dados não sejam alterados acidentalmente.</li>
+    <li>Usar como chaves em dicionários (são hashable).</li>
+  </ul>
+
+  <h2>Desempacotamento</h2>
+  <pre>
+pessoa = ("Ana", 30, "Engenheira")
+nome, idade, profissão = pessoa
+
+print(nome)      # Ana
+print(idade)     # 30
+print(profissão) # Engenheira
+  </pre>
+
+  <h2>Conversão entre listas e tuplas</h2>
+  <pre>
+lista = [1, 2, 3]
+tupla = tuple(lista)
+
+tupla2 = (4, 5, 6)
+lista2 = list(tupla2)
+  </pre>
+
+</body>
+</html>

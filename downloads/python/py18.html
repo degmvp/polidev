@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py18.html - Decorator com Memorization</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 18</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este exemplo demonstra como implementar um <strong>decorator com memorization</strong> (armazenamento em cache) para otimizar chamadas repetidas de funções.  
+    A classe `memorize` atua como um dicionário que armazena os resultados das chamadas para evitar recomputações.
+  </p>
+
+  <h2>✅ Mensagem de Cabeçalho</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB03 
+# ✅ Python 3.6 alterado: 2018/08/14 
+# ✅ Objetivo: usando decorator --> @memorize 
+#---------------------------------------
+''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Classe Decorator memorize</h2>
+  <pre><code>
+class memorize(dict):
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args):
+        return self[args]
+
+    def __missing__(self, key):
+        result = self[key] = self.func(*key)
+        return result
+  </code></pre>
+
+  <h2>✅ Função decorada com @memorize</h2>
+  <pre><code>
+@memorize
+def foo(a, b):
+    return a * b
+  </code></pre>
+
+  <h2>✅ Chamadas e Resultados</h2>
+  <p style="color:lightgreen">
+    Ao chamar a função `foo` várias vezes com os mesmos parâmetros, o resultado será obtido do cache interno do decorator sem recalcular.
+  </p>
+  <pre><code>
+print('Efetua 3 operações com a função foo(a, b): 2x4, 12x4, 12x12')
+print('Armazena os resultados no decorador memorize (dicionário)')
+print(foo(2, 4))     # 8
+print(foo(12, 4))    # 48
+print(foo(12, 12))   # 144
+print(foo)           # mostra o objeto memorize
+  </code></pre>
+
+</body>
+</html>

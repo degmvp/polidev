@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py11.html - Busca Binária em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 11</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script demonstra o uso de algoritmos de busca binária em Python — tanto iterativo quanto recursivo —, além de operações com listas, `map`, `pow` e descompactação de argumentos.
+  </p>
+
+  <h2>✅ Exemplo com range e list comprehension</h2>
+  <pre><code>
+L = [0, 16]
+print(list(range(*L)))
+
+qua = [z**2 for z in range(10)]
+print(qua)
+  </code></pre>
+
+  <h2>✅ Conversão de números e construtores básicos</h2>
+  <pre><code>
+print(127)      # decimal
+print(0x7F)     # hexadecimal
+
+b = bool(True)
+i = int(100)
+f = float(100.1)
+c = complex(3.0, 1.2)
+print(b, i, f, c)
+  </code></pre>
+
+  <h2>✅ Busca Binária Iterativa</h2>
+  <pre><code>
+def binary_search_ite(vet, num):
+    esquerda, direita, tentativa = 0, len(vet), 1
+    while True:
+        meio = (esquerda + direita) // 2
+        aux_num = vet[meio]
+        if num == aux_num:
+            return tentativa
+        elif num > aux_num:
+            esquerda = meio
+        else:
+            direita = meio
+        tentativa += 1
+  </code></pre>
+
+  <h2>✅ Busca Binária Recursiva</h2>
+  <pre><code>
+def binary_search_rec(vet, num, esq, dir, tentativa):
+    meio = (esq + dir) // 2
+    aux_num = vet[meio]
+    if num == aux_num:
+        return tentativa
+    elif num > aux_num:
+        return binary_search_rec(vet, num, meio, dir, tentativa + 1)
+    return binary_search_rec(vet, num, esq, meio, tentativa + 1)
+  </code></pre>
+
+  <h2>✅ Teste com valores aleatórios</h2>
+  <pre><code>
+import random
+
+def teste():
+    vet = [i for i in range(1, 1000001)]
+    num = random.choice(vet)
+    print('Numero escolhido: %d' % num)
+    print('Tentativa (iterativo): %d' % binary_search_ite(vet, num))
+    print('Tentativa (recursivo): %d' % binary_search_rec(vet, num, 0, len(vet), 1))
+
+teste()
+  </code></pre>
+
+  <h2>✅ Outra implementação de busca binária</h2>
+  <pre><code>
+def binarySearch(alist, item):
+    tentativa = 0
+    if len(alist) == 0:
+        return False
+    else:
+        midpoint = len(alist) // 2
+        tentativa += 1
+        if alist[midpoint] == item:
+            return print('o item existe na lista -->', item, 'tentativa-->', tentativa)
+        elif item < alist[midpoint]:
+            tentativa += 1
+            return binarySearch(alist[:midpoint], item)
+        else:
+            tentativa += 1
+            return binarySearch(alist[midpoint + 1:], item)
+
+vet = [i for i in range(1, 1000001)]
+binarySearch(vet, 1945)
+  </code></pre>
+
+  <h2>✅ Potências com pow() e map()</h2>
+  <pre><code>
+print('usando a função pow(x,y)', pow(2, 8))
+print('usando a função pow(x,y)', pow(2, 16))
+print('usando a função pow(x,y)', pow(2, 31))
+
+x = [2, 2, 2]
+y = [8, 16, 31]
+r = [*map(pow, x, y)]
+print('imprime a função map -->', r)
+  </code></pre>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py19.html - Decorator com Cache para Fatorial</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 19</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este exemplo implementa um decorator chamado <code>@memoized</code>, que armazena em cache os resultados de chamadas anteriores da função.  
+    A função decorada é um cálculo de fatorial iterativo com saída informativa a cada passo.
+  </p>
+
+  <h2>✅ Mensagem Inicial</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB04 
+# ✅ Python 3.6 alterado: 2017/08/13 
+# ✅ Objetivo: decorator → Caches a function's return 
+#---------------------------------------
+''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Importações</h2>
+  <pre><code>
+import collections
+import functools
+  </code></pre>
+
+  <h2>✅ Decorator memoized</h2>
+  <p style="color:lightgreen">
+    A classe <code>memoized</code> armazena os resultados de chamadas anteriores em um dicionário interno, acelerando chamadas repetidas.
+  </p>
+  <pre><code>
+class memoized(object):
+    '''Decorator. Caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned
+    (not reevaluated).
+    '''
+
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+    def __call__(self, *args):
+        if not isinstance(args, collections.Hashable):
+            # uncacheable (e.g., list)
+            return self.func(*args)
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+
+    def __repr__(self):
+        '''Return the function's docstring.'''
+        return self.func.__doc__
+
+    def __get__(self, obj, objtype):
+        '''Support instance methods.'''
+        return functools.partial(self.__call__, obj)
+  </code></pre>
+
+  <h2>✅ Função fatorial com @memoized</h2>
+  <p style="color:lightgreen">
+    A função <code>fat(n)</code> imprime o processo do cálculo fatorial até <code>n</code> e retorna o número (não o valor fatorial).
+  </p>
+  <pre><code>
+@memoized
+def fat(n):
+    i = 1
+    fat = 1
+    while i <= n:
+        fat = fat * i
+        i += 1
+        print('Fatorial(%d) = %d' % (n, fat))
+    return n
+
+print(fat(10))
+  </code></pre>
+
+</body>
+</html>

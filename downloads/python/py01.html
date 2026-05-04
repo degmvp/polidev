@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py01 - Introdução à POO</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 01</h1>
+<h1>Documentação Didática: Fundamentos de Classe em Python</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">Este código apresenta a estrutura básica de uma classe Python com atributos e métodos simples.</p>
+
+<h2>🔧 Definição da Classe Pessoa</h2>
+<p class="explicacao">A classe <code>Pessoa</code> possui dois atributos: nome e idade. Um método chamado <code>mostrar_dados</code> exibe essas informações.</p>
+
+<pre>
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def mostrar_dados(self):
+        print(f"Nome: {self.nome}")
+        print(f"Idade: {self.idade}")
+
+p1 = Pessoa("João", 30)
+p1.mostrar_dados()
+</pre>
+
+<h2>✅ Explicação Final</h2>
+<p class="explicacao">
+O método <code>__init__</code> é o construtor da classe, chamado automaticamente na criação de um novo objeto.
+<br>
+O uso de <code>self</code> permite acessar os atributos e métodos do próprio objeto.
+</p>
+
+</body>
+</html>

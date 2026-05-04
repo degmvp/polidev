@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py05 - Encapsulamento e Propriedades</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 05</h1>
+<h1>Documentação Didática: Encapsulamento e Propriedades em Python</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">Neste exemplo, você verá como proteger atributos e controlar seu acesso com <code>getters</code> e <code>setters</code> usando a técnica de encapsulamento.</p>
+
+<h2>🔒 Classe ContaBancaria com Encapsulamento</h2>
+<p class="explicacao">O atributo <code>_saldo</code> é protegido. O acesso controlado é feito por propriedades.</p>
+
+<pre>
+class ContaBancaria:
+    def __init__(self, titular, saldo=0):
+        self.titular = titular
+        self._saldo = saldo  # atributo protegido
+
+    @property
+    def saldo(self):
+        """Getter para o saldo"""
+        return self._saldo
+
+    @saldo.setter
+    def saldo(self, valor):
+        """Setter que impede saldo negativo"""
+        if valor < 0:
+            print("❌ Saldo não pode ser negativo.")
+        else:
+            self._saldo = valor
+
+    def depositar(self, valor):
+        if valor > 0:
+            self._saldo += valor
+        else:
+            print("❌ Valor inválido para depósito.")
+
+    def sacar(self, valor):
+        if 0 < valor <= self._saldo:
+            self._saldo -= valor
+        else:
+            print("❌ Saldo insuficiente ou valor inválido.")
+</pre>
+
+<h2>💼 Usando a ContaBancaria</h2>
+<p class="explicacao">Observe como o acesso ao saldo é feito com validações via métodos e propriedades.</p>
+
+<pre>
+# Criando uma conta
+conta = ContaBancaria("Maria", 1000)
+
+# Tentando acessar e modificar diretamente
+print("Saldo atual:", conta.saldo)
+conta.saldo = -500  # tentativa inválida
+conta.depositar(200)
+conta.sacar(300)
+
+# Resultado final
+print("Saldo final:", conta.saldo)
+</pre>
+
+<h2>✅ Conclusão</h2>
+<p class="explicacao">
+O uso de <code>@property</code> melhora a segurança dos dados.
+<br>
+Encapsulamento é fundamental para garantir que os atributos só sejam acessados de forma segura e controlada.
+</p>
+
+</body>
+</html>

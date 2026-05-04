@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY32 - Docstrings: Documentação de Funções</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1>  Mix-Adv 32 - Docstrings: Documentação de Funções</h1>
+
+  <h2>O que são docstrings?</h2>
+  <p style="color:lightgreen">
+    Docstrings são cadeias de texto utilizadas para documentar funções, classes e módulos em Python. São escritas logo após a definição da função, entre três aspas (simples ou duplas).
+  </p>
+
+  <h2>Exemplo de docstring</h2>
+  <pre>
+def somar(a, b):
+    """
+    Retorna a soma de dois números.
+    
+    Parâmetros:
+    a -- primeiro número
+    b -- segundo número
+    """
+    return a + b
+  </pre>
+
+  <h2>Como acessar a docstring</h2>
+  <pre>
+print(somar.__doc__)
+  </pre>
+
+  <p style="color:lightgreen">
+    Isso exibirá a documentação definida dentro da função.
+  </p>
+
+  <h2>Boas práticas para docstrings</h2>
+  <ul>
+    <li>Descreva claramente o propósito da função.</li>
+    <li>Indique os parâmetros e seus tipos, se necessário.</li>
+    <li>Explique o valor de retorno.</li>
+    <li>Use um estilo consistente.</li>
+  </ul>
+
+  <h2>Docstring de uma função com validação</h2>
+  <pre>
+def dividir(a, b):
+    """
+    Retorna a divisão de a por b.
+
+    Lança uma exceção se b for zero.
+    """
+    if b == 0:
+        raise ValueError("O divisor não pode ser zero.")
+    return a / b
+  </pre>
+
+  <h2>Documentação para classes</h2>
+  <pre>
+class Pessoa:
+    """Representa uma pessoa com nome e idade."""
+    
+    def __init__(self, nome, idade):
+        """
+        Inicializa a pessoa com nome e idade.
+        """
+        self.nome = nome
+        self.idade = idade
+  </pre>
+
+  <h2>Resumo</h2>
+  <ul>
+    <li><span style="color:lightgreen">Docstrings ajudam na manutenção e entendimento do código.</span></li>
+    <li><span style="color:lightgreen">São acessíveis em tempo de execução via <code>__doc__</code>.</span></li>
+    <li><span style="color:lightgreen">São diferentes de comentários normais (usam aspas triplas).</span></li>
+  </ul>
+
+</body>
+</html>

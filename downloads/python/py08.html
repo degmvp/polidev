@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py08 - Impressão Avançada de Tabelas</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 08</h1>
+<h1>Documentação Didática: Impressão de Tabelas com Título e Alinhamento</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">
+Este exemplo cria uma classe <code>Table</code> capaz de imprimir dados tabulados com título e cabeçalhos.
+<br>
+A largura de cada coluna é ajustada dinamicamente com base no conteúdo.
+</p>
+
+<h2>📐 Classe <code>Table</code></h2>
+<p class="explicacao">Recebe título, cabeçalhos e dados. Calcula larguras ideais de cada coluna.</p>
+
+<pre>
+print('✅' * 50)
+print('''
+#-------------------------------------------------------
+# ✅ advR008
+# ✅ Python 3.66 alterado: 2018/07/29
+# ✅ Objetivo: cmd avançado imprime formato table
+# ✅ Comandos: for, if
+# ✅ Funções : append(), str(), join(), range()
+#-------------------------------------------------------''')
+print('✅' * 50)
+
+class Table:
+    def __init__(self, title, headers, rows):
+        self.title = title
+        self.headers = headers
+        self.rows = rows
+        self.nrows = len(self.rows)
+        self.fieldlen = []
+
+        ncols = len(headers)
+
+        for i in range(ncols):
+            max = 0
+            for j in rows:
+                if len(str(j[i])) > max:
+                    max = len(str(j[i]))
+            self.fieldlen.append(max)
+
+        for i in range(len(headers)):
+            if len(str(headers[i])) > self.fieldlen[i]:
+                self.fieldlen[i] = len(str(headers[i]))
+
+        self.width = sum(self.fieldlen) + (ncols - 1) * 3 + 4
+</pre>
+
+<h2>🧩 Método <code>__str__</code>: Montando e Formatando a Tabela</h2>
+
+<pre>
+    def __str__(self):
+        bar = "-" * self.width
+        title = "| " + self.title + " " * (self.width - 3 - len(self.title)) + "|"
+        out = [bar, title, bar]
+        header = ""
+        for i in range(len(self.headers)):
+            header += "| %s" % str(self.headers[i]) + " " * (self.fieldlen[i] - len(str(self.headers[i]))) + " "
+        header += "|"
+        out.append(header)
+        out.append(bar)
+        for i in self.rows:
+            line = ""
+            for j in range(len(i)):
+                line += "| %s" % str(i[j]) + " " * (self.fieldlen[j] - len(str(i[j]))) + " "
+            out.append(line + "|")
+        out.append(bar)
+        return "\r\n".join(out)
+</pre>
+
+<h2>📊 Exemplo de Uso</h2>
+<p class="explicacao">Tabela com três colunas e linhas com diferentes tipos de dados (número, string, booleano, lista, etc).</p>
+
+<pre>
+print(Table(
+    "Este é o titulo da tabela ",
+    ["Header1", "Header2", "H3"],
+    [
+        [1, 2, 3],
+        ["Hi", "everybody", "How are you??"],
+        [None, True, [1, 2]]
+    ]
+))
+</pre>
+
+<h2>✅ Conclusão</h2>
+<p class="explicacao">
+Essa implementação é útil para relatórios visuais no terminal sem depender de bibliotecas externas.
+<br>
+Pode ser adaptada para exportar CSV ou gerar tabelas HTML futuramente.
+</p>
+
+</body>
+</html>

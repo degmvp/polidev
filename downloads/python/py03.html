@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py03 - POO com Python</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 03</h1>
+<h1>Documentação Didática: Programação Orientada a Objetos com Python</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">Este exemplo demonstra conceitos fundamentais de POO em Python: classes, métodos, construtores, herança e uso de listas.</p>
+
+<h2>👥 Classe Pessoa e Operações com Lista</h2>
+<p class="explicacao">A classe <code>Pessoa</code> permite cadastrar nomes em uma lista e realizar iteração sobre ela.</p>
+
+<pre>
+print('✅' * 50) 
+vet = input('Digite header:') 
+print('--------->---------------------------<---------') 
+print('-------------------->Class---------------------') 
+print('--------->---------------------------<---------') 
+print(vet) 
+print('self --> é uma variavel de classe') 
+print('passa toda -->class<-- para dentro da definição') 
+print('-' * 65) 
+print('><' * 32) 
+print('Deg - Python 3.66 - em 2018/07/29 ') 
+print('Programa - class_01 - Python 3.66 ') 
+print('><' * 32) 
+print('--------->---------------------------<---------') 
+print('-------------------->Class---------------------') 
+print('--------->---------------------------<---------') 
+
+class Pessoa: 
+    def __init__(self): 
+        self.listaDePessoas = [] 
+
+    def cadastrar_pessoa(self,nome): 
+        self.listaDePessoas.append(nome) 
+        print('Pessoa adiionada com sucesso!') 
+
+    def __iter__(self): 
+        return iter(self.listaDePessoas) 
+
+    def  __len__(self): 
+        return len(self.listaDePessoas) 
+
+vinst = Pessoa() 
+vinst.cadastrar_pessoa('Degmar') 
+vinst.cadastrar_pessoa('Janaina') 
+vinst.cadastrar_pessoa('Laura') 
+vinst.cadastrar_pessoa('Lawrence') 
+
+for x in vinst: 
+    print(x) 
+</pre>
+
+<h2>🔧 Métodos Construtores</h2>
+<p class="explicacao">Construtores são definidos por <code>__init__</code> e usados para inicializar objetos com valores padrão ou recebidos.</p>
+
+<pre>
+print('--------->---------------------------<---------') 
+print('--------->Class Metodo Construtor--------------') 
+print('--------->---------------------------<---------') 
+
+class Many_obj(): 
+    def __init__(self): 
+        self.descreve = 'Metodo construtor do objeto' 
+        self.programa = 'Usando variaveis de class' 
+        print('Metodo construtor chamado com sucesso!') 
+
+    def imprime(self): 
+        print('Many_obj é:%s \nO programa é: %s'%(self.descreve,self.programa)) 
+
+obj_instanciado = Many_obj() 
+obj_instanciado.imprime() 
+</pre>
+
+<h2>🧬 Herança em Classes</h2>
+<p class="explicacao">Herança permite criar classes que reutilizam atributos e métodos de outras classes.</p>
+
+<pre>
+print('✅' * 50) 
+print('--------->---------------------------<---------') 
+print('-------------------->Class---------------------') 
+print('--------->---------------------------<---------') 
+print(vet) 
+print('--------->---------------------------<---------') 
+print('-------------------->Herança-------------------') 
+print('--------->---------------------------<---------') 
+
+class Cab: 
+    cab1 = 'Programação orientada ao objeto (Class)' 
+    ano = 2018 
+    __nome = 'Herança' 
+
+    def criarcab(self, __nome, ano, cab1): 
+        self.__nome = nome 
+        self.ano = ano 
+        self.cab1 = cab1 
+
+    def obternome(self): 
+        return self.__nome 
+
+    def obterano(self): 
+        return self.ano 
+
+    def obtercab1(self): 
+        return self.cab1 
+
+hd = Cab() 
+print(hd.obtercab1()) 
+print(hd.obternome()) 
+print(hd.obterano()) 
+
+class ClassePai: 
+    var1 = 'definição de classe pai' 
+
+class ClasseFilha(ClassePai): 
+    pass 
+
+objeto_pai = ClassePai() 
+objeto_filho = ClasseFilha() 
+
+print(objeto_pai.var1) 
+print(objeto_filho.var1, 'ClasseFilha foi herdado de ClassePai') 
+</pre>
+
+<h2>🙋 Interatividade com Input</h2>
+<p class="explicacao">A classe <code>Entrevista</code> demonstra entrada de dados e cálculo com base em entrada do usuário.</p>
+
+<pre>
+print('✅' * 50) 
+print('Para passar toda -->class<-- para dentro da definição usamos **self**') 
+print('O parametro que passamos para a definição é a propria class no caso as variaveis') 
+print('self.variavel é uma variavel de classe, outra é variavel local') 
+
+class Entrevista(): 
+    nome = '' 
+    ano_informado = 0 
+    idade = 0 
+
+    def pergunta_nome(self): 
+        self.nome = input('Qual é o seu nome? ') 
+        print('O seu nome é ', self.nome) 
+        return self.nome 
+
+    def pergunta_idade(self, ano_atual=2018): 
+        self.ano_informado = int(input('Então ' + self.nome + ', em que ano vc nasceu?')) 
+        self.idade = ano_atual - self.ano_informado 
+        print('Voce tem', self.idade, 'anos') 
+        return (self.ano_informado, self.idade)  # tuple 
+
+obj_inst = Entrevista() 
+obj_inst.pergunta_nome() 
+obj_inst.pergunta_idade() 
+</pre>
+
+<h2>🎁 Outros Objetos com Construtor</h2>
+<p class="explicacao">Exemplos adicionais de construtores com passagem de argumentos e coleta de dados via input.</p>
+
+<pre>
+print('><' * 32) 
+print('--------->---------------------------<---------') 
+print('--------->Class Metodo Construtor--------------') 
+print('--------->---------------------------<---------') 
+
+class Too_obj(): 
+    def __init__(self, p1,p2): 
+        self.descreve = p1 
+        self.programa = p2 
+        print('Metodo construtor chamado com sucesso!') 
+
+    def imprime(self): 
+        print('O obj é:%s \nO programa é: %d'%(self.descreve,self.programa)) 
+
+obj_instanciado = Too_obj('Metodo construtor do objeto',2) 
+obj_instanciado.imprime() 
+
+class Moo_obj(): 
+    def __init__(self,p1,p2): 
+        self.nome = input('Digite nome:') 
+        self.cel  = input('Celular:') 
+        print('Metodo construtor chamado com sucesso!') 
+
+    def imprime(self): 
+        print('O Moo_obj é:%s \nO celular é: %s'%(self.nome,self.cel)) 
+
+obj_inst = Moo_obj('','') 
+obj_inst.imprime()
+</pre>
+
+</body>
+</html>

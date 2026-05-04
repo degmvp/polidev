@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY31 - Escopo de Variáveis em Funções</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1>  Mix-Adv 31 - Escopo de Variáveis em Funções</h1>
+
+  <h2>O que é escopo?</h2>
+  <p style="color:lightgreen">
+    Escopo se refere ao contexto onde uma variável é reconhecida e acessível. Existem dois tipos principais de escopo em Python:
+    <strong>local</strong> e <strong>global</strong>.
+  </p>
+
+  <h2>Escopo local</h2>
+  <pre>
+def minha_funcao():
+    x = 10  # x é local
+    print(x)
+
+minha_funcao()
+# print(x)  # Isso causaria erro, pois x não existe fora da função
+  </pre>
+
+  <h2>Escopo global</h2>
+  <pre>
+x = 5  # variável global
+
+def mostrar():
+    print(x)
+
+mostrar()  # Saída: 5
+  </pre>
+
+  <h2>Modificando variáveis globais</h2>
+  <pre>
+x = 10
+
+def alterar():
+    global x
+    x = 20
+
+alterar()
+print(x)  # Saída: 20
+  </pre>
+
+  <p style="color:lightgreen">
+    A palavra-chave <code>global</code> permite modificar uma variável definida fora da função.
+  </p>
+
+  <h2>Variáveis com mesmo nome</h2>
+  <pre>
+x = 50
+
+def teste():
+    x = 100  # nova variável local x
+    print("Dentro da função:", x)
+
+teste()
+print("Fora da função:", x)
+  </pre>
+
+  <p style="color:lightgreen">
+    A variável local <code>x</code> dentro da função não altera a <code>x</code> global.
+  </p>
+
+  <h2>Resumo</h2>
+  <ul>
+    <li><span style="color:lightgreen">Variáveis locais</span> existem apenas dentro da função onde são definidas.</li>
+    <li><span style="color:lightgreen">Variáveis globais</span> são definidas fora de funções e acessíveis em todo o programa.</li>
+    <li><span style="color:lightgreen">Use <code>global</code></span> com cuidado, pois altera variáveis globais dentro de funções.</li>
+  </ul>
+
+</body>
+</html>

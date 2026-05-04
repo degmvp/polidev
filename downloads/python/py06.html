@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py06 - Arquivos e Argumentos</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 06</h1>
+<h1>Documentação Didática: Leitura de Arquivos e Argumentos Variáveis</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">
+Este exemplo mostra como manipular arquivos de texto com diferentes métodos de leitura, gravação e cópia.
+<br>Também demonstra como trabalhar com argumentos variáveis em funções Python.
+</p>
+
+<h2>📂 Abertura e Leitura de Arquivo com <code>open()</code></h2>
+
+<pre>
+print('✅' * 50)
+print('''
+-------------------------------------------------- 
+# ✅ advR003 
+# ✅ Python 3.6 alterado: 2018/07/29 
+# ✅ Objetivo: Rotina ler arq.txt 
+# ✅ Comandos: open(), with open, readlines() 
+# ✅ Funções: f.read(), f.readline(), f.readlines() 
+--------------------------------------------------''')
+print('✅' * 50)
+
+f = open('arq.txt', 'r')
+
+print(f.name)
+print(f)
+print(f.mode)
+lineH = f.readline()
+print(lineH)
+
+f.close()
+</pre>
+
+<h2>📖 Leitura Completa com <code>with open</code></h2>
+
+<pre>
+print('ler o arquivo a função read() todo o arquivo\n')
+with open('arq.txt', 'r') as f:
+    f_contents = f.read()
+    print(f_contents)
+</pre>
+
+<h2>📚 Leitura com <code>readlines()</code></h2>
+
+<pre>
+print('ler o arquivo a função readlines() todo o arquivo\n')
+with open('arq.txt', 'r') as f:
+    f_contents = f.readlines()
+    print(f_contents)
+</pre>
+
+<h2>🧾 Leitura com <code>readline()</code> (uma linha)</h2>
+
+<pre>
+print('ler o arquivo a função readline() apenas uma linha\n')
+with open('arq.txt', 'r') as f:
+    f_contents = f.readline()
+    print(f_contents, end='')
+</pre>
+
+<h2>🔁 Leitura com Loop <code>for</code></h2>
+
+<pre>
+print('ler o arquivo usando for para acesso aos registros\n')
+with open('arq.txt', 'r') as f:
+    for line in f:
+        print(line, end='')
+</pre>
+
+<h2>📏 Leitura Parcial com <code>read(size)</code></h2>
+
+<pre>
+print('ler o arquivo usando size explicito 120 bytes\n')
+with open('arq.txt', 'r') as f:
+    size_to_read = 125
+
+    f_contents = f.read(size_to_read)
+    print(f_contents, end='')
+
+    print('imprime o tamanho da variavel size_to_read : ', f.tell())
+</pre>
+
+<h2>📤 Copiando Arquivo com <code>write()</code></h2>
+
+<pre>
+print('ler arq.txt e grava saida em arq_copy.txt\n')
+with open('arq.txt', 'r') as rf:
+    with open('arq_copy.txt', 'w') as wf:
+        for line in rf:
+            wf.write(line)
+</pre>
+
+<h2>🧩 Função com Argumentos Variáveis</h2>
+<p class="explicacao">A função <code>func_arg</code> usa <code>*args</code> e <code>**kwargs</code> para aceitar qualquer quantidade de argumentos posicionais e nomeados.</p>
+
+<pre>
+def func_arg(*args, **kwargs):
+    print(args)
+    print(kwargs)
+
+pro = ['Python', 'Programação']
+dic = {'nome': 'Degmar', 'desenvolvedor': 'avancado', 'ano ': '2017', 'mes ': 'maio'}
+
+func_arg(*pro, **dic)
+</pre>
+
+<h2>✅ Conclusão</h2>
+<p class="explicacao">
+A leitura e escrita de arquivos é essencial para automações e manipulação de dados em Python.
+<br>
+O uso de argumentos variáveis torna funções mais flexíveis e reutilizáveis.
+</p>
+
+</body>
+</html>

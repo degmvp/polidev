@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY25 - Operadores Lógicos em Python</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1> Mix-Adv 25 - Operadores Lógicos em Python</h1>
+
+  <h2>Operadores Lógicos</h2>
+  <p style="color:lightgreen">
+    Os operadores lógicos em Python permitem combinar expressões booleanas. Os principais são:
+  </p>
+  <ul>
+    <li><strong>and</strong>: retorna True se ambas as expressões forem verdadeiras.</li>
+    <li><strong>or</strong>: retorna True se pelo menos uma das expressões for verdadeira.</li>
+    <li><strong>not</strong>: inverte o valor lógico da expressão.</li>
+  </ul>
+
+  <h2>Exemplos de Uso</h2>
+  <pre>
+a = True
+b = False
+
+print(a and b)   # False
+print(a or b)    # True
+print(not a)     # False
+  </pre>
+
+  <h2>Com Condições</h2>
+  <p style="color:lightgreen">
+    Os operadores lógicos são muito utilizados em estruturas condicionais:
+  </p>
+  <pre>
+idade = 20
+tem_carteira = True
+
+if idade >= 18 and tem_carteira:
+    print("Pode dirigir.")
+else:
+    print("Não pode dirigir.")
+  </pre>
+
+  <h2>Curiosidades</h2>
+  <p style="color:lightgreen">
+    Python avalia expressões da esquerda para a direita e para nos primeiros valores que tornam a expressão completa (curto-circuito lógico).
+  </p>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py15.html - Leitura de Imagem com Matplotlib</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 15</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script apresenta como utilizar a biblioteca <code>matplotlib</code> para ler e exibir uma imagem no formato <strong>.jpg</strong> ou <strong>.png</strong>.
+    Ele é útil para visualizar arquivos gráficos em aplicações científicas ou educacionais.
+  </p>
+
+  <h2>✅ Impressão de Título</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB01  
+# ✅ Python 3.66 alterado: 2018/08/04 
+# ✅ Objetivo: Ler uma imagem.jpg/png 
+#---------------------------------------
+''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Importação das Bibliotecas</h2>
+  <pre><code>
+import matplotlib.pyplot as plt
+import matplotlib.cbook as cbook
+  </code></pre>
+
+  <h2>✅ Caminho e Leitura da Imagem</h2>
+  <p style="color:lightgreen">
+    O caminho do arquivo é recuperado com a função <code>get_sample_data()</code> que localiza o arquivo indicado:
+  </p>
+  <pre><code>
+image_file = cbook.get_sample_data('P:\\app_prog_xpydb\\app_abmzs\\modulo.png')
+image = plt.imread(image_file)
+  </code></pre>
+
+  <h2>✅ Exibição da Imagem</h2>
+  <pre><code>
+fig, ax = plt.subplots()
+ax.imshow(image)
+ax.axis('off')  # Oculta os eixos
+plt.show()
+  </code></pre>
+
+  <p style="color:lightgreen">
+    O método <code>imshow()</code> renderiza a imagem na interface gráfica do matplotlib, enquanto <code>axis('off')</code> oculta os eixos X e Y.
+  </p>
+
+</body>
+</html>

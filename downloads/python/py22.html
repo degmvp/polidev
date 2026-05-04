@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py22.html - Operações NumPy Avançadas</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 22</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script aprofunda o uso do <code>NumPy</code> com arrays 1D e 2D, operações com booleanos, slicing, broadcasting, reshape e somas por eixo.
+  </p>
+
+  <h2>✅ Cabeçalho</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB07 
+# ✅ Python 3.6 alterado: 2017/08/13 
+# ✅ Objetivo: import numpy as np 
+#---------------------------------------''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Importação e Vetor Base</h2>
+  <pre><code>
+import numpy as np
+
+x = np.arange(10)
+print(x)             # [0 1 2 3 4 5 6 7 8 9]
+print(x.ndim)        # 1
+print(x.shape)       # (10,)
+print(x.size)        # 10
+  </code></pre>
+
+  <h2>✅ Indexação e Slicing</h2>
+  <pre><code>
+print(x[0])          # 0
+print(x[2])          # 2
+print(x[:])          # todos os elementos
+print(x[::-1])       # reverso
+  </code></pre>
+
+  <h2>✅ Máscaras Booleanas e Substituições</h2>
+  <pre><code>
+print(x < 5)         # [ True  True  True  True  True False False False False False]
+print(x[x < 5])      # [0 1 2 3 4]
+
+x[x < 5] = 50
+print(x)             # valores &lt; 5 substituídos por 50
+  </code></pre>
+
+  <h2>✅ Matriz 3x3 e Acesso de Elementos</h2>
+  <pre><code>
+x = np.arange(9).reshape((3, 3))
+print(x)
+
+print(x[1][2])       # linha 1, coluna 2 → valor 5
+print(x[1, 2])       # mesma coisa
+print(x[1:, 1:])     # submatriz
+print(x[:, 1])       # coluna 1 inteira
+  </code></pre>
+
+  <h2>✅ Atribuição com Broadcast</h2>
+  <p style="color:lightgreen">
+    Alterando todos os valores da 2ª coluna para 0.
+  </p>
+  <pre><code>
+x[:, 1] = 0
+print(x)
+  </code></pre>
+
+  <h2>✅ Somas</h2>
+  <pre><code>
+print(x.sum())            # soma total
+print(x.sum(axis=0))      # soma por coluna
+print(x.sum(axis=1))      # soma por linha
+  </code></pre>
+
+  <h2>✅ Alterações e Multiplicações</h2>
+  <pre><code>
+x[:, 2] = 0
+print(x)
+
+print(x * 2)
+print(x * x)
+print(x.T)         # transposta
+  </code></pre>
+
+  <h2>✅ Criação de Vetores Especiais</h2>
+  <pre><code>
+print(np.zeros((3, 3)))
+print(np.ones((3, 3)))
+print(np.eye(3))       # identidade
+  </code></pre>
+
+</body>
+</html>

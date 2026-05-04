@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py14.html - Map, deque, LinkedList, Sets e Counter</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 14</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script aborda conceitos fundamentais da linguagem Python como:
+    <strong>função map, deque, listas ligadas, conjuntos (set, frozenset)</strong> e a classe <code>Counter</code> da biblioteca <code>collections</code>.
+    Também são exploradas convenções de nomes usando underscores.
+  </p>
+
+  <h2>✅ Função map()</h2>
+  <pre><code>
+def pow(x):
+    return x ** 2
+
+mapa = map(pow, range(10))
+print(*mapa)
+
+ran = tuple(map(pow, range(10)))
+print(ran)
+  </code></pre>
+
+  <h2>✅ Verificação de Arquivos</h2>
+  <pre><code>
+import os.path
+
+print(os.path.exists('P:/app_advanced/app_tipB.py'))
+print(os.path.exists('P:/app_advanced'))
+
+print(os.path.isfile('P:/app_advanced/app_tipB.py'))
+print(os.path.isfile('P:/app_advanced'))
+  </code></pre>
+
+  <h2>✅ collections.deque como Lista Ligada</h2>
+  <pre><code>
+import collections
+
+lst = collections.deque()
+lst.append('B')
+lst.append('C')
+lst.appendleft('A')
+print(lst)
+
+lst.insert(2, 'X')
+print(lst)
+
+lst.pop()
+lst.popleft()
+print(lst)
+
+del lst[1]
+lst.remove('B')
+print(lst)
+
+lst = ['A', 'B', 'X', 'C']
+lst.reverse()
+print(lst)
+
+print(lst.index('X'))
+  </code></pre>
+
+  <h2>✅ Classe SinglyLinkedList</h2>
+  <pre><code>
+class ListNode:
+    def __init__(self, data=None, next=None):
+        self.data = data
+        self.next = next
+    def __repr__(self):
+        return repr(self.data)
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+    def __repr__(self):
+        nodes = []
+        curr = self.head
+        while curr:
+            nodes.append(repr(curr))
+            curr = curr.next
+        return '[' + ', '.join(nodes) + ']'
+    def prepend(self, data):
+        self.head = ListNode(data=data, next=self.head)
+    def append(self, data):
+        if not self.head:
+            self.head = ListNode(data=data)
+            return
+        curr = self.head
+        while curr.next:
+            curr = curr.next
+        curr.next = ListNode(data=data)
+    def find(self, key):
+        curr = self.head
+        while curr and curr.data != key:
+            curr = curr.next
+        return curr
+    def remove(self, key):
+        curr = self.head
+        prev = None
+        while curr and curr.data != key:
+            prev = curr
+            curr = curr.next
+        if prev is None:
+            self.head = curr.next
+        elif curr:
+            prev.next = curr.next
+            curr.next = None
+    def reverse(self):
+        curr = self.head
+        prev_node = None
+        while curr:
+            next_node = curr.next
+            curr.next = prev_node
+            prev_node = curr
+            curr = next_node
+        self.head = prev_node
+  </code></pre>
+
+  <h2>✅ Testando a Lista Ligada</h2>
+  <pre><code>
+lst = SinglyLinkedList()
+lst.prepend(23)
+lst.prepend('a')
+lst.prepend(42)
+lst.prepend('X')
+lst.append('1945')
+lst.append('1983')
+print(lst)
+
+lst.find('X')
+elem = lst.find(42)
+lst.remove('X')
+print(lst)
+  </code></pre>
+
+  <h2>✅ Conjuntos (set e frozenset)</h2>
+  <pre><code>
+vogais = {'a', 'e', 'i', 'o', 'u'}
+print('e' in vogais)
+
+nome = set('Degmar')
+print(nome.intersection(vogais))
+
+vogais.add('x')
+print(vogais)
+print(len(vogais))
+
+nome.add('xx')
+print(nome)
+
+vfro = frozenset({'a', 'e', 'i', 'o', 'u'})
+print(vfro)
+  </code></pre>
+
+  <h2>✅ collections.Counter</h2>
+  <pre><code>
+from collections import Counter
+
+inventory = Counter()
+dbqty = {'proc': 2, 'func': 3, 'view': 2}
+inventory.update(dbqty)
+
+more_dbqty = {'proc': 4, 'func': 2, 'view': 1}
+inventory.update(more_dbqty)
+
+print(inventory)
+print('Total únicos:', len(inventory))
+print('Total itens:', sum(inventory.values()))
+print('proc:', inventory['proc'])
+print('func:', inventory['func'])
+print('view:', inventory['view'])
+
+print(list(inventory.elements()))
+print(*inventory.elements())
+  </code></pre>
+
+  <h2>✅ Convenções com Underscore</h2>
+  <pre><code>
+# _var    → uso interno
+# var_    → evita conflito com palavra-chave
+# __var   → name mangling (uso interno da classe)
+# __var__ → métodos especiais (ex: __init__)
+# _       → variável descartável
+  </code></pre>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PY28 - Laços de Repetição: for</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+
+  <h1> Mix-Adv 28 - Laços de Repetição: for</h1>
+
+  <h2>Introdução</h2>
+  <p style="color:lightgreen">
+    O laço <strong>for</strong> é usado para percorrer elementos de uma sequência (listas, strings, intervalos, etc).
+  </p>
+
+  <h2>Sintaxe</h2>
+  <pre>
+for variável in sequência:
+    # bloco de código
+  </pre>
+
+  <h2>Exemplo com range()</h2>
+  <pre>
+for i in range(5):
+    print("Valor de i:", i)
+  </pre>
+  <p style="color:lightgreen">
+    A função <code>range(5)</code> gera os valores 0 até 4.
+  </p>
+
+  <h2>Iterando sobre listas</h2>
+  <pre>
+frutas = ["maçã", "banana", "uva"]
+
+for fruta in frutas:
+    print("Fruta:", fruta)
+  </pre>
+
+  <h2>Iterando sobre strings</h2>
+  <pre>
+palavra = "Python"
+
+for letra in palavra:
+    print(letra)
+  </pre>
+
+  <h2>Usando break e continue</h2>
+  <pre>
+for numero in range(10):
+    if numero == 5:
+        break
+    print(numero)
+  </pre>
+  <pre>
+for numero in range(10):
+    if numero % 2 == 0:
+        continue
+    print(numero)
+  </pre>
+
+</body>
+</html>

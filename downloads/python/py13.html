@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py13.html - Entrada com Tkinter + MySQL</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 13</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este exemplo demonstra como usar o módulo <code>tkinter</code> para criar uma interface gráfica que se conecta a um banco de dados MySQL, permitindo inserções e visualização de dados.
+  </p>
+
+  <h2>✅ Requisitos</h2>
+  <p style="color:lightgreen">
+    É necessário ter o <strong>MySQL Server</strong> instalado e o módulo <code>mysql.connector</code> disponível no Python:
+  </p>
+  <pre><code>pip install mysql-connector-python</code></pre>
+
+  <h2>✅ Conexão com MySQL</h2>
+  <pre><code>
+import mysql.connector
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="rsx45831",
+    database="polydev"
+)
+mycursor = mydb.cursor()
+  </code></pre>
+
+  <h2>✅ Interface Gráfica com Tkinter</h2>
+  <p style="color:lightgreen">
+    A interface principal permite digitar um código e nome, que são então inseridos na tabela <code>linguagens</code> do banco de dados.
+  </p>
+  <pre><code>
+from tkinter import *
+
+root = Tk()
+root.title("App Entrada Banco")
+root.geometry("400x180")
+  </code></pre>
+
+  <h2>✅ Função de Inserção</h2>
+  <pre><code>
+def inserir():
+    cod = e1.get()
+    nome = e2.get()
+    mycursor.execute("INSERT INTO linguagens (id, nome) VALUES (%s, %s)", (cod, nome))
+    mydb.commit()
+    e1.delete(0, END)
+    e2.delete(0, END)
+  </code></pre>
+
+  <h2>✅ Widgets e Layout</h2>
+  <pre><code>
+Label(root, text="Código:").pack()
+e1 = Entry(root)
+e1.pack()
+
+Label(root, text="Nome:").pack()
+e2 = Entry(root)
+e2.pack()
+
+Button(root, text="Inserir", command=inserir).pack(pady=10)
+  </code></pre>
+
+  <h2>✅ Execução</h2>
+  <pre><code>
+root.mainloop()
+  </code></pre>
+
+  <p style="color:lightgreen">
+    Com esta aplicação, você pode inserir registros diretamente na sua base de dados <code>polydev</code> sem necessidade de usar comandos SQL manuais.
+  </p>
+
+</body>
+</html>

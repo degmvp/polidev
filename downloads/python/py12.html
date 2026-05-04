@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py12.html - Gerenciador de Telas com Tkinter</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 12</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este exemplo implementa um gerenciador de telas com múltiplas páginas (multi-frame) usando <code>Tkinter</code> em Python.
+    O sistema é baseado em uma classe principal que empilha páginas como <code>StartPage</code>, <code>PageOne</code>, <code>PageTwo</code> e <code>Page3</code>.
+  </p>
+
+  <h2>✅ Objetivo</h2>
+  <p style="color:lightgreen">
+    Criar um container com várias telas, que podem ser alternadas por botões. Cada tela tem funcionalidades próprias como ler arquivos de texto e exibir em canvas com scrollbar.
+  </p>
+
+  <h2>✅ Estrutura Principal</h2>
+  <pre><code>
+class SampleApp(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        ...
+        self.frames = {}
+        for F in (StartPage, PageOne, PageTwo, Page3):
+            ...
+        self.show_frame("StartPage")
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+  </code></pre>
+
+  <h2>✅ Tela Inicial (StartPage)</h2>
+  <p style="color:lightgreen">
+    A tela inicial exibe botões para navegar entre as outras telas e encerrar o programa.
+  </p>
+  <pre><code>
+class StartPage(tk.Frame):
+    def __init__(self, parent, controller):
+        ...
+        button1 = tk.Button(..., command=lambda: controller.show_frame("PageOne"))
+        button2 = tk.Button(..., command=lambda: controller.show_frame("PageTwo"))
+        button3 = tk.Button(..., command=exit)
+  </code></pre>
+
+  <h2>✅ Funcionalidades nas Telas</h2>
+  <p style="color:lightgreen">
+    As telas secundárias permitem abrir arquivos de texto (`SQL1.txt`), exibir o conteúdo com scrollbar, limpar ou fechar a visualização.
+  </p>
+  <pre><code>
+def visual(self):
+    self.wintxt = tk.Tk()
+    scrollbar = tk.Scrollbar(self.wintxt)
+    canvas = tk.Canvas(..., yscrollcommand=scrollbar.set)
+    ...
+    self.labex = tk.Label(..., text=' ', bg='#006', fg='#FFF')
+    self.labex.pack()
+    ...
+
+def helpForm(self):
+    with open("P:\\app_prog_xpydb\\adv_bin\\SQL1.txt") as f:
+        for line in f:
+            vet.append(line)
+    ...
+    self.labex['text'] = output
+  </code></pre>
+
+  <h2>✅ Execução Principal</h2>
+  <pre><code>
+if __name__ == "__main__":
+    app = SampleApp()
+    app.title("Container Frame")
+    app.geometry("512x412")
+    app.mainloop()
+  </code></pre>
+
+  <p style="color:lightgreen">
+    Este script pode ser facilmente adaptado para projetos com múltiplas janelas e organização modular de interface.
+  </p>
+
+</body>
+</html>

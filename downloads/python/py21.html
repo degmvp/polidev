@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py21.html - NumPy: Arrays, Tipos e Slicing</title>
+</head>
+<body style="background-color:navy; color:white; font-family:Arial, sans-serif; padding:20px;">
+<h1>Mix-Adv 21</h1>
+  <h2>✅ Introdução</h2>
+  <p style="color:lightgreen">
+    Este script demonstra conceitos básicos de NumPy: criação de arrays, conversão de tipos, operações com strings, slicing, propriedades e médias por eixo.
+  </p>
+
+  <h2>✅ Cabeçalho Inicial</h2>
+  <pre><code>
+print('✅' * 50)
+print(''' 
+#--------------------------------------- 
+# ✅ AppB06 
+# ✅ Python 3.6 alterado: 2017/08/13 
+# ✅ Objetivo: import numpy as np 
+#---------------------------------------''')
+print('✅' * 50)
+  </code></pre>
+
+  <h2>✅ Criação e Tipo de Dados de Arrays</h2>
+  <pre><code>
+import numpy as np
+
+my_array = np.array([0, 1, 2, 3])
+print(my_array)            # array([0, 1, 2, 3])
+print(my_array.dtype)      # dtype('int32')
+  </code></pre>
+
+  <h2>✅ Conversão para String e Multiplicações</h2>
+  <p style="color:lightgreen">Multiplicações numéricas vs. multiplicações de strings:</p>
+  <pre><code>
+str_array = my_array.astype(str)
+
+for i in my_array:
+    print(i * 4)  # multiplicação numérica
+
+for i in str_array:
+    print(i * 4)  # repetição de string
+  </code></pre>
+
+  <h2>✅ Tamanho dos Arrays</h2>
+  <pre><code>
+print(len(my_array))     # 4
+print(len(str_array))    # 4
+  </code></pre>
+
+  <h2>✅ Matrizes 2D e Estatísticas</h2>
+  <p style="color:lightgreen">
+    Criação de uma matriz 3x4 e uso de propriedades como <code>ndim</code>, <code>shape</code>, <code>size</code> e médias.
+  </p>
+  <pre><code>
+dim2_array = np.array([
+  [0, 1, 2, 3],
+  [0, 1, 2, 3],
+  [0, 1, 2, 3]
+])
+
+print(dim2_array)
+print(dim2_array.ndim)        # 2
+print(dim2_array.shape)       # (3, 4)
+print(dim2_array.size)        # 12
+
+print(np.mean(dim2_array))              # média geral
+print(np.mean(dim2_array, axis=0))      # média por coluna
+print(np.mean(dim2_array, axis=1))      # média por linha
+  </code></pre>
+
+  <h2>✅ Slicing em Matrizes</h2>
+  <p style="color:lightgreen">
+    Operações de fatiamento de arrays bidimensionais.
+  </p>
+  <pre><code>
+print('-' * 30)
+print(dim2_array[:])             # todas as linhas
+print('-' * 30)
+print(dim2_array[:2])            # primeiras 2 linhas
+print('-' * 30)
+print(dim2_array[:2, :])         # primeiras 2 linhas, todas colunas
+print('-' * 30)
+print(dim2_array[:2, :2])        # primeiras 2 linhas e colunas
+print('-' * 30)
+print(dim2_array[::-1])          # linhas invertidas
+print('-' * 30)
+print(dim2_array[0][::-1])       # primeira linha invertida
+  </code></pre>
+
+  <h2>✅ Geração de Sequência</h2>
+  <p style="color:lightgreen">Cria um array de 0 a 9 com <code>np.arange</code>:</p>
+  <pre><code>
+x = np.arange(10)
+print(x)
+  </code></pre>
+
+</body>
+</html>

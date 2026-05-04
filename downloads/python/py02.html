@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>py02 - Classes com Parâmetros</title>
+  <style>
+    body {
+      background-color: navy;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+    pre {
+      background-color: #001f3f;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    h1, h2, h3 {
+      color: lightgreen;
+    }
+    p.explicacao {
+      color: lightgreen;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<h1>Mix-Adv 02</h1>
+<h1>Documentação Didática: Trabalhando com Múltiplas Instâncias</h1>
+
+<h2>📌 Introdução</h2>
+<p class="explicacao">Neste exemplo, exploramos como instanciar múltiplos objetos de uma mesma classe, passando parâmetros diferentes.</p>
+
+<h2>🔧 Classe Produto com Parâmetros</h2>
+<p class="explicacao">A classe <code>Produto</code> é construída com nome, preço e quantidade. Um método exibe os dados formatados.</p>
+
+<pre>
+class Produto:
+    def __init__(self, nome, preco, quantidade):
+        self.nome = nome
+        self.preco = preco
+        self.quantidade = quantidade
+
+    def mostrar_produto(self):
+        print(f"Produto: {self.nome}")
+        print(f"Preço: R$ {self.preco}")
+        print(f"Quantidade: {self.quantidade} unidades")
+
+# Criando instâncias diferentes
+p1 = Produto("Caneta", 2.50, 10)
+p2 = Produto("Caderno", 15.00, 5)
+p3 = Produto("Borracha", 1.00, 20)
+
+# Exibindo os dados
+p1.mostrar_produto()
+print("-" * 40)
+p2.mostrar_produto()
+print("-" * 40)
+p3.mostrar_produto()
+</pre>
+
+<h2>✅ Explicação Final</h2>
+<p class="explicacao">
+Cada objeto criado é independente, mas compartilha a mesma estrutura da classe.
+<br>
+Este é um passo importante para trabalhar com **coleções de objetos** e **lógicas orientadas a dados**.
+</p>
+
+</body>
+</html>
