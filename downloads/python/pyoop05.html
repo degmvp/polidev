@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 4 - Herança</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 4 - Herança</h1>
+
+  <h2>O que é Herança?</h2>
+  <p>Herança é o mecanismo que permite criar novas classes baseadas em classes já existentes. Isso promove a reutilização de código e facilita a extensão de funcionalidades.</p>
+
+  <h2>Vantagens da Herança</h2>
+  <ul>
+    <li>Reutilização de código.</li>
+    <li>Facilidade de manutenção e expansão do sistema.</li>
+    <li>Organização hierárquica entre classes.</li>
+  </ul>
+
+  <h2>Exemplo prático:</h2>
+  <p>Vamos criar uma classe base <code>Animal</code> e duas subclasses: <code>Cachorro</code> e <code>Gato</code>.</p>
+
+  <code>
+class Animal:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome<br>
+    def falar(self):<br>
+        return "Som genérico"<br><br>
+
+class Cachorro(Animal):<br>
+    def falar(self):<br>
+        return "Au au!"<br><br>
+
+class Gato(Animal):<br>
+    def falar(self):<br>
+        return "Miau"<br><br>
+
+# Testando<br>
+a = Animal("Bicho")<br>
+print(a.falar())          # Som genérico<br>
+c = Cachorro("Rex")<br>
+print(c.falar())          # Au au!<br>
+g = Gato("Mimi")<br>
+print(g.falar())          # Miau
+  </code>
+
+  <h2>Uso do <code>super()</code></h2>
+  <p>É possível acessar métodos e atributos da classe pai usando <code>super()</code>.</p>
+
+  <code>
+class Pessoa:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome<br><br>
+
+class Estudante(Pessoa):<br>
+    def __init__(self, nome, curso):<br>
+        super().__init__(nome)<br>
+        self.curso = curso<br><br>
+e = Estudante("Ana", "Python")<br>
+print(e.nome)   # Ana<br>
+print(e.curso)  # Python
+  </code>
+
+  <h2>Resumo</h2>
+  <p>Herança permite criar estruturas hierárquicas e reaproveitar funcionalidades entre classes. No próximo módulo, abordaremos o polimorfismo, que amplia ainda mais o poder da herança.</p>
+</body>
+</html>

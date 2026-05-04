@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 2 - Objetos e Classes</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 2 - Objetos e Classes</h1>
+
+  <h2>O que são Objetos?</h2>
+  <p>Objetos são instâncias de classes. Eles representam entidades com características (atributos) e comportamentos (métodos).</p>
+
+  <h2>O que são Classes?</h2>
+  <p>Classes são moldes (ou modelos) que definem como os objetos serão criados, especificando atributos e métodos.</p>
+
+  <h2>Exemplo prático:</h2>
+  <p>Vamos criar uma classe simples para representar um cachorro.</p>
+
+  <code>
+class Cachorro:<br>
+    def __init__(self, nome, raca):<br>
+        self.nome = nome<br>
+        self.raca = raca<br><br>
+    def latir(self):<br>
+        print(f"{self.nome} está latindo!")<br><br>
+# Criando um objeto (instância) da classe Cachorro<br>
+meu_cachorro = Cachorro("Rex", "Labrador")<br>
+meu_cachorro.latir()
+  </code>
+
+  <h2>Atributos e Métodos</h2>
+  <ul>
+    <li><strong>Atributos:</strong> características do objeto (ex: nome, raça).</li>
+    <li><strong>Métodos:</strong> ações ou comportamentos do objeto (ex: latir).</li>
+  </ul>
+
+  <h2>Construtor (__init__)</h2>
+  <p>O método <code>__init__</code> é chamado automaticamente quando um novo objeto é criado. Ele serve para inicializar os atributos do objeto.</p>
+
+  <h2>Resumo</h2>
+  <p>Neste módulo, aprendemos a diferença entre classes e objetos, criamos uma classe simples com atributos e métodos, e instanciamos objetos a partir dela. No próximo módulo, exploraremos o conceito de encapsulamento para proteger os dados dos objetos.</p>
+</body>
+</html>

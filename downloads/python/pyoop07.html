@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 6 - Abstração</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 6 - Abstração</h1>
+
+  <h2>O que é Abstração?</h2>
+  <p>Abstração é o princípio de esconder os detalhes de implementação e expor apenas o necessário. Ajuda a focar no que um objeto faz, e não em como ele faz.</p>
+  <p>Em Python, podemos aplicar abstração usando classes base e métodos abstratos (com o módulo <code>abc</code>).</p>
+
+  <h2>Exemplo com classe abstrata:</h2>
+
+  <code>
+from abc import ABC, abstractmethod<br><br>
+
+class Animal(ABC):<br>
+    @abstractmethod<br>
+    def emitir_som(self):<br>
+        pass<br><br>
+
+class Gato(Animal):<br>
+    def emitir_som(self):<br>
+        print("Miau")<br><br>
+
+class Vaca(Animal):<br>
+    def emitir_som(self):<br>
+        print("Muuu")<br><br>
+
+# Testando<br>
+animais = [Gato(), Vaca()]<br>
+for a in animais:<br>
+    a.emitir_som()
+  </code>
+
+  <h2>Importância da Abstração</h2>
+  <ul>
+    <li>Reduz a complexidade do sistema.</li>
+    <li>Aumenta a reutilização de código.</li>
+    <li>Facilita a manutenção e evolução.</li>
+  </ul>
+
+  <h2>Resumo</h2>
+  <p>Ao usar abstração, você cria estruturas mais robustas, independentes dos detalhes internos de implementação, promovendo melhores práticas de design de software.</p>
+</body>
+</html>

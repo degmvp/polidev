@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 8 - Tipos de Classes</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 8 - Tipos de Classes</h1>
+
+  <h2>Tipos de Classes em Python</h2>
+  <p>Existem diversos tipos de classes que podemos usar para diferentes necessidades no desenvolvimento:</p>
+
+  <h3>1. Classe Concreta</h3>
+  <p>Classe comum que pode ser instanciada normalmente.</p>
+  <code>
+class Pessoa:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome
+  </code>
+
+  <h3>2. Classe Abstrata</h3>
+  <p>Classe que não pode ser instanciada diretamente e serve como base para outras classes.</p>
+  <code>
+from abc import ABC, abstractmethod<br><br>
+class Animal(ABC):<br>
+    @abstractmethod<br>
+    def emitir_som(self):<br>
+        pass
+  </code>
+
+  <h3>3. Classe Estática</h3>
+  <p>Classe que possui apenas métodos estáticos, que podem ser chamados sem criar instâncias.</p>
+  <code>
+class Utilidades:<br>
+    @staticmethod<br>
+    def somar(a, b):<br>
+        return a + b<br><br>
+print(Utilidades.somar(2, 3))  # Saída: 5
+  </code>
+
+  <h3>4. Classe Selada (Final)</h3>
+  <p>Em Python não há suporte nativo para classes seladas (final), mas podemos usar bibliotecas para evitar herança.</p>
+
+  <h3>5. Classe Parcial</h3>
+  <p>Python não suporta classes parciais nativamente como C#, mas é possível modularizar funcionalidades usando múltiplos arquivos e importações.</p>
+
+  <h2>Resumo</h2>
+  <p>Conhecer os diferentes tipos de classes ajuda a estruturar melhor o sistema, aproveitando as características de cada tipo para manter código limpo e organizado.</p>
+</body>
+</html>

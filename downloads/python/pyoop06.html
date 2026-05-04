@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 5 - Polimorfismo</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 5 - Polimorfismo</h1>
+
+  <h2>O que é Polimorfismo?</h2>
+  <p>Polimorfismo é a capacidade de diferentes classes responderem a uma mesma mensagem (método) de maneiras diferentes.</p>
+  <p>É uma forma de reaproveitar nomes de métodos mantendo comportamentos distintos para cada classe.</p>
+
+  <h2>Tipos de Polimorfismo</h2>
+  <ul>
+    <li><strong>Polimorfismo por sobrescrita (override):</strong> Subclasses reimplementam métodos da superclasse.</li>
+    <li><strong>Polimorfismo por duck typing:</strong> "Se anda como um pato e grasna como um pato, então é um pato".</li>
+  </ul>
+
+  <h2>Exemplo com sobrescrita:</h2>
+
+  <code>
+class Forma:<br>
+    def desenhar(self):<br>
+        print("Desenhando forma genérica")<br><br>
+
+class Circulo(Forma):<br>
+    def desenhar(self):<br>
+        print("Desenhando círculo")<br><br>
+
+class Quadrado(Forma):<br>
+    def desenhar(self):<br>
+        print("Desenhando quadrado")<br><br>
+
+# Função que usa polimorfismo<br>
+def renderizar_forma(forma):<br>
+    forma.desenhar()<br><br>
+
+# Teste<br>
+formas = [Circulo(), Quadrado(), Forma()]<br>
+for f in formas:<br>
+    renderizar_forma(f)
+  </code>
+
+  <h2>Exemplo com duck typing:</h2>
+  <p>Não importa o tipo do objeto, mas sim se ele possui o método esperado.</p>
+
+  <code>
+class Pato:<br>
+    def fazer_som(self):<br>
+        print("Quack!")<br><br>
+
+class Cachorro:<br>
+    def fazer_som(self):<br>
+        print("Au au!")<br><br>
+
+def emitir_som(animal):<br>
+    animal.fazer_som()<br><br>
+
+emitir_som(Pato())     # Quack!<br>
+emitir_som(Cachorro()) # Au au!
+  </code>
+
+  <h2>Resumo</h2>
+  <p>O polimorfismo permite escrever código mais flexível, reutilizável e desacoplado. Ele é essencial para trabalhar com coleções de objetos diversos que compartilham comportamentos semelhantes.</p>
+</body>
+</html>

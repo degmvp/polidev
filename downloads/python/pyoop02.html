@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 1 - Introdução à POO</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 1 - Introdução à Programação Orientada a Objetos</h1>
+
+  <h2>O que é POO?</h2>
+  <p>A Programação Orientada a Objetos (POO) é um paradigma de programação que utiliza objetos como base da construção dos programas.</p>
+  <p>Esses objetos combinam dados (atributos) e comportamentos (métodos), promovendo organização, reutilização de código e modularidade.</p>
+
+  <h2>Histórico</h2>
+  <p>O paradigma surgiu na década de 1960 com a linguagem Simula e ganhou força com Smalltalk, C++, Java e Python. Atualmente, é amplamente utilizado no desenvolvimento de sistemas complexos.</p>
+
+  <h2>Comparação com a Programação Estruturada</h2>
+  <p>Na programação estruturada, o foco está em funções e no fluxo do programa. Na POO, o foco está em entidades chamadas objetos, que representam elementos do mundo real.</p>
+
+  <h2>Exemplo comparativo</h2>
+
+  <p><strong>Programação Estruturada:</strong></p>
+  <code>
+def dirigir(carro):<br>
+    print(f"{carro} está em movimento")<br><br>
+dirigir("Fusca")
+  </code>
+
+  <p><strong>Programação Orientada a Objetos:</strong></p>
+  <code>
+class Carro:<br>
+    def __init__(self, modelo):<br>
+        self.modelo = modelo<br><br>
+    def dirigir(self):<br>
+        print(f"{self.modelo} está em movimento")<br><br>
+fusca = Carro("Fusca")<br>
+fusca.dirigir()
+  </code>
+
+  <h2>Benefícios da POO</h2>
+  <ul>
+    <li><strong>Reutilização de código:</strong> através de herança e composição.</li>
+    <li><strong>Organização:</strong> código mais limpo, coeso e fácil de entender.</li>
+    <li><strong>Facilidade de manutenção:</strong> módulos independentes facilitam ajustes.</li>
+    <li><strong>Segurança:</strong> encapsulamento protege os dados internos.</li>
+  </ul>
+
+  <h2>Resumo</h2>
+  <p>Este módulo introduziu os conceitos básicos da POO, comparando com a programação tradicional e mostrando um exemplo prático. Nos próximos módulos, veremos como criar nossas próprias classes, encapsular dados, herdar comportamentos e muito mais.</p>
+</body>
+</html>

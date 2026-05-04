@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 7 - Interfaces</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 7 - Interfaces</h1>
+
+  <h2>O que são Interfaces?</h2>
+  <p>Interfaces definem contratos que especificam um conjunto de métodos que uma classe deve implementar, garantindo consistência e padronização.</p>
+  <p>Em Python, não existe uma palavra-chave específica para interfaces, mas podemos usar classes abstratas para definir esses contratos.</p>
+
+  <h2>Exemplo usando classes abstratas para interface:</h2>
+
+  <code>
+from abc import ABC, abstractmethod<br><br>
+
+class Animal(ABC):<br>
+    @abstractmethod<br>
+    def emitir_som(self):<br>
+        pass<br><br>
+
+class Cachorro(Animal):<br>
+    def emitir_som(self):<br>
+        print("Au au!")<br><br>
+
+class Gato(Animal):<br>
+    def emitir_som(self):<br>
+        print("Miau")<br><br>
+
+# Testando<br>
+def fazer_animal_falar(animal):<br>
+    animal.emitir_som()<br><br>
+fazer_animal_falar(Cachorro())<br>
+fazer_animal_falar(Gato())
+  </code>
+
+  <h2>Vantagens das Interfaces</h2>
+  <ul>
+    <li>Forçam a implementação de métodos essenciais.</li>
+    <li>Facilitam a integração entre componentes.</li>
+    <li>Melhoram a organização do código.</li>
+  </ul>
+
+  <h2>Resumo</h2>
+  <p>Embora Python não tenha suporte nativo para interfaces, podemos simular esse conceito com classes abstratas para garantir contratos claros entre classes.</p>
+</body>
+</html>

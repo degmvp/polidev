@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 3 - Encapsulamento</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 3 - Encapsulamento</h1>
+
+  <h2>O que é Encapsulamento?</h2>
+  <p>Encapsulamento é um dos pilares da Programação Orientada a Objetos (POO). Ele se refere à ocultação dos detalhes internos de um objeto, expondo apenas o que for necessário para seu uso externo.</p>
+
+  <h2>Vantagens do Encapsulamento</h2>
+  <ul>
+    <li>Protege os dados do objeto contra acessos indevidos.</li>
+    <li>Permite controlar como os dados são acessados e modificados.</li>
+    <li>Facilita a manutenção e evolução do código.</li>
+  </ul>
+
+  <h2>Exemplo prático:</h2>
+  <p>Vamos criar uma classe que representa uma conta bancária com encapsulamento.</p>
+
+  <code>
+class ContaBancaria:<br>
+    def __init__(self, titular, saldo):<br>
+        self.titular = titular<br>
+        self.__saldo = saldo  # atributo privado<br><br>
+    def depositar(self, valor):<br>
+        if valor > 0:<br>
+            self.__saldo += valor<br>
+    def sacar(self, valor):<br>
+        if 0 < valor <= self.__saldo:<br>
+            self.__saldo -= valor<br>
+        else:<br>
+            print("Saldo insuficiente.")<br>
+    def ver_saldo(self):<br>
+        return self.__saldo<br><br>
+# Testando a classe<br>
+conta = ContaBancaria("João", 1000)<br>
+conta.depositar(500)<br>
+print(conta.ver_saldo())  # saída: 1500<br>
+conta.sacar(300)<br>
+print(conta.ver_saldo())  # saída: 1200<br>
+print(conta.__saldo)      # Erro! Atributo privado
+  </code>
+
+  <h2>Notação de Atributo Privado</h2>
+  <p>Em Python, um atributo com dois underlines (<code>__</code>) no início é tratado como privado. Ele não deve ser acessado diretamente de fora da classe.</p>
+
+  <h2>Resumo</h2>
+  <p>Encapsulamento é uma prática essencial para proteger os dados internos de um objeto e garantir que seu uso externo seja feito de maneira segura e controlada. No próximo módulo, veremos como reutilizar código com Herança.</p>
+</body>
+</html>

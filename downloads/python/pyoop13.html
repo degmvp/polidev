@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 12 - Design Patterns</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 12 - Design Patterns</h1>
+
+  <h2>O que são Design Patterns?</h2>
+  <p>Design Patterns (padrões de projeto) são soluções reutilizáveis para problemas comuns no desenvolvimento de software orientado a objetos.</p>
+
+  <h2>Tipos comuns de Design Patterns</h2>
+  <ul>
+    <li><strong>Singleton:</strong> Garante que uma classe tenha apenas uma instância.</li>
+    <li><strong>Factory Method:</strong> Cria objetos sem expor a lógica de criação ao cliente.</li>
+    <li><strong>Observer:</strong> Permite que objetos sejam notificados de mudanças em outros objetos.</li>
+    <li><strong>Strategy:</strong> Define uma família de algoritmos intercambiáveis.</li>
+  </ul>
+
+  <h2>Exemplo: Singleton em Python</h2>
+
+  <code>
+class Singleton:<br>
+    _instance = None<br><br>
+    def __new__(cls):<br>
+        if cls._instance is None:<br>
+            cls._instance = super().__new__(cls)<br>
+        return cls._instance<br><br>
+# Teste<br>
+s1 = Singleton()<br>
+s2 = Singleton()<br>
+print(s1 is s2)  # True
+  </code>
+
+  <h2>Exemplo: Factory Method simples</h2>
+
+  <code>
+class Carro:<br>
+    def dirigir(self):<br>
+        pass<br><br>
+class CarroEsportivo(Carro):<br>
+    def dirigir(self):<br>
+        print("Dirigindo carro esportivo")<br><br>
+class CarroPopular(Carro):<br>
+    def dirigir(self):<br>
+        print("Dirigindo carro popular")<br><br>
+def criar_carro(tipo):<br>
+    if tipo == "esportivo":<br>
+        return CarroEsportivo()<br>
+    elif tipo == "popular":<br>
+        return CarroPopular()<br>
+    else:<br>
+        return Carro()<br><br>
+carro = criar_carro("esportivo")<br>
+carro.dirigir()
+  </code>
+
+  <h2>Resumo</h2>
+  <p>Design Patterns ajudam a criar sistemas flexíveis, reutilizáveis e de fácil manutenção. Conhecê-los é essencial para programadores orientados a objetos experientes.</p>
+</body>
+</html>

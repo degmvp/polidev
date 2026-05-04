@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 13 - Testes</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 13 - Testes</h1>
+
+  <h2>O que são Testes?</h2>
+  <p>Testes são procedimentos que verificam se um software está funcionando conforme o esperado. Em POO, é essencial garantir que objetos e métodos se comportem corretamente.</p>
+
+  <h2>Tipos de Testes</h2>
+  <ul>
+    <li><strong>Testes Unitários:</strong> Verificam o comportamento de unidades isoladas (funções, métodos).</li>
+    <li><strong>Testes de Integração:</strong> Avaliam a interação entre diferentes componentes.</li>
+    <li><strong>Testes de Sistema:</strong> Validam o sistema como um todo.</li>
+  </ul>
+
+  <h2>Biblioteca <code>unittest</code> do Python</h2>
+  <p>O Python possui a biblioteca <code>unittest</code> para facilitar a criação e execução de testes.</p>
+
+  <h2>Exemplo de Teste Unitário</h2>
+
+  <code>
+import unittest<br><br>
+
+class Calculadora:<br>
+    def somar(self, a, b):<br>
+        return a + b<br><br>
+
+class TestCalculadora(unittest.TestCase):<br>
+    def test_somar(self):<br>
+        calc = Calculadora()<br>
+        self.assertEqual(calc.somar(2, 3), 5)<br><br>
+
+if __name__ == '__main__':<br>
+    unittest.main()
+  </code>
+
+  <h2>Boas Práticas</h2>
+  <ul>
+    <li>Testar o maior número possível de casos.</li>
+    <li>Escrever testes antes do código (TDD - Test Driven Development).</li>
+    <li>Automatizar a execução de testes.</li>
+  </ul>
+
+  <h2>Resumo</h2>
+  <p>Testar é essencial para garantir a qualidade, manutenção e evolução de sistemas orientados a objetos.</p>
+</body>
+</html>

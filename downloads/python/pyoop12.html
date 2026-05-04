@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 11 - Coleções</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 11 - Coleções</h1>
+
+  <h2>O que são Coleções?</h2>
+  <p>Coleções são estruturas de dados que armazenam e organizam múltiplos objetos, facilitando sua manipulação e acesso.</p>
+
+  <h2>Principais tipos de coleções em Python</h2>
+  <ul>
+    <li><strong>Lista:</strong> coleção ordenada e mutável.</li>
+    <li><strong>Tupla:</strong> coleção ordenada e imutável.</li>
+    <li><strong>Conjunto (set):</strong> coleção não ordenada, sem elementos duplicados.</li>
+    <li><strong>Dicionário:</strong> coleção de pares chave-valor.</li>
+  </ul>
+
+  <h2>Exemplos práticos</h2>
+
+  <code>
+# Lista<br>
+frutas = ["maçã", "banana", "laranja"]<br>
+frutas.append("uva")<br>
+print(frutas)  # ['maçã', 'banana', 'laranja', 'uva']<br><br>
+
+# Tupla<br>
+coordenadas = (10, 20)<br>
+print(coordenadas)<br><br>
+
+# Conjunto<br>
+numeros = {1, 2, 3, 2, 1}<br>
+print(numeros)  # {1, 2, 3}<br><br>
+
+# Dicionário<br>
+pessoa = {"nome": "Ana", "idade": 30}<br>
+print(pessoa["nome"])  # Ana
+  </code>
+
+  <h2>Coleções e POO</h2>
+  <p>Em POO, coleções são usadas para armazenar múltiplos objetos, como listas de instâncias de uma classe.</p>
+
+  <code>
+class Aluno:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome<br><br>
+
+alunos = [Aluno("João"), Aluno("Maria"), Aluno("Pedro")]<br>
+for aluno in alunos:<br>
+    print(aluno.nome)
+  </code>
+
+  <h2>Resumo</h2>
+  <p>Conhecer e utilizar coleções é fundamental para manipular grupos de objetos em POO e em programação geral.</p>
+</body>
+</html>

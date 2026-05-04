@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 10 - Tratamento de Exceções</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 10 - Tratamento de Exceções</h1>
+
+  <h2>O que são Exceções?</h2>
+  <p>Exceções são erros que ocorrem durante a execução do programa. O tratamento adequado das exceções permite que o programa lide com esses erros de forma controlada, evitando travamentos.</p>
+
+  <h2>Blocos try-except</h2>
+  <p>Permite capturar exceções e tomar ações específicas para tratar erros.</p>
+
+  <code>
+try:<br>
+    x = 10 / 0<br>
+except ZeroDivisionError:<br>
+    print("Não é possível dividir por zero!")<br>
+  </code>
+
+  <h2>Capturando exceções genéricas</h2>
+
+  <code>
+try:<br>
+    # código que pode gerar erro<br>
+    valor = int(input("Digite um número: "))<br>
+except Exception as e:<br>
+    print(f"Ocorreu um erro: {e}")<br>
+  </code>
+
+  <h2>Bloco else e finally</h2>
+  <p><strong>else:</strong> executa se não ocorrer exceção.</p>
+  <p><strong>finally:</strong> executa sempre, independente de exceção.</p>
+
+  <code>
+try:<br>
+    valor = int(input("Digite um número: "))<br>
+except ValueError:<br>
+    print("Valor inválido!")<br>
+else:<br>
+    print(f"Você digitou: {valor}")<br>
+finally:<br>
+    print("Fim do tratamento.")<br>
+  </code>
+
+  <h2>Resumo</h2>
+  <p>O tratamento de exceções é fundamental para construir programas robustos, capazes de lidar com erros sem interromper sua execução abruptamente.</p>
+</body>
+</html>

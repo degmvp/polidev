@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Módulo 9 - Relacionamentos entre Objetos</title>
+  <style>
+    body {
+      background-color: yellowgreen;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    code {
+      background-color: black;
+      color: white;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Módulo 9 - Relacionamentos entre Objetos</h1>
+
+  <h2>Tipos de Relacionamentos</h2>
+  <p>Na POO, os objetos podem se relacionar entre si de várias formas, principalmente através de:</p>
+  <ul>
+    <li><strong>Agregação:</strong> relacionamento onde um objeto contém outro, mas o objeto contido pode existir independentemente.</li>
+    <li><strong>Composição:</strong> relacionamento forte onde o objeto contido não pode existir sem o objeto que o contém.</li>
+  </ul>
+
+  <h2>Exemplo de Agregação</h2>
+  <p>Um objeto <code>Departamento</code> possui vários <code>Funcionarios</code>, mas os funcionários podem existir sem o departamento.</p>
+
+  <code>
+class Funcionario:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome<br><br>
+class Departamento:<br>
+    def __init__(self, nome):<br>
+        self.nome = nome<br>
+        self.funcionarios = []<br><br>
+    def adicionar_funcionario(self, funcionario):<br>
+        self.funcionarios.append(funcionario)<br><br>
+# Teste<br>
+f1 = Funcionario("Ana")<br>
+f2 = Funcionario("Carlos")<br>
+dep = Departamento("RH")<br>
+dep.adicionar_funcionario(f1)<br>
+dep.adicionar_funcionario(f2)
+  </code>
+
+  <h2>Exemplo de Composição</h2>
+  <p>Um objeto <code>Carro</code> é composto por objetos <code>Motor</code>. O motor não existe sem o carro.</p>
+
+  <code>
+class Motor:<br>
+    def __init__(self, potencia):<br>
+        self.potencia = potencia<br><br>
+class Carro:<br>
+    def __init__(self, modelo, potencia_motor):<br>
+        self.modelo = modelo<br>
+        self.motor = Motor(potencia_motor)<br><br>
+# Teste<br>
+carro = Carro("Fusca", 120)<br>
+print(carro.motor.potencia)  # Saída: 120
+  </code>
+
+  <h2>Resumo</h2>
+  <p>Agregação e composição definem como objetos se relacionam, com diferentes graus de dependência e ciclo de vida. Compreender esses relacionamentos ajuda a modelar sistemas mais realistas e eficientes.</p>
+</body>
+</html>
