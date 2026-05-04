@@ -1,0 +1,1 @@
+lambda argumentos: expressão

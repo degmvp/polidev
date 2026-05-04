@@ -1,0 +1,5 @@
+tupla1 = (1, 2, 3)
+tupla2 = ("maçã", "banana", "laranja")
+tupla3 = (1, "texto", True, 3.14)
+tupla_vazia = ()
+tupla_um_elemento = (5,)
