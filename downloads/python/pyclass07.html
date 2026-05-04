@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 7 - Loops While em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 7 - Loops While em Python</h1>
+        <p>Aprenda a criar loops baseados em condições com a estrutura while.</p>
+
+        <div class="topico">
+            <h2>1. Estrutura While</h2>
+            <p>O loop <code>while</code> repete um bloco enquanto uma condição for verdadeira.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Contagem regressiva
+contador = 5
+while contador > 0:
+    print(contador)
+    contador -= 1
+print("Decolar!")
+
+# Validação de entrada
+resposta = ''
+while resposta not in ['sim', 'não']:
+    resposta = input("Você quer continuar? (sim/não): ").lower()</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Use while quando não souber quantas iterações serão necessárias.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie programas que:</p>
+                <ol>
+                    <li>Some números digitados até que o usuário digite 0</li>
+                    <li>Gere a sequência de Collatz para um número inicial</li>
+                    <li>Peça uma senha até que o usuário digite a correta</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Loop Infinito no While</h2>
+            <p>Cuidado com loops infinitos - sempre tenha uma condição de saída.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Loop infinito intencional com break
+while True:
+    comando = input("Digite 'sair' para terminar: ")
+    if comando.lower() == 'sair':
+        break
+    print("Executando comando...")
+
+# Loop infinito acidental (cuidado!)
+# contador = 5
+# while contador > 0:
+#     print(contador)
+#     # Esqueceu de decrementar contador!</code>
+                
+                <div class="atencao">
+                    <strong>Cuidado:</strong> Sempre teste seus loops while para garantir que terminam!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Corrija estes loops infinitos:</p>
+                <code># 1. Loop que não termina
+x = 10
+while x > 0:
+    print(x)
+    x += 1  # Deveria ser -= 1
+
+# 2. Validação problemática
+numero = -1
+while numero < 0:
+    numero = int(input("Digite um número positivo: "))</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Exercício de While Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Implemente uma calculadora que:
+                        <ul>
+                            <li>Permita fazer várias operações</li>
+                            <li>Pergunte se quer continuar após cada cálculo</li>
+                            <li>Mostre histórico de operações ao sair</li>
+                        </ul>
+                    </li>
+                    <li>Crie um jogo de adivinhação onde:
+                        <ul>
+                            <li>O computador sorteia um número</li>
+                            <li>O usuário tenta adivinhar</li>
+                            <li>O programa dá dicas (maior/menor)</li>
+                            <li>Conta o número de tentativas</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um sistema de login que:
+                        <ul>
+                            <li>Permita apenas 3 tentativas</li>
+                            <li>Bloqueie após tentativas esgotadas</li>
+                            <li>Mostre mensagens adequadas</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

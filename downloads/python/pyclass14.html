@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 14 - Python com Arquivos TXT e PDF</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 14 - Integração Python com Arquivos TXT e PDF</h1>
+        <p>Aprenda a manipular arquivos de texto e PDFs com Python.</p>
+
+        <div class="topico">
+            <h2>1. Lendo Arquivos TXT</h2>
+            <p>Operações básicas de leitura com arquivos texto.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Abrindo e lendo todo o conteúdo
+arquivo = open('dados.txt', 'r', encoding='utf-8')
+conteudo = arquivo.read()
+arquivo.close()
+print(conteudo)
+
+# Lendo linha por linha
+arquivo = open('dados.txt', 'r', encoding='utf-8')
+linhas = arquivo.readlines()
+arquivo.close()
+for linha in linhas:
+    print(linha.strip())  # strip() remove \n no final
+
+# Lendo com loop direto no arquivo
+arquivo = open('dados.txt', 'r', encoding='utf-8')
+for linha in arquivo:
+    print(linha.strip())
+arquivo.close()</code>
+                
+                <div class="atencao">
+                    <strong>Importante:</strong> Sempre especifique o encoding (utf-8 é o mais comum) para evitar problemas com caracteres especiais.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Conte o número de linhas de um arquivo</li>
+                    <li>Encontre todas as linhas que contêm uma palavra específica</li>
+                    <li>Calcule a média de números em um arquivo (um por linha)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Escrevendo em Arquivo TXT</h2>
+            <p>Criação e modificação de arquivos texto.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Escrevendo em um arquivo novo
+with open('saida.txt', 'w', encoding='utf-8') as arquivo:
+    arquivo.write("Primeira linha\n")
+    arquivo.write("Segunda linha\n")
+    arquivo.writelines(["Terceira linha\n", "Quarta linha\n"])
+
+# Adicionando a um arquivo existente
+with open('saida.txt', 'a', encoding='utf-8') as arquivo:
+    arquivo.write("Nova linha adicionada no final\n")
+
+# Modos de abertura:
+# 'r' - leitura (padrão)
+# 'w' - escrita (sobrescreve)
+# 'a' - adicionar no final
+# 'r+' - leitura e escrita</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie programas que:</p>
+                <ol>
+                    <li>Gere um arquivo com a tabuada de 1 a 10</li>
+                    <li>Combine o conteúdo de dois arquivos em um terceiro</li>
+                    <li>Registre dados de usuário em um arquivo de log</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Método With</h2>
+            <p>Gerenciamento seguro de recursos com context managers.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Forma tradicional (precisa fechar manualmente)
+arquivo = open('dados.txt', 'r')
+try:
+    conteudo = arquivo.read()
+finally:
+    arquivo.close()
+
+# Com with (fecha automaticamente)
+with open('dados.txt', 'r') as arquivo:
+    conteudo = arquivo.read()
+# Arquivo já está fechado aqui
+
+# Múltiplos arquivos
+with open('origem.txt', 'r') as origem, open('destino.txt', 'w') as destino:
+    destino.write(origem.read())</code>
+                
+                <div class="dica">
+                    <strong>Melhor prática:</strong> Sempre use <code>with</code> para garantir que recursos sejam liberados corretamente.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Reescreva estes exemplos usando <code>with</code>:</p>
+                <code># 1. Leitura sem with
+arq = open('dados.txt', 'r')
+dados = arq.read()
+arq.close()
+
+# 2. Escrita sem with
+log = open('log.txt', 'a')
+log.write("Nova entrada\n")
+log.close()</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Integração Python e PDF - Como funciona</h2>
+            <p>Introdução às bibliotecas para manipulação de PDF.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Instalação das bibliotecas (executar no terminal)
+# pip install PyPDF2 tabula-py pdf2image
+
+# Extraindo texto com PyPDF2
+from PyPDF2 import PdfReader
+
+reader = PdfReader("documento.pdf")
+texto = ""
+for pagina in reader.pages:
+    texto += pagina.extract_text()
+print(texto)
+
+# Contando páginas
+print(f"Total de páginas: {len(reader.pages)}")</code>
+                
+                <div class="atencao">
+                    <strong>Limitações:</strong> Nem todos os PDFs permitem extração perfeita de texto (especialmente PDFs baseados em imagens).
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Conte o número de páginas de um PDF</li>
+                    <li>Extraia todo o texto de um PDF para um arquivo TXT</li>
+                    <li>Verifique se um PDF contém uma palavra específica</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. tabula - Lendo tabelas em PDF</h2>
+            <p>Extraindo dados tabulares de PDFs.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Extraindo tabelas com tabula-py
+import tabula
+
+# Lendo todas as tabelas
+tabelas = tabula.read_pdf("dados.pdf", pages='all')
+
+# Lendo tabela específica (página 1, área coordenadas)
+tabela = tabula.read_pdf("dados.pdf", pages=1, area=(100, 50, 400, 500))
+
+# Convertendo para DataFrame pandas
+df = tabula.read_pdf("dados.pdf", pages=1)[0]
+
+# Salvando como CSV
+tabula.convert_into("dados.pdf", "dados.csv", output_format="csv", pages='all')</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Para tabelas complexas, especifique as coordenadas da área (y1, x1, y2, x2).
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Extraia tabelas de um PDF e:</p>
+                <ol>
+                    <li>Salve como arquivo CSV</li>
+                    <li>Calcule estatísticas básicas dos dados</li>
+                    <li>Filtre linhas com base em critérios</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Extrair imagens de PDF</h2>
+            <p>Recuperando imagens embutidas em documentos PDF.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Extraindo imagens com pdf2image
+from pdf2image import convert_from_path
+
+# Convertendo PDF para imagens
+imagens = convert_from_path('documento.pdf', dpi=300)
+
+# Salvando imagens
+for i, img in enumerate(imagens):
+    img.save(f'pagina_{i+1}.jpg', 'JPEG')
+
+# Extraindo apenas páginas específicas
+imagens = convert_from_path('documento.pdf', first_page=2, last_page=5)</code>
+                
+                <div class="atencao">
+                    <strong>Requisitos:</strong> pdf2image requer poppler instalado no sistema (no Windows, adicione ao PATH).
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Converta um PDF em imagens JPG</li>
+                    <li>Extraia apenas páginas pares</li>
+                    <li>Redimensione as imagens para 50% do tamanho original</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>Exercícios Integrados</h2>
+            <div class="exercicio">
+                <h3>Projetos Completos:</h3>
+                <ol>
+                    <li>Desenvolva um sistema de processamento de relatórios que:
+                        <ul>
+                            <li>Leia múltiplos PDFs de um diretório</li>
+                            <li>Extraia tabelas e textos</li>
+                            <li>Consolide os dados em um arquivo estruturado</li>
+                            <li>Gere um resumo em TXT</li>
+                        </ul>
+                    </li>
+                    <li>Crie um organizador de documentos que:
+                        <ul>
+                            <li>Classifique PDFs por conteúdo</li>
+                            <li>Extraia metadados e imagens</li>
+                            <li>Renomeie arquivos com base no conteúdo</li>
+                        </ul>
+                    </li>
+                    <li>Implemente um conversor PDF para HTML que:
+                        <ul>
+                            <li>Preserve formatação básica</li>
+                            <li>Converta tabelas para HTML</li>
+                            <li>Incorpore imagens</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um sistema OCR que processe PDFs escaneados usando pytesseract em conjunto com pdf2image.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

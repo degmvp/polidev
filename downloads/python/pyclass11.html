@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 11 - List Comprehension em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .comparacao {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 11 - List Comprehension em Python</h1>
+        <p>Aprenda a criar listas de forma concisa e eficiente com esta poderosa técnica.</p>
+
+        <div class="topico">
+            <h2>1. O que é List Comprehension</h2>
+            <p>Sintaxe concisa para criar listas baseadas em iteráveis existentes.</p>
+            
+            <div class="comparacao">
+                <h3>Comparação: Tradicional vs Comprehension</h3>
+                <code># Forma tradicional
+quadrados = []
+for num in range(1, 6):
+    quadrados.append(num ** 2)
+
+# Com List Comprehension
+quadrados = [num ** 2 for num in range(1, 6)]</code>
+                
+                <div class="dica">
+                    <strong>Vantagens:</strong> Mais conciso, legível e geralmente mais rápido.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Converta estes loops tradicionais para List Comprehension:</p>
+                <code># 1. Criar lista com números de 0 a 9
+numeros = []
+for i in range(10):
+    numeros.append(i)
+
+# 2. Converter strings para maiúsculas
+palavras = ["python", "java", "c++"]
+maiusculas = []
+for palavra in palavras:
+    maiusculas.append(palavra.upper())</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Exemplo de List Comprehension</h2>
+            <p>Aplicações práticas em diferentes cenários.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Números pares de 0 a 20
+pares = [x for x in range(21) if x % 2 == 0]
+
+# Comprimento das palavras
+palavras = ["python", "comprehension", "list"]
+tamanhos = [len(p) for p in palavras]
+
+# Tuplas com número e seu quadrado
+quadrados = [(x, x**2) for x in range(5)]
+
+# Lista de listas (matriz identidade)
+identidade = [[1 if i == j else 0 for j in range(3)] for i in range(3)]</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie List Comprehensions para:</p>
+                <ol>
+                    <li>Gerar os primeiros 10 números cúbicos</li>
+                    <li>Converter temperaturas de Celsius para Fahrenheit</li>
+                    <li>Criar uma matriz 4x4 com valores alternados 0 e 1</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Exercícios List Comprehension - Fixação 1</h2>
+            <div class="exercicio">
+                <h3>Exercícios Básicos:</h3>
+                <ol>
+                    <li>Crie uma lista com os quadrados dos números de 1 a 15</li>
+                    <li>Converta uma lista de strings para inteiros: ["1", "2", "3"] → [1, 2, 3]</li>
+                    <li>Gere uma lista com os caracteres de uma string em maiúsculo</li>
+                    <li>Crie pares (número, string) para números de 1 a 5: [(1, "1"), (2, "2")...]</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. List Comprehension filtrando com if</h2>
+            <p>Adicionando condições para filtrar elementos.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Números ímpares entre 0 e 20
+impares = [x for x in range(21) if x % 2 != 0]
+
+# Palavras com mais de 5 letras
+frutas = ["maçã", "banana", "kiwi", "laranja"]
+grandes = [f for f in frutas if len(f) > 5]
+
+# Múltiplos de 3 ou 5
+multiplos = [x for x in range(50) if x % 3 == 0 or x % 5 == 0]
+
+# Condição complexa
+numeros = [x for x in range(100) if x % 2 == 0 if x % 5 == 0]</code>
+                
+                <div class="atencao">
+                    <strong>Cuidado:</strong> List Comprehensions muito complexas podem prejudicar a legibilidade.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie List Comprehensions com filtros para:</p>
+                <ol>
+                    <li>Selecionar apenas números positivos de uma lista</li>
+                    <li>Filtrar palavras que começam com vogal</li>
+                    <li>Selecionar anos bissextos entre 1900 e 2100</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Exercícios List Comprehension - Fixação 2</h2>
+            <div class="exercicio">
+                <h3>Exercícios Intermediários:</h3>
+                <ol>
+                    <li>Dada uma lista de números, crie uma lista com apenas os pares elevados ao quadrado</li>
+                    <li>Filtre palavras de uma lista que são palíndromos</li>
+                    <li>Converta uma lista de temperaturas em Celsius para Fahrenheit, mantendo apenas as acima de 0°C</li>
+                    <li>Crie uma lista de tuplas (índice, valor) apenas para valores não nulos</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Tratando casos em List Comprehension</h2>
+            <p>Técnicas para lidar com casos especiais e expressões complexas.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Usando if-else na expressão
+classificacao = ["Par" if x % 2 == 0 else "Ímpar" for x in range(10)]
+
+# Lidando com exceções
+valores = ["10", "20", "trinta", "40"]
+numeros = [int(x) if x.isdigit() else 0 for x in valores]
+
+# Aninhando comprehensions
+matriz = [[1, 2], [3, 4], [5, 6]]
+aplanada = [num for linha in matriz for num in linha]
+
+# Dicionário comprehension
+quadrados = {x: x**2 for x in range(5)}</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Para lógica muito complexa, considere usar funções auxiliares dentro da comprehension.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Resolva estes desafios:</p>
+                <ol>
+                    <li>Classifique números como "Positivo", "Negativo" ou "Zero"</li>
+                    <li>Converta uma lista de strings para inteiros, tratando erros</li>
+                    <li>Aplane uma lista de listas de listas (3 níveis)</li>
+                    <li>Crie um dicionário mapeando palavras para seus comprimentos</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Exercícios List Comprehension - Fixação 3</h2>
+            <div class="exercicio">
+                <h3>Exercícios Avançados:</h3>
+                <ol>
+                    <li>Implemente o Crivo de Eratóstenes para encontrar primos até N</li>
+                    <li>Crie uma matriz de multiplicação (tabuada NxN)</li>
+                    <li>Processe um texto para contar palavras únicas, ignorando case e pontuação</li>
+                    <li>Transforme uma lista de dicionários em um dicionário de listas</li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Implemente multiplicação de matrizes usando List Comprehensions aninhadas.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

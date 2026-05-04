@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 4 - Strings em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .exemplo {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 4 - Strings em Python</h1>
+        <p>Domine a manipulação de textos, uma das habilidades mais importantes em Python.</p>
+
+        <div class="topico">
+            <h2>1. Por que aprender Strings e a importância para Python</h2>
+            <p>Strings são essenciais em praticamente todos os programas Python.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Strings estão em todo lugar!
+nome = "João Silva"
+email = "joao@exemplo.com"
+endereco = "Rua Python, 123"
+telefone = "(11) 98765-4321"
+
+print("Cliente:", nome)
+print("E-mail:", email)</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Em Python, tudo entre aspas simples (' ') ou duplas (" ") é uma string.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie variáveis string para armazenar:</p>
+                <ol>
+                    <li>Seu nome completo</li>
+                    <li>Seu endereço</li>
+                    <li>Um CPF (como texto, não número)</li>
+                    <li>Exiba todas as informações formatadas</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Índice e Tamanho de String</h2>
+            <p>Podemos acessar caracteres individuais e medir o comprimento da string.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>linguagem = "Python"
+
+# Acessando caracteres por índice (começa em 0)
+print(linguagem[0])  # 'P'
+print(linguagem[2])  # 't'
+
+# Tamanho da string
+print(len(linguagem))  # 6</code>
+                
+                <div class="atencao">
+                    <strong>Cuidado:</strong> Tentar acessar um índice inexistente causa erro!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada a string <code>frase = "Aprender Python é divertido"</code>:</p>
+                <ol>
+                    <li>Qual o tamanho da string?</li>
+                    <li>Acesse o primeiro caractere</li>
+                    <li>Acesse o 10º caractere</li>
+                    <li>Qual o último caractere? (use len)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Índice Negativo e Slice de String</h2>
+            <p>Técnicas avançadas para acessar partes da string.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>texto = "Desenvolvimento"
+
+# Índices negativos (começam do final)
+print(texto[-1])  # 'o' (último caractere)
+print(texto[-3])  # 'n' (terceiro a partir do fim)
+
+# Slicing [início:fim:passo]
+print(texto[2:6])    # 'senv'
+print(texto[:5])     # 'Desen' (do início até índice 5)
+print(texto[5:])     # 'volvimento' (do índice 5 até fim)
+print(texto[::2])    # 'Dsvlvmet' (pulando de 2 em 2)
+print(texto[::-1])   # 'otnemivlovedneseD' (inverte a string)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada <code>frase = "Python é poderosa"</code>:</p>
+                <ol>
+                    <li>Extraia a palavra "Python"</li>
+                    <li>Extraia a palavra "poderosa" (use índice negativo)</li>
+                    <li>Inverta a string completa</li>
+                    <li>Extraia os caracteres nas posições pares (0, 2, 4...)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Operações com String</h2>
+            <p>Operações básicas que podemos realizar com strings.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Concatenação
+nome = "Ana" + " " + "Silva"
+
+# Repetição
+risadas = "ha" * 5  # "hahahahaha"
+
+# Verificação
+texto = "Python"
+print("Py" in texto)  # True
+print("java" in texto) # False
+
+# Comparação
+print("abc" == "ABC")  # False (case sensitive)
+print("abc" < "def")   # True (ordem alfabética)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Concatene seu nome e sobrenome</li>
+                    <li>Crie uma string com 10 asteriscos (*) usando repetição</li>
+                    <li>Verifique se seu nome contém a letra "a"</li>
+                    <li>Compare duas strings e mostre qual vem primeiro no dicionário</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Métodos de String - Apresentação</h2>
+            <p>Strings possuem muitos métodos úteis embutidos.</p>
+            
+            <table class="tabela">
+                <tr>
+                    <th>Método</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+                <tr>
+                    <td><code>upper()</code></td>
+                    <td>Converte para maiúsculas</td>
+                    <td>"python".upper() → "PYTHON"</td>
+                </tr>
+                <tr>
+                    <td><code>lower()</code></td>
+                    <td>Converte para minúsculas</td>
+                    <td>"PYTHON".lower() → "python"</td>
+                </tr>
+                <tr>
+                    <td><code>strip()</code></td>
+                    <td>Remove espaços extras</td>
+                    <td>"  python  ".strip() → "python"</td>
+                </tr>
+                <tr>
+                    <td><code>split()</code></td>
+                    <td>Divide a string em partes</td>
+                    <td>"a,b,c".split(",") → ["a", "b", "c"]</td>
+                </tr>
+                <tr>
+                    <td><code>replace()</code></td>
+                    <td>Substitui partes da string</td>
+                    <td>"banana".replace("a", "o") → "bonono"</td>
+                </tr>
+            </table>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>mensagem = "  Aprenda Python Hoje!  "
+
+print(mensagem.strip())
+print(mensagem.lower())
+print(mensagem.replace("Hoje", "Agora"))
+print(mensagem.split())  # Divide nos espaços</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada <code>frase = "Python é Fácil de Aprender"</code>:</p>
+                <ol>
+                    <li>Converta para minúsculas</li>
+                    <li>Substitua "Fácil" por "Divertido"</li>
+                    <li>Divida a string em palavras</li>
+                    <li>Verifique se começa com "Py"</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Formatação de números</h2>
+            <p>Como formatar números em strings de forma elegante.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>valor = 1234.5678
+
+# Formatação com f-strings
+print(f"R$ {valor:.2f}")       # R$ 1234.57
+print(f"Número: {valor:,.2f}")  # Número: 1,234.57
+
+# Formatação com format()
+print("Percentual: {:.1%}".format(0.753))  # Percentual: 75.3%
+print("Hexadecimal: {:x}".format(255))     # Hexadecimal: ff</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie strings formatadas que:</p>
+                <ol>
+                    <li>Exibam o número π (3.1415926535) com 4 casas decimais</li>
+                    <li>Exibam 1000000 como "1,000,000"</li>
+                    <li>Convertam 0.85 para porcentagem com 1 decimal</li>
+                    <li>Exibam o número 42 em hexadecimal</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Exercícios String - Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Crie um programa que:
+                        <ul>
+                            <li>Pergunte o nome completo do usuário</li>
+                            <li>Mostre o nome em maiúsculas</li>
+                            <li>Conte quantas letras tem (sem espaços)</li>
+                            <li>Mostre o primeiro nome e quantas letras tem</li>
+                        </ul>
+                    </li>
+                    <li>Faça um programa que:
+                        <ul>
+                            <li>Pergunte uma data no formato dd/mm/aaaa</li>
+                            <li>Extraia o dia, mês e ano separadamente</li>
+                            <li>Exiba a data no formato "Dia X, Mês Y do ano Z"</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um validador de CPF que:
+                        <ul>
+                            <li>Pergunte um CPF no formato XXX.XXX.XXX-XX</li>
+                            <li>Verifique se tem 14 caracteres</li>
+                            <li>Verifique se os pontos e traço estão nas posições corretas</li>
+                        </ul>
+                    </li>
+                    <li>Crie um gerador de senhas que:
+                        <ul>
+                            <li>Pergunte o nome do site</li>
+                            <li>Pegue as 3 primeiras letras (maiúsculas)</li>
+                            <li>Pegue os 2 últimos dígitos do ano atual</li>
+                            <li>Adicione "!@#" no final</li>
+                            <li>Ex: "google" → "GOO23!@#"</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um tradutor de "P" que:
+                    <ol>
+                        <li>Pergunte uma frase ao usuário</li>
+                        <li>Substitua todas as vogais por "p" (ou "P")</li>
+                        <li>Ex: "Hello World" → "Hpllp Wprld"</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

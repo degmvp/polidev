@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 10 - Iterables em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 10 - Iterables em Python</h1>
+        <p>Explore os diferentes tipos de objetos iteráveis em Python e suas particularidades.</p>
+
+        <div class="topico">
+            <h2>1. O que é um iterable</h2>
+            <p>Um iterable é qualquer objeto que pode ser percorrido em um loop.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Objetos iteráveis comuns
+lista = [1, 2, 3]          # Lista
+tupla = (1, 2, 3)          # Tupla
+string = "Python"          # String
+dicionario = {'a': 1, 'b': 2} # Dicionário (itera nas chaves)
+conjunto = {1, 2, 3}       # Conjunto
+range_obj = range(5)       # Range
+
+# Todos podem ser usados em loops
+for item in lista:
+    print(item)
+
+# Verificando se é iterável
+from collections.abc import Iterable
+print(isinstance(5, Iterable))        # False
+print(isinstance("texto", Iterable))  # True</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Qualquer objeto que implemente o método <code>__iter__()</code> é um iterable.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Teste quais destes objetos são iteráveis:</p>
+                <ol>
+                    <li>123</li>
+                    <li>[1, 2, 3]</li>
+                    <li>{'a': 1, 'b': 2}</li>
+                    <li>True</li>
+                    <li>range(10)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Range</h2>
+            <p><code>range</code> gera uma sequência imutável de números, eficiente em memória.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Formas de criar range
+r1 = range(5)          # 0, 1, 2, 3, 4
+r2 = range(1, 6)       # 1, 2, 3, 4, 5
+r3 = range(0, 10, 2)   # 0, 2, 4, 6, 8
+r4 = range(10, 0, -1)  # 10, 9, ..., 1
+
+# Convertendo para lista
+print(list(r3))  # [0, 2, 4, 6, 8]
+
+# Usos comuns
+for i in range(3):
+    print("Python")
+
+indices = range(len(["a", "b", "c"]))
+print(list(indices))  # [0, 1, 2]</code>
+                
+                <div class="atencao">
+                    <strong>Performance:</strong> <code>range</code> não cria a lista na memória, gerando os números sob demanda.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie ranges para:</p>
+                <ol>
+                    <li>Números de 0 a 9</li>
+                    <li>Números pares de 2 a 20</li>
+                    <li>Contagem regressiva de 5 a 1</li>
+                    <li>Múltiplos de 3 entre 30 e 0</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Set</h2>
+            <p>Conjuntos são coleções não ordenadas de elementos únicos.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Criando conjuntos
+frutas = {"maçã", "banana", "laranja"}
+numeros = {1, 2, 3, 3, 2}  # {1, 2, 3}
+
+# Operações com conjuntos
+frutas.add("uva")          # Adiciona elemento
+frutas.remove("banana")    # Remove elemento (gera erro se não existir)
+frutas.discard("kiwi")     # Remove se existir (sem erro)
+
+# Operações entre conjuntos
+a = {1, 2, 3}
+b = {3, 4, 5}
+print(a.union(b))          # {1, 2, 3, 4, 5}
+print(a.intersection(b))   # {3}
+print(a.difference(b))     # {1, 2}</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Use conjuntos para remover duplicatas de listas: <code>lista_sem_duplicatas = list(set(lista_com_duplicatas))</code>
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dados os conjuntos <code>A = {1, 2, 3, 4}</code> e <code>B = {3, 4, 5, 6}</code>:</p>
+                <ol>
+                    <li>Encontre a união entre A e B</li>
+                    <li>Encontre a interseção entre A e B</li>
+                    <li>Encontre os elementos que estão em A mas não em B</li>
+                    <li>Verifique se A é subconjunto de B</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>Exercícios de Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Integrados:</h3>
+                <ol>
+                    <li>Crie um programa que:
+                        <ul>
+                            <li>Gere um range com os primeiros 100 números naturais</li>
+                            <li>Filtre apenas os números divisíveis por 3 ou 5</li>
+                            <li>Armazene em um conjunto para eliminar duplicatas</li>
+                            <li>Calcule a soma desses números</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um verificador de anagramas que:
+                        <ul>
+                            <li>Receba duas palavras</li>
+                            <li>Converta para conjuntos de letras</li>
+                            <li>Compare os conjuntos para determinar se são anagramas</li>
+                        </ul>
+                    </li>
+                    <li>Implemente um sistema de loteria que:
+                        <ul>
+                            <li>Gere números aleatórios entre 1 e 60</li>
+                            <li>Garanta que não há números repetidos (usando set)</li>
+                            <li>Compare com números escolhidos pelo usuário</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um programa que encontre todas as substrings únicas em uma string, usando combinações de range e set.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

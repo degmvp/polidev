@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 16 - Integração Python com APIs e JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: black;
+            background-color: yellowgreen;
+        }
+        h1 {
+            color: black;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: black;
+            margin-top: 30px;
+            background-color: #9ACD32;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: black;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid darkgreen;
+            color: white;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #ADFF2F;
+            padding: 10px;
+            border-left: 4px solid darkgreen;
+            margin: 15px 0;
+            color: black;
+        }
+        .dicas {
+            background-color: #ADFF2F;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 2px solid darkgreen;
+        }
+        .api-example {
+            background-color: #9ACD32;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Módulo 16 - Integração Python com APIs e JSON</h1>
+
+    <h2>1. Python e Integrações de API</h2>
+    <p>Python oferece várias bibliotecas para trabalhar com APIs RESTful e JSON:</p>
+    
+    <pre><code>import requests
+import json
+
+# Exemplo básico de requisição API
+response = requests.get('https://api.exemplo.com/dados')
+data = response.json()
+
+print(json.dumps(data, indent=2))</code></pre>
+    
+    <div class="note">
+        <strong>Bibliotecas úteis:</strong>
+        <ul>
+            <li><code>requests</code> - Para fazer requisições HTTP</li>
+            <li><code>json</code> - Para trabalhar com dados JSON</li>
+            <li><code>http.client</code> - Cliente HTTP de baixo nível</li>
+            <li><code>urllib</code> - Alternativa ao requests</li>
+        </ul>
+    </div>
+
+    <h2>2. API de Cotação de Moeda</h2>
+    <p>Exemplo usando a API do Banco Central ou AwesomeAPI:</p>
+    
+    <div class="api-example">
+        <h3>API: AwesomeAPI (Cotação atual)</h3>
+        <p>Endpoint: https://economia.awesomeapi.com.br/json/last/USD-BRL</p>
+    </div>
+    
+    <pre><code>import requests
+
+def get_currency_rate(from_currency, to_currency):
+    url = f'https://economia.awesomeapi.com.br/json/last/{from_currency}-{to_currency}'
+    response = requests.get(url)
+    data = response.json()
+    return float(data[f'{from_currency}{to_currency}']['bid'])
+
+# Uso
+usd_to_brl = get_currency_rate('USD', 'BRL')
+print(f'1 USD = {usd_to_brl:.2f} BRL')</code></pre>
+
+    <h2>3. API de CEP e Busca de Endereços</h2>
+    <p>Exemplo usando a API ViaCEP:</p>
+    
+    <div class="api-example">
+        <h3>API: ViaCEP</h3>
+        <p>Endpoint: https://viacep.com.br/ws/01001000/json/</p>
+    </div>
+    
+    <pre><code>def get_address_by_cep(cep):
+    url = f'https://viacep.com.br/ws/{cep}/json/'
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+# Uso
+address = get_address_by_cep('01001000')
+if address:
+    print(f"Endereço: {address['logradouro']}, {address['localidade']}/{address['uf']}")
+else:
+    print("CEP não encontrado")</code></pre>
+
+    <h2>4. API de Preço de Ações e Informações Econômicas</h2>
+    <p>Exemplo usando a Alpha Vantage (requer chave API):</p>
+    
+    <div class="api-example">
+        <h3>API: Alpha Vantage</h3>
+        <p>Endpoint: https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=SEU_API_KEY</p>
+    </div>
+    
+    <pre><code>def get_stock_data(symbol, api_key):
+    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}'
+    response = requests.get(url)
+    return response.json()
+
+# Uso (substitua 'SUA_CHAVE' por uma chave API válida)
+stock_data = get_stock_data('IBM', 'SUA_CHAVE')
+latest_date = list(stock_data['Time Series (Daily)'].keys())[0]
+latest_price = stock_data['Time Series (Daily)'][latest_date]['4. close']
+print(f"Preço mais recente de IBM: ${latest_price}")</code></pre>
+
+    <div class="dicas">
+        <h3>Melhores Práticas para Trabalhar com APIs</h3>
+        <ul>
+            <li>Sempre verifique o status code da resposta</li>
+            <li>Trate erros e exceções (timeout, limites de requisição)</li>
+            <li>Use headers apropriados (Content-Type, Authorization)</li>
+            <li>Respeite os limites de requisição (rate limiting)</li>
+            <li>Armazene chaves API em variáveis de ambiente</li>
+            <li>Considere usar cache para respostas</li>
+        </ul>
+        
+        <h3>Exemplo: Tratamento de Erros</h3>
+        <pre><code>try:
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()  # Levanta exceção para códigos 4xx/5xx
+    data = response.json()
+except requests.exceptions.RequestException as e:
+    print(f"Erro na requisição: {e}")
+except ValueError as e:
+    print(f"Erro ao decodificar JSON: {e}")</code></pre>
+    </div>
+</body>
+</html>

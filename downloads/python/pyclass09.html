@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 9 - Dicionários em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 9 - Dicionários em Python</h1>
+        <p>Aprenda a trabalhar com estruturas chave-valor, uma das mais poderosas do Python.</p>
+
+        <div class="topico">
+            <h2>1. Dicionários em Python</h2>
+            <p>Dicionários armazenam pares chave-valor em uma estrutura mutável e não ordenada.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Criando dicionários
+pessoa = {
+    "nome": "João Silva",
+    "idade": 30,
+    "cidade": "São Paulo"
+}
+
+produto = {
+    "nome": "Notebook",
+    "preco": 3500.00,
+    "estoque": True
+}
+
+# Acessando valores
+print(pessoa["nome"])  # João Silva
+print(produto.get("preco"))  # 3500.0</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Use dicionários quando precisar de acesso rápido a valores através de chaves descritivas.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie dicionários para representar:</p>
+                <ol>
+                    <li>Seus dados pessoais (nome, idade, cidade)</li>
+                    <li>Um produto com pelo menos 5 características</li>
+                    <li>Um filme com informações como título, ano e diretor</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Pegar item Dicionário e Verificar Item Dicionário</h2>
+            <p>Formas seguras de acessar e verificar a existência de itens.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>aluno = {
+    "nome": "Maria",
+    "nota": 8.5,
+    "aprovado": True
+}
+
+# Acesso direto (pode gerar KeyError)
+# print(aluno["idade"])
+
+# Acesso seguro com get()
+print(aluno.get("idade", "Não informado"))
+
+# Verificando existência de chave
+if "nota" in aluno:
+    print(f"Nota: {aluno['nota']}")
+
+# Método setdefault()
+aluno.setdefault("faltas", 0)
+print(aluno)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dado o dicionário <code>livro = {"titulo": "Python Essencial", "autor": "Carlos Coder", "ano": 2020}</code>:</p>
+                <ol>
+                    <li>Verifique se existe a chave "editora"</li>
+                    <li>Acesse o autor de forma segura (com get)</li>
+                    <li>Adicione "páginas" com valor padrão 300 se não existir</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Adicionar, Modificar e Remover Itens do Dicionário</h2>
+            <p>Manipulando o conteúdo de dicionários.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>config = {
+    "tema": "escuro",
+    "notificacoes": True
+}
+
+# Adicionando itens
+config["idioma"] = "pt-br"
+
+# Modificando valores
+config["tema"] = "claro"
+
+# Removendo itens
+valor_removido = config.pop("notificacoes")
+del config["idioma"]
+
+# Limpando o dicionário
+config.clear()</code>
+                
+                <div class="atencao">
+                    <strong>Cuidado:</strong> <code>del</code> e <code>pop()</code> geram KeyError se a chave não existir.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Comece com dicionário vazio</li>
+                    <li>Permita adicionar pares chave-valor</li>
+                    <li>Permita remover itens por chave</li>
+                    <li>Mostre o dicionário atualizado após cada operação</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. For em Dicionário</h2>
+            <p>Iterando sobre chaves, valores ou itens de um dicionário.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>estoque = {
+    "mouse": 50,
+    "teclado": 30,
+    "monitor": 15,
+    "headset": 20
+}
+
+# Iterando sobre chaves
+for produto in estoque:
+    print(produto)
+
+# Iterando sobre valores
+for quantidade in estoque.values():
+    print(quantidade)
+
+# Iterando sobre itens (chave e valor)
+for produto, qtd in estoque.items():
+    print(f"{produto}: {qtd} unidades")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dado o dicionário <code>notas = {"Matemática": 8.5, "Português": 7.0, "História": 9.0}</code>:</p>
+                <ol>
+                    <li>Percorra e mostre todas as disciplinas</li>
+                    <li>Calcule a média das notas</li>
+                    <li>Encontre a disciplina com maior nota</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Exercícios de Dicionário - Fixação 1</h2>
+            <div class="exercicio">
+                <h3>Exercícios Básicos:</h3>
+                <ol>
+                    <li>Crie um sistema de agenda que:
+                        <ul>
+                            <li>Armazene contatos (nome: telefone)</li>
+                            <li>Permita adicionar e remover contatos</li>
+                            <li>Busque um contato pelo nome</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um tradutor de palavras que:
+                        <ul>
+                            <li>Use um dicionário para mapear palavras</li>
+                            <li>Traduza palavras em ambas direções</li>
+                            <li>Permita adicionar novas traduções</li>
+                        </ul>
+                    </li>
+                    <li>Implemente um sistema de inventário que:
+                        <ul>
+                            <li>Acompanhe itens e quantidades</li>
+                            <li>Calcule o valor total do inventário</li>
+                            <li>Identifique itens com estoque baixo</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Métodos Úteis Dicionários (Parte 1) - items</h2>
+            <p>O método <code>items()</code> retorna uma visão dos pares chave-valor.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>aluno = {
+    "nome": "Ana",
+    "curso": "Engenharia",
+    "semestre": 3
+}
+
+# Convertendo items em lista
+itens = list(aluno.items())
+print(itens)  # [('nome', 'Ana'), ('curso', 'Engenharia'), ('semestre', 3)]
+
+# Atualizando múltiplos valores
+aluno.update({"semestre": 4, "bolsista": True})
+print(aluno)
+
+# Criando cópia
+copia_aluno = aluno.copy()</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dado o dicionário <code>config = {"tema": "claro", "fonte": "Arial", "tamanho": 12}</code>:</p>
+                <ol>
+                    <li>Use items() para percorrer e mostrar todas configurações</li>
+                    <li>Atualize múltiplas configurações de uma vez</li>
+                    <li>Crie uma cópia profunda do dicionário</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Métodos Úteis Dicionários (Parte 2) - keys e values</h2>
+            <p>Métodos para acessar chaves e valores separadamente.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>funcionario = {
+    "matricula": "F123",
+    "cargo": "Analista",
+    "salario": 4500.00
+}
+
+# Obtendo listas de chaves e valores
+chaves = list(funcionario.keys())
+valores = list(funcionario.values())
+
+print(chaves)   # ['matricula', 'cargo', 'salario']
+print(valores)  # ['F123', 'Analista', 4500.0]
+
+# Verificando valores
+if 4500.00 in funcionario.values():
+    print("Salário encontrado")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Percorra apenas as chaves de um dicionário e as ordene alfabeticamente</li>
+                    <li>Verifique se um determinado valor existe no dicionário</li>
+                    <li>Conte quantas vezes um valor aparece no dicionário</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>8. Zip e Transformando Listas em Dicionários</h2>
+            <p>Convertendo entre listas e dicionários usando <code>zip()</code>.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Criando dicionário a partir de listas
+chaves = ["nome", "idade", "cidade"]
+valores = ["Carlos", 25, "Belo Horizonte"]
+
+pessoa = dict(zip(chaves, valores))
+print(pessoa)  # {'nome': 'Carlos', 'idade': 25, 'cidade': 'Belo Horizonte'}
+
+# Zip com múltiplas listas
+produtos = ["mouse", "teclado", "monitor"]
+precos = [50.00, 120.00, 800.00]
+estoque = [30, 25, 10]
+
+inventario = {prod: (preco, qtd) for prod, preco, qtd in zip(produtos, precos, estoque)}
+print(inventario)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dadas as listas:</p>
+                <code>disciplinas = ["Matemática", "Português", "História"]
+notas = [8.5, 7.0, 9.0]
+professores = ["Carlos", "Ana", "Márcio"]</code>
+                <p>Crie:</p>
+                <ol>
+                    <li>Um dicionário {disciplina: nota}</li>
+                    <li>Um dicionário {disciplina: (nota, professor)}</li>
+                    <li>Uma lista de dicionários com todas informações</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>9. Exercícios de Dicionário - Fixação 2</h2>
+            <div class="exercicio">
+                <h3>Exercícios Avançados:</h3>
+                <ol>
+                    <li>Implemente um sistema de votação que:
+                        <ul>
+                            <li>Registre candidatos e votos</li>
+                            <li>Calcule o vencedor</li>
+                            <li>Mostre estatísticas</li>
+                        </ul>
+                    </li>
+                    <li>Crie um analisador de texto que:
+                        <ul>
+                            <li>Conte a frequência de cada palavra</li>
+                            <li>Mostre as 5 palavras mais comuns</li>
+                            <li>Ignore palavras muito curtas</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um sistema de quiz que:
+                        <ul>
+                            <li>Armazene perguntas e respostas</li>
+                            <li>Mantenha pontuação do jogador</li>
+                            <li>Selecione perguntas aleatórias</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Implemente um sistema de banco simples com contas (número, titular, saldo) usando dicionários aninhados.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

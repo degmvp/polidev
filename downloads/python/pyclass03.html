@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 3 - Condicionais em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .exemplo {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 3 - Condicionais em Python (If)</h1>
+        <p>Controle o fluxo do seu programa com estruturas condicionais.</p>
+
+        <div class="topico">
+            <h2>1. Estrutura do if - Condições no Python</h2>
+            <p>O <code>if</code> executa um bloco de código apenas se uma condição for verdadeira.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>idade = 18
+
+if idade >= 18:
+    print("Você é maior de idade!")
+    print("Pode acessar o conteúdo.")</code>
+                
+                <div class="dica">
+                    <strong>Observação:</strong> Todo o código indentado pertence ao bloco do if!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie uma condição que:</p>
+                <ol>
+                    <li>Verifique se um número é positivo</li>
+                    <li>Se for, imprima "Número positivo"</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Blocos e Indentação - If dentro de If</h2>
+            <p>Podemos aninhar condições colocando um if dentro de outro.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>numero = 15
+
+if numero > 10:
+    print("Número maior que 10")
+    if numero > 20:
+        print("E também maior que 20!")
+    print("Ainda dentro do primeiro if")</code>
+                
+                <div class="atencao">
+                    <strong>Cuidado:</strong> A indentação define quais instruções pertencem a qual bloco!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Pergunte a idade do usuário</li>
+                    <li>Se for maior que 12, verifique se é maior que 18</li>
+                    <li>Mostre mensagens diferentes para cada faixa etária</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Elif</h2>
+            <p><code>elif</code> testa condições adicionais quando o if anterior é falso.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>nota = 7.5
+
+if nota >= 9:
+    print("Conceito A")
+elif nota >= 7:
+    print("Conceito B")
+elif nota >= 5:
+    print("Conceito C")
+else:
+    print("Conceito D")</code>
+                
+                <div class="exemplo">
+                    <strong>Fluxo:</strong> Python testa cada condição em ordem até encontrar uma verdadeira.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Pergunte a temperatura atual</li>
+                    <li>Classifique como:
+                        <ul>
+                            <li>"Muito quente" se > 30°C</li>
+                            <li>"Quente" se > 20°C</li>
+                            <li>"Ameno" se > 10°C</li>
+                            <li>"Frio" se ≤ 10°C</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Comparadores</h2>
+            <p>Operadores para comparar valores: ==, !=, >, <, >=, <=</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>a = 5
+b = 7
+
+print(a == b)  # Igual
+print(a != b)  # Diferente
+print(a > b)   # Maior que
+print(a < b)   # Menor que
+print(a >= 5)  # Maior ou igual
+print(b <= 10) # Menor ou igual</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Complete as condições:</p>
+                <code>idade = 15
+
+# Verifique se a idade é diferente de 18
+if idade __ 18:
+    print("Idade não é 18")
+
+# Verifique se a idade é entre 13 e 19 (inclusive)
+if idade __ 13 __ idade __ 19:
+    print("Adolescente")</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. And e Or</h2>
+            <p>Combinar condições com operadores lógicos.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>tem_sol = True
+tem_guarda_sol = False
+
+# AND - ambas condições devem ser verdadeiras
+if tem_sol and tem_guarda_sol:
+    print("Pode ir à praia com proteção")
+
+# OR - pelo menos uma condição verdadeira
+if tem_sol or tem_guarda_sol:
+    print("Talvez possa ir à praia")</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> <code>and</code> tem precedência sobre <code>or</code> (use parênteses para controlar).
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie condições que:</p>
+                <ol>
+                    <li>Verifiquem se um número está entre 10 e 20 OU maior que 50</li>
+                    <li>Verifiquem se uma pessoa pode votar (idade ≥ 16 E tem título)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Exercícios If - Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Crie um programa que:
+                        <ul>
+                            <li>Pergunte dois números</li>
+                            <li>Mostre qual é o maior ou se são iguais</li>
+                        </ul>
+                    </li>
+                    <li>Faça um sistema de login que:
+                        <ul>
+                            <li>Pergunte usuário e senha</li>
+                            <li>Verifique se correspondem aos valores esperados</li>
+                            <li>Dê mensagens específicas para cada erro</li>
+                        </ul>
+                    </li>
+                    <li>Crie uma calculadora que:
+                        <ul>
+                            <li>Pergunte dois números e uma operação (+, -, *, /)</li>
+                            <li>Realize a operação apenas se for válida</li>
+                            <li>Alerte se a operação for inválida</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um programa que classifique IMC:
+                        <ul>
+                            <li>Pergunte peso e altura</li>
+                            <li>Calcule o IMC (peso / altura²)</li>
+                            <li>Classifique de acordo com a tabela da OMS</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um programa que:
+                    <ol>
+                        <li>Pergunte o ano atual e o ano de nascimento</li>
+                        <li>Calcule a idade</li>
+                        <li>Verifique se pode votar (16+), dirigir (18+) e beber (21+)</li>
+                        <li>Mostre uma mensagem personalizada com estas informações</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 2 - Variáveis em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 2 - Variáveis em Python</h1>
+        <p>Aprofundando nosso conhecimento sobre variáveis e seus tipos.</p>
+
+        <div class="topico">
+            <h2>1. Ordem de Execução dos Programas</h2>
+            <p>Python executa o código linha por linha, de cima para baixo.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <p>Observe a ordem de execução:</p>
+                <code># Linhas são executadas em ordem
+a = 5
+b = 10
+print(a + b)
+
+a = 20  # Esta alteração só afeta daqui para frente
+print(a + b)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Qual será a saída deste código?</p>
+                <code>x = 3
+y = x * 2
+x = 5
+print(y)</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Tipos de Variáveis</h2>
+            <p>Principais tipos em Python: int (inteiro), float (decimal), str (texto), bool (True/False).</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Descubra os tipos com type()
+idade = 25
+preco = 9.99
+nome = "Python"
+ativo = True
+
+print(type(idade))
+print(type(preco))
+print(type(nome))
+print(type(ativo))</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie variáveis dos seguintes tipos:</p>
+                <ol>
+                    <li>Um número inteiro negativo</li>
+                    <li>Um número decimal muito pequeno</li>
+                    <li>Uma string com seu email</li>
+                    <li>Um valor booleano falso</li>
+                    <li>Verifique os tipos com type()</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Misturando Tipos de Variáveis</h2>
+            <p>Algumas operações entre tipos diferentes podem causar erros.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>numero = 10
+texto = "5"
+
+# Isso funciona?
+print(numero + int(texto))  # Convertendo texto para número
+
+# Isso causa erro?
+print(str(numero) + texto)  # Convertendo número para texto</code>
+                
+                <div class="atencao">
+                    <strong>Atenção:</strong> Não podemos somar diretamente um número com texto!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Corrija os erros nestes códigos:</p>
+                <code># Código 1
+idade = "25"
+print(idade + 5)
+
+# Código 2
+preco = 19.99
+print("O preço é: " + preco)</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Comando Format</h2>
+            <p>O método format() nos permite criar strings com valores de variáveis.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>nome = "Maria"
+idade = 30
+altura = 1.65
+
+# Usando format
+print("{} tem {} anos e {:.2f}m de altura".format(nome, idade, altura))
+
+# f-strings (Python 3.6+)
+print(f"{nome} tem {idade} anos e {altura:.2f}m de altura")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie uma mensagem que mostre:</p>
+                <ol>
+                    <li>Seu nome completo</li>
+                    <li>Sua idade</li>
+                    <li>Seu peso (com 1 casa decimal)</li>
+                    <li>Use tanto format quanto f-string</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. String e Mudança de Tipos de Variáveis</h2>
+            <p>Podemos converter entre tipos usando int(), float(), str(), bool().</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Conversões entre tipos
+numero_texto = "123"
+numero_inteiro = int(numero_texto)
+numero_decimal = float(numero_texto)
+
+print(numero_inteiro + 7)
+print(numero_decimal / 2)
+
+# Convertendo para string
+valor = 45.7
+texto_valor = str(valor)
+print("O valor é " + texto_valor)</code>
+                
+                <div class="dica">
+                    <strong>Cuidado:</strong> Não podemos converter textos não numéricos para números!
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Faça um programa que:</p>
+                <ol>
+                    <li>Pergunte o ano de nascimento</li>
+                    <li>Calcule a idade (considerando ano atual 2023)</li>
+                    <li>Mostre "Você tem X anos" usando conversão para string</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Exercícios - Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Crie variáveis para armazenar:
+                        <ul>
+                            <li>Nome do produto</li>
+                            <li>Preço</li>
+                            <li>Quantidade em estoque</li>
+                        </ul>
+                        Mostre uma mensagem formatada com estas informações.
+                    </li>
+                    <li>Pergunte ao usuário:
+                        <ul>
+                            <li>Distância em km</li>
+                            <li>Tempo em horas</li>
+                        </ul>
+                        Calcule e mostre a velocidade média em km/h.
+                    </li>
+                    <li>Converta:
+                        <ul>
+                            <li>O texto "3.14" para float</li>
+                            <li>O número 100 para string</li>
+                            <li>O booleano True para inteiro</li>
+                        </ul>
+                        Mostre os resultados e seus tipos.
+                    </li>
+                    <li>Crie um programa que pergunte dois números e mostre:
+                        <ul>
+                            <li>A soma</li>
+                            <li>A concatenação dos números como textos</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um conversor de temperatura que:
+                    <ol>
+                        <li>Pergunte a temperatura em Celsius</li>
+                        <li>Converta para Fahrenheit (F = C × 9/5 + 32)</li>
+                        <li>Mostre o resultado formatado com 1 casa decimal</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

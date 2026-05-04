@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 18 - Transformando Python em EXE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: black;
+            background-color: yellowgreen;
+        }
+        h1 {
+            color: black;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: black;
+            margin-top: 30px;
+            background-color: #9ACD32;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: black;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid darkgreen;
+            color: white;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #ADFF2F;
+            padding: 10px;
+            border-left: 4px solid darkgreen;
+            margin: 15px 0;
+            color: black;
+        }
+        .dicas {
+            background-color: #ADFF2F;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 2px solid darkgreen;
+        }
+        .warning {
+            background-color: #FFA500;
+            padding: 10px;
+            border-left: 4px solid #FF4500;
+            margin: 15px 0;
+            color: black;
+        }
+        .command {
+            font-weight: bold;
+            color: #32CD32;
+        }
+    </style>
+</head>
+<body>
+    <h1>Módulo 18 - Transformando Python em EXE</h1>
+
+    <h2>1. Executando Códigos em Python Automaticamente</h2>
+    <p>Para agendar a execução automática de scripts Python:</p>
+    
+    <div class="note">
+        <h3>No Windows (Agendador de Tarefas):</h3>
+        <ol>
+            <li>Abra o Agendador de Tarefas</li>
+            <li>Crie uma Tarefa Básica</li>
+            <li>Defina o gatilho (diário, semanal, etc.)</li>
+            <li>Ação: "Iniciar um programa"</li>
+            <li>Programa/script: caminho para python.exe</li>
+            <li>Argumentos: caminho para seu script.py</li>
+        </ol>
+    </div>
+
+    <pre><code># Alternativa: usar o código Python com time.sleep()
+import time
+while True:
+    # Seu código aqui
+    time.sleep(86400)  # Executa diariamente (86400 segundos)</code></pre>
+
+    <h2>2. Instruções Importantes</h2>
+    <div class="warning">
+        <strong>ATENÇÃO:</strong>
+        <ul>
+            <li>Sempre teste seu código antes de converter para EXE</li>
+            <li>Mantenha uma cópia do código fonte</li>
+            <li>O executável será específico para o sistema operacional usado na compilação</li>
+            <li>Arquivos EXE podem ser flagrados como vírus por alguns antivírus</li>
+        </ul>
+    </div>
+
+    <h2>3. Python para EXE com Arquivos Simples</h2>
+    <p>Usando PyInstaller (o método mais comum):</p>
+    
+    <pre><code><span class="command"># Instale o PyInstaller</span>
+pip install pyinstaller
+
+<span class="command"># Crie o executável (modo básico)</span>
+pyinstaller --onefile seu_script.py
+
+<span class="command"># O executável estará em dist/seu_script.exe</span></code></pre>
+
+    <div class="note">
+        <h3>Opções úteis do PyInstaller:</h3>
+        <ul>
+            <li><code>--onefile</code>: Cria um único arquivo EXE</li>
+            <li><code>--windowed</code>: Não mostra o console (para aplicações GUI)</li>
+            <li><code>--icon=seu_icone.ico</code>: Adiciona ícone ao executável</li>
+            <li><code>--name=NomeDoApp</code>: Define o nome do executável</li>
+        </ul>
+    </div>
+
+    <h2>4. Diminuindo Tamanho de Arquivos Executáveis</h2>
+    <p>Técnicas para reduzir o tamanho do EXE:</p>
+    
+    <pre><code><span class="command"># 1. Use UPX (compactador de executáveis)</span>
+pyinstaller --onefile --upx-dir=caminho_para_upx seu_script.py
+
+<span class="command"># 2. Exclua bibliotecas não usadas</span>
+pyinstaller --onefile --exclude-module=tkinter seu_script.py
+
+<span class="command"># 3. Use Python em modo otimizado</span>
+pyinstaller --onefile -O seu_script.py</code></pre>
+
+    <div class="note">
+        <strong>Dicas adicionais:</strong>
+        <ul>
+            <li>Remova imports não utilizados no seu código</li>
+            <li>Considere usar <code>--clean</code> para remover caches entre builds</li>
+            <li>Para aplicações muito grandes, considere a abordagem de múltiplos arquivos</li>
+        </ul>
+    </div>
+
+    <h2>5. Adaptando o Código de Arquivos Complexos</h2>
+    <p>Ajustes necessários para projetos complexos:</p>
+    
+    <pre><code># 1. Tratamento de caminhos de arquivos (usar sys._MEIPASS)
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
+
+# Uso:
+image_path = resource_path('imagens/logo.png')</code></pre>
+
+    <div class="note">
+        <h3>Para projetos com:</h3>
+        <ul>
+            <li><strong>Arquivos de dados:</strong> Especifique no .spec ou use --add-data</li>
+            <li><strong>Bibliotecas externas:</strong> Pode precisar de hooks personalizados</li>
+            <li><strong>GUI (Tkinter, PyQt):</strong> Use --windowed e teste em máquinas limpas</li>
+        </ul>
+    </div>
+
+    <h2>6. Python para EXE com Arquivos Complexos</h2>
+    <p>Processo para projetos com múltiplos arquivos e dependências:</p>
+    
+    <pre><code><span class="command"># 1. Primeiro crie um arquivo .spec (opcional)</span>
+pyinstaller --onefile seu_script.py
+
+<span class="command"># 2. Edite o arquivo seu_script.spec gerado</span>
+# Adicione arquivos de dados:
+a = Analysis(
+    ['seu_script.py'],
+    binaries=[],
+    datas=[('imagens/*.png', 'imagens'), ('dados/*.csv', 'dados')],
+    hiddenimports=['pandas', 'numpy'],  # Para bibliotecas não detectadas
+    ...
+)
+
+<span class="command"># 3. Recompile usando o arquivo .spec</span>
+pyinstaller seu_script.spec</code></pre>
+
+    <div class="dicas">
+        <h3>Solução de Problemas Comuns</h3>
+        <ul>
+            <li><strong>Executável não funciona em outra máquina:</strong>
+                <ul>
+                    <li>Teste em uma máquina limpa</li>
+                    <li>Inclua todas as dependências</li>
+                    <li>Use --onefile apenas quando necessário</li>
+                </ul>
+            </li>
+            <li><strong>Erros de missing modules:</strong>
+                <ul>
+                    <li>Use --hidden-import para módulos não detectados</li>
+                    <li>Verifique se todas as bibliotecas estão instaladas</li>
+                </ul>
+            </li>
+            <li><strong>Executável muito grande:</strong>
+                <ul>
+                    <li>Use as técnicas da seção 4</li>
+                    <li>Considere dividir em múltiplos executáveis</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h3>Alternativas ao PyInstaller</h3>
+        <pre><code># cx_Freeze (alternativa para projetos complexos)
+pip install cx_Freeze
+# Crie um arquivo setup.py e execute:
+python setup.py build
+
+# auto-py-to-exe (interface gráfica para PyInstaller)
+pip install auto-py-to-exe
+auto-py-to-exe</code></pre>
+    </div>
+</body>
+</html>

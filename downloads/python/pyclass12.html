@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 12 - Módulos e Bibliotecas em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 12 - Módulos e Bibliotecas em Python</h1>
+        <p>Explore o poder da modularização e das bibliotecas Python para expandir suas capacidades.</p>
+
+        <div class="topico">
+            <h2>1. O que são Módulos e qual a importância</h2>
+            <p>Módulos são arquivos Python que contêm definições e instruções reutilizáveis.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Importando um módulo completo
+import math
+
+# Usando funções do módulo
+print(math.sqrt(25))  # 5.0
+print(math.pi)        # 3.141592653589793
+
+# Importando com alias
+import math as m
+print(m.cos(m.pi))    # -1.0
+
+# Importando itens específicos
+from math import pow, factorial
+print(pow(2, 3))      # 8.0
+print(factorial(5))   # 120</code>
+                
+                <div class="dica">
+                    <strong>Vantagens:</strong> Organização, reuso de código, namespaces separados e colaboração.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um arquivo <code>meu_modulo.py</code> com:</p>
+                <ol>
+                    <li>Uma função que calcula a área de um círculo</li>
+                    <li>Uma constante com o valor de gravidade (9.8)</li>
+                    <li>Importe e use esses itens em outro arquivo</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Como ler um Módulo</h2>
+            <p>Técnicas para explorar e entender módulos desconhecidos.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Listando conteúdo de um módulo
+import math
+print(dir(math))
+
+# Ajuda sobre funções
+help(math.sqrt)
+
+# Verificando tipo
+print(type(math.pi))  # <class 'float'>
+
+# Explorando módulos nativos
+import sys
+print(sys.builtin_module_names)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Explore o módulo <code>random</code>:</p>
+                <ol>
+                    <li>Liste todas as funções disponíveis</li>
+                    <li>Leia a documentação de 3 funções</li>
+                    <li>Teste pelo menos 2 funções na prática</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Biblioteca time - Trabalhando com Datas no Python</h2>
+            <p>Operações básicas com tempo usando o módulo <code>time</code>.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>import time
+
+# Tempo atual em segundos desde epoch
+agora = time.time()
+print(agora)
+
+# Tempo local como struct_time
+local = time.localtime()
+print(local)
+print(f"Ano: {local.tm_year}, Mês: {local.tm_mon}")
+
+# Formatação de tempo
+formatado = time.strftime("%d/%m/%Y %H:%M:%S", local)
+print(formatado)
+
+# Dormir por 2 segundos
+print("Início")
+time.sleep(2)
+print("Fim")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Mostre a data e hora atual formatada</li>
+                    <li>Calcule quanto tempo leva para executar um loop</li>
+                    <li>Converta um timestamp específico para formato legível</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Métodos Avançados da biblioteca time</h2>
+            <p>Funções mais sofisticadas para manipulação de tempo.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>import time
+
+# Medindo tempo de execução
+inicio = time.perf_counter()
+
+# Código a ser medido
+for _ in range(1000000):
+    pass
+
+fim = time.perf_counter()
+print(f"Tempo: {fim - inicio:.6f} segundos")
+
+# Process time (só tempo de CPU)
+inicio_cpu = time.process_time()
+# ... código ...
+fim_cpu = time.process_time()
+
+# Conversão de string para struct_time
+data_str = "25/12/2023"
+struct_data = time.strptime(data_str, "%d/%m/%Y")
+print(struct_data)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Implemente um cronômetro que:</p>
+                <ol>
+                    <li>Começa quando o usuário pressionar Enter</li>
+                    <li>Para quando o usuário pressionar Enter novamente</li>
+                    <li>Mostre o tempo decorrido com precisão</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Exercícios time - Fixação 1</h2>
+            <div class="exercicio">
+                <h3>Exercícios Práticos:</h3>
+                <ol>
+                    <li>Crie um relógio digital que atualize a cada segundo</li>
+                    <li>Desenvolva um temporizador regressivo de 1 minuto</li>
+                    <li>Implemente uma função que formate durações em segundos para "HH:MM:SS"</li>
+                    <li>Compare o tempo de execução de diferentes algoritmos de ordenação</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Biblioteca datetime - Métodos Avançados</h2>
+            <p>Manipulação mais intuitiva de datas e horas.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>from datetime import datetime, timedelta
+
+# Data e hora atual
+agora = datetime.now()
+print(agora)
+print(agora.year, agora.month, agora.day)
+
+# Operações com datas
+amanha = agora + timedelta(days=1)
+print(amanha)
+
+# Formatação
+print(agora.strftime("%A, %d de %B de %Y"))
+
+# Criação de data específica
+natal = datetime(2023, 12, 25)
+print((natal - agora).days, "dias para o Natal")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Pergunte a data de nascimento do usuário</li>
+                    <li>Calcule a idade em anos, meses e dias</li>
+                    <li>Mostre quantos dias faltam para o próximo aniversário</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Como instalar módulos novos</h2>
+            <p>Expandindo o Python com pacotes externos.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Instalando via pip (no terminal)
+# pip install nome_do_pacote
+
+# Exemplo com requests (HTTP)
+# pip install requests
+
+# Verificando pacotes instalados
+# pip list
+
+# Requisitos para projetos
+# pip freeze > requirements.txt
+
+# Instalando de requirements
+# pip install -r requirements.txt</code>
+                
+                <div class="atencao">
+                    <strong>Ambientes virtuais:</strong> Sempre use <code>python -m venv meu_ambiente</code> para isolar projetos.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Prática com pip:</p>
+                <ol>
+                    <li>Crie e ative um ambiente virtual</li>
+                    <li>Instale o pacote <code>python-dateutil</code></li>
+                    <li>Use-o para parsear datas em formatos diversos</li>
+                    <li>Gere um arquivo requirements.txt</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>8. Módulo de Gráficos - Exibindo Gráficos no Python</h2>
+            <p>Introdução à visualização de dados com Matplotlib.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>import matplotlib.pyplot as plt
+
+# Dados
+x = [1, 2, 3, 4, 5]
+y = [2, 4, 6, 8, 10]
+
+# Gráfico básico
+plt.plot(x, y)
+plt.title("Gráfico Linear")
+plt.xlabel("Eixo X")
+plt.ylabel("Eixo Y")
+plt.grid(True)
+plt.show()
+
+# Gráfico de barras
+nomes = ["A", "B", "C"]
+valores = [15, 30, 45]
+plt.bar(nomes, valores)
+plt.show()</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie gráficos que:</p>
+                <ol>
+                    <li>Mostrem a evolução de temperaturas ao longo de uma semana</li>
+                    <li>Comparem vendas por mês usando barras</li>
+                    <li>Exibam a distribuição de notas em uma turma (histograma)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>9. Mais edições de Gráficos e Módulo Numpy</h2>
+            <p>Personalização avançada e computação numérica.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Criando arrays com numpy
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+# Gráfico personalizado
+plt.figure(figsize=(10, 5))
+plt.plot(x, y, 'r--', label='Seno(x)')
+plt.title("Função Seno", fontsize=16)
+plt.legend()
+plt.savefig('grafico.png')  # Salvando a figura
+
+# Operações com numpy
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print(a + b)  # [5 7 9]
+print(a * 2)  # [2 4 6]</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Combine numpy e matplotlib para:</p>
+                <ol>
+                    <li>Plotar múltiplas funções matemáticas em um mesmo gráfico</li>
+                    <li>Criar um gráfico 3D simples</li>
+                    <li>Gerar e visualizar dados aleatórios com distribuição normal</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>Exercícios Integrados</h2>
+            <div class="exercicio">
+                <h3>Projetos Completos:</h3>
+                <ol>
+                    <li>Desenvolva um sistema de agendamento que:
+                        <ul>
+                            <li>Armazene eventos com data/hora</li>
+                            <li>Mostre eventos próximos</li>
+                            <li>Alertas para eventos do dia</li>
+                            <li>Gere gráficos de distribuição de eventos</li>
+                        </ul>
+                    </li>
+                    <li>Crie um analisador de hábitos que:
+                        <ul>
+                            <li>Registre atividades diárias</li>
+                            <li>Calcule estatísticas temporais</li>
+                            <li>Visualize padrões em gráficos</li>
+                            <li>Exporte relatórios em PDF</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Implemente um dashboard meteorológico que mostre previsões em gráficos interativos.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

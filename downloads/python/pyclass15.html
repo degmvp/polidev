@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 15 - Integração Python-SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: black;
+            background-color: yellowgreen;
+        }
+        h1 {
+            color: black;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: black;
+            margin-top: 30px;
+            background-color: #9ACD32;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: black;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid darkgreen;
+            color: white;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #ADFF2F;
+            padding: 10px;
+            border-left: 4px solid darkgreen;
+            margin: 15px 0;
+            color: black;
+        }
+        .dicas {
+            background-color: #ADFF2F;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 2px solid darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Módulo 15 - Integração Python-SQL</h1>
+
+    <h2>1. pyodbc - Configurações</h2>
+    <p>O pyodbc é uma biblioteca Python que permite conexão com bancos de dados SQL. Para começar:</p>
+    
+    <pre><code>import pyodbc
+
+# Configuração da conexão
+conn = pyodbc.connect(
+    Driver='{SQL Server}',  # Ou outro driver como MySQL, PostgreSQL
+    Server='nome_do_servidor',
+    Database='nome_do_banco',
+    UID='usuario',
+    PWD='senha'
+)
+
+# Criar um cursor para executar comandos SQL
+cursor = conn.cursor()</code></pre>
+    
+    <div class="note">
+        <strong>Nota:</strong> Os parâmetros de conexão variam conforme o banco de dados utilizado. Consulte a documentação do seu SGBD para os detalhes específicos.
+    </div>
+
+    <h2>2. Read no Banco de Dados</h2>
+    <p>Para ler dados de uma tabela:</p>
+    
+    <pre><code># Executar uma consulta SELECT
+cursor.execute("SELECT * FROM tabela")
+
+# Recuperar todos os resultados
+rows = cursor.fetchall()
+
+# Iterar sobre os resultados
+for row in rows:
+    print(row)
+    
+# Ou buscar um registro por vez
+row = cursor.fetchone()
+while row:
+    print(row)
+    row = cursor.fetchone()</code></pre>
+
+    <h2>3. Read no Banco de Dados com o Pandas</h2>
+    <p>Usando pandas para facilitar a manipulação dos dados:</p>
+    
+    <pre><code>import pandas as pd
+
+# Ler dados diretamente para um DataFrame
+query = "SELECT * FROM tabela"
+df = pd.read_sql(query, conn)
+
+# Mostrar os primeiros registros
+print(df.head())
+
+# Fazer análises com pandas
+print(df.describe())
+print(df.groupby('coluna').mean())</code></pre>
+
+    <h2>4. Update no Banco de Dados</h2>
+    <p>Para atualizar registros:</p>
+    
+    <pre><code># Atualizar um registro
+cursor.execute("UPDATE tabela SET coluna1 = ? WHERE id = ?", ('novo_valor', 1))
+
+# Confirmar a transação
+conn.commit()
+
+# Verificar quantas linhas foram afetadas
+print(f"Linhas afetadas: {cursor.rowcount}")</code></pre>
+
+    <div class="note">
+        <strong>Importante:</strong> Sempre lembre de executar <code>conn.commit()</code> após operações que modificam o banco de dados (INSERT, UPDATE, DELETE).
+    </div>
+
+    <h2>5. Delete no Banco de Dados</h2>
+    <p>Para deletar registros:</p>
+    
+    <pre><code># Deletar um registro
+cursor.execute("DELETE FROM tabela WHERE id = ?", (1,))
+
+# Confirmar a transação
+conn.commit()
+
+# Verificar quantas linhas foram afetadas
+print(f"Linhas deletadas: {cursor.rowcount}")</code></pre>
+
+    <h2>6. CRUD no Python - Integração Python e MySQL</h2>
+    <p>Exemplo completo de CRUD (Create, Read, Update, Delete) com MySQL:</p>
+    
+    <pre><code>import pyodbc
+import pandas as pd
+
+# Configuração da conexão MySQL
+conn = pyodbc.connect(
+    Driver='{MySQL ODBC 8.0 Unicode Driver}',
+    Server='localhost',
+    Database='meu_banco',
+    UID='root',
+    PWD='senha'
+)
+cursor = conn.cursor()
+
+# CREATE (Inserir)
+cursor.execute("INSERT INTO clientes (nome, email) VALUES (?, ?)", 
+               ('João Silva', 'joao@email.com'))
+conn.commit()
+
+# READ (Ler)
+cursor.execute("SELECT * FROM clientes")
+df = pd.read_sql("SELECT * FROM clientes", conn)
+print("Clientes:")
+print(df)
+
+# UPDATE (Atualizar)
+cursor.execute("UPDATE clientes SET email = ? WHERE nome = ?", 
+               ('joao.novo@email.com', 'João Silva'))
+conn.commit()
+
+# DELETE (Remover)
+cursor.execute("DELETE FROM clientes WHERE nome = ?", ('João Silva',))
+conn.commit()
+
+# Fechar conexão
+cursor.close()
+conn.close()</code></pre>
+
+    <div class="dicas">
+        <h3>Dicas importantes:</h3>
+        <ul>
+            <li>Sempre use parâmetros (?) para evitar SQL injection</li>
+            <li>Não esqueça de fazer commit() após INSERT, UPDATE ou DELETE</li>
+            <li>Feche a conexão quando não for mais necessária</li>
+            <li>Para operações em lote, considere usar executemany()</li>
+        </ul>
+        
+        <p>Exemplo de executemany:</p>
+        <pre><code>dados = [
+    ('Maria', 'maria@email.com'),
+    ('Pedro', 'pedro@email.com'),
+    ('Ana', 'ana@email.com')
+]
+cursor.executemany("INSERT INTO clientes (nome, email) VALUES (?, ?)", dados)
+conn.commit()</code></pre>
+    </div>
+</body>
+</html>

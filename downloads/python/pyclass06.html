@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 6 - Loops For em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .atencao {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 6 - Loops For em Python</h1>
+        <p>Aprenda a automatizar tarefas repetitivas com estruturas de repetição.</p>
+
+        <div class="topico">
+            <h2>1. Estrutura de Repetição For</h2>
+            <p>O loop <code>for</code> executa um bloco de código para cada item em uma sequência.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Imprimindo números de 0 a 4
+for i in range(5):
+    print(i)
+
+# range(início, fim, passo)
+for num in range(1, 10, 2):
+    print(num)  # 1, 3, 5, 7, 9</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> <code>range()</code> gera uma sequência numérica sem criar a lista na memória.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie loops que:</p>
+                <ol>
+                    <li>Imprimam números de 5 a 15</li>
+                    <li>Imprimam números pares de 0 a 20</li>
+                    <li>Imprimam números de 10 a 1 em ordem decrescente</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. For each - Percorrer cada item de uma lista</h2>
+            <p>Iterando diretamente sobre os elementos de uma lista.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>frutas = ["maçã", "banana", "laranja", "uva"]
+
+# Percorrendo cada elemento
+for fruta in frutas:
+    print(fruta.upper())
+
+# Com contador manual
+contador = 1
+for fruta in frutas:
+    print(f"{contador}. {fruta}")
+    contador += 1</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada a lista <code>notas = [7.5, 8.0, 6.5, 9.0]</code>:</p>
+                <ol>
+                    <li>Percorra e imprima cada nota</li>
+                    <li>Calcule e mostre a média das notas</li>
+                    <li>Conte quantas notas são maiores que 7.0</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. For e If</h2>
+            <p>Combinando loops com condicionais para filtragem.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>numeros = [1, 5, 3, 8, 2, 7, 9, 4]
+
+# Filtrando números pares
+for num in numeros:
+    if num % 2 == 0:
+        print(f"{num} é par")
+
+# Com else no for (executa se não houver break)
+for num in numeros:
+    if num == 10:
+        print("Encontrado")
+        break
+else:
+    print("10 não encontrado")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Percorra números de 1 a 100</li>
+                    <li>Imprima "Fizz" se múltiplo de 3</li>
+                    <li>Imprima "Buzz" se múltiplo de 5</li>
+                    <li>Imprima "FizzBuzz" se múltiplo de ambos</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Enumerate - For com item e índice</h2>
+            <p>Acessando tanto o item quanto seu índice na iteração.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>linguagens = ["Python", "Java", "C++", "JavaScript"]
+
+# Forma tradicional (não pythonica)
+for i in range(len(linguagens)):
+    print(f"{i}. {linguagens[i]}")
+
+# Forma pythonica com enumerate
+for indice, linguagem in enumerate(linguagens, start=1):
+    print(f"{indice}. {linguagem}")</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> <code>enumerate()</code> é mais eficiente e legível que usar <code>range(len())</code>.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada a lista <code>alunos = ["Ana", "Carlos", "Beatriz", "Daniel"]</code>:</p>
+                <ol>
+                    <li>Use enumerate para mostrar a posição e nome de cada aluno</li>
+                    <li>Encontre e mostre a posição do aluno "Beatriz"</li>
+                    <li>Crie um dicionário com {posição: nome} usando enumerate</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Quando usar cada "tipo" de for</h2>
+            <p>Escolhendo o padrão de loop mais adequado.</p>
+            
+            <table class="tabela">
+                <tr>
+                    <th>Situação</th>
+                    <th>Padrão Recomendado</th>
+                    <th>Exemplo</th>
+                </tr>
+                <tr>
+                    <td>Iterar sobre elementos</td>
+                    <td><code>for item in lista:</code></td>
+                    <td><code>for fruta in frutas:</code></td>
+                </tr>
+                <tr>
+                    <td>Precisar do índice</td>
+                    <td><code>for idx, item in enumerate(lista):</code></td>
+                    <td><code>for i, fruta in enumerate(frutas):</code></td>
+                </tr>
+                <tr>
+                    <td>Número específico de repetições</td>
+                    <td><code>for _ in range(n):</code></td>
+                    <td><code>for _ in range(10):</code></td>
+                </tr>
+                <tr>
+                    <td>Iterar sobre dicionário (chaves)</td>
+                    <td><code>for chave in dicionario:</code></td>
+                    <td><code>for chave in aluno:</code></td>
+                </tr>
+                <tr>
+                    <td>Iterar sobre dicionário (itens)</td>
+                    <td><code>for chave, valor in dicionario.items():</code></td>
+                    <td><code>for k, v in aluno.items():</code></td>
+                </tr>
+            </table>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Reescreva estes loops de forma mais pythonica:</p>
+                <code># 1. Loop tradicional para acessar índice
+for i in range(len(linguagens)):
+    print(linguagens[i])
+
+# 2. Iteração desnecessária com range
+for i in range(3):
+    print("Python é legal")
+
+# 3. Acesso a dicionário não pythonico
+aluno = {"nome": "Ana", "idade": 22}
+for chave in aluno:
+    print(chave, "=", aluno[chave])</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Exercícios de For - Fixação 1</h2>
+            <div class="exercicio">
+                <h3>Exercícios Básicos:</h3>
+                <ol>
+                    <li>Calcule o fatorial de um número usando for</li>
+                    <li>Conte quantas vogais existem em uma string</li>
+                    <li>Gere a tabuada de um número (de 1 a 10)</li>
+                    <li>Percorra uma lista e crie uma nova com os quadrados dos números</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Exercícios de For - Fixação 2</h2>
+            <div class="exercicio">
+                <h3>Exercícios Intermediários:</h3>
+                <ol>
+                    <li>Verifique se uma palavra é palíndromo</li>
+                    <li>Encontre o maior e menor número em uma lista sem usar max/min</li>
+                    <li>Calcule a soma dos dígitos de um número inteiro</li>
+                    <li>Gere os primeiros N números da sequência Fibonacci</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>8. For dentro de For</h2>
+            <p>Loops aninhados para trabalhar com estruturas multidimensionais.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Tabuadas de 1 a 10
+for i in range(1, 11):
+    for j in range(1, 11):
+        print(f"{i} x {j} = {i*j}")
+    print()  # Linha em branco entre tabuadas
+
+# Percorrendo matriz
+matriz = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+for linha in matriz:
+    for elemento in linha:
+        print(elemento, end=" ")
+    print()</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie programas que:</p>
+                <ol>
+                    <li>Desenhem um retângulo de asteriscos (largura e altura variáveis)</li>
+                    <li>Encontrem elementos em comum entre duas listas</li>
+                    <li>Calculem a transposta de uma matriz</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>9. Criando Lista Auxiliar - Solução Desafio</h2>
+            <p>Padrão comum: criar nova lista durante iteração.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Filtrando números pares e elevando ao quadrado
+numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+resultado = []
+
+for num in numeros:
+    if num % 2 == 0:
+        resultado.append(num ** 2)
+
+print(resultado)  # [4, 16, 36, 64, 100]
+
+# Versão com list comprehension (será vista depois)
+resultado = [num**2 for num in numeros if num % 2 == 0]</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Implemente as seguintes transformações:</p>
+                <ol>
+                    <li>Dada uma lista de palavras, crie uma lista com seus comprimentos</li>
+                    <li>Dada uma lista de números, crie uma lista apenas com os positivos</li>
+                    <li>Dada uma lista de strings, crie uma lista com as que começam com vogal</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>10. Exercícios de For - Fixação 3</h2>
+            <div class="exercicio">
+                <h3>Exercícios Avançados:</h3>
+                <ol>
+                    <li>Implemente o Crivo de Eratóstenes para encontrar números primos</li>
+                    <li>Crie um jogo da velha usando loops aninhados</li>
+                    <li>Desenvolva um sistema de busca que encontre palavras em uma matriz de letras</li>
+                    <li>Implemente uma cifra de César para criptografar mensagens</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>11. Break e Continue - Interrompendo um Loop</h2>
+            <p>Controlando o fluxo de execução dentro do loop.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Break - interrompe completamente o loop
+for num in range(1, 100):
+    if num % 7 == 0:
+        print("Encontrado múltiplo de 7:", num)
+        break
+
+# Continue - pula para próxima iteração
+for num in range(10):
+    if num % 2 == 0:
+        continue  # Pula números pares
+    print(num)    # Só imprime ímpares
+
+# Else no for - executa se não houve break
+for num in range(2, 10):
+    if 10 % num == 0:
+        print(f"{num} é divisor de 10")
+        break
+else:
+    print("Nenhum divisor encontrado")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie programas que:</p>
+                <ol>
+                    <li>Verifiquem se um número é primo (use break para otimizar)</li>
+                    <li>Percorram uma lista até encontrar um negativo (então pare)</li>
+                    <li>Some números positivos de uma lista, pulando os negativos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 17 - Ambientes Virtuais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: black;
+            background-color: yellowgreen;
+        }
+        h1 {
+            color: black;
+            border-bottom: 2px solid darkgreen;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: black;
+            margin-top: 30px;
+            background-color: #9ACD32;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: black;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid darkgreen;
+            color: white;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .note {
+            background-color: #ADFF2F;
+            padding: 10px;
+            border-left: 4px solid darkgreen;
+            margin: 15px 0;
+            color: black;
+        }
+        .dicas {
+            background-color: #ADFF2F;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 2px solid darkgreen;
+        }
+        .ide-example {
+            background-color: #9ACD32;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .command {
+            font-weight: bold;
+            color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <h1>Módulo 17 - Ambientes Virtuais</h1>
+    <div class="note">
+        <strong>Importante:</strong> Ambientes virtuais são essenciais para isolar dependências entre projetos Python. Este módulo é fundamental para os próximos conteúdos.
+    </div>
+
+    <h2>1. Ambientes Virtuais no PyCharm</h2>
+    <div class="ide-example">
+        <h3>Criando ambiente virtual no PyCharm:</h3>
+        <ol>
+            <li>Abra seu projeto no PyCharm</li>
+            <li>Vá em File > Settings (Windows/Linux) ou PyCharm > Preferences (macOS)</li>
+            <li>Navegue até Project: [nome_do_projeto] > Python Interpreter</li>
+            <li>Clique na engrenagem e selecione "Add"</li>
+            <li>Escolha "Virtualenv Environment"</li>
+            <li>Selecione a localização e a versão do Python</li>
+            <li>Marque "Make available to all projects" se desejar</li>
+            <li>Clique em OK</li>
+        </ol>
+    </div>
+
+    <pre><code># No terminal do PyCharm você pode verificar o ambiente ativo
+which python
+# ou
+python --version</code></pre>
+
+    <h2>2. Navegando no Prompt de Comando</h2>
+    <p>Comandos básicos para navegar entre diretórios:</p>
+    
+    <pre><code><span class="command">cd</span> nome_da_pasta       # Entra na pasta
+<span class="command">cd ..</span>                # Volta uma pasta
+<span class="command">dir</span> (Windows)        # Lista arquivos
+<span class="command">ls</span> (Linux/macOS)    # Lista arquivos
+<span class="command">mkdir</span> nova_pasta   # Cria nova pasta
+<span class="command">pwd</span> (Linux/macOS)   # Mostra caminho atual</code></pre>
+
+    <div class="note">
+        <strong>Dica:</strong> No Windows, você pode usar o comando <code>cd</code> com a tecla TAB para autocompletar nomes de pastas.
+    </div>
+
+    <h2>3. Criando, Ativando e Removendo Ambientes Virtuais</h2>
+    
+    <div class="ide-example">
+        <h3>Usando venv (módulo padrão do Python):</h3>
+    </div>
+    
+    <pre><code># Criar ambiente virtual (substitua 'meu_ambiente' pelo nome desejado)
+python -m venv meu_ambiente
+
+# Ativar ambiente (Windows)
+meu_ambiente\Scripts\activate
+
+# Ativar ambiente (Linux/macOS)
+source meu_ambiente/bin/activate
+
+# Desativar ambiente
+deactivate
+
+# Remover ambiente (apenas delete a pasta)
+rm -rf meu_ambiente  # Linux/macOS
+rd /s /q meu_ambiente  # Windows</code></pre>
+
+    <div class="note">
+        <strong>Alternativa:</strong> Para projetos mais complexos, considere usar <code>pipenv</code> ou <code>poetry</code> que gerenciam ambientes e dependências juntos.
+    </div>
+
+    <h2>4. Ambientes Virtuais no VSCode</h2>
+    
+    <div class="ide-example">
+        <h3>Configurando ambiente virtual no VSCode:</h3>
+        <ol>
+            <li>Abra a pasta do projeto no VSCode</li>
+            <li>Abra o terminal integrado (Ctrl+`)</li>
+            <li>Crie o ambiente virtual como mostrado na seção 3</li>
+            <li>Pressione Ctrl+Shift+P e digite "Python: Select Interpreter"</li>
+            <li>Selecione o interpretador do ambiente virtual criado</li>
+            <li>O VSCode geralmente detecta automaticamente ambientes virtuais na pasta do projeto</li>
+        </ol>
+    </div>
+
+    <pre><code># Verificando o interpretador selecionado no VSCode
+import sys
+print(sys.executable)</code></pre>
+
+    <div class="dicas">
+        <h3>Boas Práticas com Ambientes Virtuais</h3>
+        <ul>
+            <li>Crie um ambiente virtual para cada projeto</li>
+            <li>Nomeie os ambientes de forma descritiva (ex: projeto-analise-dados)</li>
+            <li>Não versione a pasta do ambiente virtual no Git</li>
+            <li>Use <code>requirements.txt</code> para listar dependências</li>
+            <li>Atualize regularmente os pacotes no ambiente</li>
+        </ul>
+        
+        <h3>Gerenciando dependências</h3>
+        <pre><code># Salvar dependências em requirements.txt
+pip freeze > requirements.txt
+
+# Instalar dependências de requirements.txt
+pip install -r requirements.txt
+
+# Listar pacotes instalados
+pip list
+
+# Atualizar todos os pacotes
+pip freeze | %{$_.split('==')[0]} | %{pip install --upgrade $_}</code></pre>
+    </div>
+</body>
+</html>

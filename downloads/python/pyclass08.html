@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 8 - Tuplas em Python</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .tabela th, .tabela td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 8 - Tuplas em Python</h1>
+        <p>Domine as tuplas, estruturas imutáveis e eficientes do Python.</p>
+
+        <div class="topico">
+            <h2>1. Tuplas</h2>
+            <p>Tuplas são coleções ordenadas e imutáveis de itens.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Criando tuplas
+coordenadas = (10, 20)
+cores = ("vermelho", "verde", "azul")
+ponto = (3.5, 4.2, "origem")
+
+# Acessando elementos
+print(coordenadas[0])  # 10
+print(cores[-1])       # azul
+
+# Tuplas são imutáveis
+# coordenadas[0] = 15  # Erro!</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> Use tuplas para dados que não devem ser modificados.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie tuplas para representar:</p>
+                <ol>
+                    <li>Coordenadas GPS (latitude, longitude)</li>
+                    <li>Data de nascimento (dia, mês, ano)</li>
+                    <li>RGB de uma cor (red, green, blue)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Unpacking em Tuplas</h2>
+            <p>Atribuição desestruturada de valores de tuplas.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Unpacking básico
+coordenadas = (10, 20)
+x, y = coordenadas
+print(f"X: {x}, Y: {y}")
+
+# Unpacking com *
+valores = (1, 2, 3, 4, 5)
+primeiro, *meio, ultimo = valores
+print(primeiro)  # 1
+print(meio)      # [2, 3, 4]
+print(ultimo)    # 5
+
+# Troca de valores
+a, b = 5, 10
+a, b = b, a  # Agora a=10, b=5</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada a tupla <code>dados = ("João", 25, "Engenheiro", "São Paulo")</code>:</p>
+                <ol>
+                    <li>Faça unpacking para variáveis nome, idade, profissão, cidade</li>
+                    <li>Use * para pegar o primeiro e último elemento, empacotando o meio</li>
+                    <li>Crie uma função que retorna tupla e faça unpacking do resultado</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Lista de Tuplas</h2>
+            <p>Combinação poderosa para estruturar dados.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code># Criando lista de tuplas
+pessoas = [
+    ("João", 25),
+    ("Maria", 30),
+    ("Carlos", 22)
+]
+
+# Acessando elementos
+print(pessoas[0][1])  # Idade do João: 25
+
+# Adicionando nova tupla
+pessoas.append(("Ana", 28))
+
+# Percorrendo
+for nome, idade in pessoas:
+    print(f"{nome} tem {idade} anos")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie uma lista de tuplas que represente:</p>
+                <ol>
+                    <li>Produtos com (nome, preço, quantidade)</li>
+                    <li>Cidades com (nome, população, estado)</li>
+                    <li>Alunos com (nome, nota1, nota2, nota3)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Finalizando Exercício de Lista de Tuplas</h2>
+            <p>Manipulação avançada de listas de tuplas.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>alunos = [
+    ("Ana", 7.5, 8.0, 9.0),
+    ("João", 6.0, 5.5, 7.0),
+    ("Maria", 9.0, 8.5, 10.0)
+]
+
+# Calculando médias
+for nome, n1, n2, n3 in alunos:
+    media = (n1 + n2 + n3) / 3
+    print(f"{nome}: {media:.1f}")
+
+# Ordenando por nome
+alunos.sort()
+print(alunos)
+
+# Ordenando por média (usando função lambda)
+alunos.sort(key=lambda aluno: (aluno[1]+aluno[2]+aluno[3])/3, reverse=True)
+print(alunos)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Dada a lista de produtos <code>produtos = [("Celular", 1200, 5), ("Notebook", 3500, 3), ("Tablet", 900, 8)]</code>:</p>
+                <ol>
+                    <li>Calcule o valor total de cada produto (preço × quantidade)</li>
+                    <li>Ordene os produtos por quantidade em estoque</li>
+                    <li>Filtre produtos com valor unitário acima de R$ 1000</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Exercícios de Tupla Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Crie um sistema de coordenadas que:
+                        <ul>
+                            <li>Armazene pontos (x, y) em uma lista</li>
+                            <li>Calcule a distância entre dois pontos</li>
+                            <li>Encontre o ponto mais distante da origem (0,0)</li>
+                        </ul>
+                    </li>
+                    <li>Desenvolva um sistema de notas que:
+                        <ul>
+                            <li>Armazene alunos e 3 notas em tuplas</li>
+                            <li>Calcule a média de cada aluno</li>
+                            <li>Identifique alunos com média acima de 7</li>
+                        </ul>
+                    </li>
+                    <li>Implemente um tradutor de cores que:
+                        <ul>
+                            <li>Use tuplas para mapear nomes para valores RGB</li>
+                            <li>Permita buscar componentes de uma cor</li>
+                            <li>Calcule cores intermediárias entre duas cores</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Módulo 1 - Python Prático</title>
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .modulo {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .topico {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .exercicio {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        .dica {
+            background-color: #fffde7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="modulo">
+        <h1>Módulo 1 - Início em Python</h1>
+        <p>Neste módulo, vamos aprender Python de forma prática, colocando a mão no código desde o primeiro momento.</p>
+
+        <div class="topico">
+            <h2>1. Criando seu Primeiro Programa</h2>
+            <p>Em Python, usamos a função <code>print()</code> para exibir informações na tela.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <p>Execute o código abaixo no seu ambiente Python:</p>
+                <code>print("Minha primeira linha de código Python!")</code>
+                
+                <div class="dica">
+                    <strong>Dica:</strong> No Jupyter Notebook, basta digitar o código em uma célula e pressionar Shift+Enter para executar.
+                </div>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Modifique o código para exibir uma mensagem diferente:</p>
+                <code># Seu código aqui
+print("Python é poderoso!")</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>2. Operações Básicas</h2>
+            <p>Python pode ser usado como uma calculadora poderosa. Vamos testar as operações básicas:</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>print(5 + 3)   # Adição
+print(10 - 2)  # Subtração
+print(4 * 2)   # Multiplicação
+print(16 / 2)  # Divisão</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Complete os códigos abaixo com os operadores corretos (+, -, *, /):</p>
+                <code>print(10 __ 2)  # Deve resultar em 5
+print(7 __ 3)   # Deve resultar em 21
+print(15 __ 3)  # Deve resultar em 12
+print(20 __ 4)  # Deve resultar em 5</code>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>3. Ordem das Operações no Python</h2>
+            <p>Python segue a ordem matemática padrão de operações (PEMDAS): Parênteses, Expoentes, Multiplicação/Divisão, Adição/Subtração.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>print(2 + 3 * 4)    # Resultado: 14 (multiplicação primeiro)
+print((2 + 3) * 4)  # Resultado: 20 (parênteses primeiro)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Preveja o resultado antes de executar:</p>
+                <code>print(10 + 20 / 5 - 3)
+print(100 / (10 * 2))
+print(2 ** 3 + 1)   # O que é 2**3?</code>
+                
+                <div class="dica">
+                    <strong>Desafio:</strong> Escreva uma expressão que some 5 e 7, depois multiplique o resultado por 3.
+                </div>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>4. Operações com Texto (String)</h2>
+            <p>Em Python, textos são chamados de strings. Podemos concatenar (juntar) e repetir strings.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>print("Python" + " " + "é" + " legal!")  # Concatenação
+print("Repetir " * 3)             # Repetição</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Concatene seu nome e sobrenome</li>
+                    <li>Repita a palavra "Olá" 3 vezes</li>
+                    <li>Concatene "Python" com o número 3 (dica: use str(3))</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>5. Variáveis</h2>
+            <p>Variáveis são como caixas que guardam informações para usarmos depois.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>linguagem = "Python"
+versao = 3.9
+print(linguagem)
+print("Versão:", versao)</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie variáveis para:</p>
+                <ol>
+                    <li>Seu nome completo</li>
+                    <li>Sua idade</li>
+                    <li>Seu ano de nascimento (calcule com base na idade)</li>
+                    <li>Exiba todas as informações juntas</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>6. Input - Pegando informações do Usuário</h2>
+            <p>Podemos interagir com o usuário usando a função <code>input()</code>.</p>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <code>nome = input("Qual seu nome? ")
+print("Olá,", nome, "! Bem-vindo ao Python!")</code>
+            </div>
+            
+            <div class="exercicio">
+                <h3>Fixando o Conhecimento:</h3>
+                <p>Crie um programa que:</p>
+                <ol>
+                    <li>Pergunte a idade do usuário</li>
+                    <li>Calcule quantos dias aproximadamente ele já viveu (idade * 365)</li>
+                    <li>Exiba o resultado</li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Lembrete:</strong> O input sempre retorna uma string. Use int() para converter para número.
+                </div>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>7. Os arquivos do Jupyter e como abrir nossos arquivos</h2>
+            <p>Para salvar seu trabalho no Jupyter Notebook:</p>
+            <ol>
+                <li>Clique em "File" > "Save and Checkpoint" para salvar</li>
+                <li>Seu arquivo será salvo com extensão .ipynb</li>
+                <li>Para abrir novamente, inicie o Jupyter e navegue até o arquivo</li>
+            </ol>
+            
+            <div class="exercicio">
+                <h3>Exercício Prático:</h3>
+                <ol>
+                    <li>Crie um novo notebook no Jupyter</li>
+                    <li>Salve com o nome "modulo1_pratico"</li>
+                    <li>Feche e abra novamente para verificar</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h2>8. Exercícios Jupyter Fixação</h2>
+            <div class="exercicio">
+                <h3>Exercícios Finais:</h3>
+                <ol>
+                    <li>Crie um programa que peça dois números e mostre a soma</li>
+                    <li>Faça um programa que concatene seu nome e sobrenome com uma mensagem de boas-vindas</li>
+                    <li>Crie um cálculo que use pelo menos 3 operações diferentes e parênteses</li>
+                    <li>Peça o ano de nascimento do usuário e mostre sua idade aproximada</li>
+                    <li>Crie um programa que peça 3 notas e calcule a média</li>
+                </ol>
+                
+                <div class="dica">
+                    <strong>Desafio Extra:</strong> Crie um programa que converta graus Celsius para Fahrenheit (F = C * 9/5 + 32)
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
