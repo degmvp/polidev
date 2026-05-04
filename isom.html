@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Menu Isométrico</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:yellowgreen;
+    color:black;
+    text-align:center;
+}
+
+header{
+    background:black;
+    color:#FFD700;
+    padding:25px;
+}
+
+header h1{
+    margin:0;
+    font-size:36px;
+}
+
+header p{
+    margin:8px 0 0;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1100px;
+    margin:60px auto;
+    padding:20px;
+}
+
+.iso-menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:45px;
+    justify-items:center;
+}
+
+.iso-card{
+    width:230px;
+    height:130px;
+    background:black;
+    color:white;
+    border:3px solid #FFD700;
+    border-radius:12px;
+    transform:skewY(-8deg);
+    box-shadow:18px 18px 0 #333;
+    cursor:pointer;
+    position:relative;
+    transition:0.3s;
+}
+
+.iso-card::before{
+    content:"";
+    position:absolute;
+    top:12px;
+    left:12px;
+    right:-18px;
+    bottom:-18px;
+    border-radius:12px;
+    background:rgba(0,0,0,0.25);
+    z-index:-1;
+}
+
+.iso-card:hover{
+    background:#FFD700;
+    color:black;
+    transform:skewY(-8deg) translateY(-10px);
+    box-shadow:24px 24px 0 #111;
+}
+
+.iso-content{
+    transform:skewY(8deg);
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:10px;
+}
+
+.icon{
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.iso-content h2{
+    margin:0;
+    font-size:20px;
+}
+
+.iso-content p{
+    margin:6px 0 0;
+    font-size:13px;
+    font-weight:bold;
+}
+
+footer{
+    margin-top:50px;
+    padding:20px;
+    font-weight:bold;
+}
+
+@media(max-width:600px){
+    .container{
+        margin:30px auto;
+    }
+
+    .iso-card{
+        width:85%;
+        height:120px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚀 POLYDEV</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="container">
+
+    <div class="iso-menu">
+
+        <div class="iso-card" onclick="ir('vw.html?categoria=sql')">
+            <div class="iso-content">
+                <div class="icon">🗄️</div>
+                <h2>Guias SQL</h2>
+                <p>Bancos de dados</p>
+            </div>
+        </div>
+
+        <div class="iso-card" onclick="ir('vw.html?categoria=lang')">
+            <div class="iso-content">
+                <div class="icon">💻</div>
+                <h2>Linguagens</h2>
+                <p>Programação</p>
+            </div>
+        </div>
+
+        <div class="iso-card" onclick="ir('top.html')">
+            <div class="iso-content">
+                <div class="icon">🏆</div>
+                <h2>Top Downloads</h2>
+                <p>Mais acessados</p>
+            </div>
+        </div>
+
+        <div class="iso-card" onclick="ir('dashboard_visual.html')">
+            <div class="iso-content">
+                <div class="icon">📊</div>
+                <h2>Dashboard</h2>
+                <p>Métricas reais</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    POLYDEV V1.0 — Plataforma de Conteúdos Técnicos
+</footer>
+
+<script>
+function ir(pagina){
+    location.href = pagina;
+}
+</script>
+
+</body>
+</html>
