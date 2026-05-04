@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Home Isométrico</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg, #000 0%, #111 55%, #2d3f00 100%);
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px 15px;
+}
+
+header h1{
+    color:#FFD700;
+    font-size:42px;
+    margin:0;
+    letter-spacing:2px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:20px;
+    font-weight:bold;
+}
+
+main{
+    max-width:1100px;
+    margin:20px auto;
+    padding:20px;
+}
+
+.intro{
+    background:black;
+    border:2px solid yellowgreen;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(154,205,50,.35);
+}
+
+.intro h2{
+    color:#FFD700;
+    margin-top:0;
+}
+
+.intro p{
+    color:white;
+    font-size:17px;
+}
+
+.iso-area{
+    display:flex;
+    justify-content:center;
+    margin-top:60px;
+}
+
+.iso-menu{
+    display:grid;
+    grid-template-columns:repeat(3, 180px);
+    gap:55px 35px;
+    transform:skewY(-12deg);
+}
+
+.iso-card{
+    position:relative;
+    height:95px;
+    background:yellowgreen;
+    color:black;
+    text-decoration:none;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:
+        -12px 12px 0 #5f7f16,
+        -24px 24px 20px rgba(0,0,0,.75);
+    transition:.3s;
+}
+
+.iso-card::before{
+    content:"";
+    position:absolute;
+    left:-12px;
+    top:6px;
+    width:12px;
+    height:100%;
+    background:#6f911c;
+    transform:skewY(45deg);
+    border-radius:5px 0 0 5px;
+}
+
+.iso-card::after{
+    content:"";
+    position:absolute;
+    left:-6px;
+    bottom:-12px;
+    width:100%;
+    height:12px;
+    background:#4c650f;
+    transform:skewX(45deg);
+    border-radius:0 0 5px 5px;
+}
+
+.iso-card:hover{
+    background:#FFD700;
+    transform:translate(10px,-10px);
+    box-shadow:
+        -20px 20px 0 #7c6500,
+        -35px 35px 25px rgba(0,0,0,.85);
+}
+
+.iso-card span{
+    transform:skewY(12deg);
+    font-size:17px;
+}
+
+.gold{
+    background:#FFD700;
+}
+
+.gold:hover{
+    background:white;
+}
+
+footer{
+    margin-top:70px;
+    text-align:center;
+    padding:20px;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+/* Responsivo */
+@media(max-width:800px){
+    header h1{
+        font-size:34px;
+    }
+
+    .iso-menu{
+        grid-template-columns:1fr;
+        transform:none;
+        gap:25px;
+        width:90%;
+    }
+
+    .iso-card,
+    .iso-card span{
+        transform:none;
+    }
+
+    .iso-area{
+        margin-top:35px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<main>
+
+<section class="intro">
+    <h2>Central de Estudos e Downloads</h2>
+    <p>
+        Escolha uma trilha abaixo para acessar códigos, guias, bancos,
+        linguagens, dashboards e materiais do projeto POLYDEV.
+    </p>
+</section>
+
+<section class="iso-area">
+    <nav class="iso-menu">
+
+        <a class="iso-card" href="viewer.html?categoria=python">
+            <span>🐍 Python</span>
+        </a>
+
+        <a class="iso-card gold" href="viewer.html?categoria=lang">
+            <span>💻 Linguagens</span>
+        </a>
+
+        <a class="iso-card" href="viewer.html?categoria=sql">
+            <span>🗄️ Bancos SQL</span>
+        </a>
+
+        <a class="iso-card" href="viewer.html?categoria=oop">
+            <span>🏛️ OOP</span>
+        </a>
+
+        <a class="iso-card gold" href="dash.html">
+            <span>📊 Dashboard</span>
+        </a>
+
+        <a class="iso-card" href="top.html">
+            <span>⬇️ Top Downloads</span>
+        </a>
+
+        <a class="iso-card" href="conteudos.html">
+            <span>📚 Conteúdos</span>
+        </a>
+
+        <a class="iso-card gold" href="guia.html">
+            <span>📘 Guia POLYDEV</span>
+        </a>
+
+        <a class="iso-card" href="index.html">
+            <span>🏠 Landing Page</span>
+        </a>
+
+    </nav>
+</section>
+
+</main>
+
+<footer>
+    POLYDEV V1.0 — Multi Linguagens • Multi Bancos • Código na prática
+</footer>
+
+</body>
+</html>
