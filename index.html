@@ -313,27 +313,24 @@ celular:celular
 
 if(response.ok){
 
-document.getElementById("formCadastro").reset();
+    document.getElementById("formCadastro").reset();
 
-const total = await carregarContador();
+    const total = await carregarContador();
 
-alert("Cadastro realizado com sucesso!\nVocê é o inscrito número " + total + " no POLIDEV 🚀");
+    const contador = document.getElementById("contador");
 
-}else{
+    contador.innerHTML =
+    "✅ Cadastro realizado com sucesso!<br>" +
+    "Você é o inscrito número <strong>" + total + "</strong> no POLIDEV 🚀<br>" +
+    "Redirecionando para o sistema...";
 
-const erro = await response.text();
+    contador.style.color = "green";
 
-alert("Erro ao salvar: "+erro);
+    setTimeout(() => {
+        window.location.href = "home.html";
+    }, 1500);
 
 }
-
-}catch(err){
-
-alert("Erro de conexão: "+err);
-
-}
-
-});
 
 </script>
 
