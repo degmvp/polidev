@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | 20 Exemplos de SQL Moderno</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #FFD700;
+    color: black;
+}
+
+header {
+    background-color: #FFD700;
+    color: black;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 48px;
+}
+
+section {
+    max-width: 1000px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+h2 {
+    border-left: 10px solid white;
+    padding-left: 15px;
+}
+
+.box{
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+pre {
+    background: #111;
+    color: #00ff99;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #444;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+footer {
+    background-color: black;
+    color: #FFD700;
+    text-align: center;
+    padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV</h1>
+    <p>20 Exemplos de SQL Moderno</p>
+    <p><strong>Leia • Entenda • Execute seu código</strong></p>
+</header>
+
+<section>
+
+<h2>Introdução</h2>
+<div class="box">
+<p>
+SQL moderno vai muito além do tradicional <strong>SELECT, INSERT, UPDATE e DELETE</strong>.
+Hoje temos recursos poderosos como CTE, funções de janela, agregações avançadas,
+JSON, UPSERT, MERGE, STRING_AGG, PIVOT lógico, consultas recursivas e muito mais.
+</p>
+<p>
+Este guia apresenta 20 exemplos úteis para programadores, DBAs e analistas que desejam
+escrever consultas mais inteligentes, limpas e profissionais.
+</p>
+</div>
+
+<h2>1. CTE - Common Table Expression</h2>
+<div class="box">
+<p>Permite criar uma consulta temporária nomeada, melhorando a organização do SQL.</p>
+<pre><code>WITH vendas_mes AS (
+    SELECT vendedor, SUM(valor) AS total
+    FROM vendas
+    GROUP BY vendedor
+)
+SELECT *
+FROM vendas_mes
+WHERE total > 10000;</code></pre>
+</div>
+
+<h2>2. CTE Recursiva</h2>
+<div class="box">
+<p>Usada para hierarquias, árvores, organogramas e estruturas pai-filho.</p>
+<pre><code>WITH RECURSIVE hierarquia AS (
+    SELECT id, nome, gerente_id, 1 AS nivel
+    FROM funcionarios
+    WHERE gerente_id IS NULL
+
+    UNION ALL
+
+    SELECT f.id, f.nome, f.gerente_id, h.nivel + 1
+    FROM funcionarios f
+    JOIN hierarquia h ON f.gerente_id = h.id
+)
+SELECT *
+FROM hierarquia;</code></pre>
+</div>
+
+<h2>3. ROW_NUMBER</h2>
+<div class="box">
+<p>Numera linhas conforme uma ordem definida. Muito usado para ranking e paginação.</p>
+<pre><code>SELECT 
+    nome,
+    salario,
+    ROW_NUMBER() OVER (ORDER BY salario DESC) AS posicao
+FROM funcionarios;</code></pre>
+</div>
+
+<h2>4. RANK</h2>
+<div class="box">
+<p>Cria ranking permitindo empates. Quando há empate, pula posições.</p>
+<pre><code>SELECT 
+    vendedor,
+    total_vendas,
+    RANK() OVER (ORDER BY total_vendas DESC) AS ranking
+FROM vendedores;</code></pre>
+</div>
+
+<h2>5. DENSE_RANK</h2>
+<div class="box">
+<p>Também cria ranking com empates, mas não pula posições.</p>
+<pre><code>SELECT 
+    vendedor,
+    total_vendas,
+    DENSE_RANK() OVER (ORDER BY total_vendas DESC) AS ranking
+FROM vendedores;</code></pre>
+</div>
+
+<h2>6. LAG</h2>
+<div class="box">
+<p>Busca o valor da linha anterior. Excelente para comparar mês atual com mês anterior.</p>
+<pre><code>SELECT 
+    mes,
+    valor,
+    LAG(valor) OVER (ORDER BY mes) AS valor_mes_anterior
+FROM vendas_mensais;</code></pre>
+</div>
+
+<h2>7. LEAD</h2>
+<div class="box">
+<p>Busca o valor da próxima linha. Útil para projeções e comparações futuras.</p>
+<pre><code>SELECT 
+    mes,
+    valor,
+    LEAD(valor) OVER (ORDER BY mes) AS valor_proximo_mes
+FROM vendas_mensais;</code></pre>
+</div>
+
+<h2>8. SUM com OVER</h2>
+<div class="box">
+<p>Calcula acumulados sem precisar de subqueries complexas.</p>
+<pre><code>SELECT 
+    mes,
+    valor,
+    SUM(valor) OVER (ORDER BY mes) AS acumulado
+FROM vendas_mensais;</code></pre>
+</div>
+
+<h2>9. PARTITION BY</h2>
+<div class="box">
+<p>Divide os cálculos por grupos, como departamento, categoria ou funcionário.</p>
+<pre><code>SELECT 
+    departamento,
+    nome,
+    salario,
+    AVG(salario) OVER (PARTITION BY departamento) AS media_departamento
+FROM funcionarios;</code></pre>
+</div>
+
+<h2>10. STRING_AGG</h2>
+<div class="box">
+<p>Concatena valores de várias linhas em uma única linha. Excelente para relatórios.</p>
+<pre><code>SELECT 
+    funcionario,
+    STRING_AGG(salario::text, ' - ' ORDER BY mes) AS ficha_financeira
+FROM folha_pagamento
+GROUP BY funcionario;</code></pre>
+</div>
+
+<h2>11. CASE WHEN</h2>
+<div class="box">
+<p>Permite criar lógica condicional diretamente no SQL.</p>
+<pre><code>SELECT 
+    nome,
+    salario,
+    CASE 
+        WHEN salario >= 10000 THEN 'Alto'
+        WHEN salario >= 5000 THEN 'Médio'
+        ELSE 'Baixo'
+    END AS faixa_salarial
+FROM funcionarios;</code></pre>
+</div>
+
+<h2>12. FILTER em agregações</h2>
+<div class="box">
+<p>Permite somar ou contar apenas registros que atendem a uma condição.</p>
+<pre><code>SELECT 
+    COUNT(*) AS total,
+    COUNT(*) FILTER (WHERE status = 'ativo') AS ativos,
+    COUNT(*) FILTER (WHERE status = 'inativo') AS inativos
+FROM clientes;</code></pre>
+</div>
+
+<h2>13. COALESCE</h2>
+<div class="box">
+<p>Substitui valores nulos por um valor padrão.</p>
+<pre><code>SELECT 
+    nome,
+    COALESCE(telefone, 'Sem telefone') AS telefone
+FROM clientes;</code></pre>
+</div>
+
+<h2>14. NULLIF</h2>
+<div class="box">
+<p>Evita erros como divisão por zero, transformando um valor em NULL.</p>
+<pre><code>SELECT 
+    produto,
+    vendas,
+    estoque,
+    vendas / NULLIF(estoque, 0) AS giro_estoque
+FROM produtos;</code></pre>
+</div>
+
+<h2>15. UPSERT</h2>
+<div class="box">
+<p>Insere um registro novo ou atualiza se ele já existir.</p>
+<pre><code>INSERT INTO clientes (email, nome)
+VALUES ('deg@polydev.com', 'DEG')
+ON CONFLICT (email)
+DO UPDATE SET nome = EXCLUDED.nome;</code></pre>
+</div>
+
+<h2>16. MERGE</h2>
+<div class="box">
+<p>Comando moderno para sincronizar dados entre tabelas.</p>
+<pre><code>MERGE INTO clientes c
+USING novos_clientes n
+ON c.email = n.email
+WHEN MATCHED THEN
+    UPDATE SET nome = n.nome
+WHEN NOT MATCHED THEN
+    INSERT (email, nome)
+    VALUES (n.email, n.nome);</code></pre>
+</div>
+
+<h2>17. JSON no SQL</h2>
+<div class="box">
+<p>Permite consultar dados armazenados em formato JSON.</p>
+<pre><code>SELECT 
+    dados->>'nome' AS nome,
+    dados->>'cidade' AS cidade
+FROM clientes_json;</code></pre>
+</div>
+
+<h2>18. GROUPING SETS</h2>
+<div class="box">
+<p>Gera vários agrupamentos em uma única consulta.</p>
+<pre><code>SELECT 
+    categoria,
+    vendedor,
+    SUM(valor) AS total
+FROM vendas
+GROUP BY GROUPING SETS (
+    (categoria),
+    (vendedor),
+    (categoria, vendedor),
+    ()
+);</code></pre>
+</div>
+
+<h2>19. CUBE</h2>
+<div class="box">
+<p>Cria combinações automáticas de agrupamentos, útil em relatórios analíticos.</p>
+<pre><code>SELECT 
+    categoria,
+    regiao,
+    SUM(valor) AS total
+FROM vendas
+GROUP BY CUBE (categoria, regiao);</code></pre>
+</div>
+
+<h2>20. Consulta estilo PIVOT com SUM e CASE</h2>
+<div class="box">
+<p>Transforma linhas em colunas. Muito útil para ficha financeira, meses e relatórios anuais.</p>
+<pre><code>SELECT 
+    nome,
+    SUM(CASE WHEN mes = 1 THEN salario ELSE 0 END) AS jan,
+    SUM(CASE WHEN mes = 2 THEN salario ELSE 0 END) AS fev,
+    SUM(CASE WHEN mes = 3 THEN salario ELSE 0 END) AS mar,
+    SUM(CASE WHEN mes = 4 THEN salario ELSE 0 END) AS abr,
+    SUM(CASE WHEN mes = 5 THEN salario ELSE 0 END) AS mai,
+    SUM(CASE WHEN mes = 6 THEN salario ELSE 0 END) AS jun,
+    SUM(CASE WHEN mes = 7 THEN salario ELSE 0 END) AS jul,
+    SUM(CASE WHEN mes = 8 THEN salario ELSE 0 END) AS ago,
+    SUM(CASE WHEN mes = 9 THEN salario ELSE 0 END) AS set,
+    SUM(CASE WHEN mes = 10 THEN salario ELSE 0 END) AS out,
+    SUM(CASE WHEN mes = 11 THEN salario ELSE 0 END) AS nov,
+    SUM(CASE WHEN mes = 12 THEN salario ELSE 0 END) AS dez,
+    SUM(salario) AS total_ano
+FROM folha_pagamento
+GROUP BY nome;</code></pre>
+</div>
+
+<h2>Conclusão</h2>
+<div class="box">
+<p>
+Esses recursos mostram como o SQL moderno permite resolver problemas reais com elegância.
+Consultas que antes exigiam várias tabelas temporárias, cursores ou programas externos
+podem hoje ser resolvidas diretamente no banco de dados.
+</p>
+<p>
+Para o projeto POLYDEV, este tipo de conteúdo é ideal para guias práticos:
+o aluno lê, entende, executa e adapta para problemas reais.
+</p>
+</div>
+
+</section>
+
+<footer>
+    <p>POLYDEV - SQL Moderno</p>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+</body>
+</html>
