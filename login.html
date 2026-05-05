@@ -27,12 +27,17 @@ async function login() {
         password: senha
     })
 
-    if (error) {
-        alert("Erro: " + error.message)
-    } else {
-        alert("Login realizado!")
-        window.location.href = "conteudos.html"
-    }
+if (error) {
+    alert("Erro: " + error.message)
+} else {
+    alert("Login realizado!")
+
+    // 👉 NOVO (GUARDA USUÁRIO)
+    localStorage.setItem("polydev_usuario", email)
+
+    // 👉 REDIRECIONA
+    window.location.href = "conteudos.html"
+}
 }
 </script>
 

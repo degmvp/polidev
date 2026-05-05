@@ -1,100 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Central de Links</title>
-<h1> testando link.html</h1>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:yellowgreen;
-    text-align:center;
-}
-
-header{
-    background:black;
-    color:#FFD700;
-    padding:25px;
-}
-
-.container{
-    max-width:900px;
-    margin:40px auto;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:black;
-    color:white;
-    padding:30px;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.3s;
-    border:2px solid #FFD700;
-}
-
-.card:hover{
-    transform:scale(1.05);
-    background:#FFD700;
-    color:black;
-}
-
-h2{
-    margin:0;
-}
-
-footer{
-    margin-top:40px;
-    font-weight:bold;
-}
-</style>
+<title>POLYDEV</title>
 </head>
 
 <body>
 
-<header>
-    <h1>🚀 POLYDEV</h1>
-    <p>Leia • Entenda • Execute seu código</p>
-</header>
-
-<div class="container">
-
-    <div class="grid">
-
-        <div class="card" onclick="ir('vw.html?categoria=sql')">
-            <h2>🗄️ Guias SQL</h2>
-        </div>
-
-        <div class="card" onclick="ir('vw.html?categoria=lang')">
-            <h2>💻 Linguagens</h2>
-        </div>
-
-        <div class="card" onclick="ir('top.html')">
-            <h2>🏆 Top Downloads</h2>
-        </div>
-
-        <div class="card" onclick="ir('dashboard_visual.html')">
-            <h2>📊 Dashboard</h2>
-        </div>
-
-    </div>
-
-</div>
-
-<footer>
-    POLYDEV V1.0
-</footer>
-
 <script>
-function ir(pagina){
-    location.href = pagina;
+// verifica se já está logado
+const usuario = localStorage.getItem("polydev_usuario");
+
+if(usuario){
+    // já entrou antes → vai direto
+    window.location.href = "conteudos.html";
+} else {
+    // não entrou → login
+    window.location.href = "login.html";
 }
 </script>
 
