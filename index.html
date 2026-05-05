@@ -19,12 +19,15 @@
 <button onclick="entrar()">Entrar</button>
 
 <script>
+
+// 🔐 Se já estiver logado → vai direto para HOME
 const usuario = localStorage.getItem("polydev_usuario");
 
 if (usuario) {
-    window.location.href = "conteudos.html";
+    window.location.href = "home.html";
 }
 
+// 🚀 Cadastro inteligente + entrada
 async function entrar() {
 
     const nome = document.getElementById("nome").value.trim();
@@ -38,6 +41,7 @@ async function entrar() {
 
     try {
 
+        // 🔎 verifica se já existe
         const { data: existe, error: erroBusca } = await db
             .from("cadastros")
             .select("id,email")
@@ -48,6 +52,7 @@ async function entrar() {
             return;
         }
 
+        // 🟢 só cadastra se NÃO existir
         if (existe.length === 0) {
 
             const { error: erroInsert } = await db
@@ -66,14 +71,17 @@ async function entrar() {
             }
         }
 
+        // 🔐 salva sessão
         localStorage.setItem("polydev_usuario", email);
 
-        window.location.href = "conteudos.html";
+        // 🚀 entra no sistema
+        window.location.href = "home.html";
 
     } catch (e) {
         alert("Erro inesperado: " + e.message);
     }
 }
+
 </script>
 
 </body>
