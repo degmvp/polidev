@@ -1,84 +1,168 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Entrada</title>
+<title>POLYDEV | Plataforma de Aprendizado</title>
+
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:yellowgreen;
+}
+
+/* TOPO */
+header{
+    background:black;
+    color:#FFD700;
+    text-align:center;
+    padding:30px;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+/* CONTEÚDO */
+.container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:40px;
+}
+
+/* BOX CENTRAL */
+.box{
+    background:black;
+    color:white;
+    padding:30px;
+    border-radius:10px;
+    width:320px;
+    text-align:center;
+}
+
+/* INPUTS */
+input{
+    width:90%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:5px;
+}
+
+/* BOTÃO */
+button{
+    width:95%;
+    padding:12px;
+    background:#FFD700;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:5px;
+    margin-top:10px;
+}
+
+button:hover{
+    background:white;
+}
+
+/* TEXTO */
+.desc{
+    max-width:600px;
+    text-align:center;
+    margin-top:20px;
+    font-size:18px;
+}
+</style>
+
 </head>
 
 <body>
 
-<h2>Entrada POLYDEV</h2>
+<header>
+    <h1>🚀 POLYDEV</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
 
-<input type="text" id="nome" placeholder="Nome"><br><br>
-<input type="email" id="email" placeholder="Email"><br><br>
-<input type="text" id="telefone" placeholder="WhatsApp / Celular"><br><br>
+<div class="container">
 
-<button onclick="entrar()">Entrar</button>
+```
+<div class="desc">
+    Plataforma de aprendizado focada em código real.  
+    Explore conteúdos de Python, SQL, APIs e muito mais.
+</div>
+
+<div class="box">
+    <h2>Entrar no Sistema</h2>
+
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="email" id="email" placeholder="Seu email">
+    <input type="text" id="celular" placeholder="Seu celular">
+
+    <button onclick="entrar()">Acessar</button>
+</div>
+```
+
+</div>
 
 <script>
 
-// 🔐 Se já estiver logado → vai direto para HOME
+// 🔐 se já estiver logado → vai direto
 const usuario = localStorage.getItem("polydev_usuario");
 
 if (usuario) {
     window.location.href = "home.html";
 }
 
-// 🚀 Cadastro inteligente + entrada
-async function entrar() {
+async function entrar(){
 
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
-    const telefone = document.getElementById("telefone").value.trim();
+    const telefone = document.getElementById("whatsapp").value.trim();
 
-    if (nome === "" || email === "" || telefone === "") {
-        alert("Preencha nome, email e celular.");
+    if(nome === "" || email === "" || telefone === ""){
+        alert("Preencha todos os campos.");
         return;
     }
 
-    try {
+    try{
 
-        // 🔎 verifica se já existe
         const { data: existe, error: erroBusca } = await db
             .from("cadastros")
             .select("id,email")
             .eq("email", email);
 
         if (erroBusca) {
-            alert("Erro ao verificar cadastro: " + erroBusca.message);
+            alert("Erro: " + erroBusca.message);
             return;
         }
 
-        // 🟢 só cadastra se NÃO existir
         if (existe.length === 0) {
 
             const { error: erroInsert } = await db
                 .from("cadastros")
                 .insert([
-                    {
-                        nome: nome,
-                        email: email,
-                        telefone: telefone
-                    }
+                    { nome, email, celular }
                 ]);
 
             if (erroInsert) {
-                alert("Erro ao cadastrar: " + erroInsert.message);
+                alert("Erro: " + erroInsert.message);
                 return;
             }
         }
 
-        // 🔐 salva sessão
         localStorage.setItem("polydev_usuario", email);
 
-        // 🚀 entra no sistema
         window.location.href = "home.html";
 
-    } catch (e) {
-        alert("Erro inesperado: " + e.message);
+    } catch(e){
+        alert("Erro inesperado");
     }
 }
 
