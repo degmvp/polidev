@@ -1,321 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 <meta charset="UTF-8">
-<title>POLIDEV | Multiprogramação e Multibanco</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>POLYDEV | Entrada</title>
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-
-<style>
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background-color:yellowgreen;
-color:black;
-}
-
-header{
-background-color:black;
-color:yellowgreen;
-padding:40px 20px;
-text-align:center;
-}
-
-header h1{
-margin:0;
-font-size:48px;
-letter-spacing:3px;
-}
-
-header p{
-font-size:20px;
-margin-top:10px;
-}
-
-section{
-max-width:1000px;
-margin:auto;
-padding:40px 20px;
-}
-
-h2{
-border-left:10px solid black;
-padding-left:15px;
-font-size:28px;
-}
-
-ul{
-font-size:18px;
-line-height:1.8;
-}
-
-.box{
-background-color:black;
-color:yellowgreen;
-padding:30px;
-border-radius:10px;
-margin-top:30px;
-}
-
-.formulario{
-background-color:#f0f0f0;
-padding:30px;
-border-radius:10px;
-margin-top:20px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-font-size:16px;
-}
-
-button{
-width:100%;
-padding:15px;
-font-size:18px;
-background-color:black;
-color:yellowgreen;
-border:none;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-background-color:#222;
-}
-
-footer{
-background-color:black;
-color:yellowgreen;
-text-align:center;
-padding:20px;
-margin-top:40px;
-}
-</style>
-
 </head>
 
 <body>
 
-<header>
-<h1>POLIDEV</h1>
-<p>Multiprogramação • Multibanco • Código Real</p>
-<p><strong>Leia • Entenda • Execute seu código</strong></p>
-</header>
+<h2>Entrada POLYDEV</h2>
 
-<section>
+<input type="text" id="nome" placeholder="Nome"><br><br>
+<input type="email" id="email" placeholder="Email"><br><br>
+<input type="text" id="telefone" placeholder="WhatsApp / Celular"><br><br>
 
-<h2>O que é o POLIDEV?</h2>
-
-<p>
-O <strong>POLIDEV</strong> é um projeto educacional focado em programação prática,
-com múltiplas linguagens, bancos de dados e exemplos reais.
-</p>
-
-<h2>O que você vai aprender</h2>
-
-<ul>
-<li>Python do zero ao avançado</li>
-<li>Programação Orientada a Objetos (OOP)</li>
-<li>Pandas e análise de dados</li>
-<li>MySQL, PostgreSQL, SQL Server e Oracle</li>
-<li>Automação, scripts e integrações</li>
-<li>Aplicações reais e projetos práticos</li>
-</ul>
-
-<div class="box">
-<h3>🎁 Conteúdo GRATUITO</h3>
-
-<ul>
-<li>Guias em HTML prontos para estudo</li>
-<li>Códigos funcionais e comentados</li>
-<li>Labs passo a passo</li>
-<li>Estrutura real de projetos</li>
-</ul>
-</div>
-
-<h2>Receba o material gratuito</h2>
-
-<div class="formulario">
-
-<form id="formCadastro">
-
-<input type="text" id="nome" placeholder="Seu nome" required>
-<input type="email" id="email" placeholder="Seu e-mail" required>
-<input type="tel" id="celular" placeholder="Celular / WhatsApp" required>
-
-<input type="text" id="website" style="display:none">
-
-<button type="submit">QUERO ACESSO GRATUITO</button>
-
-</form>
-
-<p style="font-size:14px;">Sem spam. Apenas conteúdo técnico de qualidade.</p>
-
-<p id="contador" style="font-size:18px;font-weight:bold;margin-top:20px;">
-🔥 Carregando número de programadores inscritos...
-</p>
-
-</div>
-
-<h2>Por que o POLIDEV é diferente?</h2>
-
-<ul>
-<li>Conteúdo direto e técnico</li>
-<li>Código que realmente funciona</li>
-<li>Multilinguagem e multibanco</li>
-<li>Ideal para estudo e referência</li>
-</ul>
-
-</section>
-
-<footer>
-<p>POLIDEV © 2026</p>
-<p>Leia • Entenda • Execute seu código</p>
-</footer>
+<button onclick="entrar()">Entrar</button>
 
 <script>
+const usuario = localStorage.getItem("polydev_usuario");
 
-const startTime = Date.now();
-
-/* valida email */
-function emailValido(email){
-const regex=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-return regex.test(email);
+if (usuario) {
+    window.location.href = "conteudos.html";
 }
 
-/* contador */
-async function carregarContador(){
+async function entrar() {
 
-try{
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
 
-const response = await fetch(
-SUPABASE_URL + "/rest/v1/cadastros?select=id",
-{
-headers:{
-"apikey": SUPABASE_KEY,
-"Authorization": "Bearer " + SUPABASE_KEY
+    if (nome === "" || email === "" || telefone === "") {
+        alert("Preencha nome, email e celular.");
+        return;
+    }
+
+    try {
+
+        const { data: existe, error: erroBusca } = await db
+            .from("cadastros")
+            .select("id,email")
+            .eq("email", email);
+
+        if (erroBusca) {
+            alert("Erro ao verificar cadastro: " + erroBusca.message);
+            return;
+        }
+
+        if (existe.length === 0) {
+
+            const { error: erroInsert } = await db
+                .from("cadastros")
+                .insert([
+                    {
+                        nome: nome,
+                        email: email,
+                        telefone: telefone
+                    }
+                ]);
+
+            if (erroInsert) {
+                alert("Erro ao cadastrar: " + erroInsert.message);
+                return;
+            }
+        }
+
+        localStorage.setItem("polydev_usuario", email);
+
+        window.location.href = "conteudos.html";
+
+    } catch (e) {
+        alert("Erro inesperado: " + e.message);
+    }
 }
-}
-);
-
-const dados = await response.json();
-const total = dados.length;
-
-document.getElementById("contador").innerText =
-"🔥 Já temos " + total + " programadores inscritos no POLIDEV";
-
-return total;
-
-}catch(err){
-
-document.getElementById("contador").innerText =
-"🔥 Faça parte da comunidade POLIDEV";
-
-return 0;
-
-}
-
-}
-
-carregarContador();
-
-/* submit */
-document.getElementById("formCadastro").addEventListener("submit", async function(e){
-
-e.preventDefault();
-
-const nome = document.getElementById("nome").value.trim();
-const email = document.getElementById("email").value.trim();
-const celular = document.getElementById("celular").value.trim();
-const website = document.getElementById("website").value;
-
-/* anti bot */
-if(website !== "") return;
-
-/* anti spam */
-if(Date.now() - startTime < 3000){
-document.getElementById("contador").innerText =
-"Aguarde alguns segundos antes de enviar.";
-return;
-}
-
-/* validações */
-if(nome.length < 3){
-document.getElementById("contador").innerText = "Nome inválido.";
-return;
-}
-
-if(!emailValido(email)){
-document.getElementById("contador").innerText = "E-mail inválido.";
-return;
-}
-
-if(celular.length < 8){
-document.getElementById("contador").innerText = "Celular inválido.";
-return;
-}
-
-try{
-
-const response = await fetch(
-SUPABASE_URL + "/rest/v1/cadastros",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"apikey": SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY,
-"Prefer":"return=minimal"
-},
-body: JSON.stringify({
-nome:nome,
-email:email,
-celular:celular
-})
-}
-);
-
-if(response.ok){
-
-document.getElementById("formCadastro").reset();
-
-const total = await carregarContador();
-
-const contador = document.getElementById("contador");
-
-contador.innerHTML =
-"✅ Cadastro realizado com sucesso!<br>" +
-"Você é o inscrito número <strong>" + total + "</strong><br>" +
-"Redirecionando...";
-
-contador.style.color = "green";
-
-setTimeout(()=>{
-window.location.href = "home.html";
-},1500);
-
-}else{
-
-const erro = await response.text();
-document.getElementById("contador").innerText = "Erro: " + erro;
-
-}
-
-}catch(err){
-
-document.getElementById("contador").innerText =
-"Erro de conexão.";
-
-}
-
-});
-
 </script>
 
 </body>
