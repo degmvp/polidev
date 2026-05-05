@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -16,7 +15,6 @@ body{
     background:yellowgreen;
 }
 
-/* TOPO */
 header{
     background:black;
     color:#FFD700;
@@ -29,7 +27,6 @@ header h1{
     font-size:42px;
 }
 
-/* CONTEÚDO */
 .container{
     display:flex;
     flex-direction:column;
@@ -37,7 +34,6 @@ header h1{
     margin-top:40px;
 }
 
-/* BOX CENTRAL */
 .box{
     background:black;
     color:white;
@@ -47,7 +43,6 @@ header h1{
     text-align:center;
 }
 
-/* INPUTS */
 input{
     width:90%;
     padding:12px;
@@ -56,7 +51,6 @@ input{
     border-radius:5px;
 }
 
-/* BOTÃO */
 button{
     width:95%;
     padding:12px;
@@ -72,7 +66,6 @@ button:hover{
     background:white;
 }
 
-/* TEXTO */
 .desc{
     max-width:600px;
     text-align:center;
@@ -80,7 +73,6 @@ button:hover{
     font-size:18px;
 }
 </style>
-
 </head>
 
 <body>
@@ -92,28 +84,24 @@ button:hover{
 
 <div class="container">
 
-```
-<div class="desc">
-    Plataforma de aprendizado focada em código real.  
-    Explore conteúdos de Python, SQL, APIs e muito mais.
-</div>
+    <div class="desc">
+        Plataforma de aprendizado focada em código real.<br>
+        Explore conteúdos de Python, SQL, APIs e muito mais.
+    </div>
 
-<div class="box">
-    <h2>Entrar no Sistema</h2>
+    <div class="box">
+        <h2>Entrar no Sistema</h2>
 
-    <input type="text" id="nome" placeholder="Seu nome">
-    <input type="email" id="email" placeholder="Seu email">
-    <input type="text" id="celular" placeholder="Seu celular">
+        <input type="text" id="nome" placeholder="Seu nome">
+        <input type="email" id="email" placeholder="Seu email">
+        <input type="text" id="celular" placeholder="Seu celular">
 
-    <button onclick="entrar()">Acessar</button>
-</div>
-```
+        <button onclick="entrar()">Acessar</button>
+    </div>
 
 </div>
 
 <script>
-
-// 🔐 se já estiver logado → vai direto
 const usuario = localStorage.getItem("polydev_usuario");
 
 if (usuario) {
@@ -124,7 +112,7 @@ async function entrar(){
 
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
-    const telefone = document.getElementById("celular").value.trim();
+    const celular = document.getElementById("celular").value.trim();
 
     if(nome === "" || email === "" || celular === ""){
         alert("Preencha todos os campos.");
@@ -148,7 +136,11 @@ async function entrar(){
             const { error: erroInsert } = await db
                 .from("cadastros")
                 .insert([
-                    { nome, email, celular }
+                    {
+                        nome: nome,
+                        email: email,
+                        celular: celular
+                    }
                 ]);
 
             if (erroInsert) {
@@ -158,14 +150,12 @@ async function entrar(){
         }
 
         localStorage.setItem("polydev_usuario", email);
-
         window.location.href = "home.html";
 
     } catch(e){
-        alert("Erro inesperado");
+        alert("Erro inesperado: " + e.message);
     }
 }
-
 </script>
 
 </body>
