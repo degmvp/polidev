@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Login POLYDEV</title>
@@ -10,7 +10,7 @@
 
 <body>
 
-<h2>Login</h2>
+<h2>Login POLYDEV</h2>
 
 <input type="email" id="email" placeholder="Email"><br><br>
 <input type="password" id="senha" placeholder="Senha"><br><br>
@@ -19,25 +19,30 @@
 
 <script>
 async function login() {
-    let email = document.getElementById("email").value
-    let senha = document.getElementById("senha").value
+
+    let email = document.getElementById("email").value.trim();
+    let senha = document.getElementById("senha").value.trim();
+
+    if (email === "" || senha === "") {
+        alert("Digite email e senha.");
+        return;
+    }
 
     const { data, error } = await db.auth.signInWithPassword({
         email: email,
         password: senha
-    })
+    });
 
-if (error) {
-    alert("Erro: " + error.message)
-} else {
-    alert("Login realizado!")
+    if (error) {
+        alert("Erro: " + error.message);
+        return;
+    }
 
-    // 👉 NOVO (GUARDA USUÁRIO)
-    localStorage.setItem("polydev_usuario", email)
+    localStorage.setItem("polydev_usuario", email);
 
-    // 👉 REDIRECIONA
-    window.location.href = "conteudos.html"
-}
+    alert("Login realizado!");
+
+    window.location.href = "conteudos.html";
 }
 </script>
 
