@@ -2,129 +2,54 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>POLYDEV | Viewer Python</title>
-
+<title>POLYDEV | Python</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-}
-
 body{
     margin:0;
-    min-height:100vh;
     font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#000 0%,#111 55%,#2d3f00 100%);
-    color:white;
+    background:yellowgreen;
+    color:black;
+    text-align:center;
 }
 
 header{
-    text-align:center;
-    padding:25px 15px;
-    background:#000;
-    border-bottom:3px solid #FFD700;
-}
-
-header h1{
-    margin:0;
+    background:black;
     color:#FFD700;
-    font-size:36px;
-}
-
-header p{
-    margin:8px 0 0;
-    color:yellowgreen;
-    font-weight:bold;
-    font-size:18px;
+    padding:20px;
 }
 
 .container{
-    width:95%;
-    max-width:1200px;
+    max-width:1000px;
     margin:25px auto;
-}
-
-.status{
-    text-align:center;
-    color:#FFD700;
-    font-weight:bold;
-    margin:20px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:#111;
-    border:2px solid #FFD700;
-    border-radius:14px;
-    padding:18px;
-    box-shadow:0 0 18px rgba(255,215,0,0.25);
-}
-
-.card h2{
-    color:#FFD700;
-    margin-top:0;
-    font-size:20px;
-}
-
-.card p{
-    color:white;
-    line-height:1.5;
-}
-
-pre{
-    background:#000;
-    color:lightgreen;
-    padding:14px;
-    border-radius:10px;
-    overflow-x:auto;
-    max-height:260px;
-    font-size:14px;
-    border:1px solid yellowgreen;
+    background:black;
+    padding:20px;
+    border-radius:12px;
 }
 
 button{
+    width:90%;
+    margin:8px;
+    padding:14px;
     background:#FFD700;
-    color:#000;
-    border:none;
-    padding:10px 16px;
-    margin:6px 5px 0 0;
+    color:black;
+    border:0;
     border-radius:8px;
-    cursor:pointer;
     font-weight:bold;
+    cursor:pointer;
+    font-size:16px;
 }
 
 button:hover{
-    background:yellowgreen;
+    background:white;
 }
 
-.btn-voltar{
-    display:block;
-    margin:25px auto;
-    background:#000;
-    color:#FFD700;
-    border:2px solid #FFD700;
-}
-
-footer{
-    text-align:center;
-    padding:20px;
-    color:yellowgreen;
-    font-weight:bold;
-}
-
-@media(max-width:600px){
-    header h1{
-        font-size:28px;
-    }
+#msg{
+    color:white;
+    font-size:20px;
+    margin:20px;
 }
 </style>
 </head>
@@ -132,151 +57,56 @@ footer{
 <body>
 
 <header>
-    <h1>🐍 POLYDEV Python Viewer</h1>
+    <h1>🐍 POLYDEV Python</h1>
     <p>Leia • Entenda • Execute seu código</p>
 </header>
 
 <div class="container">
-    <div id="status" class="status">Carregando programas Python...</div>
-    <div id="lista" class="grid"></div>
-
-    <button class="btn-voltar" onclick="voltar()">⬅ Voltar</button>
+    <div id="msg">Carregando programas Python...</div>
+    <div id="lista"></div>
 </div>
 
-<footer>
-    POLYDEV | Programas Python
-</footer>
-
 <script>
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const CATEGORIA = "python";
 
-let programas = [];
-
-async function carregarProgramas(){
-    const status = document.getElementById("status");
+async function carregarPython(){
+    const msg = document.getElementById("msg");
     const lista = document.getElementById("lista");
 
-    try{
-        const { data, error } = await db
-            .from("conteudos")
-            .select("id,titulo,descricao,categoria,arquivo_url,ativo,downloads")
-            .eq("categoria","python")
-            .order("id",{ ascending:true });
-
-        if(error){
-            console.error(error);
-            status.innerHTML = "Erro ao carregar programas Python.";
-            return;
-        }
-
-        programas = (data || []).filter(item => {
-            const url = (item.arquivo_url || "").toLowerCase().trim();
-
-            return (
-                url.endsWith(".py")
-            );
-        });
-
-        if(programas.length === 0){
-            status.innerHTML = "Nenhum programa Python encontrado.";
-            return;
-        }
-
-        status.innerHTML = `Foram encontrados ${programas.length} programas Python.`;
-
-        lista.innerHTML = "";
-
-        programas.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "card";
-
-            card.innerHTML = `
-                <h2>${item.titulo || "Programa Python"}</h2>
-                <p>${item.descricao || "Código Python disponível para leitura e download."}</p>
-                <p><strong>Downloads:</strong> ${item.downloads || 0}</p>
-
-                <button onclick="visualizar(${item.id})">👁 Visualizar</button>
-                <button onclick="baixar(${item.id})">⬇ Download</button>
-
-                <pre id="codigo-${item.id}">Clique em visualizar para ler o código.</pre>
-            `;
-
-            lista.appendChild(card);
-        });
-
-    }catch(e){
-        console.error(e);
-        status.innerHTML = "Erro inesperado ao carregar.";
-    }
-}
-
-async function visualizar(id){
-    const item = programas.find(p => p.id === id);
-    if(!item) return;
-
-    const area = document.getElementById(`codigo-${id}`);
-    area.textContent = "Carregando código...";
-
-    try{
-        const resp = await fetch(item.arquivo_url);
-
-        if(!resp.ok){
-            area.textContent = "Erro ao abrir o arquivo: " + item.arquivo_url;
-            return;
-        }
-
-        const texto = await resp.text();
-        area.textContent = texto;
-
-    }catch(e){
-        console.error(e);
-        area.textContent = "Erro ao carregar o código.";
-    }
-}
-
-async function baixar(id){
-    const item = programas.find(p => p.id === id);
-    if(!item) return;
-
-    try{
-        await registrarDownload(item);
-
-        const link = document.createElement("a");
-        link.href = item.arquivo_url;
-        link.download = item.arquivo_url.split("/").pop();
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-    }catch(e){
-        console.error(e);
-        alert("Erro ao baixar o programa.");
-    }
-}
-
-async function registrarDownload(item){
-    const novoTotal = (item.downloads || 0) + 1;
-
-    const { error } = await db
+    const { data, error } = await db
         .from("conteudos")
-        .update({ downloads: novoTotal })
-        .eq("id", item.id);
+        .select("id,titulo,categoria,arquivo_url,ativo")
+        .eq("categoria", CATEGORIA)
+        .eq("ativo", true)
+        .order("id", { ascending:true });
 
     if(error){
-        console.error("Erro ao incrementar download:", error);
+        msg.innerHTML = "Erro Supabase: " + error.message;
         return;
     }
 
-    item.downloads = novoTotal;
-    carregarProgramas();
+    const somentePython = (data || []).filter(item =>
+        String(item.categoria).trim().toLowerCase() === "python"
+    );
+
+    if(somentePython.length === 0){
+        msg.innerHTML = "Nenhum programa Python encontrado.";
+        return;
+    }
+
+    msg.innerHTML = `Foram encontrados ${somentePython.length} programas Python.`;
+
+    somentePython.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerHTML = item.titulo;
+        btn.onclick = () => {
+            window.location.href = "viewer_py.html?id=" + item.id;
+        };
+        lista.appendChild(btn);
+    });
 }
 
-function voltar(){
-    window.location.href = "index.html";
-}
-
-carregarProgramas();
+carregarPython();
 </script>
 
 </body>
