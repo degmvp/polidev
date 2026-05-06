@@ -162,7 +162,6 @@ async function carregarProgramas(){
             .from("conteudos")
             .select("id,titulo,descricao,categoria,arquivo_url,ativo,downloads")
             .eq("categoria","python")
-            .eq("ativo",true)
             .order("id",{ ascending:true });
 
         if(error){
