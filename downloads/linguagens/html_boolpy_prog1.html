@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | PYTHON BOOLEAN</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #FFD700;
+    color: black;
+}
+
+header {
+    background-color: #FFD700;
+    color: black;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 48px;
+}
+
+header p {
+    font-size: 18px;
+}
+
+section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+h2 {
+    border-left: 10px solid white;
+    padding-left: 15px;
+}
+
+.box {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    background: black;
+    color: #FFD700;
+    border: 2px solid white;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: white;
+    color: black;
+}
+
+pre {
+    background: #111;
+    color: #00ff99;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #444;
+}
+
+code {
+    font-family: Consolas, monospace;
+    font-size: 14px;
+}
+
+.exemplo {
+    display: none;
+}
+
+.exemplo.ativo {
+    display: block;
+}
+
+footer {
+    background-color: black;
+    color: #FFD700;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV</h1>
+    <p>PYTHON BOOLEAN - Série Avançada com 20 Exemplos</p>
+    <p><strong>Leia • Entenda • Execute seu código</strong></p>
+</header>
+
+<section>
+
+<h2>Visualizador dos Arquivos</h2>
+<div class="box">
+    <p>
+        Este visualizador reúne a série <strong>bool_adv_01.py até bool_adv_20.py</strong>,
+        com exemplos de lógica booleana, operadores lógicos, bitwise, máscaras, flags,
+        permissões, tabela verdade, parser lógico e motor de regras.
+    </p>
+    <p><strong>Categoria recomendada no banco:</strong> lang</p>
+</div>
+
+<div class="menu">
+<button onclick="mostrar('ex01')">bool_adv_01.py</button><button onclick="mostrar('ex02')">bool_adv_02.py</button><button onclick="mostrar('ex03')">bool_adv_03.py</button><button onclick="mostrar('ex04')">bool_adv_04.py</button><button onclick="mostrar('ex05')">bool_adv_05.py</button><button onclick="mostrar('ex06')">bool_adv_06.py</button><button onclick="mostrar('ex07')">bool_adv_07.py</button><button onclick="mostrar('ex08')">bool_adv_08.py</button><button onclick="mostrar('ex09')">bool_adv_09.py</button><button onclick="mostrar('ex10')">bool_adv_10.py</button><button onclick="mostrar('ex11')">bool_adv_11.py</button><button onclick="mostrar('ex12')">bool_adv_12.py</button><button onclick="mostrar('ex13')">bool_adv_13.py</button><button onclick="mostrar('ex14')">bool_adv_14.py</button><button onclick="mostrar('ex15')">bool_adv_15.py</button><button onclick="mostrar('ex16')">bool_adv_16.py</button><button onclick="mostrar('ex17')">bool_adv_17.py</button><button onclick="mostrar('ex18')">bool_adv_18.py</button><button onclick="mostrar('ex19')">bool_adv_19.py</button><button onclick="mostrar('ex20')">bool_adv_20.py</button>
+</div>
+
+
+<div class="box exemplo" id="ex01">
+    <h2>01. bool_adv_01.py</h2>
+    <p><strong>Descrição:</strong> Operadores booleanos básicos AND, OR e NOT.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 01</p>
+    <pre><code># bool_adv_01.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Operadores booleanos básicos AND, OR e NOT
+
+idade = 25
+tem_carteira = True
+
+pode_dirigir = idade &gt;= 18 and tem_carteira
+precisa_tirar_carteira = idade &gt;= 18 and not tem_carteira
+menor_de_idade = idade &lt; 18
+
+print(&quot;Pode dirigir:&quot;, pode_dirigir)
+print(&quot;Precisa tirar carteira:&quot;, precisa_tirar_carteira)
+print(&quot;Menor de idade:&quot;, menor_de_idade)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex02">
+    <h2>02. bool_adv_02.py</h2>
+    <p><strong>Descrição:</strong> XOR lógico usando operador diferente (!=).</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 02</p>
+    <pre><code># bool_adv_02.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: XOR lógico usando operador diferente (!=)
+
+porta_aberta = True
+janela_aberta = False
+
+# XOR: verdadeiro somente quando uma condição é verdadeira e a outra falsa
+alarme_parcial = porta_aberta != janela_aberta
+
+print(&quot;Porta aberta:&quot;, porta_aberta)
+print(&quot;Janela aberta:&quot;, janela_aberta)
+print(&quot;Alarme parcial:&quot;, alarme_parcial)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex03">
+    <h2>03. bool_adv_03.py</h2>
+    <p><strong>Descrição:</strong> Tabela verdade para AND, OR e XOR.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 03</p>
+    <pre><code># bool_adv_03.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Tabela verdade para AND, OR e XOR
+
+valores = [False, True]
+
+print(&quot;A\tB\tAND\tOR\tXOR&quot;)
+for a in valores:
+    for b in valores:
+        print(a, b, a and b, a or b, a != b, sep=&quot;\t&quot;)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex04">
+    <h2>04. bool_adv_04.py</h2>
+    <p><strong>Descrição:</strong> Operações bitwise AND, OR, XOR e NOT.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 04</p>
+    <pre><code># bool_adv_04.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Operações bitwise AND, OR, XOR e NOT
+
+a = 10  # 1010
+b = 6   # 0110
+
+print(&quot;a:&quot;, a, bin(a))
+print(&quot;b:&quot;, b, bin(b))
+print(&quot;a &amp; b:&quot;, a &amp; b, bin(a &amp; b))
+print(&quot;a | b:&quot;, a | b, bin(a | b))
+print(&quot;a ^ b:&quot;, a ^ b, bin(a ^ b))
+print(&quot;~a:&quot;, ~a, bin(~a))
+</code></pre>
+</div>
+<div class="box exemplo" id="ex05">
+    <h2>05. bool_adv_05.py</h2>
+    <p><strong>Descrição:</strong> Máscaras de bits para permissões.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 05</p>
+    <pre><code># bool_adv_05.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Máscaras de bits para permissões
+
+LER = 1       # 001
+ESCREVER = 2 # 010
+EXECUTAR = 4 # 100
+
+usuario = LER | ESCREVER
+
+print(&quot;Permissões do usuário:&quot;, bin(usuario))
+print(&quot;Pode ler:&quot;, bool(usuario &amp; LER))
+print(&quot;Pode escrever:&quot;, bool(usuario &amp; ESCREVER))
+print(&quot;Pode executar:&quot;, bool(usuario &amp; EXECUTAR))
+</code></pre>
+</div>
+<div class="box exemplo" id="ex06">
+    <h2>06. bool_adv_06.py</h2>
+    <p><strong>Descrição:</strong> Adicionar, remover e alternar permissões com bits.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 06</p>
+    <pre><code># bool_adv_06.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Adicionar, remover e alternar permissões com bits
+
+LER = 1
+ESCREVER = 2
+EXECUTAR = 4
+
+permissoes = 0
+permissoes |= LER       # adiciona leitura
+permissoes |= EXECUTAR  # adiciona execução
+permissoes &amp;= ~EXECUTAR # remove execução
+permissoes ^= ESCREVER  # alterna escrita
+
+print(&quot;Permissões finais:&quot;, bin(permissoes))
+print(&quot;LER:&quot;, bool(permissoes &amp; LER))
+print(&quot;ESCREVER:&quot;, bool(permissoes &amp; ESCREVER))
+print(&quot;EXECUTAR:&quot;, bool(permissoes &amp; EXECUTAR))
+</code></pre>
+</div>
+<div class="box exemplo" id="ex07">
+    <h2>07. bool_adv_07.py</h2>
+    <p><strong>Descrição:</strong> Shift left e shift right.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 07</p>
+    <pre><code># bool_adv_07.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Shift left e shift right
+
+numero = 5  # 0101
+
+multiplica_por_2 = numero &lt;&lt; 1
+multiplica_por_4 = numero &lt;&lt; 2
+divide_por_2 = numero &gt;&gt; 1
+
+print(&quot;Número original:&quot;, numero, bin(numero))
+print(&quot;numero &lt;&lt; 1:&quot;, multiplica_por_2, bin(multiplica_por_2))
+print(&quot;numero &lt;&lt; 2:&quot;, multiplica_por_4, bin(multiplica_por_4))
+print(&quot;numero &gt;&gt; 1:&quot;, divide_por_2, bin(divide_por_2))
+</code></pre>
+</div>
+<div class="box exemplo" id="ex08">
+    <h2>08. bool_adv_08.py</h2>
+    <p><strong>Descrição:</strong> Verificar se número é par usando bitwise.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 08</p>
+    <pre><code># bool_adv_08.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Verificar se número é par usando bitwise
+
+numeros = [1, 2, 3, 4, 5, 10, 11, 20]
+
+for n in numeros:
+    eh_par = (n &amp; 1) == 0
+    print(n, &quot;é par?&quot;, eh_par)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex09">
+    <h2>09. bool_adv_09.py</h2>
+    <p><strong>Descrição:</strong> Estado de sistema usando flags booleanas.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 09</p>
+    <pre><code># bool_adv_09.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Estado de sistema usando flags booleanas
+
+sistema_online = True
+usuario_logado = True
+manutencao = False
+
+acesso_liberado = sistema_online and usuario_logado and not manutencao
+
+print(&quot;Sistema online:&quot;, sistema_online)
+print(&quot;Usuário logado:&quot;, usuario_logado)
+print(&quot;Manutenção:&quot;, manutencao)
+print(&quot;Acesso liberado:&quot;, acesso_liberado)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex10">
+    <h2>10. bool_adv_10.py</h2>
+    <p><strong>Descrição:</strong> Validação booleana de senha.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 10</p>
+    <pre><code># bool_adv_10.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Validação booleana de senha
+
+senha = &quot;Polydev@2026&quot;
+
+tem_tamanho = len(senha) &gt;= 8
+tem_maiuscula = any(c.isupper() for c in senha)
+tem_numero = any(c.isdigit() for c in senha)
+tem_simbolo = any(not c.isalnum() for c in senha)
+
+senha_valida = tem_tamanho and tem_maiuscula and tem_numero and tem_simbolo
+
+print(&quot;Senha válida:&quot;, senha_valida)
+print(&quot;Tamanho:&quot;, tem_tamanho)
+print(&quot;Maiúscula:&quot;, tem_maiuscula)
+print(&quot;Número:&quot;, tem_numero)
+print(&quot;Símbolo:&quot;, tem_simbolo)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex11">
+    <h2>11. bool_adv_11.py</h2>
+    <p><strong>Descrição:</strong> Filtro com múltiplas condições booleanas.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 11</p>
+    <pre><code># bool_adv_11.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Filtro com múltiplas condições booleanas
+
+produtos = [
+    {&quot;nome&quot;: &quot;Notebook&quot;, &quot;preco&quot;: 3500, &quot;estoque&quot;: 5},
+    {&quot;nome&quot;: &quot;Mouse&quot;, &quot;preco&quot;: 80, &quot;estoque&quot;: 0},
+    {&quot;nome&quot;: &quot;Monitor&quot;, &quot;preco&quot;: 900, &quot;estoque&quot;: 3},
+    {&quot;nome&quot;: &quot;Servidor&quot;, &quot;preco&quot;: 12000, &quot;estoque&quot;: 1},
+]
+
+for p in produtos:
+    disponivel = p[&quot;estoque&quot;] &gt; 0
+    preco_aceitavel = p[&quot;preco&quot;] &lt;= 5000
+    aprovado = disponivel and preco_aceitavel
+    print(p[&quot;nome&quot;], &quot;aprovado?&quot;, aprovado)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex12">
+    <h2>12. bool_adv_12.py</h2>
+    <p><strong>Descrição:</strong> Motor simples de regras booleanas.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 12</p>
+    <pre><code># bool_adv_12.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Motor simples de regras booleanas
+
+cliente = {
+    &quot;idade&quot;: 32,
+    &quot;renda&quot;: 6500,
+    &quot;score&quot;: 720,
+    &quot;restricao&quot;: False
+}
+
+regra_idade = cliente[&quot;idade&quot;] &gt;= 18
+regra_renda = cliente[&quot;renda&quot;] &gt;= 3000
+regra_score = cliente[&quot;score&quot;] &gt;= 700
+regra_restricao = not cliente[&quot;restricao&quot;]
+
+credito_aprovado = regra_idade and regra_renda and regra_score and regra_restricao
+
+print(&quot;Crédito aprovado:&quot;, credito_aprovado)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex13">
+    <h2>13. bool_adv_13.py</h2>
+    <p><strong>Descrição:</strong> Operadores all() e any().</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 13</p>
+    <pre><code># bool_adv_13.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Operadores all() e any()
+
+validacoes = [True, True, False, True]
+
+print(&quot;Todas verdadeiras?&quot;, all(validacoes))
+print(&quot;Alguma verdadeira?&quot;, any(validacoes))
+
+campos = [&quot;nome&quot;, &quot;email&quot;, &quot;telefone&quot;]
+formulario_valido = all(campo != &quot;&quot; for campo in campos)
+
+print(&quot;Formulário válido:&quot;, formulario_valido)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex14">
+    <h2>14. bool_adv_14.py</h2>
+    <p><strong>Descrição:</strong> Simulação de circuito lógico.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 14</p>
+    <pre><code># bool_adv_14.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Simulação de circuito lógico
+
+def porta_and(a, b):
+    return a and b
+
+def porta_or(a, b):
+    return a or b
+
+def porta_not(a):
+    return not a
+
+entrada_a = True
+entrada_b = False
+
+saida = porta_or(porta_and(entrada_a, entrada_b), porta_not(entrada_b))
+
+print(&quot;Saída do circuito lógico:&quot;, saida)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex15">
+    <h2>15. bool_adv_15.py</h2>
+    <p><strong>Descrição:</strong> Compactação de vários booleanos em um inteiro.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 15</p>
+    <pre><code># bool_adv_15.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Compactação de vários booleanos em um inteiro
+
+ativo = True
+admin = False
+premium = True
+bloqueado = False
+
+flags = 0
+flags |= int(ativo) &lt;&lt; 0
+flags |= int(admin) &lt;&lt; 1
+flags |= int(premium) &lt;&lt; 2
+flags |= int(bloqueado) &lt;&lt; 3
+
+print(&quot;Flags compactadas:&quot;, flags, bin(flags))
+print(&quot;Ativo:&quot;, bool(flags &amp; (1 &lt;&lt; 0)))
+print(&quot;Admin:&quot;, bool(flags &amp; (1 &lt;&lt; 1)))
+print(&quot;Premium:&quot;, bool(flags &amp; (1 &lt;&lt; 2)))
+print(&quot;Bloqueado:&quot;, bool(flags &amp; (1 &lt;&lt; 3)))
+</code></pre>
+</div>
+<div class="box exemplo" id="ex16">
+    <h2>16. bool_adv_16.py</h2>
+    <p><strong>Descrição:</strong> Controle de acesso com papéis.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 16</p>
+    <pre><code># bool_adv_16.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Controle de acesso com papéis
+
+roles_usuario = {&quot;leitor&quot;, &quot;editor&quot;}
+roles_necessarias = {&quot;admin&quot;, &quot;editor&quot;}
+
+pode_acessar = bool(roles_usuario.intersection(roles_necessarias))
+
+print(&quot;Roles do usuário:&quot;, roles_usuario)
+print(&quot;Roles necessárias:&quot;, roles_necessarias)
+print(&quot;Pode acessar:&quot;, pode_acessar)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex17">
+    <h2>17. bool_adv_17.py</h2>
+    <p><strong>Descrição:</strong> Álgebra booleana - Lei de De Morgan.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 17</p>
+    <pre><code># bool_adv_17.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Álgebra booleana - Lei de De Morgan
+
+A = True
+B = False
+
+expressao_1 = not (A and B)
+expressao_2 = (not A) or (not B)
+
+print(&quot;not (A and B):&quot;, expressao_1)
+print(&quot;not A or not B:&quot;, expressao_2)
+print(&quot;São equivalentes?&quot;, expressao_1 == expressao_2)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex18">
+    <h2>18. bool_adv_18.py</h2>
+    <p><strong>Descrição:</strong> Comparação de conjuntos com lógica booleana.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 18</p>
+    <pre><code># bool_adv_18.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Comparação de conjuntos com lógica booleana
+
+permissoes_usuario = {&quot;ler&quot;, &quot;escrever&quot;, &quot;exportar&quot;}
+permissoes_minimas = {&quot;ler&quot;, &quot;escrever&quot;}
+
+possui_todas = permissoes_minimas.issubset(permissoes_usuario)
+possui_alguma = bool(permissoes_usuario &amp; permissoes_minimas)
+
+print(&quot;Possui todas:&quot;, possui_todas)
+print(&quot;Possui alguma:&quot;, possui_alguma)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex19">
+    <h2>19. bool_adv_19.py</h2>
+    <p><strong>Descrição:</strong> Parser simples de expressão booleana controlada.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 19</p>
+    <pre><code># bool_adv_19.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Parser simples de expressão booleana controlada
+
+contexto = {
+    &quot;A&quot;: True,
+    &quot;B&quot;: False,
+    &quot;C&quot;: True
+}
+
+# Expressão controlada, sem entrada externa do usuário
+resultado = contexto[&quot;A&quot;] and (not contexto[&quot;B&quot;] or contexto[&quot;C&quot;])
+
+print(&quot;A:&quot;, contexto[&quot;A&quot;])
+print(&quot;B:&quot;, contexto[&quot;B&quot;])
+print(&quot;C:&quot;, contexto[&quot;C&quot;])
+print(&quot;Resultado:&quot;, resultado)
+</code></pre>
+</div>
+<div class="box exemplo" id="ex20">
+    <h2>20. bool_adv_20.py</h2>
+    <p><strong>Descrição:</strong> Mini ALU booleana com operações bitwise.</p>
+    <p><strong>Categoria POLYDEV:</strong> lang</p>
+    <p><strong>Título sugerido:</strong> PYTHON BOOLEAN 20</p>
+    <pre><code># bool_adv_20.py
+# POLYDEV - PYTHON BOOLEAN
+# Tema: Mini ALU booleana com operações bitwise
+
+def alu(op, a, b):
+    if op == &quot;AND&quot;:
+        return a &amp; b
+    if op == &quot;OR&quot;:
+        return a | b
+    if op == &quot;XOR&quot;:
+        return a ^ b
+    if op == &quot;SHL&quot;:
+        return a &lt;&lt; b
+    if op == &quot;SHR&quot;:
+        return a &gt;&gt; b
+    raise ValueError(&quot;Operação inválida&quot;)
+
+a = 12  # 1100
+b = 3   # 0011
+
+for op in [&quot;AND&quot;, &quot;OR&quot;, &quot;XOR&quot;, &quot;SHL&quot;, &quot;SHR&quot;]:
+    resultado = alu(op, a, b)
+    print(op, &quot;=&gt;&quot;, resultado, bin(resultado))
+</code></pre>
+</div>
+
+</section>
+
+<footer>
+    <p>POLYDEV - PYTHON BOOLEAN</p>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+function mostrar(id) {
+    const exemplos = document.querySelectorAll('.exemplo');
+    exemplos.forEach(e => e.classList.remove('ativo'));
+    document.getElementById(id).classList.add('ativo');
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+mostrar('ex01');
+</script>
+
+</body>
+</html>
