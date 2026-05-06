@@ -164,12 +164,12 @@ async function carregar(){
     document.getElementById("tituloMenu").innerText =
         categoria === "sql" ? "Guias SQL / Bancos" : "Guias Linguagens";
 
-    const { data, error } = await db
-        .from("conteudos")
-        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
-        .eq("categoria", categoria)
-        .eq("ativo", true)
-        .order("id", { ascending:true });
+let { data, error } = await db
+    .from("conteudos")
+    .select("*")
+    .eq("categoria", "lang")
+    .eq("ativo", true)
+    .order("titulo", { ascending: true });
 
     if(error){
         console.error("ERRO SUPABASE:", error);
