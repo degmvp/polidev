@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Viewer Genérico</title>
+<title>POLYDEV | Viewer de Linguagens</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
@@ -11,99 +11,92 @@
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:yellowgreen;
+    background:#FFD700;
     color:black;
-    text-align:center;
 }
 
 header{
     background:black;
     color:#FFD700;
-    padding:20px;
+    text-align:center;
+    padding:25px;
 }
 
 header h1{
     margin:0;
+    font-size:38px;
 }
 
-.status{
-    margin:10px;
+header p{
+    color:white;
     font-weight:bold;
 }
 
 .container{
-    display:flex;
-    gap:12px;
-    padding:12px;
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
 }
 
-.menu{
-    width:30%;
+.card{
     background:black;
     color:white;
-    padding:12px;
     border-radius:10px;
-    max-height:75vh;
-    overflow-y:auto;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 10px rgba(0,0,0,.35);
 }
 
-.viewer{
-    width:70%;
-    background:white;
-    border:3px solid black;
-    border-radius:10px;
-    padding:12px;
+.card h2{
+    color:#FFD700;
+    margin-top:0;
+}
+
+.card p{
+    color:white;
+    line-height:1.5;
 }
 
 button{
-    width:100%;
-    margin:6px 0;
-    padding:10px;
-    background:yellowgreen;
+    background:#FFD700;
     color:black;
-    border:none;
+    border:0;
+    padding:10px 16px;
+    margin:5px;
     border-radius:6px;
     font-weight:bold;
     cursor:pointer;
 }
 
 button:hover{
-    background:#FFD700;
-}
-
-.action{
-    width:auto;
-    background:black;
-    color:#FFD700;
-    padding:10px 20px;
-    margin:10px;
-}
-
-iframe{
-    width:100%;
-    height:65vh;
-    border:none;
     background:white;
 }
 
 pre{
-    background:black;
-    color:white;
-    text-align:left;
-    padding:20px;
-    overflow:auto;
-    height:60vh;
+    background:#111;
+    color:#00ff99;
+    padding:18px;
     border-radius:8px;
+    overflow-x:auto;
+    white-space:pre-wrap;
+    display:none;
 }
 
-@media(max-width:800px){
-    .container{
-        flex-direction:column;
-    }
+.msg{
+    background:black;
+    color:#FFD700;
+    padding:20px;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+}
 
-    .menu,.viewer{
-        width:auto;
-    }
+footer{
+    background:black;
+    color:#FFD700;
+    text-align:center;
+    padding:18px;
+    margin-top:30px;
 }
 </style>
 </head>
@@ -111,182 +104,130 @@ pre{
 <body>
 
 <header>
-    <h1>📚 POLYDEV Viewer</h1>
-    <p>Leia • Entenda • Execute seu código</p>
+    <h1>POLYDEV</h1>
+    <p>Viewer de Linguagens | Leia • Entenda • Execute seu código</p>
 </header>
 
-<div class="status" id="status">Carregando conteúdos...</div>
-
 <div class="container">
-
-    <div class="menu">
-        <h2 id="tituloMenu">Conteúdos</h2>
-        <div id="lista"></div>
-    </div>
-
-    <div class="viewer">
-        <h2 id="tituloViewer">Selecione</h2>
-
-        <button class="action" onclick="baixar()">⬇ Download</button>
-        <button class="action" onclick="voltar()">⬅ Voltar</button>
-
-        <div id="conteudo">
-            <p>Nenhum conteúdo</p>
-        </div>
-    </div>
-
+    <div id="lista" class="msg">Carregando códigos...</div>
 </div>
 
+<footer>
+    POLYDEV - Viewer de Códigos de Linguagens
+</footer>
+
 <script>
-let dados = [];
-let atual = null;
+const lista = document.getElementById("lista");
 
-function getCategoria(){
-    const params = new URLSearchParams(window.location.search);
-    return params.get("categoria") || "lang";
-}
+async function carregarConteudos(){
 
-function limparPath(path){
-    if(!path) return "";
-
-    path = path.trim();
-    path = path.replace(/^\/+/, "");
-
-    path = path.replace("downloads/html/bancos/", "downloads/bancos/");
-    path = path.replace("/downloads/html/bancos/", "downloads/bancos/");
-
-    return path;
-}
-
-async function carregar(){
-    const categoria = getCategoria();
-
-    document.getElementById("tituloMenu").innerText =
-        categoria === "sql" ? "Guias SQL / Bancos" : "Guias Linguagens";
-
-let { data, error } = await db
-    .from("conteudos")
-    .select("*")
-    .eq("categoria", "lang")
-    .eq("ativo", true)
-    .order("titulo", { ascending: true });
-
-    if(error){
-        console.error("ERRO SUPABASE:", error);
-        document.getElementById("status").innerText = "Erro ao carregar conteúdos.";
-        return;
-    }
-
-    dados = data || [];
-
-    if(dados.length === 0){
-        document.getElementById("status").innerText =
-            "Nenhum conteúdo encontrado para categoria: " + categoria;
-        return;
-    }
-
-    montarMenu();
-
-    document.getElementById("status").innerText =
-        "Categoria: " + categoria + " | Itens: " + dados.length;
-}
-
-function montarMenu(){
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
-
-    dados.forEach(item => {
-        const btn = document.createElement("button");
-        btn.innerText = item.titulo + " (" + (item.downloads || 0) + ")";
-        btn.onclick = () => abrir(item);
-        lista.appendChild(btn);
-    });
-}
-
-async function abrir(item){
-    atual = item;
-
-    document.getElementById("tituloViewer").innerText = item.titulo;
-
-    const arquivo = limparPath(item.arquivo_url);
-
-    if(!arquivo){
-        document.getElementById("conteudo").innerHTML =
-            "<p>Este conteúdo não possui arquivo_url.</p>";
-        return;
-    }
-
-    const ext = arquivo.split(".").pop().toLowerCase();
-
-    if(ext === "html" || ext === "htm"){
-        document.getElementById("conteudo").innerHTML =
-            `<iframe src="${arquivo}"></iframe>`;
-    }else{
-        try{
-            const resp = await fetch(arquivo);
-            const texto = await resp.text();
-
-            document.getElementById("conteudo").innerHTML =
-                `<pre>${escapeHtml(texto)}</pre>`;
-        }catch(e){
-            console.error("ERRO AO ABRIR ARQUIVO:", e);
-            document.getElementById("conteudo").innerHTML =
-                "<p>Erro ao exibir arquivo.</p>";
-        }
-    }
-}
-
-async function baixar(){
-    if(!atual){
-        alert("Selecione um conteúdo primeiro.");
-        return;
-    }
-
-    const arquivo = limparPath(atual.arquivo_url);
-
-    if(!arquivo){
-        alert("Arquivo não encontrado.");
-        return;
-    }
-
-    const novoValor = (atual.downloads || 0) + 1;
-
-    const { error } = await db
+    const { data, error } = await db
         .from("conteudos")
-        .update({ downloads: novoValor })
-        .eq("id", atual.id);
+        .select("*")
+        .eq("categoria", "lang")
+        .order("titulo", { ascending: true });
 
     if(error){
-        console.error("ERRO AO INCREMENTAR:", error);
-        alert("Download feito, mas erro ao atualizar contador.");
-    }else{
-        atual.downloads = novoValor;
+        lista.innerHTML = "Erro ao carregar conteúdos.";
+        console.error(error);
+        return;
     }
 
-    const a = document.createElement("a");
-    a.href = arquivo;
-    a.download = arquivo.split("/").pop();
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    if(!data || data.length === 0){
+        lista.innerHTML = "Nenhum código encontrado.";
+        return;
+    }
 
-    await carregar();
+    lista.className = "";
+
+    let html = "";
+    let totalCodigos = 0;
+
+    data.forEach(item => {
+
+        let arquivo = item.arquivo_url || "";
+
+        /*
+           POLYDEV JUMP / NOP
+           Se for guia HTML, ignora.
+           Não altera banco, não altera categoria, não altera estrutura.
+        */
+        if(arquivo.toLowerCase().endsWith(".html")){
+            return;
+        }
+
+        totalCodigos++;
+
+        html += `
+            <div class="card">
+                <h2>${item.titulo}</h2>
+                <p>${item.descricao || "Código de linguagem disponível no POLYDEV."}</p>
+
+                <button onclick="visualizar('${arquivo}', 'codigo_${item.id}')">
+                    Visualizar
+                </button>
+
+                <button onclick="baixar('${arquivo}', ${item.id})">
+                    Download
+                </button>
+
+                <pre id="codigo_${item.id}"></pre>
+            </div>
+        `;
+    });
+
+    if(totalCodigos === 0){
+        lista.className = "msg";
+        lista.innerHTML = "Nenhum código de linguagem encontrado. Guias HTML foram ignorados pelo JUMP/NOP.";
+        return;
+    }
+
+    lista.innerHTML = html;
 }
 
-function voltar(){
-    atual = null;
-    document.getElementById("tituloViewer").innerText = "Selecione";
-    document.getElementById("conteudo").innerHTML = "<p>Nenhum conteúdo</p>";
+async function visualizar(arquivo, elementoId){
+
+    const area = document.getElementById(elementoId);
+
+    try{
+        const resp = await fetch(arquivo);
+
+        if(!resp.ok){
+            area.style.display = "block";
+            area.textContent = "Erro ao abrir arquivo: " + arquivo;
+            return;
+        }
+
+        const texto = await resp.text();
+
+        area.style.display = "block";
+        area.textContent = texto;
+
+    }catch(e){
+        area.style.display = "block";
+        area.textContent = "Erro ao carregar arquivo.";
+        console.error(e);
+    }
 }
 
-function escapeHtml(texto){
-    return texto
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+async function baixar(arquivo, id){
+
+    try{
+        await fetch(arquivo);
+
+        await db
+            .from("conteudos")
+            .update({ downloads: db.raw ? db.raw("downloads + 1") : undefined })
+            .eq("id", id);
+
+    }catch(e){
+        console.log("Download liberado, mas incremento pode depender da sua rotina atual.");
+    }
+
+    window.open(arquivo, "_blank");
 }
 
-carregar();
+carregarConteudos();
 </script>
 
 </body>
