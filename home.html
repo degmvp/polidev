@@ -6,7 +6,6 @@
 
 <title>POLYDEV | Home Isométrico</title>
 
-
 <style>
 *{
     box-sizing:border-box;
@@ -20,7 +19,24 @@ body{
     color:white;
 }
 
-<button class="btn-voltar" onclick="voltar()">⬅ Voltar</button>
+.btn-voltar{
+    position:fixed;
+    top:15px;
+    left:15px;
+    padding:10px 18px;
+    background:#FFD700;
+    color:black;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    z-index:999;
+    box-shadow:0 0 12px rgba(0,0,0,.5);
+}
+
+.btn-voltar:hover{
+    background:white;
+}
 
 header{
     text-align:center;
@@ -142,27 +158,6 @@ main{
     background:white;
 }
 
-.btn-voltar{
-    position:fixed;
-    top:15px;
-    left:15px;
-    padding:10px 18px;
-    background:#FFD700;
-    color:black;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    z-index:999;
-    box-shadow:0 0 12px rgba(0,0,0,.5);
-}
-
-.btn-voltar:hover{
-    background:white;
-}
-
-
-
 footer{
     margin-top:70px;
     text-align:center;
@@ -198,6 +193,8 @@ footer{
 
 <body>
 
+<button class="btn-voltar" onclick="voltar()">⬅ Voltar</button>
+
 <header>
     <h1>POLYDEV</h1>
     <p>Leia • Entenda • Execute seu código</p>
@@ -227,6 +224,7 @@ footer{
         <a class="iso-card" href="vw.html?categoria=sql">
             <span>🗄️ Bancos SQL</span>
         </a>
+
         <a class="iso-card" href="dashgeral.html">
             <span>📈 Estatísticas</span>
         </a>
@@ -253,21 +251,19 @@ footer{
 
     </nav>
 </section>
-<script>
-function voltar(){
 
-    // limpa login salvo
-    localStorage.removeItem("polydev_usuario");
-
-    // volta para entrada
-    window.location.href = "index.html";
-}
-</script>
 </main>
 
 <footer>
     POLYDEV V1.0 — Multi Linguagens • Multi Bancos • Código na prática
 </footer>
+
+<script>
+function voltar(){
+    localStorage.removeItem("polydev_usuario");
+    window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
