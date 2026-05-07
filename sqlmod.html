@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | SQL Moderno</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="config.js"></script>
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:25px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:38px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.barra{
+    text-align:center;
+    margin:20px;
+}
+
+button{
+    background:#FFD700;
+    color:#000;
+    border:0;
+    padding:10px 18px;
+    margin:6px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+
+#lista{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:18px;
+    padding:25px;
+}
+
+.card{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:14px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 0 12px rgba(255,215,0,.25);
+}
+
+.card h3{
+    color:#FFD700;
+}
+
+.card p{
+    color:white;
+}
+
+#areaViewer{
+    display:none;
+    padding:20px;
+}
+
+#iframeViewer{
+    width:100%;
+    height:680px;
+    background:white;
+    border:3px solid #FFD700;
+    border-radius:12px;
+}
+
+pre{
+    display:none;
+    background:#111;
+    color:white;
+    padding:22px;
+    border:3px solid #FFD700;
+    border-radius:12px;
+    overflow:auto;
+    white-space:pre-wrap;
+    min-height:600px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | SQL Moderno</h1>
+    <p>T-SQL Moderno • 20 Scripts • Leia • Entenda • Execute</p>
+</header>
+
+<div class="barra">
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='isom.html'">🧭 Menu</button>
+</div>
+
+<section id="areaLista">
+    <h2 style="text-align:center;color:yellowgreen;">Carregando SQL Moderno...</h2>
+    <div id="lista"></div>
+</section>
+
+<section id="areaViewer">
+    <div class="barra">
+        <button onclick="voltar()">⬅ Voltar ao SQL Moderno</button>
+        <button onclick="location.href='home.html'">🏠 Home</button>
+        <button onclick="location.href='isom.html'">🧭 Menu</button>
+        <button id="btnDownload">⬇ Download</button>
+    </div>
+
+    <iframe id="iframeViewer"></iframe>
+    <pre id="preViewer"></pre>
+</section>
+
+<script>
+const BASE_URL = "https://degmvp.github.io/polidev/";
+
+function montarUrl(item){
+    if(!item.arquivo_url) return "";
+    let caminho = String(item.arquivo_url).trim().replace(/^\/+/, "");
+    return BASE_URL + caminho;
+}
+
+function nomeArquivo(item){
+    return String(item.arquivo_url || "").split("/").pop();
+}
+
+async function carregarSQLModerno(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+        .eq("ativo", true)
+        .or("titulo.ilike.%SQL Moderno%,titulo.ilike.%TSQL Moderno%,titulo.ilike.%T-SQL Moderno%,arquivo_url.ilike.%sqlmod%")
+        .order("id", { ascending:true });
+
+    if(error){
+        console.error(error);
+        document.querySelector("#areaLista h2").innerText = "Erro ao carregar SQL Moderno";
+        return;
+    }
+
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    if(!data || data.length === 0){
+        document.querySelector("#areaLista h2").innerText = "Nenhum script SQL Moderno encontrado";
+        return;
+    }
+
+    data.forEach(item => {
+        if(!item.arquivo_url) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const h3 = document.createElement("h3");
+        h3.innerText = item.titulo || nomeArquivo(item);
+
+        const p = document.createElement("p");
+        p.innerText = "Downloads: " + (item.downloads || 0);
+
+        const btnExibir = document.createElement("button");
+        btnExibir.innerText = "📖 Exibir";
+        btnExibir.onclick = () => exibir(item);
+
+        const btnDownload = document.createElement("button");
+        btnDownload.innerText = "⬇ Download";
+        btnDownload.onclick = () => download(item);
+
+        card.appendChild(h3);
+        card.appendChild(p);
+        card.appendChild(btnExibir);
+        card.appendChild(btnDownload);
+
+        lista.appendChild(card);
+    });
+
+    document.querySelector("#areaLista h2").innerText = "Selecione um script";
+}
+
+async function exibir(item){
+    const url = montarUrl(item);
+    const iframe = document.getElementById("iframeViewer");
+    const pre = document.getElementById("preViewer");
+
+    document.getElementById("areaLista").style.display = "none";
+    document.getElementById("areaViewer").style.display = "block";
+
+    document.getElementById("btnDownload").onclick = () => download(item);
+
+    if(url.toLowerCase().endsWith(".html")){
+        pre.style.display = "none";
+        iframe.style.display = "block";
+        iframe.src = url;
+    }else{
+        iframe.style.display = "none";
+        iframe.src = "";
+        pre.style.display = "block";
+
+        try{
+            const resp = await fetch(url);
+            pre.textContent = await resp.text();
+        }catch(e){
+            pre.textContent = "Erro ao carregar o script.";
+        }
+    }
+}
+
+function voltar(){
+    document.getElementById("iframeViewer").src = "";
+    document.getElementById("preViewer").textContent = "";
+    document.getElementById("areaViewer").style.display = "none";
+    document.getElementById("areaLista").style.display = "block";
+}
+
+async function download(item){
+    const url = montarUrl(item);
+    if(!url) return;
+
+    const { data, error: erroBusca } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", item.id)
+        .single();
+
+    if(erroBusca){
+        alert("Erro ao consultar contador.");
+        return;
+    }
+
+    const novoTotal = Number(data.downloads || 0) + 1;
+
+    const { error: erroUpdate } = await db
+        .from("conteudos")
+        .update({ downloads: novoTotal })
+        .eq("id", item.id);
+
+    if(erroUpdate){
+        alert("Erro ao incrementar download.");
+        return;
+    }
+
+    item.downloads = novoTotal;
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nomeArquivo(item);
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+carregarSQLModerno();
+</script>
+
+</body>
+</html>
