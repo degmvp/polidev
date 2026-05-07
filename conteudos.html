@@ -86,7 +86,7 @@ button:hover{
 
 <body>
 
-<h1>POLYDEV - GUIAS</h1>
+<h1>POLYDEV - GUIAS LINGUAGENS</h1>
 
 <div class="barra">
     <button onclick="location.href='home.html'">🏠 Home</button>
@@ -233,9 +233,13 @@ async function carregarGuias(){
 
     data.forEach(item => {
 
-        if(!item.arquivo_url){
-            return;
-        }
+    if(!item.arquivo_url){
+        return;
+    }
+
+    if(!item.arquivo_url.toLowerCase().endsWith(".html")){
+        return;
+    }
 
         const card = document.createElement("div");
         card.className = "card";
