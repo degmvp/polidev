@@ -86,7 +86,7 @@ button:hover{
 
 <body>
 
-<h1>POLYDEV - GUIAS LINGUAGENS</h1>
+<h1>POLYDEV - GUIAS </h1>
 
 <div class="barra">
     <button onclick="location.href='home.html'">🏠 Home</button>
@@ -207,6 +207,16 @@ async function carregarGuias(){
 
     const params = new URLSearchParams(window.location.search);
     const categoria = params.get("categoria") || "sql";
+
+    const tituloPagina = document.getElementById("tituloPagina");
+
+if(categoria === "sql"){
+    tituloPagina.innerText = "POLYDEV - GUIAS DE BANCOS";
+}
+
+if(categoria === "lang"){
+    tituloPagina.innerText = "POLYDEV - GUIAS DE LINGUAGENS";
+}
 
     const { data, error } = await db
         .from("conteudos")
