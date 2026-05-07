@@ -205,10 +205,13 @@ async function downloadGuia(item){
 
 async function carregarGuias(){
 
+    const params = new URLSearchParams(window.location.search);
+    const categoria = params.get("categoria") || "sql";
+
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
-        .eq("categoria", "sql")
+        .eq("categoria", categoria)
         .eq("ativo", true)
         .order("id", { ascending:true });
 
