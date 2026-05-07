@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>POLYDEV | Python</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
@@ -19,6 +20,15 @@ header{
     background:black;
     color:#FFD700;
     padding:20px;
+}
+
+header h1{
+    margin:0;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
 }
 
 .container{
@@ -73,6 +83,8 @@ async function carregarPython(){
     const msg = document.getElementById("msg");
     const lista = document.getElementById("lista");
 
+    lista.innerHTML = "";
+
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,ativo")
@@ -85,9 +97,12 @@ async function carregarPython(){
         return;
     }
 
-    const somentePython = (data || []).filter(item =>
-        String(item.categoria).trim().toLowerCase() === "python"
-    );
+    const somentePython = (data || []).filter(item => {
+        const categoria = String(item.categoria || "").trim().toLowerCase();
+        const arquivo = String(item.arquivo_url || "").trim().toLowerCase();
+
+        return categoria === "python" && arquivo !== "";
+    });
 
     if(somentePython.length === 0){
         msg.innerHTML = "Nenhum programa Python encontrado.";
@@ -99,9 +114,11 @@ async function carregarPython(){
     somentePython.forEach(item => {
         const btn = document.createElement("button");
         btn.innerHTML = item.titulo;
+
         btn.onclick = () => {
             window.location.href = "viewer_py.html?id=" + item.id;
         };
+
         lista.appendChild(btn);
     });
 }
