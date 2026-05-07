@@ -1,103 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Estatísticas POLYDEV</title>
+
+<title>POLYDEV | SQL Moderno</title>
 
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+
+body{
+    background:black;
+    color:#FFD700;
+    font-family:Arial, Helvetica, sans-serif;
+    margin:0;
+}
+
+header{
+    text-align:center;
+    padding:25px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:40px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.barra{
+    text-align:center;
+    margin:20px;
+}
+
+button{
+    background:#FFD700;
+    color:black;
+    border:0;
+    padding:10px 18px;
+    margin:5px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+
+#lista{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+    padding:25px;
+}
+
+.card{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+}
+
+.card h3{
+    color:#FFD700;
+}
+
+.card p{
+    color:white;
+}
+
+#viewerArea{
+    display:none;
+    padding:20px;
+}
+
+#viewer{
+    width:100%;
+    height:700px;
+    border:3px solid #FFD700;
+    border-radius:10px;
+    background:white;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<h2>📊 Estatísticas do Sistema</h2>
+<header>
+    <h1>🧠 POLYDEV | SQL Moderno</h1>
+    <p>T-SQL Moderno • Scripts Avançados • Leia • Entenda • Execute</p>
+</header>
 
-<h3 id="total">Total de downloads: 0</h3>
+<div class="barra">
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='isom.html'">🧭 Menu</button>
+</div>
 
-<h3>🏆 Top Downloads</h3>
+<section id="listaArea">
 
-<table border="1">
-<thead>
-<tr>
-<th>Título</th>
-<th>Categoria</th>
-<th>Downloads</th>
-</tr>
-</thead>
+    <h2 style="text-align:center;color:yellowgreen;">
+        Carregando SQL Moderno...
+    </h2>
 
-<tbody id="ranking"></tbody>
-</table>
+    <div id="lista"></div>
 
-<br><br>
+</section>
 
-<canvas id="grafico" width="600" height="300"></canvas>
+<section id="viewerArea">
+
+<div class="barra">
+    <button onclick="voltar()">⬅ Voltar</button>
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='isom.html'">🧭 Menu</button>
+    <button id="btnDownload">⬇ Download</button>
+</div>
+
+<iframe id="viewer"></iframe>
+
+</section>
 
 <script>
 
-async function carregarEstatisticas(){
+const BASE_URL = "https://degmvp.github.io/polidev/";
 
-    // TOTAL GERAL
-    const { data: totalData } = await db
-        .from("downloads")
-        .select("*")
+function montarUrl(item){
 
-    let total = totalData ? totalData.length : 0
-    document.getElementById("total").innerText = "Total de downloads: " + total
-
-    // TOP DOWNLOADS
-    const { data } = await db
-        .from("conteudos")
-        .select("*")
-        .order("downloads", { ascending: false })
-        .limit(10)
-
-    let tabela = document.getElementById("ranking")
-    tabela.innerHTML = ""
-
-    let labels = []
-    let valores = []
-
-    if(data){
-        data.forEach(item => {
-
-            tabela.innerHTML += `
-            <tr>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads}</td>
-            </tr>
-            `
-
-            labels.push(item.titulo)
-            valores.push(item.downloads)
-        })
+    if(!item.arquivo_url){
+        return "";
     }
 
-    // GRÁFICO
-    const ctx = document.getElementById('grafico').getContext('2d')
+    let caminho = item.arquivo_url.trim();
+    caminho = caminho.replace(/^\/+/, "");
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Downloads',
-                data: valores
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    })
+    return BASE_URL + caminho;
 }
 
-// INICIALIZA
-carregarEstatisticas()
+function voltar(){
+
+    document.getElementById("viewer").src = "";
+
+    document.getElementById("viewerArea").style.display = "none";
+
+    document.getElementById("listaArea").style.display = "block";
+}
+
+async function download(item){
+
+    const url = montarUrl(item);
+
+    if(!url){
+        return;
+    }
+
+    const { data } = await db
+        .from("conteudos")
+        .select("downloads")
+        .eq("id", item.id)
+        .single();
+
+    const atual = Number(data.downloads || 0);
+
+    await db
+        .from("conteudos")
+        .update({
+            downloads: atual + 1
+        })
+        .eq("id", item.id);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = item.arquivo_url.split("/").pop();
+
+    a.target = "_blank";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+}
+
+function exibir(item){
+
+    const url = montarUrl(item);
+
+    document.getElementById("viewer").src = url;
+
+    document.getElementById("listaArea").style.display = "none";
+
+    document.getElementById("viewerArea").style.display = "block";
+
+    document.getElementById("btnDownload").onclick = function(){
+        download(item);
+    };
+}
+
+async function carregar(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+        .ilike("arquivo_url", "%sqlmod%")
+        .order("id", { ascending:true });
+
+    if(error){
+
+        console.error(error);
+
+        document.querySelector("#listaArea h2").innerText =
+            "Erro ao carregar SQL Moderno";
+
+        return;
+    }
+
+    const lista = document.getElementById("lista");
+
+    lista.innerHTML = "";
+
+    if(!data || data.length === 0){
+
+        document.querySelector("#listaArea h2").innerText =
+            "Nenhum SQL Moderno encontrado";
+
+        return;
+    }
+
+    data.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${item.titulo}</h3>
+
+            <p>Downloads: ${item.downloads || 0}</p>
+
+            <button onclick='exibir(${JSON.stringify(item)})'>
+                📖 Exibir
+            </button>
+
+            <button onclick='download(${JSON.stringify(item)})'>
+                ⬇ Download
+            </button>
+        `;
+
+        lista.appendChild(card);
+    });
+
+    document.querySelector("#listaArea h2").innerText =
+        "Selecione um script";
+
+}
+
+carregar();
 
 </script>
 
