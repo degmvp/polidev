@@ -135,7 +135,7 @@ input{
         <button onclick="abrir('pyadv')">🐍 Python Avançado</button>
         <button onclick="abrir('pycl')">🏛️ Python Classes</button>
         <button onclick="abrir('sqlmod')">🧠 SQL Moderno</button>
-        <button onclick="abrir('cpp')">⚙️ C++</button>
+        <button onclick="location.href='cmm.html'">⚙️ C++</button>
     </div>
 </div>
 
@@ -167,6 +167,7 @@ input{
 <div class="barra">
     <button onclick="location.href='home.html'">🏠 Home</button>
     <button onclick="location.href='isom.html'">🧭 Menu</button>
+    <button onclick="location.href='cmm.html'">⚙️ C++</button>
 </div>
 
 </div>
@@ -184,9 +185,13 @@ function abrirCategoria(){
         return;
     }
 
+    if(cat === "cpp" || cat === "c++"){
+        location.href = "cmm.html";
+        return;
+    }
+
     location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
 }
-
 document.getElementById("categoria").addEventListener("keydown", function(e){
     if(e.key === "Enter"){
         abrirCategoria();
