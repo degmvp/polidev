@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Exemplos de C++ Moderno</title>
+<style>
+body {
+    background-color: #FFD700;
+    color: #000;
+    font-family: 'Courier New', monospace;
+    padding: 20px;
+}
+pre {
+    background: #222;
+    color: #0f0;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 0.9em;
+}
+h2 {
+    border-bottom: 2px solid #000;
+}
+</style>
+</head>
+<body>
+<h1>20 Exemplos de C++ Moderno (comentados)</h1>
+
+<h2>1. Leitura de arquivo TXT linha a linha</h2>
+<pre>// Lê cada linha de um arquivo .txt
+#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+void lerTXT(const std::string&amp; caminho) {
+    std::ifstream arquivo(caminho);
+    std::string linha;
+    while (std::getline(arquivo, linha)) {
+        std::cout &lt;&lt; linha &lt;&lt; '
+';
+    }
+}
+</pre>
+
+<h2>2. Leitura de CSV simples (separador vírgula)</h2>
+<pre>// Lê campos separados por vírgula
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+
+std::vector&lt;std::vector&lt;std::string&gt;&gt; lerCSV(const std::string&amp; caminho) {
+    std::ifstream arquivo(caminho);
+    std::vector&lt;std::vector&lt;std::string&gt;&gt; dados;
+    std::string linha;
+    while (std::getline(arquivo, linha)) {
+        std::stringstream ss(linha);
+        std::string campo;
+        std::vector&lt;std::string&gt; linhaDados;
+        while (std::getline(ss, campo, ',')) {
+            linhaDados.push_back(campo);
+        }
+        dados.push_back(linhaDados);
+    }
+    return dados;
+}
+</pre>
+
+<h2>3. Leitura de TXT com delimitador personalizado</h2>
+<pre>// Usa '|' como delimitador
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+
+void lerDelimitado(const std::string&amp; caminho, char delim = '|') {
+    std::ifstream arq(caminho);
+    std::string linha;
+    while (std::getline(arq, linha)) {
+        std::stringstream ss(linha);
+        std::string token;
+        while (std::getline(ss, token, delim)) {
+            std::cout &lt;&lt; token &lt;&lt; ' ';
+        }
+        std::cout &lt;&lt; '
+';
+    }
+}
+</pre>
+
+<h2>4. Ler arquivo inteiro para uma string (moderno)</h2>
+<pre>// Usa istreambuf_iterator para ler tudo de uma vez
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;iterator&gt;
+
+std::string lerArquivoInteiro(const std::string&amp; caminho) {
+    std::ifstream arq(caminho);
+    return {std::istreambuf_iterator&lt;char&gt;(arq),
+            std::istreambuf_iterator&lt;char&gt;()};
+}
+</pre>
+
+<h2>5. Bitwise: verificar se número é potência de 2</h2>
+<pre>// n &gt; 0 e (n &amp; (n-1)) == 0
+bool ehPotenciaDe2(int n) {
+    return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;
+}
+</pre>
+
+<h2>6. Bitwise: contar bits setados (popcount) – C++20</h2>
+<pre>// std::popcount disponível em C++20
+#include &lt;bit&gt;
+int contarBits(unsigned int n) {
+    return std::popcount(n);
+}
+// Alternativa manual: while (n) { cont++; n &amp;= n-1; }
+</pre>
+
+<h2>7. Bitwise: trocar dois números sem variável auxiliar</h2>
+<pre>// Usando XOR
+void trocar(int&amp; a, int&amp; b) {
+    a ^= b;
+    b ^= a;
+    a ^= b;
+}
+</pre>
+
+<h2>8. Bitwise: encontrar elemento único em array (XOR)</h2>
+<pre>// Todos os outros aparecem duas vezes
+int unico(const std::vector&lt;int&gt;&amp; v) {
+    int res = 0;
+    for (int x : v) res ^= x;
+    return res;
+}
+</pre>
+
+<h2>9. Bitwise: definir/limpar/alternar um bit</h2>
+<pre>// Operações em um byte
+uint8_t setBit(uint8_t valor, int bit) { return valor | (1 &lt;&lt; bit); }
+uint8_t clearBit(uint8_t valor, int bit) { return valor &amp; ~(1 &lt;&lt; bit); }
+uint8_t toggleBit(uint8_t valor, int bit) { return valor ^ (1 &lt;&lt; bit); }
+bool testBit(uint8_t valor, int bit) { return valor &amp; (1 &lt;&lt; bit); }
+</pre>
+
+<h2>10. Lambda com auto e captura moderna</h2>
+<pre>// Lambda genérica e captura por referência
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+auto maiorQue = [](const auto&amp; a, const auto&amp; b) { return a &gt; b; };
+// Uso: std::sort(v.begin(), v.end(), maiorQue);
+</pre>
+
+<h2>11. Smart pointer: unique_ptr</h2>
+<pre>// Gerenciamento automático de memória
+#include &lt;memory&gt;
+
+std::unique_ptr&lt;int&gt; criaInteiro(int valor) {
+    return std::make_unique&lt;int&gt;(valor);
+} // liberado automaticamente ao sair do escopo
+</pre>
+
+<h2>12. Range-based for loop com inicializador (C++20)</h2>
+<pre>// for com variável de inicialização
+#include &lt;vector&gt;
+
+void exibir(const std::vector&lt;int&gt;&amp; v) {
+    for (int i = 0; int x : v) {
+        std::cout &lt;&lt; i++ &lt;&lt; ": " &lt;&lt; x &lt;&lt; '
+';
+    }
+}
+</pre>
+
+<h2>13. constexpr função – avaliada em tempo de compilação</h2>
+<pre>constexpr int fatorial(int n) {
+    return (n &lt;= 1) ? 1 : n * fatorial(n - 1);
+}
+// static_assert(fatorial(5) == 120);
+</pre>
+
+<h2>14. std::optional – valor opcional</h2>
+<pre>#include &lt;optional&gt;
+
+std::optional&lt;double&gt; dividir(double a, double b) {
+    if (b == 0) return std::nullopt;
+    return a / b;
+}
+// Uso: if (auto res = dividir(10,2)) std::cout &lt;&lt; *res;
+</pre>
+
+<h2>15. std::variant – união type-safe</h2>
+<pre>#include &lt;variant&gt;
+#include &lt;string&gt;
+
+std::variant&lt;int, double, std::string&gt; valor;
+valor = 42;
+valor = 3.14;
+valor = "texto";
+// Acesso com std::get&lt;T&gt; ou std::visit
+</pre>
+
+<h2>16. Structured bindings (C++17)</h2>
+<pre>// Desestruturação de tuplas/pares
+#include &lt;tuple&gt;
+#include &lt;map&gt;
+
+std::map&lt;int, std::string&gt; m = {{1,"um"}};
+for (const auto&amp; [chave, valor] : m) {
+    std::cout &lt;&lt; chave &lt;&lt; ": " &lt;&lt; valor &lt;&lt; '
+';
+}
+</pre>
+
+<h2>17. Template com parâmetro auto (C++17)</h2>
+<pre>// Função template que aceita qualquer tipo não-tipo
+template &lt;auto N&gt;
+void mostrarConstante() {
+    std::cout &lt;&lt; N &lt;&lt; '
+';
+}
+// Uso: mostrarConstante&lt;42&gt;();
+</pre>
+
+<h2>18. Fold expressions (C++17)</h2>
+<pre>// Soma de vários argumentos
+template &lt;typename... Args&gt;
+auto soma(Args... args) {
+    return (args + ...);
+}
+// std::cout &lt;&lt; soma(1,2,3,4); // 10
+</pre>
+
+<h2>19. std::string_view – visão de string sem cópia</h2>
+<pre>#include &lt;string_view&gt;
+
+void exibirPrefixo(std::string_view texto, size_t n) {
+    std::cout &lt;&lt; texto.substr(0, n) &lt;&lt; '
+';
+}
+// Uso: exibirPrefixo("Hello World", 5); // "Hello"
+</pre>
+
+<h2>20. std::filesystem – ler diretório e arquivos (C++17)</h2>
+<pre>#include &lt;filesystem&gt;
+namespace fs = std::filesystem;
+
+void listarArquivos(const fs::path&amp; dir) {
+    for (const auto&amp; entry : fs::directory_iterator(dir)) {
+        if (entry.is_regular_file()) {
+            std::cout &lt;&lt; entry.path().filename() &lt;&lt; '
+';
+        }
+    }
+}
+</pre>
+
+</body>
+</html>

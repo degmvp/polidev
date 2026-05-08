@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Query de Categorias</title>
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#000 0%,#111 55%,#2d3f00 100%);
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.container{
+    max-width:1000px;
+    margin:30px auto;
+    padding:20px;
+}
+
+.box{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 0 14px rgba(255,215,0,.25);
+}
+
+.box h2{
+    color:yellowgreen;
+    text-align:center;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+button{
+    background:#FFD700;
+    color:#000;
+    border:0;
+    padding:14px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:15px;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:2px solid #FFD700;
+    background:#000;
+    color:#FFD700;
+    font-size:18px;
+    margin-bottom:15px;
+    box-sizing:border-box;
+}
+
+.info{
+    color:white;
+    line-height:1.7;
+}
+
+.code{
+    background:#000;
+    color:yellowgreen;
+    padding:12px;
+    border-radius:8px;
+    font-family:Consolas, monospace;
+    overflow:auto;
+}
+
+.barra{
+    text-align:center;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🔎 POLYDEV | Query</h1>
+    <p>Consulta dinâmica por categorias do banco</p>
+</header>
+
+<div class="container">
+
+<div class="box">
+    <h2>Consulta Manual</h2>
+
+    <input id="categoria" placeholder="Digite a categoria: sql, lang, pyadv, pycl, sqlmod, cpp...">
+
+    <button onclick="abrirCategoria()">🔎 Consultar Categoria</button>
+
+    <p class="info">
+        Digite o nome da categoria cadastrada no banco para abrir automaticamente
+        o viewer dinâmico do POLYDEV.
+    </p>
+</div>
+
+<div class="box">
+    <h2>Categorias Disponíveis</h2>
+
+    <div class="grid">
+        <button onclick="abrir('sql')">🗄️ SQL / Bancos</button>
+        <button onclick="abrir('lang')">💻 Linguagens</button>
+        <button onclick="abrir('pyadv')">🐍 Python Avançado</button>
+        <button onclick="abrir('pycl')">🏛️ Python Classes</button>
+        <button onclick="abrir('sqlmod')">🧠 SQL Moderno</button>
+        <button onclick="abrir('cpp')">⚙️ C++</button>
+    </div>
+</div>
+
+<div class="box">
+    <h2>Como funciona</h2>
+
+    <p class="info">
+        Esta página usa o motor universal:
+    </p>
+
+    <div class="code">
+        conteudos.html?categoria=NOME_DA_CATEGORIA
+    </div>
+
+    <p class="info">
+        Exemplos:
+    </p>
+
+    <div class="code">
+        conteudos.html?categoria=sql<br>
+        conteudos.html?categoria=lang<br>
+        conteudos.html?categoria=pyadv<br>
+        conteudos.html?categoria=pycl<br>
+        conteudos.html?categoria=sqlmod<br>
+        conteudos.html?categoria=cpp
+    </div>
+</div>
+
+<div class="barra">
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='isom.html'">🧭 Menu</button>
+</div>
+
+</div>
+
+<script>
+function abrir(cat){
+    location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
+}
+
+function abrirCategoria(){
+    const cat = document.getElementById("categoria").value.trim().toLowerCase();
+
+    if(!cat){
+        alert("Informe uma categoria.");
+        return;
+    }
+
+    location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
+}
+
+document.getElementById("categoria").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        abrirCategoria();
+    }
+});
+</script>
+
+</body>
+</html>
