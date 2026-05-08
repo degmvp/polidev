@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | C++ Code Viewer</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:25px 10px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:38px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:20px;
+}
+
+.menu{
+    width:28%;
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:15px;
+    max-height:78vh;
+    overflow-y:auto;
+}
+
+.viewer{
+    width:72%;
+    background:#111;
+    border:2px solid yellowgreen;
+    border-radius:12px;
+    padding:15px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:12px;
+    background:#FFD700;
+    color:#000;
+    border:0;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+
+pre{
+    background:#000;
+    color:white;
+    padding:18px;
+    border-radius:10px;
+    min-height:430px;
+    overflow:auto;
+    border:1px solid #FFD700;
+    text-align:left;
+}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.acoes button{
+    width:auto;
+    min-width:150px;
+}
+
+#tituloArquivo{
+    color:yellowgreen;
+}
+
+@media(max-width:800px){
+    .container{
+        flex-direction:column;
+    }
+
+    .menu,
+    .viewer{
+        width:100%;
+    }
+
+    .acoes{
+        flex-direction:column;
+    }
+
+    .acoes button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💻 POLYDEV C++</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="container">
+
+    <aside class="menu">
+        <h2>Programas C++</h2>
+        <div id="listaProgramas"></div>
+    </aside>
+
+    <main class="viewer">
+        <h2 id="tituloArquivo">Selecione um programa C++</h2>
+
+        <div class="acoes">
+            <button onclick="baixar()">⬇ Download</button>
+            <button onclick="voltarCpp()">⬅ Voltar C++</button>
+            <button onclick="voltarHome()">🏠 Home</button>
+        </div>
+
+        <pre id="codigo">// escolha cpp01.cpp até cpp29.cpp no menu lateral</pre>
+    </main>
+
+</div>
+
+<script>
+const BASE_PATH = "/polidev/downloads/cpp/";
+let arquivoAtual = "";
+
+function gerarLista(){
+    const lista = document.getElementById("listaProgramas");
+
+    for(let i = 1; i <= 29; i++){
+        const numero = String(i).padStart(2, "0");
+        const arquivo = `cpp${numero}.cpp`;
+
+        const btn = document.createElement("button");
+        btn.textContent = arquivo;
+        btn.onclick = () => exibirCodigo(arquivo);
+
+        lista.appendChild(btn);
+    }
+}
+
+async function exibirCodigo(arquivo){
+    arquivoAtual = arquivo;
+    document.getElementById("tituloArquivo").textContent = arquivo;
+    document.getElementById("codigo").textContent = "Carregando código...";            
+
+    try{
+        const resposta = await fetch(BASE_PATH + arquivo + "?v=" + Date.now());
+
+        if(!resposta.ok){
+            throw new Error("Arquivo não encontrado");
+        }
+
+        const texto = await resposta.text();
+        document.getElementById("codigo").textContent = texto;
+
+    }catch(erro){
+        document.getElementById("codigo").textContent =
+            "Erro ao abrir: " + BASE_PATH + arquivo;
+    }
+}
+
+function baixar(){
+    if(!arquivoAtual){
+        alert("Selecione primeiro um programa C++.");
+        return;
+    }
+
+    const link = document.createElement("a");
+    link.href = BASE_PATH + arquivoAtual;
+    link.download = arquivoAtual;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function voltarCpp(){
+    window.location.href = "cpp.html";
+}
+
+function voltarHome(){
+    window.location.href = "home.html";
+}
+
+gerarLista();
+</script>
+
+</body>
+</html>
