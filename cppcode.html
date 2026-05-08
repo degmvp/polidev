@@ -94,7 +94,9 @@ pre{
 
         <div class="acoes">
             <button onclick="baixar()">⬇ Download</button>
-            <button onclick="location.href='cpp.html'">⬅ Voltar C++</button>
+           <button onclick="location.href='cppcode.html'">
+    C++ CODE
+</button>
             <button onclick="location.href='home.html'">🏠 Home</button>
         </div>
 
@@ -111,7 +113,7 @@ function gerarLista(){
     const lista = document.getElementById("listaProgramas");
     lista.innerHTML = "";
 
-    for(let i = 1; i <= 29; i++){
+    for(let i = 1; i <= 20; i++){
         const numero = String(i).padStart(2, "0");
         const arquivo = "cpp" + numero + ".cpp";
 
