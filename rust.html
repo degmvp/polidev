@@ -146,7 +146,7 @@ pre{
 
         <div class="botoes">
             <button onclick="baixarAtual()">⬇ Download</button>
-            <button onclick="limparViewer()">🧹 Limpar</button>
+            <button onclick="voltarHome()">🏠 Home</button>
         </div>
 
         <pre id="codigo">// O código Rust selecionado aparecerá aqui.</pre>
@@ -157,6 +157,10 @@ pre{
 <script>
 let programas = [];
 let programaAtual = null;
+
+function voltarHome(){
+    window.location.href = "home.html";
+}
 
 async function carregarProgramas(){
     const lista = document.getElementById("listaProgramas");
@@ -270,13 +274,6 @@ function baixarGuia(){
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-}
-
-function limparViewer(){
-    programaAtual = null;
-    document.getElementById("titulo").innerText = "Selecione um programa Rust";
-    document.getElementById("codigo").textContent =
-        "// O código Rust selecionado aparecerá aqui.";
 }
 
 function voltarHome(){
