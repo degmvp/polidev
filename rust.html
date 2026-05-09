@@ -218,6 +218,7 @@ async function abrirPrograma(item){
         }
 
         const texto = await resp.text();
+
         document.getElementById("codigo").textContent = texto;
 
     }catch(e){
@@ -227,6 +228,7 @@ async function abrirPrograma(item){
 }
 
 async function baixarAtual(){
+
     if(!programaAtual){
         alert("Selecione primeiro um programa Rust.");
         return;
@@ -235,10 +237,15 @@ async function baixarAtual(){
     await incrementarDownload(programaAtual.id);
 
     const a = document.createElement("a");
+
     a.href = programaAtual.arquivo_url;
+
     a.download = programaAtual.arquivo_url.split("/").pop();
+
     document.body.appendChild(a);
+
     a.click();
+
     document.body.removeChild(a);
 }
 
