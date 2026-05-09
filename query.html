@@ -190,6 +190,12 @@ function abrirCategoria(){
         return;
     }
 
+    if(cat === "rust" || cat === "rs"){
+        location.href = "rust.html";
+        return;
+    }
+
+
     location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
 }
 document.getElementById("categoria").addEventListener("keydown", function(e){
