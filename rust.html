@@ -161,35 +161,48 @@ let programaAtual = null;
 async function carregarProgramas(){
     const lista = document.getElementById("listaProgramas");
 
-    const { data, error } = await db
-        .from("conteudos")
-        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
-        .eq("categoria", "rs")
-        .eq("ativo", true)
-        .order("titulo", { ascending:true });
+    try{
+        lista.innerHTML = "Conectando ao Supabase...";
 
-    if(error){
-        lista.innerHTML = "Erro ao carregar Rust.";
-        console.error(error);
-        return;
-    }
+        console.log("TESTE db =", typeof db);
+        console.log("TESTE supabase =", typeof supabase);
 
-    if(!data || data.length === 0){
-        lista.innerHTML = "Nenhum programa Rust encontrado.";
-        return;
-    }
+        const { data, error } = await db
+            .from("conteudos")
+            .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+            .eq("categoria", "rs")
+            .eq("ativo", true)
+            .order("titulo", { ascending:true });
 
-    programas = data;
-    lista.innerHTML = "";
-
-    programas.forEach(item => {
-        if(item.arquivo_url && item.arquivo_url.endsWith(".rs")){
-            const btn = document.createElement("button");
-            btn.innerText = item.titulo;
-            btn.onclick = () => abrirPrograma(item);
-            lista.appendChild(btn);
+        if(error){
+            console.error("ERRO SUPABASE:", error);
+            lista.innerHTML = "Erro Supabase: " + error.message;
+            return;
         }
-    });
+
+        console.log("DADOS RUST:", data);
+
+        if(!data || data.length === 0){
+            lista.innerHTML = "Nenhum programa Rust encontrado na categoria rs.";
+            return;
+        }
+
+        programas = data;
+        lista.innerHTML = "";
+
+        programas.forEach(item => {
+            if(item.arquivo_url && item.arquivo_url.endsWith(".rs")){
+                const btn = document.createElement("button");
+                btn.innerText = item.titulo;
+                btn.onclick = () => abrirPrograma(item);
+                lista.appendChild(btn);
+            }
+        });
+
+    }catch(e){
+        console.error("ERRO GERAL:", e);
+        lista.innerHTML = "Erro geral: " + e.message;
+    }
 }
 
 async function abrirPrograma(item){
