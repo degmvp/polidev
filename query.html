@@ -137,6 +137,7 @@ input{
         <button onclick="abrir('sqlmod')">🧠 SQL Moderno</button>
         <button onclick="location.href='cmm.html'">⚙️ C++</button>
         <button onclick="location.href='rust.html'">🦀 Rust</button>
+        <button onclick="location.href='golang.html'">🐹 Golang</button>
     </div>
 </div>
 
@@ -196,6 +197,11 @@ function abrirCategoria(){
         location.href = "rust.html";
         return;
     }
+
+    if(cat === "golang" || cat === "go"){
+    location.href = "golang.html";
+    return;
+}
 
 
     location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
