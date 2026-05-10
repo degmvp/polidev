@@ -132,7 +132,8 @@ pre{
 
     <aside class="menu">
         <h2>Programas Golang</h2>
-
+        
+        <button onclick="baixarGuia()">⬇ Baixar Guia Completo</button>
         <button onclick="voltarMenu()">⬅ Voltar</button>
         <button onclick="voltarHome()">🏠 Home</button>
 
@@ -245,6 +246,22 @@ async function incrementarDownload(id){
         console.error("Erro ao incrementar download:", error);
     }
 }
+
+function baixarGuia(){
+
+    const a = document.createElement("a");
+
+    a.href = "golang.html";
+
+    a.download = "golang.html";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+}
+
 
 function voltarMenu(){
     window.location.href = "query.html";
