@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Guia Completo Golang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:yellowgreen;
+    color:black;
+}
+
+header{
+    background:black;
+    color:#FFD700;
+    text-align:center;
+    padding:25px;
+}
+
+header h1{
+    margin:0;
+    font-size:38px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border:4px solid black;
+    border-radius:14px;
+    margin-bottom:25px;
+    padding:20px;
+}
+
+.card h2{
+    margin-top:0;
+    color:black;
+}
+
+pre{
+    background:#111;
+    color:white;
+    padding:20px;
+    border-radius:10px;
+    overflow-x:auto;
+    font-size:15px;
+    line-height:1.5;
+}
+
+.barra{
+    text-align:center;
+    margin:20px 0;
+}
+
+button{
+    background:black;
+    color:#FFD700;
+    border:0;
+    padding:12px 20px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px;
+}
+
+button:hover{
+    background:#FFD700;
+    color:black;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐹 POLYDEV | Guia Completo Golang</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="barra">
+    <button onclick="location.href='golang.html'">⬅ Voltar ao Viewer Golang</button>
+    <button onclick="location.href='home.html'">🏠 Home</button>
+</div>
+
+<div class="container">
+
+<div class="card">
+<h2>go01.go — Operações bitwise básicas</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 1 = Operações bitwise básicas em Golang
+
+func main() {
+
+    var a uint8 = 12 // 00001100
+    var b uint8 = 10 // 00001010
+
+    fmt.Println("POLYDEV | Golang Bitwise")
+    fmt.Println("Leia • Entenda • Execute seu código")
+    fmt.Println()
+
+    fmt.Printf("a = %d | binário: %08b\n", a, a)
+    fmt.Printf("b = %d | binário: %08b\n", b, b)
+
+    fmt.Println("\nOperações Bitwise:")
+
+    fmt.Printf("a &amp; b  = %d  | %08b  | AND\n", a&amp;b, a&amp;b)
+    fmt.Printf("a | b  = %d  | %08b  | OR\n", a|b, a|b)
+    fmt.Printf("a ^ b  = %d  | %08b  | XOR\n", a^b, a^b)
+    fmt.Printf("^a     = %d | %08b  | NOT\n", ^a, ^a)
+
+    fmt.Println("\nDeslocamentos:")
+
+    fmt.Printf("a &lt;&lt; 1 = %d  | %08b\n", a&lt;&lt;1, a&lt;&lt;1)
+    fmt.Printf("a &gt;&gt; 1 = %d   | %08b\n", a&gt;&gt;1, a&gt;&gt;1)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go02.go — Verifica número par usando bitwise</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 2 = Verifica número par usando bitwise
+
+func main() {
+
+    numero := 37
+
+    if numero&amp;1 == 0 {
+        fmt.Println(numero, "é PAR")
+    } else {
+        fmt.Println(numero, "é ÍMPAR")
+    }
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go03.go — Troca valores usando XOR</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 3 = Troca valores usando XOR
+
+func main() {
+
+    a := 10
+    b := 25
+
+    fmt.Println("Antes:")
+    fmt.Println("a =", a)
+    fmt.Println("b =", b)
+
+    a = a ^ b
+    b = a ^ b
+    a = a ^ b
+
+    fmt.Println("\nDepois:")
+    fmt.Println("a =", a)
+    fmt.Println("b =", b)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go04.go — Conta bits ligados</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 4 = Conta bits ligados
+
+func contarBits(n uint8) int {
+
+    total := 0
+
+    for n &gt; 0 {
+        total += int(n &amp; 1)
+        n &gt;&gt;= 1
+    }
+
+    return total
+}
+
+func main() {
+
+    var numero uint8 = 255
+
+    fmt.Printf("Número: %08b\n", numero)
+    fmt.Println("Bits ligados:", contarBits(numero))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go05.go — Liga um bit específico</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 5 = Liga um bit específico
+
+func main() {
+
+    var flags uint8 = 0
+
+    fmt.Printf("Inicial: %08b\n", flags)
+
+    flags |= (1 &lt;&lt; 2)
+
+    fmt.Printf("Bit 2 ligado: %08b\n", flags)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go06.go — Desliga um bit</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 6 = Desliga um bit
+
+func main() {
+
+    var flags uint8 = 255
+
+    fmt.Printf("Inicial: %08b\n", flags)
+
+    flags &amp;^= (1 &lt;&lt; 3)
+
+    fmt.Printf("Bit 3 desligado: %08b\n", flags)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go07.go — Alterna bit usando XOR</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 7 = Alterna bit usando XOR
+
+func main() {
+
+    var numero uint8 = 8
+
+    fmt.Printf("Antes : %08b\n", numero)
+
+    numero ^= (1 &lt;&lt; 3)
+
+    fmt.Printf("Depois: %08b\n", numero)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go08.go — Máscara de permissões</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 8 = Máscara de permissões usando bitwise
+
+const (
+    LER = 1 &lt;&lt; iota
+    ESCREVER
+    EXECUTAR
+)
+
+func main() {
+
+    var permissao uint8
+
+    permissao |= LER
+    permissao |= EXECUTAR
+
+    fmt.Printf("Permissões: %08b\n", permissao)
+
+    if permissao&amp;LER != 0 {
+        fmt.Println("Pode LER")
+    }
+
+    if permissao&amp;ESCREVER != 0 {
+        fmt.Println("Pode ESCREVER")
+    }
+
+    if permissao&amp;EXECUTAR != 0 {
+        fmt.Println("Pode EXECUTAR")
+    }
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go09.go — Multiplicação rápida usando shift left</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 9 = Multiplicação rápida usando shift left
+
+func main() {
+
+    valor := 7
+
+    fmt.Println("Original:", valor)
+
+    fmt.Println("x2 =", valor&lt;&lt;1)
+    fmt.Println("x4 =", valor&lt;&lt;2)
+    fmt.Println("x8 =", valor&lt;&lt;3)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go10.go — Divisão rápida usando shift right</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 10 = Divisão rápida usando shift right
+
+func main() {
+
+    valor := 128
+
+    fmt.Println("Original:", valor)
+
+    fmt.Println("/2 =", valor&gt;&gt;1)
+    fmt.Println("/4 =", valor&gt;&gt;2)
+    fmt.Println("/8 =", valor&gt;&gt;3)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go11.go — Extrai bit específico</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 11 = Extrai bit específico
+
+func main() {
+
+    var numero uint8 = 42
+
+    fmt.Printf("Número: %08b\n", numero)
+
+    bit := 3
+
+    valor := (numero &gt;&gt; bit) &amp; 1
+
+    fmt.Printf("Bit %d = %d\n", bit, valor)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go12.go — Ler arquivo CSV</h2>
+<pre><code>package main
+
+import (
+    "encoding/csv"
+    "fmt"
+    "os"
+)
+
+// 12 = Ler arquivo CSV
+
+func main() {
+
+    arquivo, err := os.Open("dados.csv")
+
+    if err != nil {
+        fmt.Println("Erro ao abrir CSV:", err)
+        return
+    }
+
+    defer arquivo.Close()
+
+    leitor := csv.NewReader(arquivo)
+
+    registros, err := leitor.ReadAll()
+
+    if err != nil {
+        fmt.Println("Erro ao ler CSV:", err)
+        return
+    }
+
+    fmt.Println("Conteúdo do arquivo CSV:")
+
+    for i, linha := range registros {
+        fmt.Println("Linha", i+1, ":", linha)
+    }
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go13.go — Ler arquivo TXT</h2>
+<pre><code>package main
+
+import (
+    "fmt"
+    "os"
+)
+
+// 13 = Ler arquivo TXT
+
+func main() {
+
+    conteudo, err := os.ReadFile("texto.txt")
+
+    if err != nil {
+        fmt.Println("Erro ao ler TXT:", err)
+        return
+    }
+
+    fmt.Println("Conteúdo do arquivo TXT:")
+    fmt.Println(string(conteudo))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go14.go — Converter decimal em binário</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 14 = Converter valores decimais em binários
+
+func main() {
+
+    numeros := []int{1, 2, 3, 7, 8, 10, 15, 16, 31, 32, 64, 128, 255}
+
+    fmt.Println("Decimal para Binário")
+    fmt.Println("--------------------")
+
+    for _, n := range numeros {
+        fmt.Printf("Decimal: %3d  Binário: %08b\n", n, n)
+    }
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>go15.go — Converter decimal em hexadecimal</h2>
+<pre><code>package main
+
+import "fmt"
+
+// 15 = Converter valores decimais em hexadecimais
+
+func main() {
+
+    numeros := []int{10, 15, 16, 31, 32, 64, 127, 128, 255, 256, 512, 1024}
+
+    fmt.Println("Decimal para Hexadecimal")
+    fmt.Println("------------------------")
+
+    for _, n := range numeros {
+        fmt.Printf("Decimal: %4d  Hexadecimal: 0x%X\n", n, n)
+    }
+}</code></pre>
+</div>
+
+</div>
+
+</body>
+</html>

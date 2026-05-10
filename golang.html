@@ -246,14 +246,13 @@ async function incrementarDownload(id){
         console.error("Erro ao incrementar download:", error);
     }
 }
-
 function baixarGuia(){
 
     const a = document.createElement("a");
 
-    a.href = "golang.html";
+    a.href = "golang_guia.html";
 
-    a.download = "golang.html";
+    a.download = "golang_guia.html";
 
     document.body.appendChild(a);
 
@@ -261,7 +260,6 @@ function baixarGuia(){
 
     document.body.removeChild(a);
 }
-
 
 function voltarMenu(){
     window.location.href = "query.html";
