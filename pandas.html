@@ -4,187 +4,164 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>POLYDEV | Pandas Guide</title>
+<title>POLYDEV | Guia Pandas</title>
 
 <style>
-
 *{
-    margin:0;
-    padding:0;
     box-sizing:border-box;
 }
 
 body{
-    background:black;
-    color:white;
+    margin:0;
+    min-height:100vh;
     font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#000 0%,#111 55%,#2d3f00 100%);
+    color:white;
 }
 
 header{
-    background:linear-gradient(to right,#000,#111,#1b2a00);
-    padding:40px;
     text-align:center;
+    padding:35px 15px 20px;
     border-bottom:4px solid #FFD700;
 }
 
 header h1{
     color:#FFD700;
-    font-size:48px;
-    margin-bottom:10px;
+    font-size:42px;
+    margin:0;
+    letter-spacing:2px;
 }
 
 header p{
     color:yellowgreen;
     font-size:20px;
+    font-weight:bold;
 }
 
-.container{
+main{
     width:90%;
-    max-width:1200px;
-    margin:auto;
-    padding:40px 20px;
+    max-width:1100px;
+    margin:30px auto;
 }
 
 .card{
     background:#050505;
+    border:1px solid #333;
     border-left:6px solid #FFD700;
     border-radius:14px;
-    padding:30px;
-    margin-bottom:35px;
-    box-shadow:0 0 18px rgba(255,215,0,0.15);
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 0 18px rgba(154,205,50,0.25);
 }
 
 .card h2{
     color:#FFD700;
-    margin-bottom:20px;
-    font-size:34px;
+    margin-top:0;
 }
 
 .card p{
-    color:#d8d8d8;
-    line-height:1.8;
+    color:#ddd;
     font-size:18px;
+    line-height:1.7;
+}
+
+ul{
+    color:lightgreen;
+    font-size:18px;
+    line-height:1.8;
 }
 
 pre{
     background:#111;
     color:white;
-    padding:20px;
+    padding:18px;
     border-radius:10px;
     overflow-x:auto;
-    margin-top:20px;
     border-left:5px solid yellowgreen;
     font-size:16px;
 }
 
-.botao-area{
+.area-botao{
     text-align:center;
-    margin-top:50px;
+    margin:40px 0;
 }
 
 .botao{
+    display:inline-block;
     background:#FFD700;
     color:black;
-    text-decoration:none;
-    padding:20px 45px;
-    font-size:24px;
-    font-weight:bold;
+    padding:18px 38px;
     border-radius:12px;
-    display:inline-block;
+    text-decoration:none;
+    font-size:22px;
+    font-weight:bold;
+    box-shadow:0 0 18px rgba(255,215,0,0.35);
     transition:0.3s;
-    box-shadow:0 0 20px rgba(255,215,0,0.4);
 }
 
 .botao:hover{
-    transform:scale(1.05);
     background:yellowgreen;
-    color:black;
-}
-
-.lista{
-    margin-top:20px;
-    margin-left:25px;
-}
-
-.lista li{
-    margin-bottom:12px;
-    color:lightgreen;
-    font-size:18px;
+    transform:scale(1.05);
 }
 
 footer{
-    background:#050505;
     text-align:center;
-    padding:30px;
+    padding:25px;
+    background:#050505;
     border-top:4px solid #FFD700;
-    margin-top:60px;
-}
-
-footer h3{
-    color:#FFD700;
-    margin-bottom:15px;
-}
-
-footer p{
     color:#ccc;
-    margin-top:8px;
 }
 
+footer strong{
+    color:#FFD700;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-
-<h1>🐼 POLYDEV | Pandas</h1>
-
-<p>
-Manipulação de Dados • DataFrames • CSV • Excel • Analytics
-</p>
-
+    <h1>🐼 POLYDEV | Pandas</h1>
+    <p>Leia • Entenda • Execute seu código</p>
 </header>
 
-<div class="container">
+<main>
 
-<div class="card">
+<section class="card">
+    <h2>O que é Pandas?</h2>
+    <p>
+        Pandas é uma biblioteca Python usada para manipulação, análise,
+        limpeza e transformação de dados. É uma ferramenta essencial para
+        Data Science, BI, ETL, Machine Learning e dashboards.
+    </p>
+</section>
 
-<h2>O que é Pandas?</h2>
+<section class="card">
+    <h2>Onde o Pandas é usado?</h2>
+    <ul>
+        <li>Leitura e gravação de arquivos CSV</li>
+        <li>Leitura e gravação de planilhas Excel</li>
+        <li>Criação de DataFrames</li>
+        <li>Filtros, ordenações e agrupamentos</li>
+        <li>Tratamento de valores nulos</li>
+        <li>Preparação de dados para IA e Machine Learning</li>
+        <li>Integração com Streamlit para dashboards</li>
+    </ul>
+</section>
 
-<p>
-Pandas é a principal biblioteca Python para manipulação e análise de dados.
-Ela permite trabalhar com tabelas, arquivos CSV, Excel, estatísticas,
-agrupamentos, filtros e preparação de dados para IA e Machine Learning.
-</p>
-
-<ul class="lista">
-<li>✔ Data Science</li>
-<li>✔ Business Intelligence</li>
-<li>✔ ETL</li>
-<li>✔ Dashboards</li>
-<li>✔ Streamlit</li>
-<li>✔ Machine Learning</li>
-</ul>
-
-</div>
-
-<div class="card">
-
-<h2>Importando Pandas</h2>
-
-<p>
-O padrão mundial é utilizar o alias <b>pd</b>.
-</p>
+<section class="card">
+    <h2>Importação padrão</h2>
+    <p>
+        O alias mundialmente utilizado para Pandas é <strong>pd</strong>.
+    </p>
 
 <pre>
 import pandas as pd
 </pre>
+</section>
 
-</div>
-
-<div class="card">
-
-<h2>Criando um DataFrame</h2>
+<section class="card">
+    <h2>Exemplo básico</h2>
 
 <pre>
 import pandas as pd
@@ -198,53 +175,28 @@ df = pd.DataFrame(dados)
 
 print(df)
 </pre>
+</section>
 
+<section class="card">
+    <h2>Sequência POLYDEV Pandas</h2>
+    <p>
+        Este guia acompanha a sequência de 20 programas práticos,
+        nomeados de <strong>pd01.py</strong> até <strong>pd20.py</strong>,
+        seguindo o mesmo padrão dos módulos C++, Rust e Golang.
+    </p>
+</section>
+
+<div class="area-botao">
+    <a class="botao" href="vw.html?categoria=pd">
+        🐼 Acessar Programas Pandas
+    </a>
 </div>
 
-<div class="card">
-
-<h2>Pandas + Streamlit</h2>
-
-<p>
-A combinação Pandas + Streamlit permite construir dashboards,
-painéis analíticos e aplicações web extremamente rápidas.
-</p>
-
-<pre>
-import streamlit as st
-import pandas as pd
-
-df = pd.read_csv("dados.csv")
-
-st.dataframe(df)
-</pre>
-
-</div>
-
-<div class="botao-area">
-
-<a class="botao" href="viewer.html?categoria=pd">
-
-🐼 ACESSAR PROGRAMAS PANDAS
-
-</a>
-
-</div>
-
-</div>
+</main>
 
 <footer>
-
-<h3>POLYDEV | Multiprogramação e Multibanco</h3>
-
-<p>
-Python • Pandas • Streamlit • SQL Server • PostgreSQL • MySQL • Oracle
-</p>
-
-<p>
-Leia • Entenda • Execute seu código
-</p>
-
+    <p><strong>POLYDEV | Multiprogramação e Multibanco</strong></p>
+    <p>Python • Pandas • Streamlit • SQL Server • PostgreSQL • MySQL • Oracle</p>
 </footer>
 
 </body>
