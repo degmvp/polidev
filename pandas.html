@@ -4,106 +4,130 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>POLYDEV | Guia Pandas</title>
+<title>POLYDEV | Pandas Guide</title>
 
 <style>
 
-body{
+*{
     margin:0;
     padding:0;
-    background-color:yellowgreen;
+    box-sizing:border-box;
+}
+
+body{
+    background:black;
+    color:white;
     font-family:Arial, Helvetica, sans-serif;
-    color:black;
 }
 
 header{
-    background:black;
-    color:#FFD700;
-    padding:30px;
+    background:linear-gradient(to right,#000,#111,#1b2a00);
+    padding:40px;
     text-align:center;
-    border-bottom:5px solid #FFD700;
+    border-bottom:4px solid #FFD700;
 }
 
 header h1{
-    margin:0;
-    font-size:42px;
+    color:#FFD700;
+    font-size:48px;
+    margin-bottom:10px;
 }
 
 header p{
-    margin-top:10px;
-    color:white;
-    font-size:18px;
+    color:yellowgreen;
+    font-size:20px;
 }
 
 .container{
     width:90%;
+    max-width:1200px;
     margin:auto;
-    padding:20px;
+    padding:40px 20px;
 }
 
 .card{
-    background:black;
-    color:white;
-    margin-bottom:20px;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.5);
+    background:#050505;
+    border-left:6px solid #FFD700;
+    border-radius:14px;
+    padding:30px;
+    margin-bottom:35px;
+    box-shadow:0 0 18px rgba(255,215,0,0.15);
 }
 
 .card h2{
     color:#FFD700;
-    margin-top:0;
+    margin-bottom:20px;
+    font-size:34px;
 }
 
 .card p{
-    color:lightgreen;
-    line-height:1.6;
+    color:#d8d8d8;
+    line-height:1.8;
+    font-size:18px;
 }
 
 pre{
     background:#111;
     color:white;
-    padding:15px;
-    overflow-x:auto;
-    border-left:5px solid #FFD700;
-    border-radius:5px;
-}
-
-.menu{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-    margin-top:30px;
-}
-
-.item{
-    background:black;
-    color:#FFD700;
     padding:20px;
-    text-align:center;
     border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
-    font-weight:bold;
-    box-shadow:0 0 8px rgba(0,0,0,0.5);
+    overflow-x:auto;
+    margin-top:20px;
+    border-left:5px solid yellowgreen;
+    font-size:16px;
 }
 
-.item:hover{
+.botao-area{
+    text-align:center;
+    margin-top:50px;
+}
+
+.botao{
+    background:#FFD700;
+    color:black;
+    text-decoration:none;
+    padding:20px 45px;
+    font-size:24px;
+    font-weight:bold;
+    border-radius:12px;
+    display:inline-block;
+    transition:0.3s;
+    box-shadow:0 0 20px rgba(255,215,0,0.4);
+}
+
+.botao:hover{
     transform:scale(1.05);
-    background:#222;
+    background:yellowgreen;
+    color:black;
+}
+
+.lista{
+    margin-top:20px;
+    margin-left:25px;
+}
+
+.lista li{
+    margin-bottom:12px;
+    color:lightgreen;
+    font-size:18px;
 }
 
 footer{
-    background:black;
-    color:white;
+    background:#050505;
     text-align:center;
-    padding:20px;
-    margin-top:40px;
-    border-top:5px solid #FFD700;
+    padding:30px;
+    border-top:4px solid #FFD700;
+    margin-top:60px;
 }
 
-a{
-    text-decoration:none;
+footer h3{
+    color:#FFD700;
+    margin-bottom:15px;
+}
+
+footer p{
+    color:#ccc;
+    margin-top:8px;
 }
 
 </style>
@@ -112,33 +136,34 @@ a{
 <body>
 
 <header>
-    <h1>🐼 POLYDEV | Guia Pandas</h1>
-    <p>Leia • Entenda • Execute seu código</p>
+
+<h1>🐼 POLYDEV | Pandas</h1>
+
+<p>
+Manipulação de Dados • DataFrames • CSV • Excel • Analytics
+</p>
+
 </header>
 
 <div class="container">
 
 <div class="card">
+
 <h2>O que é Pandas?</h2>
 
 <p>
-Pandas é uma das bibliotecas mais importantes do ecossistema Python.
-Ela permite manipular tabelas, arquivos CSV, Excel, análises estatísticas,
-tratamento de dados e preparação para Machine Learning.
+Pandas é a principal biblioteca Python para manipulação e análise de dados.
+Ela permite trabalhar com tabelas, arquivos CSV, Excel, estatísticas,
+agrupamentos, filtros e preparação de dados para IA e Machine Learning.
 </p>
 
-<p>
-O Pandas é amplamente utilizado em:
-</p>
-
-<ul>
-<li>Data Science</li>
-<li>Business Intelligence</li>
-<li>ETL</li>
-<li>Machine Learning</li>
-<li>Análise Financeira</li>
-<li>Dashboards</li>
-<li>Streamlit</li>
+<ul class="lista">
+<li>✔ Data Science</li>
+<li>✔ Business Intelligence</li>
+<li>✔ ETL</li>
+<li>✔ Dashboards</li>
+<li>✔ Streamlit</li>
+<li>✔ Machine Learning</li>
 </ul>
 
 </div>
@@ -147,19 +172,19 @@ O Pandas é amplamente utilizado em:
 
 <h2>Importando Pandas</h2>
 
+<p>
+O padrão mundial é utilizar o alias <b>pd</b>.
+</p>
+
 <pre>
 import pandas as pd
 </pre>
-
-<p>
-O alias padrão mundial utilizado é <b>pd</b>.
-</p>
 
 </div>
 
 <div class="card">
 
-<h2>Exemplo de DataFrame</h2>
+<h2>Criando um DataFrame</h2>
 
 <pre>
 import pandas as pd
@@ -178,97 +203,12 @@ print(df)
 
 <div class="card">
 
-<h2>📚 Programas Disponíveis</h2>
+<h2>Pandas + Streamlit</h2>
 
-<div class="menu">
-
-<a href="downloads/pandas/pd01.py" download>
-<div class="item">pd01.py<br>Criar DataFrame</div>
-</a>
-
-<a href="downloads/pandas/pd02.py" download>
-<div class="item">pd02.py<br>Ler CSV</div>
-</a>
-
-<a href="downloads/pandas/pd03.py" download>
-<div class="item">pd03.py<br>Salvar CSV</div>
-</a>
-
-<a href="downloads/pandas/pd04.py" download>
-<div class="item">pd04.py<br>Selecionar Colunas</div>
-</a>
-
-<a href="downloads/pandas/pd05.py" download>
-<div class="item">pd05.py<br>Filtrar Linhas</div>
-</a>
-
-<a href="downloads/pandas/pd06.py" download>
-<div class="item">pd06.py<br>Ordenar Dados</div>
-</a>
-
-<a href="downloads/pandas/pd07.py" download>
-<div class="item">pd07.py<br>Group By</div>
-</a>
-
-<a href="downloads/pandas/pd08.py" download>
-<div class="item">pd08.py<br>Agregações</div>
-</a>
-
-<a href="downloads/pandas/pd09.py" download>
-<div class="item">pd09.py<br>Valores Nulos</div>
-</a>
-
-<a href="downloads/pandas/pd10.py" download>
-<div class="item">pd10.py<br>Coluna Calculada</div>
-</a>
-
-<a href="downloads/pandas/pd11.py" download>
-<div class="item">pd11.py<br>Merge Join</div>
-</a>
-
-<a href="downloads/pandas/pd12.py" download>
-<div class="item">pd12.py<br>Concat</div>
-</a>
-
-<a href="downloads/pandas/pd13.py" download>
-<div class="item">pd13.py<br>Pivot Table</div>
-</a>
-
-<a href="downloads/pandas/pd14.py" download>
-<div class="item">pd14.py<br>Datas</div>
-</a>
-
-<a href="downloads/pandas/pd15.py" download>
-<div class="item">pd15.py<br>Exportar Excel</div>
-</a>
-
-<a href="downloads/pandas/pd16.py" download>
-<div class="item">pd16.py<br>Ler Excel</div>
-</a>
-
-<a href="downloads/pandas/pd17.py" download>
-<div class="item">pd17.py<br>Estatísticas</div>
-</a>
-
-<a href="downloads/pandas/pd18.py" download>
-<div class="item">pd18.py<br>Ranking</div>
-</a>
-
-<a href="downloads/pandas/pd19.py" download>
-<div class="item">pd19.py<br>Apply Lambda</div>
-</a>
-
-<a href="downloads/pandas/pd20.py" download>
-<div class="item">pd20.py<br>Mini Projeto</div>
-</a>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>🚀 Integração com Streamlit</h2>
+<p>
+A combinação Pandas + Streamlit permite construir dashboards,
+painéis analíticos e aplicações web extremamente rápidas.
+</p>
 
 <pre>
 import streamlit as st
@@ -279,10 +219,15 @@ df = pd.read_csv("dados.csv")
 st.dataframe(df)
 </pre>
 
-<p>
-Pandas e Streamlit formam uma combinação extremamente poderosa
-para construção de dashboards e aplicações web.
-</p>
+</div>
+
+<div class="botao-area">
+
+<a class="botao" href="viewer.html?categoria=pd">
+
+🐼 ACESSAR PROGRAMAS PANDAS
+
+</a>
 
 </div>
 
