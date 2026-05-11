@@ -5,140 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>POLYDEV | Pandas</title>
-<h1>versao no git</h1>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
+    min-height:100vh;
     font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#000,#111,#2d3f00);
-    color:white;
+    background:yellowgreen;
+    color:black;
 }
 
 header{
+    background:black;
+    color:#FFD700;
+    padding:25px 15px;
     text-align:center;
-    padding:35px 15px;
-    border-bottom:4px solid #FFD700;
 }
 
 header h1{
-    color:#FFD700;
-    font-size:42px;
     margin:0;
+    font-size:38px;
 }
 
 header p{
+    margin:8px 0 0;
     color:yellowgreen;
-    font-size:20px;
     font-weight:bold;
-}
-
-main{
-    width:90%;
-    max-width:1150px;
-    margin:30px auto;
-}
-
-.card{
-    background:#050505;
-    border-left:6px solid #FFD700;
-    border-radius:14px;
-    padding:25px;
-    margin-bottom:25px;
-    box-shadow:0 0 18px rgba(154,205,50,0.25);
-}
-
-.card h2{
-    color:#FFD700;
-    margin-top:0;
-}
-
-.card p{
-    color:#ddd;
     font-size:18px;
-    line-height:1.7;
 }
 
-.botoes-topo{
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:25px auto;
+}
+
+.topo-acoes{
     text-align:center;
-    margin:35px 0;
+    margin-bottom:25px;
 }
 
-.btn{
-    display:inline-block;
-    background:#FFD700;
-    color:black;
-    padding:14px 28px;
-    margin:8px;
-    border-radius:10px;
-    text-decoration:none;
+button, .btn{
+    background:black;
+    color:#FFD700;
+    border:none;
+    padding:10px 18px;
+    margin:5px;
+    border-radius:6px;
     font-weight:bold;
-    font-size:18px;
-    transition:0.3s;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
 }
 
-.btn:hover{
-    background:yellowgreen;
-    transform:scale(1.04);
+button:hover, .btn:hover{
+    background:#222;
+    color:white;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:15px;
 }
 
-.programa{
-    background:#050505;
-    border:1px solid #333;
-    border-radius:14px;
-    padding:20px;
-    box-shadow:0 0 12px rgba(255,215,0,0.15);
+.card{
+    background:white;
+    border:2px solid black;
+    border-radius:10px;
+    padding:15px;
+    box-shadow:4px 4px 0 black;
 }
 
-.programa h3{
-    color:#FFD700;
+.card h3{
     margin-top:0;
-}
-
-.programa p{
-    color:lightgreen;
-    min-height:48px;
-}
-
-.acoes{
-    margin-top:15px;
-}
-
-.acoes a{
-    display:inline-block;
-    background:#FFD700;
     color:black;
-    padding:10px 14px;
-    margin:5px;
-    border-radius:8px;
-    text-decoration:none;
-    border:1px solid #FFD700;
-    font-weight:bold;
-    transition:0.3s;
 }
 
-.acoes a:hover{
-    background:yellowgreen;
-    color:black;
-    transform:scale(1.04);
+.card p{
+    min-height:45px;
+}
+
+pre{
+    background:black;
+    color:white;
+    padding:20px;
+    border-radius:10px;
+    overflow-x:auto;
+    margin-top:30px;
+    text-align:left;
+    white-space:pre-wrap;
+    border:3px solid #FFD700;
 }
 
 footer{
     text-align:center;
-    padding:25px;
-    background:#050505;
-    border-top:4px solid #FFD700;
-    margin-top:40px;
-}
-
-footer strong{
-    color:#FFD700;
+    margin:30px 0;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -150,219 +117,103 @@ footer strong{
     <p>Leia • Entenda • Execute seu código</p>
 </header>
 
-<main>
+<div class="container">
 
-<section class="card">
-    <h2>Guia Pandas</h2>
-    <p>
-        Pandas é uma biblioteca Python usada para manipulação, análise,
-        limpeza e transformação de dados. Esta página segue o mesmo padrão
-        dos módulos C++, Rust e Golang do POLYDEV.
-    </p>
-</section>
+    <div class="topo-acoes">
+        <a class="btn" href="home.html">⬅ Voltar ao Menu</a>
+        <button onclick="baixarArquivo('downloads/pandas/pandas.html')">⬇ Baixar Guia Completo</button>
+    </div>
 
-<div class="botoes-topo">
-    <a class="btn" href="pandas.html" download>⬇ Baixar Guia Completo</a>
-    <a class="btn" href="home.html">⬅ Voltar ao Menu</a>
-</div>
+    <div class="grid" id="lista"></div>
 
-<section class="card">
-    <h2>Programas Pandas</h2>
-    <p>
-        Escolha um programa para exibir no navegador ou baixar o arquivo.
-    </p>
-</section>
-
-<div class="grid">
-
-<div class="programa">
-<h3>pd01.py</h3>
-<p>Criar DataFrame</p>
-<div class="acoes">
-<a href="downloads/pandas/pd01.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd01.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd02.py</h3>
-<p>Ler CSV</p>
-<div class="acoes">
-<a href="downloads/pandas/pd02.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd02.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd03.py</h3>
-<p>Salvar CSV</p>
-<div class="acoes">
-<a href="downloads/pandas/pd03.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd03.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd04.py</h3>
-<p>Selecionar colunas</p>
-<div class="acoes">
-<a href="downloads/pandas/pd04.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd04.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd05.py</h3>
-<p>Filtrar linhas</p>
-<div class="acoes">
-<a href="downloads/pandas/pd05.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd05.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd06.py</h3>
-<p>Ordenar dados</p>
-<div class="acoes">
-<a href="downloads/pandas/pd06.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd06.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd07.py</h3>
-<p>GroupBy simples</p>
-<div class="acoes">
-<a href="downloads/pandas/pd07.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd07.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd08.py</h3>
-<p>Agregações</p>
-<div class="acoes">
-<a href="downloads/pandas/pd08.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd08.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd09.py</h3>
-<p>Tratar valores nulos</p>
-<div class="acoes">
-<a href="downloads/pandas/pd09.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd09.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd10.py</h3>
-<p>Criar coluna calculada</p>
-<div class="acoes">
-<a href="downloads/pandas/pd10.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd10.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd11.py</h3>
-<p>Merge / Join</p>
-<div class="acoes">
-<a href="downloads/pandas/pd11.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd11.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd12.py</h3>
-<p>Concat</p>
-<div class="acoes">
-<a href="downloads/pandas/pd12.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd12.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd13.py</h3>
-<p>Pivot Table</p>
-<div class="acoes">
-<a href="downloads/pandas/pd13.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd13.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd14.py</h3>
-<p>Datas com to_datetime</p>
-<div class="acoes">
-<a href="downloads/pandas/pd14.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd14.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd15.py</h3>
-<p>Exportar Excel</p>
-<div class="acoes">
-<a href="downloads/pandas/pd15.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd15.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd16.py</h3>
-<p>Ler Excel</p>
-<div class="acoes">
-<a href="downloads/pandas/pd16.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd16.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd17.py</h3>
-<p>Estatísticas descritivas</p>
-<div class="acoes">
-<a href="downloads/pandas/pd17.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd17.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd18.py</h3>
-<p>Ranking / Top N</p>
-<div class="acoes">
-<a href="downloads/pandas/pd18.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd18.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd19.py</h3>
-<p>Apply / Lambda</p>
-<div class="acoes">
-<a href="downloads/pandas/pd19.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd19.py" download>Download</a>
-</div>
-</div>
-
-<div class="programa">
-<h3>pd20.py</h3>
-<p>Mini análise completa</p>
-<div class="acoes">
-<a href="downloads/pandas/pd20.py" target="_blank" rel="noopener">Exibir</a>
-<a href="downloads/pandas/pd20.py" download>Download</a>
-</div>
-</div>
+    <pre id="codigo">Clique em EXIBIR para visualizar o código Pandas aqui.</pre>
 
 </div>
-
-</main>
 
 <footer>
-    <p><strong>POLYDEV | Multiprogramação e Multibanco</strong></p>
-    <p>Python • Pandas • Streamlit • SQL Server • PostgreSQL • MySQL • Oracle</p>
+    POLYDEV | Módulo Pandas
 </footer>
+
+<script>
+const programas = [
+    ["pd01.py", "Criar DataFrame"],
+    ["pd02.py", "Ler CSV"],
+    ["pd03.py", "Salvar CSV"],
+    ["pd04.py", "Selecionar colunas"],
+    ["pd05.py", "Filtrar linhas"],
+    ["pd06.py", "Ordenar dados"],
+    ["pd07.py", "GroupBy simples"],
+    ["pd08.py", "Agregações"],
+    ["pd09.py", "Tratar valores nulos"],
+    ["pd10.py", "Criar coluna calculada"],
+    ["pd11.py", "Merge / Join"],
+    ["pd12.py", "Concat"],
+    ["pd13.py", "Pivot Table"],
+    ["pd14.py", "Datas com to_datetime"],
+    ["pd15.py", "Exportar Excel"],
+    ["pd16.py", "Ler Excel"],
+    ["pd17.py", "Estatísticas descritivas"],
+    ["pd18.py", "Ranking / Top N"],
+    ["pd19.py", "Apply / Lambda"],
+    ["pd20.py", "Mini análise completa"]
+];
+
+const base = "downloads/pandas/";
+
+function montarLista(){
+    const lista = document.getElementById("lista");
+
+    programas.forEach((item, index) => {
+        const arquivo = item[0];
+        const titulo = item[1];
+        const caminho = base + arquivo;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${String(index + 1).padStart(2, "0")} - ${titulo}</h3>
+            <p><strong>Arquivo:</strong> ${arquivo}</p>
+            <button onclick="exibirArquivo('${caminho}')">👁 EXIBIR</button>
+            <button onclick="baixarArquivo('${caminho}')">⬇ DOWNLOAD</button>
+        `;
+
+        lista.appendChild(card);
+    });
+}
+
+function exibirArquivo(caminho){
+    const area = document.getElementById("codigo");
+
+    area.textContent = "Carregando " + caminho + "...";
+
+    fetch(caminho)
+        .then(resp => {
+            if(!resp.ok){
+                throw new Error("Erro ao carregar: " + caminho);
+            }
+            return resp.text();
+        })
+        .then(texto => {
+            area.textContent = texto;
+            area.scrollIntoView({ behavior: "smooth" });
+        })
+        .catch(erro => {
+            area.textContent = erro.message;
+        });
+}
+
+function baixarArquivo(caminho){
+    const link = document.createElement("a");
+    link.href = caminho;
+    link.download = caminho.split("/").pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+montarLista();
+</script>
 
 </body>
 </html>
