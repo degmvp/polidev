@@ -211,7 +211,15 @@ function abrirCategoria(){
     return;
 }
 
+    if(cat === "pandas" || cat === "pd"){
+    location.href = "pandas.html";
+    return;
+}
 
+    if(cat === "python" || cat === "python"){
+    location.href = "python.html";
+    return;
+}
     location.href = "conteudos.html?categoria=" + encodeURIComponent(cat);
 }
 document.getElementById("categoria").addEventListener("keydown", function(e){
