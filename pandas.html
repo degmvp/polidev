@@ -2,78 +2,141 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>POLYDEV | Pandas</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:yellowgreen;
-    color:black;
+    background:#000;
+    color:#FFD700;
 }
 
 header{
-    background:black;
-    color:#FFD700;
     text-align:center;
-    padding:25px;
+    padding:22px;
+    background:#000;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:36px;
+    color:#FFD700;
 }
 
 header p{
+    margin:8px 0 0;
     color:yellowgreen;
     font-weight:bold;
 }
 
-.container{
-    width:95%;
-    max-width:1200px;
-    margin:25px auto;
+.layout{
+    display:grid;
+    grid-template-columns:360px 1fr;
+    gap:20px;
+    padding:20px;
 }
 
-.btn{
-    background:black;
+.menu{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:15px;
+    height:calc(100vh - 130px);
+    overflow-y:auto;
+}
+
+.menu h2{
+    text-align:center;
     color:#FFD700;
+    margin-top:0;
+}
+
+.item{
+    background:#FFD700;
+    color:#000;
+    border-radius:8px;
+    padding:10px;
+    margin-bottom:10px;
+    box-shadow:3px 3px 0 yellowgreen;
+}
+
+.item strong{
+    display:block;
+    margin-bottom:8px;
+}
+
+.acoes{
+    display:flex;
+    gap:6px;
+}
+
+button{
     border:none;
-    padding:10px 16px;
-    margin:5px;
-    border-radius:6px;
+    background:#000;
+    color:#FFD700;
+    padding:7px 10px;
+    border-radius:5px;
     font-weight:bold;
     cursor:pointer;
+    font-size:13px;
 }
 
-.btn:hover{
-    background:#222;
+button:hover{
+    background:#333;
     color:white;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:15px;
+.area{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:15px;
+    height:calc(100vh - 130px);
+    overflow:auto;
 }
 
-.card{
-    background:white;
-    border:2px solid black;
-    border-radius:10px;
-    padding:15px;
-    box-shadow:4px 4px 0 black;
+.area h2{
+    color:#FFD700;
+    margin-top:0;
 }
 
 pre{
-    background:black;
+    background:#000;
     color:white;
-    padding:20px;
-    border-radius:10px;
-    overflow-x:auto;
+    border:1px solid #FFD700;
+    border-radius:8px;
+    padding:18px;
+    overflow:auto;
     white-space:pre-wrap;
-    margin-top:30px;
-    border:3px solid #FFD700;
+    min-height:420px;
 }
 
 .topo{
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:15px;
+}
+
+.btn-topo{
+    margin:4px;
+}
+
+@media(max-width:900px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .menu,
+    .area{
+        height:auto;
+    }
 }
 </style>
 </head>
@@ -85,20 +148,29 @@ pre{
     <p>Leia • Entenda • Execute seu código</p>
 </header>
 
-<div class="container">
+<div class="layout">
 
-    <div class="topo">
-        <button class="btn" onclick="voltarMenu()">⬅ VOLTAR AO MENU</button>
-        <button class="btn" onclick="exibirArquivo('downloads/pandas/panda.html')">📘 EXIBIR GUIA</button>
-    </div>
+    <aside class="menu">
+        <h2>Programas Pandas</h2>
 
-    <div id="lista" class="grid"></div>
+        <div class="topo">
+            <button class="btn-topo" onclick="voltarMenu()">⬅ MENU</button>
+            <button class="btn-topo" onclick="mostrarGuia()">📘 GUIA</button>
+        </div>
 
-    <pre id="codigo">Clique em EXIBIR para visualizar o código aqui.</pre>
+        <div id="lista"></div>
+    </aside>
+
+    <main class="area">
+        <h2 id="tituloArea">Área de Exibição</h2>
+        <pre id="codigo">Escolha um programa no menu lateral e clique em EXIBIR.</pre>
+    </main>
 
 </div>
 
 <script>
+const base = "downloads/pandas/";
+
 const programas = [
     ["pd01.py", "Criar DataFrame"],
     ["pd02.py", "Ler CSV"],
@@ -122,9 +194,7 @@ const programas = [
     ["pd20.py", "Mini análise completa"]
 ];
 
-const base = "downloads/pandas/";
-
-function montarLista(){
+function montarMenu(){
     const lista = document.getElementById("lista");
     lista.innerHTML = "";
 
@@ -134,60 +204,92 @@ function montarLista(){
         const caminho = base + arquivo;
 
         const div = document.createElement("div");
-        div.className = "card";
+        div.className = "item";
 
         div.innerHTML = `
-            <h3>${String(i + 1).padStart(2, "0")} - ${titulo}</h3>
-            <p><b>Arquivo:</b> ${arquivo}</p>
-
-            <button type="button" class="btn" onclick="exibirArquivo('${caminho}')">
-                👁 EXIBIR
-            </button>
-
-            <button type="button" class="btn" onclick="baixarArquivo('${caminho}')">
-                ⬇ BAIXAR
-            </button>
+            <strong>${String(i + 1).padStart(2, "0")} - ${titulo}</strong>
+            <small>${arquivo}</small>
+            <div class="acoes">
+                <button type="button" onclick="exibirArquivo('${caminho}', '${arquivo}')">EXIBIR</button>
+                <button type="button" onclick="baixarArquivo('${caminho}')">BAIXAR</button>
+            </div>
         `;
 
         lista.appendChild(div);
     });
 }
 
-function exibirArquivo(caminho){
-    const area = document.getElementById("codigo");
+function exibirArquivo(caminho, nome){
+    const codigo = document.getElementById("codigo");
+    const titulo = document.getElementById("tituloArea");
 
-    area.textContent = "Carregando: " + caminho;
+    titulo.textContent = "Exibindo: " + nome;
+    codigo.textContent = "Carregando " + caminho + "...";
 
-    fetch(caminho, { cache: "no-store" })
+    fetch(caminho, { cache:"no-store" })
         .then(resp => {
             if(!resp.ok){
-                throw new Error("Erro ao carregar: " + caminho);
+                throw new Error("Arquivo não encontrado: " + caminho);
             }
             return resp.text();
         })
         .then(texto => {
-            area.textContent = texto;
-            area.scrollIntoView({ behavior:"smooth" });
+            codigo.textContent = texto;
         })
         .catch(err => {
-            area.textContent = err.message;
+            codigo.textContent = err.message;
         });
 }
 
 function baixarArquivo(caminho){
     const a = document.createElement("a");
     a.href = caminho;
-    a.setAttribute("download", caminho.split("/").pop());
+    a.download = caminho.split("/").pop();
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+}
+
+function mostrarGuia(){
+    document.getElementById("tituloArea").textContent = "Guia Pandas";
+
+    document.getElementById("codigo").textContent =
+`POLYDEV | GUIA PANDAS
+
+Este módulo reúne 20 exemplos práticos de Pandas.
+
+Sequência:
+
+pd01.py  → criar DataFrame
+pd02.py  → ler CSV
+pd03.py  → salvar CSV
+pd04.py  → selecionar colunas
+pd05.py  → filtrar linhas
+pd06.py  → ordenar dados
+pd07.py  → groupby simples
+pd08.py  → agregações
+pd09.py  → tratar valores nulos
+pd10.py  → criar coluna calculada
+pd11.py  → merge/join
+pd12.py  → concat
+pd13.py  → pivot_table
+pd14.py  → datas com to_datetime
+pd15.py  → exportar Excel
+pd16.py  → ler Excel
+pd17.py  → estatísticas descritivas
+pd18.py  → ranking/top N
+pd19.py  → apply/lambda
+pd20.py  → mini análise completa
+
+Padrão POLYDEV:
+Leia • Entenda • Execute seu código`;
 }
 
 function voltarMenu(){
     window.location.href = "home.html";
 }
 
-montarLista();
+montarMenu();
 </script>
 
 </body>
