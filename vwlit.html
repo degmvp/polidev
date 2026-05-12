@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Streamlit</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    background:#000;
+    color:#FFD700;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+header{
+    text-align:center;
+    padding:25px 10px;
+    border-bottom:4px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:38px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:400px 1fr;
+    gap:20px;
+    padding:20px;
+}
+
+.sidebar,
+.viewer{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:18px;
+}
+
+.sidebar{
+    height:calc(100vh - 145px);
+    overflow-y:auto;
+}
+
+.sidebar h2,
+.viewer h2{
+    margin-top:0;
+    color:#FFD700;
+}
+
+.top-buttons{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#FFD700;
+    color:#000;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:12px;
+    box-shadow:5px 5px 0 yellowgreen;
+}
+
+.card h3{
+    margin:0 0 10px 0;
+    color:#000;
+    font-size:17px;
+}
+
+.card p{
+    margin:0 0 8px 0;
+    color:#000;
+    font-size:14px;
+}
+
+button,
+.btn{
+    display:inline-block;
+    background:#000;
+    color:#FFD700;
+    border:none;
+    border-radius:6px;
+    padding:9px 13px;
+    margin:4px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+button:hover,
+.btn:hover{
+    background:#222;
+}
+
+pre{
+    background:#000;
+    color:white;
+    border:1px solid #FFD700;
+    border-radius:8px;
+    padding:20px;
+    min-height:445px;
+    overflow-x:auto;
+    white-space:pre-wrap;
+    text-align:left;
+}
+
+@media(max-width:900px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        height:auto;
+        max-height:500px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚀 POLYDEV | Streamlit</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Programas Streamlit</h2>
+
+        <div class="top-buttons">
+            <a class="btn" href="menu.html">⬅ MENU</a>
+            <a class="btn" href="streamlit.html">📘 GUIA</a>
+        </div>
+
+        <div id="lista">Carregando programas...</div>
+    </aside>
+
+    <main class="viewer">
+        <h2>Área de Exibição</h2>
+        <pre id="codigo">Escolha um programa no menu lateral e clique em EXIBIR.</pre>
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<script>
+const CATEGORIA = "stlit";
+let programas = [];
+
+async function carregarProgramas(){
+    const lista = document.getElementById("lista");
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo")
+        .eq("categoria", CATEGORIA)
+        .eq("ativo", true)
+        .order("id", { ascending:true });
+
+    if(error){
+        lista.innerHTML = "Erro Supabase: " + error.message;
+        return;
+    }
+
+    programas = (data || []).filter(item => {
+        const arquivo = String(item.arquivo_url || "").trim().toLowerCase();
+        return arquivo !== "" && !arquivo.endsWith(".html");
+    });
+
+    if(programas.length === 0){
+        lista.innerHTML = "Nenhum programa Streamlit encontrado.";
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    programas.forEach((item, index) => {
+        const arquivo = item.arquivo_url.split("/").pop();
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${String(index + 1).padStart(2, "0")} - ${item.titulo}</h3>
+            <p>${arquivo}</p>
+            <button onclick="exibir('${item.arquivo_url}')">EXIBIR</button>
+            <button onclick="baixar(${item.id}, '${item.arquivo_url}', ${item.downloads || 0})">BAIXAR</button>
+        `;
+
+        lista.appendChild(card);
+    });
+}
+
+async function exibir(url){
+    const codigo = document.getElementById("codigo");
+
+    codigo.textContent = "Carregando arquivo...";
+
+    try{
+        const resp = await fetch(url + "?v=" + Date.now());
+
+        if(!resp.ok){
+            codigo.textContent = "Erro ao carregar arquivo: " + url;
+            return;
+        }
+
+        const texto = await resp.text();
+        codigo.textContent = texto;
+    }
+    catch(e){
+        codigo.textContent = "Erro ao ler arquivo: " + e.message;
+    }
+}
+
+async function baixar(id, url, downloadsAtual){
+    try{
+        await db
+            .from("conteudos")
+            .update({ downloads: downloadsAtual + 1 })
+            .eq("id", id);
+    }
+    catch(e){
+        console.log("Erro contador:", e);
+    }
+
+    const nome = url.split("/").pop();
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+carregarProgramas();
+</script>
+
+</body>
+</html>
