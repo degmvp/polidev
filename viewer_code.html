@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Viewer Code</title>
+
+<style>
+body{
+    margin:0;
+    background:#000;
+    color:#FFD700;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align:center;
+}
+
+header{
+    padding:25px;
+    border-bottom:4px solid #FFD700;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+#msg{
+    margin:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+pre{
+    background:#111;
+    color:white;
+    border:2px solid #FFD700;
+    border-radius:10px;
+    padding:20px;
+    margin:20px;
+    text-align:left;
+    overflow-x:auto;
+    min-height:420px;
+}
+
+button{
+    margin:10px;
+    padding:12px 22px;
+    background:#FFD700;
+    color:#000;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚀 POLYDEV Code Viewer</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div id="msg">Carregando programa...</div>
+
+<button onclick="baixar()">⬇ Download</button>
+<button onclick="voltar()">⬅ Voltar</button>
+
+<pre id="codigo">Carregando...</pre>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const ID = params.get("id");
+
+let itemAtual = null;
+
+async function carregar(){
+    const msg = document.getElementById("msg");
+    const codigo = document.getElementById("codigo");
+
+    if(!ID){
+        msg.innerHTML = "ID do programa não informado.";
+        codigo.textContent = "";
+        return;
+    }
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,categoria,arquivo_url,downloads")
+        .eq("id", ID)
+        .single();
+
+    if(error){
+        msg.innerHTML = "Erro Supabase: " + error.message;
+        codigo.textContent = "";
+        return;
+    }
+
+    if(!data || !data.arquivo_url){
+        msg.innerHTML = "Programa não encontrado.";
+        codigo.textContent = "";
+        return;
+    }
+
+    itemAtual = data;
+
+    document.title = "POLYDEV | " + data.titulo;
+    msg.innerHTML = data.titulo + " | Categoria: " + data.categoria.toUpperCase();
+
+    try{
+        const resp = await fetch(data.arquivo_url + "?v=" + Date.now());
+
+        if(!resp.ok){
+            codigo.textContent = "Erro ao carregar arquivo: " + data.arquivo_url;
+            return;
+        }
+
+        const texto = await resp.text();
+        codigo.textContent = texto;
+    }
+    catch(e){
+        codigo.textContent = "Erro ao ler arquivo: " + e.message;
+    }
+}
+
+async function baixar(){
+    if(!itemAtual){
+        alert("Programa inválido.");
+        return;
+    }
+
+    const atual = itemAtual.downloads || 0;
+
+    await db
+        .from("conteudos")
+        .update({ downloads: atual + 1 })
+        .eq("id", itemAtual.id);
+
+    const nome = itemAtual.arquivo_url.split("/").pop();
+
+    const a = document.createElement("a");
+    a.href = itemAtual.arquivo_url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function voltar(){
+    if(itemAtual && itemAtual.categoria){
+        window.location.href = "vw.html?categoria=" + itemAtual.categoria + "&v=" + Date.now();
+    }else{
+        window.location.href = "menu.html";
+    }
+}
+
+carregar();
+</script>
+
+</body>
+</html>
