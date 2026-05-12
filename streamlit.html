@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Guia Streamlit</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background-color:yellowgreen;
+    font-family:Arial, Helvetica, sans-serif;
+    color:black;
+}
+
+header{
+    background-color:black;
+    color:#FFD700;
+    padding:30px;
+    text-align:center;
+    border-bottom:5px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+header p{
+    color:white;
+    font-size:20px;
+    margin-top:10px;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.section{
+    background:white;
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+h2{
+    color:black;
+    border-left:10px solid black;
+    padding-left:15px;
+}
+
+pre{
+    background:black;
+    color:#00FF7F;
+    padding:20px;
+    overflow-x:auto;
+    border-radius:8px;
+    font-size:15px;
+}
+
+ul{
+    line-height:1.8;
+    font-size:18px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:12px 20px;
+    background:black;
+    color:#FFD700;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    background:#222;
+}
+
+footer{
+    background:black;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+.highlight{
+    color:darkblue;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚀 POLYDEV | Guia Streamlit</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="container">
+
+    <div class="section">
+        <h2>📌 O que é Streamlit?</h2>
+
+        <p>
+            <span class="highlight">Streamlit</span> é uma biblioteca Python moderna
+            utilizada para criação rápida de aplicações web interativas,
+            dashboards, ferramentas de dados, aplicações de IA e sistemas visuais
+            utilizando apenas Python.
+        </p>
+
+        <p>
+            Com poucas linhas de código é possível criar:
+        </p>
+
+        <ul>
+            <li>Dashboards</li>
+            <li>Sistemas administrativos</li>
+            <li>Aplicações IA</li>
+            <li>Visualização de dados</li>
+            <li>Interfaces para Machine Learning</li>
+            <li>Ferramentas analíticas</li>
+            <li>Aplicações web locais</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>⚙ Instalação</h2>
+
+<pre>
+pip install streamlit
+</pre>
+
+        <p>
+            Após a instalação:
+        </p>
+
+<pre>
+streamlit run app.py
+</pre>
+
+    </div>
+
+    <div class="section">
+        <h2>🧠 Primeiro Programa</h2>
+
+<pre>
+import streamlit as st
+
+st.title("POLYDEV Streamlit")
+
+st.write("Olá mundo Streamlit!")
+</pre>
+
+    </div>
+
+    <div class="section">
+        <h2>📊 Recursos Principais</h2>
+
+        <ul>
+            <li>st.title()</li>
+            <li>st.write()</li>
+            <li>st.button()</li>
+            <li>st.sidebar()</li>
+            <li>st.dataframe()</li>
+            <li>st.metric()</li>
+            <li>st.line_chart()</li>
+            <li>st.bar_chart()</li>
+            <li>st.file_uploader()</li>
+            <li>st.session_state()</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🐍 Integração com Python</h2>
+
+        <p>
+            Streamlit integra perfeitamente com:
+        </p>
+
+        <ul>
+            <li>Pandas</li>
+            <li>NumPy</li>
+            <li>Matplotlib</li>
+            <li>Plotly</li>
+            <li>Scikit-Learn</li>
+            <li>OpenAI APIs</li>
+            <li>Banco de Dados</li>
+            <li>Supabase</li>
+            <li>PostgreSQL</li>
+            <li>SQL Server</li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>📚 Série POLYDEV Streamlit</h2>
+
+        <p>
+            O laboratório POLYDEV possui uma série prática com 15 programas:
+        </p>
+
+        <ul>
+            <li>stream01.py → Primeiro App</li>
+            <li>stream02.py → Títulos e Textos</li>
+            <li>stream03.py → Botões</li>
+            <li>stream04.py → Inputs</li>
+            <li>stream05.py → Slider</li>
+            <li>stream06.py → Selectbox</li>
+            <li>stream07.py → Checkbox</li>
+            <li>stream08.py → Sidebar</li>
+            <li>stream09.py → DataFrame</li>
+            <li>stream10.py → Upload</li>
+            <li>stream11.py → Gráficos</li>
+            <li>stream12.py → Session State</li>
+            <li>stream13.py → Layout</li>
+            <li>stream14.py → Dashboard</li>
+            <li>stream15.py → Aplicação Completa</li>
+        </ul>
+
+        <a class="btn" href="vw.html?categoria=stlit">
+            🚀 Abrir Série Streamlit
+        </a>
+
+    </div>
+
+    <div class="section">
+        <h2>🏆 Filosofia POLYDEV</h2>
+
+        <p>
+            O objetivo do projeto POLYDEV é ensinar tecnologia de forma:
+        </p>
+
+        <ul>
+            <li>Prática</li>
+            <li>Visual</li>
+            <li>Objetiva</li>
+            <li>Didática</li>
+            <li>Baseada em código real</li>
+        </ul>
+
+        <p>
+            Nosso lema:
+        </p>
+
+<pre>
+Leia • Entenda • Execute seu código
+</pre>
+
+    </div>
+
+</div>
+
+<footer>
+    POLYDEV © 2026 | Guia Streamlit
+</footer>
+
+</body>
+</html>
