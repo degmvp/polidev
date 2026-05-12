@@ -212,7 +212,7 @@ async function exibir(url){
     codigo.textContent = "Carregando arquivo...";
 
     try{
-        const resposta = await fetch(url + "?v=" + Date.now());
+        const resposta = await fetch("." + url + "?v=" + Date.now());
 
         if(!resposta.ok){
             codigo.textContent =
