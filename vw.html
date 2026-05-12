@@ -106,7 +106,7 @@ onclick="window.location.href='home.html'">
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const CATEGORIA = params.get("categoria") || "python";
+const CATEGORIA = (params.get("categoria") || "python").trim().toLowerCase();
 
 async function carregarPython(){
     const msg = document.getElementById("msg");
@@ -126,21 +126,19 @@ async function carregarPython(){
         return;
     }
 
-    const somentePython = (data || []).filter(item => {
-        const categoria = String(item.categoria || "").trim().toLowerCase();
+    const programas = (data || []).filter(item => {
         const arquivo = String(item.arquivo_url || "").trim().toLowerCase();
-
-        return categoria === "python" && arquivo !== "";
+        return arquivo !== "" && !arquivo.endsWith(".html");
     });
 
-    if(somentePython.length === 0){
-        msg.innerHTML = "Nenhum programa Python encontrado.";
+    if(programas.length === 0){
+        msg.innerHTML = `Nenhum programa ${CATEGORIA.toUpperCase()} encontrado.`;
         return;
     }
 
-    msg.innerHTML = `Foram encontrados ${somentePython.length} programas Python.`;
+    msg.innerHTML = `Foram encontrados ${programas.length} programas ${CATEGORIA.toUpperCase()}.`;
 
-    somentePython.forEach(item => {
+    programas.forEach(item => {
         const btn = document.createElement("button");
         btn.innerHTML = item.titulo;
 
