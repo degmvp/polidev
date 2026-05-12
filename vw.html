@@ -105,50 +105,9 @@ onclick="window.location.href='home.html'">
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const CATEGORIA = (params.get("categoria") || "python").trim().toLowerCase();
-
-async function carregarPython(){
-    const msg = document.getElementById("msg");
-    const lista = document.getElementById("lista");
-
-    lista.innerHTML = "";
-
-    const { data, error } = await db
-        .from("conteudos")
-        .select("id,titulo,categoria,arquivo_url,ativo")
-        .eq("categoria", CATEGORIA)
-        .eq("ativo", true)
-        .order("id", { ascending:true });
-
-    if(error){
-        msg.innerHTML = "Erro Supabase: " + error.message;
-        return;
-    }
-
-    const programas = (data || []).filter(item => {
-        const arquivo = String(item.arquivo_url || "").trim().toLowerCase();
-        return arquivo !== "" && !arquivo.endsWith(".html");
-    });
-
-    if(programas.length === 0){
-        msg.innerHTML = `Nenhum programa ${CATEGORIA.toUpperCase()} encontrado.`;
-        return;
-    }
-
-    msg.innerHTML = `Foram encontrados ${programas.length} programas ${CATEGORIA.toUpperCase()}.`;
-
-    programas.forEach(item => {
-        const btn = document.createElement("button");
-        btn.innerHTML = item.titulo;
-
-        btn.onclick = () => {
-            window.location.href = "viewer_py.html?id=" + item.id;
-        };
-
-        lista.appendChild(btn);
-    });
-}
+btn.onclick = () => {
+    window.location.href = "viewer.html?id=" + item.id;
+};
 
 carregarPython();
 </script>
