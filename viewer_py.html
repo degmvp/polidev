@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV | Viewer Python</title>
+<title>POLYDEV | Viewer de Código</title>
 
 <style>
 body{
@@ -16,6 +16,17 @@ header{
     background-color: black;
     color: #FFD700;
     padding: 20px;
+}
+
+header p{
+    color: yellowgreen;
+    font-weight: bold;
+}
+
+#msg{
+    margin: 15px;
+    font-weight: bold;
+    color: black;
 }
 
 pre{
@@ -49,48 +60,29 @@ button:hover{
 <body>
 
 <header>
-    <h1>🐍 POLYDEV Python Viewer</h1>
+    <h1>🚀 POLYDEV Code Viewer</h1>
     <p>Leia • Entenda • Execute seu código</p>
 </header>
+
+<div id="msg">Carregando programa...</div>
 
 <button onclick="baixar()">⬇ Download</button>
 <button onclick="voltar()">⬅ Voltar ao Menu</button>
 
 <pre id="codigo">Carregando...</pre>
 
-<script>
-const BASE = "https://degmvp.github.io/polidev/downloads/python/";
-
-const SUPABASE_URL = "https://vdpucrilxzlnxxnaohdh.supabase.co";
-
-const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcHVjcmlseHpsbnh4bmFvaGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0OTc0NzIsImV4cCI6MjA4ODA3MzQ3Mn0.hdGtfK0eQf0-Iu_LqYqKKLvt8189euaGy-mmGMALJ_I";
-
-const params = new URLSearchParams(window.location.search);
-let prog = params.get("prog");
-
-function normalizarPrograma(valor){
-    if(!valor) return null;
-
-    valor = valor.trim();
-    valor = valor.replace(".py", "");
-    valor = valor.replace("python_progpython_prog", "python_prog");
-
-    if(!valor.startsWith("python_prog")){
-        valor = "python_prog" + valor;
-    }
-
-    return valor;
-}
-
-prog = normalizarPrograma(prog);
-
-function voltar(){
-    window.location.href = "menu.html";
-}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 const ID = params.get("id");
+
+let programaAtual = null;
+
+function voltar(){
+    window.location.href = "vw.html?categoria=" + (programaAtual?.categoria || "python");
+}
 
 async function carregarPrograma(){
     const msg = document.getElementById("msg");
@@ -98,24 +90,29 @@ async function carregarPrograma(){
 
     if(!ID){
         msg.innerHTML = "ID do programa não informado.";
+        codigo.textContent = "";
         return;
     }
 
     const { data, error } = await db
         .from("conteudos")
-        .select("id,titulo,categoria,arquivo_url")
+        .select("id,titulo,categoria,arquivo_url,downloads")
         .eq("id", ID)
         .single();
 
     if(error){
         msg.innerHTML = "Erro Supabase: " + error.message;
+        codigo.textContent = "";
         return;
     }
 
     if(!data || !data.arquivo_url){
         msg.innerHTML = "Programa não encontrado.";
+        codigo.textContent = "";
         return;
     }
+
+    programaAtual = data;
 
     document.title = "POLYDEV | " + data.titulo;
     msg.innerHTML = data.titulo + " | Categoria: " + data.categoria.toUpperCase();
@@ -136,75 +133,41 @@ async function carregarPrograma(){
     }
 }
 
-carregarPrograma();
-</script>
 async function incrementar(){
-    try{
-        const arquivo = prog + ".py";
+    if(!programaAtual) return;
 
-        const consulta =
-            SUPABASE_URL +
-            "/rest/v1/conteudos?select=id,downloads,arquivo_url&arquivo_url=ilike.*" +
-            arquivo;
+    const atual = programaAtual.downloads || 0;
 
-        const resp = await fetch(consulta, {
-            headers: {
-                "apikey": KEY,
-                "Authorization": "Bearer " + KEY
-            }
-        });
+    const { error } = await db
+        .from("conteudos")
+        .update({ downloads: atual + 1 })
+        .eq("id", programaAtual.id);
 
-        const data = await resp.json();
-
-        if(!Array.isArray(data) || data.length === 0){
-            console.log("Conteúdo não encontrado no banco para:", arquivo);
-            return;
-        }
-
-        const item = data[0];
-        const atual = item.downloads || 0;
-
-        await fetch(
-            SUPABASE_URL + "/rest/v1/conteudos?id=eq." + item.id,
-            {
-                method: "PATCH",
-                headers: {
-                    "apikey": KEY,
-                    "Authorization": "Bearer " + KEY,
-                    "Content-Type": "application/json",
-                    "Prefer": "return=minimal"
-                },
-                body: JSON.stringify({
-                    downloads: atual + 1
-                })
-            }
-        );
-
-    }catch(e){
-        console.log("Erro contador:", e);
+    if(error){
+        console.log("Erro contador:", error.message);
     }
 }
 
 async function baixar(){
-    if(!prog){
+    if(!programaAtual || !programaAtual.arquivo_url){
         alert("Programa inválido.");
         return;
     }
 
     await incrementar();
 
-    const arquivo = prog + ".py";
-    const url = BASE + arquivo;
+    const url = programaAtual.arquivo_url;
+    const nomeArquivo = url.split("/").pop();
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = arquivo;
+    a.download = nomeArquivo;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 }
 
-carregar();
+carregarPrograma();
 </script>
 
 </body>
