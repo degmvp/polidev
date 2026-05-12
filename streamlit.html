@@ -7,85 +7,87 @@
 <title>POLYDEV | Guia Streamlit</title>
 
 <style>
-
 body{
     margin:0;
-    padding:0;
     background:#000;
-    font-family:Arial, Helvetica, sans-serif;
     color:#FFD700;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-
 header{
-    background-color:black;
-    color:#FFD700;
-    padding:30px;
     text-align:center;
-    border-bottom:5px solid #FFD700;
+    padding:35px 20px;
+    background:#000;
+    border-bottom:4px solid #FFD700;
 }
 
 header h1{
-    margin:0;
+    color:#FFD700;
     font-size:42px;
 }
 
 header p{
-    color:white;
+    color:yellowgreen;
     font-size:20px;
-    margin-top:10px;
+    font-weight:bold;
 }
 
 .container{
     width:90%;
-    max-width:1200px;
-    margin:auto;
-    padding:30px;
+    max-width:1100px;
+    margin:30px auto;
 }
 
-.section{
-    background:#111;
-    color:white;
-    border:2px solid #FFD700;
+.card{
+    background:#FFD700;
+    color:#000;
+    border:3px solid #000;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:8px 8px 0 yellowgreen;
 }
 
+.card h2{
+    color:#000;
+    margin-top:0;
+}
 
-h2{
-    color:#FFD700;
-    border-left:10px solid #FFD700;
+.card p,
+.card li{
+    color:#000;
+    font-size:18px;
+    line-height:1.6;
 }
 
 pre{
     background:#000;
     color:yellowgreen;
-    border:1px solid #FFD700;
-}
-
-
-ul{
-    line-height:1.8;
-    font-size:18px;
+    padding:18px;
+    border-radius:10px;
+    overflow-x:auto;
+    font-size:16px;
 }
 
 .btn{
-    background:#FFD700;
-    color:black;
+    display:inline-block;
+    background:#000;
+    color:#FFD700;
+    padding:14px 22px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    border:2px solid #000;
 }
+
 .btn:hover{
     background:#222;
 }
 
 footer{
-    background:black;
-    color:white;
     text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
-
-.highlight{
-    color:darkblue;
-    font-weight:bold;
+    padding:25px;
+    color:#FFD700;
 }
 
 </style>

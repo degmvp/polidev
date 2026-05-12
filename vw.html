@@ -105,7 +105,8 @@ onclick="window.location.href='home.html'">
 </div>
 
 <script>
-const CATEGORIA = "python";
+const params = new URLSearchParams(window.location.search);
+const CATEGORIA = params.get("categoria") || "python";
 
 async function carregarPython(){
     const msg = document.getElementById("msg");
