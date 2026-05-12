@@ -198,7 +198,7 @@ async function carregarProgramas(){
         card.innerHTML = `
             <h3>${String(index + 1).padStart(2, "0")} - ${item.titulo}</h3>
             <p>${arquivo}</p>
-            <button onclick="exibir('${item.arquivo_url}')">EXIBIR</button>
+            <button onclick="exibir(\`${item.arquivo_url}\`)">EXIBIR</button>
             <button onclick="baixar(${item.id}, '${item.arquivo_url}', ${item.downloads || 0})">BAIXAR</button>
         `;
 
@@ -212,18 +212,21 @@ async function exibir(url){
     codigo.textContent = "Carregando arquivo...";
 
     try{
-        const resp = await fetch(url + "?v=" + Date.now());
+        const resposta = await fetch(url + "?v=" + Date.now());
 
-        if(!resp.ok){
-            codigo.textContent = "Erro ao carregar arquivo: " + url;
+        if(!resposta.ok){
+            codigo.textContent =
+                "Erro HTTP " + resposta.status + " ao carregar:\n" + url;
             return;
         }
 
-        const texto = await resp.text();
+        const texto = await resposta.text();
+
         codigo.textContent = texto;
     }
-    catch(e){
-        codigo.textContent = "Erro ao ler arquivo: " + e.message;
+    catch(erro){
+        codigo.textContent =
+            "Erro ao exibir arquivo:\n" + erro.message;
     }
 }
 
