@@ -88,33 +88,56 @@ function voltar(){
     window.location.href = "menu.html";
 }
 
-async function carregar(){
-    const tela = document.getElementById("codigo");
+<script>
+const params = new URLSearchParams(window.location.search);
+const ID = params.get("id");
 
-    if(!prog){
-        tela.innerText = "Programa não informado.";
+async function carregarPrograma(){
+    const msg = document.getElementById("msg");
+    const codigo = document.getElementById("codigo");
+
+    if(!ID){
+        msg.innerHTML = "ID do programa não informado.";
         return;
     }
 
-    const arquivo = prog + ".py";
-    const url = BASE + arquivo;
+    const { data, error } = await db
+        .from("conteudos")
+        .select("id,titulo,categoria,arquivo_url")
+        .eq("id", ID)
+        .single();
+
+    if(error){
+        msg.innerHTML = "Erro Supabase: " + error.message;
+        return;
+    }
+
+    if(!data || !data.arquivo_url){
+        msg.innerHTML = "Programa não encontrado.";
+        return;
+    }
+
+    document.title = "POLYDEV | " + data.titulo;
+    msg.innerHTML = data.titulo + " | Categoria: " + data.categoria.toUpperCase();
 
     try{
-        const resp = await fetch(url);
+        const resp = await fetch(data.arquivo_url);
 
         if(!resp.ok){
-            tela.innerText = "Erro ao carregar arquivo: " + resp.status + "\n" + url;
+            codigo.textContent = "Erro ao carregar arquivo: " + data.arquivo_url;
             return;
         }
 
         const texto = await resp.text();
-        tela.innerText = texto;
-
-    }catch(e){
-        tela.innerText = "Erro de conexão ao carregar o programa.";
+        codigo.textContent = texto;
+    }
+    catch(e){
+        codigo.textContent = "Erro ao ler arquivo: " + e.message;
     }
 }
 
+carregarPrograma();
+</script>
 async function incrementar(){
     try{
         const arquivo = prog + ".py";
