@@ -7,20 +7,25 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
+
 body{
-    background:navy;
-    color:white;
+    background:yellowgreen;
+    color:black;
     font-family:Arial, sans-serif;
     margin:20px;
 }
 
 h1{
-    color:lightgreen;
+    color:black;
     text-align:center;
+    background:black;
+    color:#FFD700;
+    padding:18px;
+    border-radius:12px;
 }
 
 h2{
-    color:yellowgreen;
+    color:black;
     text-align:center;
 }
 
@@ -33,14 +38,15 @@ h2{
 
 .card{
     background:black;
-    border:2px solid yellowgreen;
+    border:3px solid #FFD700;
     border-radius:12px;
     padding:18px;
     text-align:center;
+    box-shadow:0 0 12px rgba(0,0,0,0.35);
 }
 
 .card h3{
-    color:lightgreen;
+    color:#FFD700;
     margin-bottom:15px;
 }
 
@@ -52,16 +58,18 @@ h2{
 button{
     padding:10px 18px;
     margin:6px;
-    background:yellowgreen;
-    color:black;
-    border:0;
+    background:black;
+    color:#FFD700;
+    border:2px solid #FFD700;
     border-radius:8px;
     font-weight:bold;
     cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
-    background:limegreen;
+    background:#FFD700;
+    color:black;
 }
 
 #areaViewer{
@@ -73,7 +81,7 @@ button:hover{
     width:100%;
     height:650px;
     background:white;
-    border:3px solid yellowgreen;
+    border:4px solid black;
     border-radius:10px;
 }
 
@@ -81,7 +89,9 @@ button:hover{
     text-align:center;
     margin-bottom:15px;
 }
+
 </style>
+
 </head>
 
 <body>
