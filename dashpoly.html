@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | DASHBOARD</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#000;
+    color:#FFD700;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+    border-bottom:4px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    padding:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.card{
+    background:#FFD700;
+    color:#000;
+    border-radius:14px;
+    padding:25px;
+    text-align:center;
+    box-shadow:6px 6px 0 yellowgreen;
+}
+
+.card h2{
+    margin:0;
+    font-size:18px;
+}
+
+.card .valor{
+    margin-top:15px;
+    font-size:38px;
+    font-weight:bold;
+}
+
+.painel{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:30px;
+}
+
+.painel h2{
+    margin-top:0;
+    color:#FFD700;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#FFD700;
+    color:#000;
+    padding:12px;
+}
+
+table td{
+    padding:10px;
+    border-bottom:1px solid #333;
+    color:white;
+}
+
+.barra{
+    height:28px;
+    background:yellowgreen;
+    margin-bottom:12px;
+    border-radius:6px;
+    padding-left:10px;
+    color:black;
+    font-weight:bold;
+    line-height:28px;
+}
+
+.btn{
+    display:inline-block;
+    background:#FFD700;
+    color:#000;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#FFD700;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📊 DASHPOLY</h1>
+    <p>Dashboard Geral POLYDEV</p>
+
+    <a class="btn" href="menu.html">⬅ MENU</a>
+</header>
+
+<div class="container">
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>📚 Conteúdos</h2>
+            <div class="valor" id="totalConteudos">0</div>
+        </div>
+
+        <div class="card">
+            <h2>⬇ Downloads</h2>
+            <div class="valor" id="totalDownloads">0</div>
+        </div>
+
+        <div class="card">
+            <h2>📂 Categorias</h2>
+            <div class="valor" id="totalCategorias">0</div>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Status</h2>
+            <div class="valor">ONLINE</div>
+        </div>
+
+    </div>
+
+    <div class="painel">
+        <h2>🏆 TOP DOWNLOADS</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Categoria</th>
+                    <th>Downloads</th>
+                </tr>
+            </thead>
+
+            <tbody id="topDownloads">
+                <tr>
+                    <td colspan="3">Carregando...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="painel">
+        <h2>📊 DOWNLOADS POR CATEGORIA</h2>
+
+        <div id="graficoCategorias">
+            Carregando gráfico...
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    POLYDEV © 2026
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<script>
+
+async function carregarDashboard(){
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("titulo,categoria,downloads,ativo")
+        .eq("ativo", true)
+        .order("downloads", { ascending:false });
+
+    if(error){
+        alert(error.message);
+        return;
+    }
+
+    document.getElementById("totalConteudos").innerText =
+        data.length;
+
+    const totalDownloads =
+        data.reduce((soma,item) =>
+            soma + (item.downloads || 0), 0);
+
+    document.getElementById("totalDownloads").innerText =
+        totalDownloads;
+
+    const categorias = {};
+
+    data.forEach(item => {
+        categorias[item.categoria] =
+            (categorias[item.categoria] || 0)
+            + (item.downloads || 0);
+    });
+
+    document.getElementById("totalCategorias").innerText =
+        Object.keys(categorias).length;
+
+    const top = document.getElementById("topDownloads");
+
+    top.innerHTML = "";
+
+    data.slice(0,10).forEach(item => {
+
+        top.innerHTML += `
+            <tr>
+                <td>${item.titulo}</td>
+                <td>${item.categoria}</td>
+                <td>${item.downloads || 0}</td>
+            </tr>
+        `;
+    });
+
+    const grafico =
+        document.getElementById("graficoCategorias");
+
+    grafico.innerHTML = "";
+
+    Object.entries(categorias)
+        .forEach(([cat,total]) => {
+
+        grafico.innerHTML += `
+            <div class="barra"
+                 style="width:${Math.max(total*2,10)}px">
+                 ${cat.toUpperCase()} : ${total}
+            </div>
+        `;
+    });
+}
+
+carregarDashboard();
+
+</script>
+
+</body>
+</html>
