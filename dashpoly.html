@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>POLYDEV | DASHBOARD</title>
+<title>POLYDEV | DASHPOLY</title>
 
 <style>
 
@@ -38,7 +38,7 @@ header p{
 
 .container{
     width:95%;
-    max-width:1400px;
+    max-width:1500px;
     margin:auto;
     padding:20px;
 }
@@ -67,6 +67,27 @@ header p{
 .card .valor{
     margin-top:15px;
     font-size:38px;
+    font-weight:bold;
+}
+
+.card-mini{
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+    color:white;
+}
+
+.card-mini h3{
+    margin:0;
+    color:#FFD700;
+}
+
+.card-mini .valor{
+    margin-top:10px;
+    font-size:28px;
+    color:yellowgreen;
     font-weight:bold;
 }
 
@@ -100,15 +121,24 @@ table td{
     color:white;
 }
 
+.barra-container{
+    margin-bottom:16px;
+}
+
+.barra-label{
+    margin-bottom:5px;
+    color:#FFD700;
+    font-weight:bold;
+}
+
 .barra{
-    height:28px;
+    height:30px;
     background:yellowgreen;
-    margin-bottom:12px;
     border-radius:6px;
     padding-left:10px;
     color:black;
     font-weight:bold;
-    line-height:28px;
+    line-height:30px;
 }
 
 .btn{
@@ -122,10 +152,40 @@ table td{
     margin-top:15px;
 }
 
+.btn:hover{
+    background:yellowgreen;
+}
+
+.online{
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:0.4;
+    }
+
+    100%{
+        opacity:1;
+    }
+}
+
 footer{
     text-align:center;
     padding:25px;
     color:#FFD700;
+}
+
+@media(max-width:900px){
+
+    table{
+        font-size:14px;
+    }
 }
 
 </style>
@@ -134,13 +194,21 @@ footer{
 <body>
 
 <header>
-    <h1>📊 DASHPOLY</h1>
-    <p>Dashboard Geral POLYDEV</p>
 
-    <a class="btn" href="menu.html">⬅ MENU</a>
+    <h1>📊 DASHPOLY</h1>
+
+    <p>
+        Dashboard Geral POLYDEV
+    </p>
+
+<a class="btn" href="home.html">
+    ⬅ HOME
+</a>
 </header>
 
 <div class="container">
+
+    <!-- KPIS -->
 
     <div class="grid">
 
@@ -159,45 +227,77 @@ footer{
             <div class="valor" id="totalCategorias">0</div>
         </div>
 
-        <div class="card">
+        <div class="card online">
             <h2>🚀 Status</h2>
             <div class="valor">ONLINE</div>
         </div>
 
     </div>
 
+    <!-- CARDS POR CATEGORIA -->
+
     <div class="painel">
+
+        <h2>📦 MÓDULOS POLYDEV</h2>
+
+        <div class="grid" id="cardsCategorias">
+
+        </div>
+
+    </div>
+
+    <!-- TOP DOWNLOADS -->
+
+    <div class="painel">
+
         <h2>🏆 TOP DOWNLOADS</h2>
 
         <table>
+
             <thead>
+
                 <tr>
                     <th>Título</th>
                     <th>Categoria</th>
                     <th>Downloads</th>
                 </tr>
+
             </thead>
 
             <tbody id="topDownloads">
+
                 <tr>
-                    <td colspan="3">Carregando...</td>
+                    <td colspan="3">
+                        Carregando...
+                    </td>
                 </tr>
+
             </tbody>
+
         </table>
+
     </div>
 
+    <!-- GRAFICO -->
+
     <div class="painel">
+
         <h2>📊 DOWNLOADS POR CATEGORIA</h2>
 
         <div id="graficoCategorias">
+
             Carregando gráfico...
+
         </div>
+
     </div>
 
 </div>
 
 <footer>
+
     POLYDEV © 2026
+
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -205,67 +305,191 @@ footer{
 
 <script>
 
+const NOMES = {
+
+    python : "🐍 PYTHON",
+    pd     : "🐼 PANDAS",
+    stlit  : "🚀 STREAMLIT",
+    flet   : "🖥️ FLET",
+    c      : "💻 C",
+    js     : "⚡ JAVASCRIPT",
+    cs     : "🔷 C#"
+};
+
 async function carregarDashboard(){
 
     const { data, error } = await db
+
         .from("conteudos")
-        .select("titulo,categoria,downloads,ativo")
+
+        .select(`
+            titulo,
+            categoria,
+            downloads,
+            ativo
+        `)
+
         .eq("ativo", true)
-        .order("downloads", { ascending:false });
+
+        .order("downloads", {
+            ascending:false
+        });
 
     if(error){
+
         alert(error.message);
+
         return;
     }
 
-    document.getElementById("totalConteudos").innerText =
-        data.length;
+    // TOTAL CONTEUDOS
+
+    document.getElementById(
+        "totalConteudos"
+    ).innerText = data.length;
+
+    // TOTAL DOWNLOADS
 
     const totalDownloads =
         data.reduce((soma,item) =>
-            soma + (item.downloads || 0), 0);
 
-    document.getElementById("totalDownloads").innerText =
-        totalDownloads;
+            soma + (item.downloads || 0)
+
+        ,0);
+
+    document.getElementById(
+        "totalDownloads"
+    ).innerText = totalDownloads;
+
+    // AGRUPAMENTOS
 
     const categorias = {};
+    const quantidade = {};
 
     data.forEach(item => {
+
         categorias[item.categoria] =
             (categorias[item.categoria] || 0)
             + (item.downloads || 0);
+
+        quantidade[item.categoria] =
+            (quantidade[item.categoria] || 0)
+            + 1;
     });
 
-    document.getElementById("totalCategorias").innerText =
+    // TOTAL CATEGORIAS
+
+    document.getElementById(
+        "totalCategorias"
+    ).innerText =
         Object.keys(categorias).length;
 
-    const top = document.getElementById("topDownloads");
+    // CARDS MODULOS
+
+    const cards =
+        document.getElementById(
+            "cardsCategorias"
+        );
+
+    cards.innerHTML = "";
+
+    Object.entries(quantidade)
+
+        .sort((a,b)=>b[1]-a[1])
+
+        .forEach(([cat,total]) => {
+
+        cards.innerHTML += `
+
+            <div class="card-mini">
+
+                <h3>
+                    ${NOMES[cat] || cat}
+                </h3>
+
+                <div class="valor">
+                    ${total}
+                </div>
+
+            </div>
+        `;
+    });
+
+    // TOP DOWNLOADS
+
+    const top =
+        document.getElementById(
+            "topDownloads"
+        );
 
     top.innerHTML = "";
 
-    data.slice(0,10).forEach(item => {
+    data.slice(0,10)
+
+        .forEach(item => {
 
         top.innerHTML += `
+
             <tr>
-                <td>${item.titulo}</td>
-                <td>${item.categoria}</td>
-                <td>${item.downloads || 0}</td>
+
+                <td>
+                    ${item.titulo}
+                </td>
+
+                <td>
+                    ${NOMES[item.categoria]
+                    || item.categoria}
+                </td>
+
+                <td>
+                    ${item.downloads || 0}
+                </td>
+
             </tr>
         `;
     });
 
+    // GRAFICO
+
     const grafico =
-        document.getElementById("graficoCategorias");
+        document.getElementById(
+            "graficoCategorias"
+        );
 
     grafico.innerHTML = "";
 
+    const maximo =
+        Math.max(
+            ...Object.values(categorias)
+        );
+
     Object.entries(categorias)
+
+        .sort((a,b)=>b[1]-a[1])
+
         .forEach(([cat,total]) => {
 
+        const largura =
+            (total / maximo) * 100;
+
         grafico.innerHTML += `
-            <div class="barra"
-                 style="width:${Math.max(total*2,10)}px">
-                 ${cat.toUpperCase()} : ${total}
+
+            <div class="barra-container">
+
+                <div class="barra-label">
+
+                    ${NOMES[cat] || cat}
+
+                </div>
+
+                <div
+                    class="barra"
+                    style="width:${largura}%">
+
+                    ${total}
+
+                </div>
+
             </div>
         `;
     });
