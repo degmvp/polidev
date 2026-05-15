@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV BLACK BELT | SQL Engineering</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Consolas, Arial, sans-serif;
+    background:#050505;
+    color:#FFD700;
+    padding:24px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+header h1{
+    font-size:42px;
+    color:#FFD700;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:24px;
+}
+
+.card{
+    background:linear-gradient(145deg,#050505,#111,#000);
+    border:2px solid #FFD700;
+    border-left:8px solid yellowgreen;
+    border-radius:16px;
+    padding:28px;
+    text-align:center;
+    text-decoration:none;
+    color:#FFD700;
+    box-shadow:0 0 18px rgba(255,215,0,0.25);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    box-shadow:0 0 28px rgba(154,205,50,0.35);
+    border-color:yellowgreen;
+}
+
+.card span{
+    display:block;
+    font-size:42px;
+    margin-bottom:18px;
+}
+
+.card h2{
+    font-size:24px;
+    margin-bottom:14px;
+}
+
+.card p{
+    color:#ddd;
+    font-size:16px;
+    line-height:1.5;
+}
+
+.disabled{
+    opacity:0.45;
+    pointer-events:none;
+}
+
+.topo{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:35px;
+}
+
+.btn{
+    background:#000;
+    color:#FFD700;
+    border:2px solid #FFD700;
+    padding:12px 24px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#FFD700;
+    color:#000;
+}
+
+footer{
+    text-align:center;
+    margin-top:45px;
+    color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>⚔ POLYDEV BLACK BELT</h1>
+    <p>SQL Engineering | Procedures • Functions • Views • DBA Tools</p>
+</header>
+
+<div class="topo">
+    <a class="btn" href="home.html">⬅ Home</a>
+    <a class="btn" href="guia_black_belt.html">📘 Guia Black Belt</a>
+</div>
+
+<div class="grid">
+
+    <a class="card" href="vwbbproc.html">
+        <span>🧠</span>
+        <h2>SQL Procedures</h2>
+        <p>
+            Arsenal de Stored Procedures BLACK BELT para catálogo,
+            metadata, locks, sessões, índices, backups e auditoria.
+        </p>
+    </a>
+
+    <a class="card disabled" href="#">
+        <span>ƒ</span>
+        <h2>SQL Functions</h2>
+        <p>
+            Funções utilitárias para parsing, formatação, bitwise,
+            conversões e apoio ao SQL Engineering.
+        </p>
+    </a>
+
+    <a class="card disabled" href="#">
+        <span>👁</span>
+        <h2>SQL Views</h2>
+        <p>
+            Views técnicas para documentação, monitoramento,
+            dashboards e leitura rápida do ambiente.
+        </p>
+    </a>
+
+</div>
+
+<footer>
+    POLYDEV BLACK BELT | Jack of All Trades Engineering Lab
+</footer>
+
+</div>
+
+</body>
+</html>
