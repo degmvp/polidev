@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Guia Black Belt</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Consolas, Arial, sans-serif;
+    background-color:#050505;
+    color:#FFD700;
+    padding:30px;
+}
+
+h1,h2,h3{
+    color:#FFD700;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.box{
+    border:1px solid #FFD700;
+    padding:18px;
+    margin-bottom:22px;
+    border-radius:10px;
+    background:#0b0b0b;
+}
+
+p,li,td,th{
+    font-size:16px;
+    line-height:1.6;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid #FFD700;
+    padding:10px;
+    text-align:left;
+}
+
+th{
+    background:#1a1a1a;
+}
+
+.status{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.pendente{
+    color:orange;
+    font-weight:bold;
+}
+
+.codigo{
+    background:#000;
+    color:#00ff66;
+    padding:15px;
+    border-left:4px solid #FFD700;
+    white-space:pre-wrap;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    font-size:14px;
+    color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>POLYDEV BLACK BELT</h1>
+<h2>Guia de Trabalho e Acompanhamento</h2>
+
+<div class="box">
+<h2>1. Objetivo</h2>
+<p>
+Este guia é o mapa de construção da área <strong>BLACK BELT</strong> do POLYDEV.
+Não é o conteúdo final da área, mas sim um documento interno de orientação,
+controle e acompanhamento dos itens que serão criados.
+</p>
+</div>
+
+<div class="box">
+<h2>2. Filosofia BLACK BELT</h2>
+<p>
+A área BLACK BELT será dedicada a códigos, soluções e ferramentas de nível avançado,
+voltadas para engenharia real, performance, automação, banco de dados, análise,
+monitoramento e resolução de problemas complexos.
+</p>
+
+<ul>
+<li>Menos sintaxe, mais engenharia.</li>
+<li>Menos exemplo simples, mais solução real.</li>
+<li>Menos tutorial básico, mais arsenal técnico.</li>
+<li>Foco em quem quer ser ou se tornar um <strong>Jack of All Trades</strong>.</li>
+</ul>
+</div>
+
+<div class="box">
+<h2>3. Estrutura Principal</h2>
+
+<div class="codigo">
+BLACK BELT
+│
+├── SQL ENGINEERING
+│   ├── Procedures
+│   ├── Functions
+│   ├── Views
+│   ├── DBA Tools
+│   ├── Monitoring
+│   ├── Metadata
+│   ├── Performance
+│   ├── Recovery
+│   ├── Auditing
+│   └── Automation
+│
+├── PYTHON ENGINEERING
+├── SYSTEMS
+├── LOW LEVEL
+├── PERFORMANCE
+├── FORENSICS
+├── AUTOMATION
+└── JACK OF ALL TRADES
+</div>
+</div>
+
+<div class="box">
+<h2>4. SQL ENGINEERING</h2>
+<p>
+Área destinada a procedures, functions, views, rotinas DBA, scripts de análise,
+monitoramento, documentação automática e ferramentas SQL avançadas.
+</p>
+
+<h3>4.1 Série inicial de Procedures</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Arquivo</th>
+<th>Tema</th>
+<th>Status</th>
+<th>Prioridade</th>
+</tr>
+
+<tr><td>SP01</td><td>sp01.sql</td><td>Seek All Catálogo</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP02</td><td>sp02.sql</td><td>Busca Colunas</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP03</td><td>sp03.sql</td><td>Dependências de Objetos</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP04</td><td>sp04.sql</td><td>Estatísticas de Tabelas</td><td class="pendente">Planejado</td><td>Média</td></tr>
+<tr><td>SP05</td><td>sp05.sql</td><td>Tamanho de Tabelas</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP06</td><td>sp06.sql</td><td>Índices Fragmentados</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP07</td><td>sp07.sql</td><td>Backup Checker</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP08</td><td>sp08.sql</td><td>Locks Ativos</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP09</td><td>sp09.sql</td><td>Sessões Abertas</td><td class="pendente">Planejado</td><td>Média</td></tr>
+<tr><td>SP10</td><td>sp10.sql</td><td>SQL em Execução</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP11</td><td>sp11.sql</td><td>Top Procedures CPU</td><td class="pendente">Planejado</td><td>Média</td></tr>
+<tr><td>SP12</td><td>sp12.sql</td><td>Auditoria DDL</td><td class="pendente">Planejado</td><td>Média</td></tr>
+<tr><td>SP13</td><td>sp13.sql</td><td>Rebuild/Reorganize Índice</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP14</td><td>sp14.sql</td><td>Pesquisa Texto Banco Inteiro</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+<tr><td>SP15</td><td>sp15.sql</td><td>Documentação Automática Objetos</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+</table>
+</div>
+
+<div class="box">
+<h2>5. Python Engineering</h2>
+<ul>
+<li>Code indexer</li>
+<li>Filesystem crawler</li>
+<li>Parser de código</li>
+<li>Automação Git/GitHub</li>
+<li>Leitura e classificação de arquivos</li>
+<li>Ferramentas auxiliares para SQL Engineering</li>
+</ul>
+</div>
+
+<div class="box">
+<h2>6. Low Level Thinking</h2>
+<ul>
+<li>Bitwise aplicado</li>
+<li>Álgebra booleana</li>
+<li>Flags binárias</li>
+<li>Hexadecimal</li>
+<li>Mapas binários</li>
+<li>Protocolos e estruturas internas</li>
+</ul>
+</div>
+
+<div class="box">
+<h2>7. Padrão Visual</h2>
+
+<div class="codigo">
+background-color: #050505;
+color: #FFD700;
+
+Estilo:
+- preto técnico
+- dourado elite
+- visual terminal
+- aparência hardcore
+- foco em leitura e controle
+</div>
+</div>
+
+<div class="box">
+<h2>8. Estrutura de Pastas Sugerida</h2>
+
+<div class="codigo">
+downloads/
+└── blackbelt/
+    │
+    ├── sql/
+    │   │
+    │   ├── procedures/
+    │   │   ├── sp01.sql
+    │   │   ├── sp02.sql
+    │   │   └── ...
+    │   │
+    │   ├── functions/
+    │   │   ├── fn01.sql
+    │   │   ├── fn02.sql
+    │   │   └── ...
+    │   │
+    │   ├── views/
+    │   │   ├── vw01.sql
+    │   │   └── ...
+    │   │
+    │   ├── monitoring/
+    │   ├── metadata/
+    │   ├── automation/
+    │   ├── performance/
+    │   └── recovery/
+    │
+    ├── python/
+    │   ├── parsers/
+    │   ├── crawlers/
+    │   ├── automation/
+    │   ├── analyzers/
+    │   └── tools/
+    │
+    ├── lowlevel/
+    │   ├── bitwise/
+    │   ├── binary/
+    │   ├── hexadecimal/
+    │   └── boolean/
+    │
+    ├── systems/
+    │
+    ├── jack_of_all_trades/
+    │
+    └── docs/
+        ├── guia_black_belt.html
+        ├── sql_engineering.html
+        └── python_engineering.html
+</div>
+</div>
+<div class="box">
+<h2>4.2 SQL Functions</h2>
+
+<p>
+Área destinada a funções reutilizáveis para manipulação,
+análise, transformação e suporte operacional em ambientes SQL.
+</p>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Arquivo</th>
+<th>Tema</th>
+<th>Status</th>
+<th>Prioridade</th>
+</tr>
+
+<tr><td>FN01</td><td>fn01.sql</td><td>Split String Universal</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+
+<tr><td>FN02</td><td>fn02.sql</td><td>Máscara CPF/CNPJ</td><td class="pendente">Planejado</td><td>Média</td></tr>
+
+<tr><td>FN03</td><td>fn03.sql</td><td>Remove Caracteres Especiais</td><td class="pendente">Planejado</td><td>Média</td></tr>
+
+<tr><td>FN04</td><td>fn04.sql</td><td>Conversão Hexadecimal</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+
+<tr><td>FN05</td><td>fn05.sql</td><td>Bitwise Analyzer</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+
+<tr><td>FN06</td><td>fn06.sql</td><td>Formatação Tamanho KB/MB/GB</td><td class="pendente">Planejado</td><td>Média</td></tr>
+
+<tr><td>FN07</td><td>fn07.sql</td><td>Conversor Data Universal</td><td class="pendente">Planejado</td><td>Média</td></tr>
+
+<tr><td>FN08</td><td>fn08.sql</td><td>Parser Texto SQL</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+
+<tr><td>FN09</td><td>fn09.sql</td><td>Gerador Dynamic SQL</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+
+<tr><td>FN10</td><td>fn10.sql</td><td>Metadata Formatter</td><td class="pendente">Planejado</td><td>Alta</td></tr>
+</table>
+
+</div>
+
+
+
+<div class="box">
+<h2>9. Próximos Passos</h2>
+
+<ul>
+
+<li><span class="status">OK</span> Definir conceito BLACK BELT.</li>
+
+<li><span class="status">OK</span> Definir SQL Engineering.</li>
+
+<li><span class="status">OK</span> Definir Procedures.</li>
+
+<li><span class="status">OK</span> Definir Functions.</li>
+
+<li><span class="pendente">Pendente</span> Criar estrutura downloads/blackbelt.</li>
+
+<li><span class="pendente">Pendente</span> Criar pasta procedures.</li>
+
+<li><span class="pendente">Pendente</span> Criar pasta functions.</li>
+
+<li><span class="pendente">Pendente</span> Criar pasta views.</li>
+
+<li><span class="pendente">Pendente</span> Criar sp01.sql.</li>
+
+<li><span class="pendente">Pendente</span> Criar sp02.sql até sp15.sql.</li>
+
+<li><span class="pendente">Pendente</span> Criar fn01.sql até fn10.sql.</li>
+
+<li><span class="pendente">Pendente</span> Definir padrão de cabeçalho SQL.</li>
+
+<li><span class="pendente">Pendente</span> Criar guia SQL ENGINEERING.</li>
+
+<li><span class="pendente">Pendente</span> Criar menu BLACK BELT.</li>
+
+<li><span class="pendente">Pendente</span> Criar viewer BLACK BELT.</li>
+
+<li><span class="pendente">Pendente</span> Inserir registros no banco.</li>
+
+<li><span class="pendente">Pendente</span> Testar downloads.</li>
+
+<li><span class="pendente">Pendente</span> Integrar ao menu principal POLYDEV.</li>
+
+<li><span class="pendente">Pendente</span> Publicar primeira versão.</li>
+
+</ul>
+</div>
+
+<div class="box">
+<h2>10. Observações de Trabalho</h2>
+<p>
+Este arquivo deverá ser atualizado conforme cada item for criado.
+Ele funcionará como painel de acompanhamento da construção da área BLACK BELT.
+</p>
+
+<p>
+Quando uma procedure, function, viewer ou guia for concluído, alterar o status
+de <strong>Planejado</strong> para <strong>Concluído</strong>.
+</p>
+</div>
+
+<footer>
+POLYDEV BLACK BELT | Guia interno de acompanhamento | Jack of All Trades Engineering Lab
+</footer>
+
+</div>
+
+</body>
+</html>
