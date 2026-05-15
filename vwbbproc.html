@@ -51,10 +51,11 @@ header p{
     flex-wrap:wrap;
 }
 
+
 .btn{
-    background:#111;
+    background:#000;
     color:#FFD700;
-    border:1px solid #FFD700;
+    border:2px solid #FFD700;
     padding:12px 22px;
     text-decoration:none;
     border-radius:8px;
@@ -68,6 +69,7 @@ header p{
     transform:scale(1.05);
 }
 
+
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
@@ -75,31 +77,34 @@ header p{
 }
 
 .card{
-    background:#0b0b0b;
-    border:1px solid #333;
-    border-left:5px solid #FFD700;
-    border-radius:10px;
-    padding:20px;
+    background:linear-gradient(145deg, #111 0%, #050505 70%);
+    border:2px solid #FFD700;
+    border-left:8px solid yellowgreen;
+    border-radius:14px;
+    padding:22px;
     transition:0.3s;
+    box-shadow:0 0 12px rgba(255,215,0,0.18);
 }
 
 .card:hover{
-    transform:translateY(-5px);
-    border-color:#FFD700;
-    box-shadow:0 0 15px rgba(255,215,0,0.3);
+    transform:translateY(-6px);
+    border-color:yellowgreen;
+    box-shadow:0 0 22px rgba(154,205,50,0.35);
 }
 
 .card h2{
     color:#FFD700;
-    margin-bottom:10px;
+    margin-bottom:12px;
     font-size:22px;
+    text-shadow:1px 1px 2px #000;
 }
 
 .card p{
-    color:#ccc;
+    color:#f2f2f2;
     margin-bottom:18px;
     line-height:1.5;
 }
+
 
 .acoes{
     display:flex;
@@ -117,10 +122,11 @@ footer{
 .sqltag{
     color:yellowgreen;
     font-size:14px;
-    margin-bottom:10px;
+    margin-bottom:12px;
     display:block;
+    font-weight:bold;
+    letter-spacing:1px;
 }
-
 </style>
 
 </head>
