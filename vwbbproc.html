@@ -206,11 +206,9 @@ async function carregarProcedures(){
                 <p>${item.descricao || 'Procedure BLACK BELT SQL Engineering.'}</p>
 
                 <div class="acoes">
-
                     <a class="btn"
-                       href="${item.arquivo_url}"
-                       target="_blank">
-                       👁 Exibir
+                       href="./viewer_bbproc.html?arquivo=${encodeURIComponent(item.arquivo_url)}">
+                            👁 Exibir
                     </a>
 
                     <a class="btn"
