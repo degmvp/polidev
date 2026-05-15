@@ -172,7 +172,7 @@ async function carregarProcedures(){
     try{
 
         const response = await fetch(
-            `${SUPABASE_URL}/rest/v1/conteudos?categoria=eq.bbproc&select=*`,
+            `${SUPABASE_URL}/rest/v1/conteudos?categoria=eq.bbfunc&select=*`,
             {
                 headers:{
                     apikey: SUPABASE_KEY,
