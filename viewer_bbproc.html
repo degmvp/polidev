@@ -145,25 +145,33 @@ footer{
 async function carregarArquivo(){
 
     const params = new URLSearchParams(window.location.search);
-
-    const arquivo = params.get("arquivo");
+    let arquivo = params.get("arquivo");
 
     const conteudo = document.getElementById("conteudo");
-
     const info = document.getElementById("arquivoInfo");
 
     if(!arquivo){
-
         info.innerHTML = "Arquivo não informado.";
-
         return;
     }
 
-    info.innerHTML = `Arquivo: ${arquivo}`;
+    arquivo = decodeURIComponent(arquivo);
+
+    if(arquivo.startsWith("/")){
+        arquivo = arquivo.substring(1);
+    }
+
+    const urlFinal = window.location.origin + "/polidev/" + arquivo;
+
+    info.innerHTML = `Arquivo: ${urlFinal}`;
 
     try{
 
-        const response = await fetch(arquivo);
+        const response = await fetch(urlFinal);
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status + " - " + urlFinal);
+        }
 
         const texto = await response.text();
 
@@ -178,7 +186,6 @@ async function carregarArquivo(){
         console.error(erro);
 
     }
-
 }
 
 carregarArquivo();
