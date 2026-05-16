@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV BLACK BELT | Home</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Consolas, Arial, sans-serif;
+    background:
+        radial-gradient(circle at top, #1a1a1a 0%, #050505 45%, #000 100%);
+    color:#FFD700;
+    padding:24px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+header h1{
+    font-size:44px;
+    color:#FFD700;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:19px;
+    font-weight:bold;
+}
+
+.topo{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:35px;
+}
+
+.btn{
+    background:#000;
+    color:#FFD700;
+    border:2px solid #FFD700;
+    padding:12px 24px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#FFD700;
+    color:#000;
+    transform:scale(1.04);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:26px;
+}
+
+.bb-card{
+    background:linear-gradient(145deg, #050505 0%, #111 60%, #000 100%);
+    border:2px solid #FFD700;
+    border-left:8px solid yellowgreen;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    text-decoration:none;
+    color:#FFD700;
+    box-shadow:0 0 20px rgba(255,215,0,0.25);
+    transition:0.35s;
+    min-height:260px;
+}
+
+.bb-card:hover{
+    transform:translateY(-8px);
+    border-color:yellowgreen;
+    box-shadow:0 0 32px rgba(154,205,50,0.42);
+}
+
+.bb-card .icon{
+    font-size:46px;
+    display:block;
+    margin-bottom:18px;
+}
+
+.bb-card h2{
+    font-size:26px;
+    margin-bottom:16px;
+    color:#FFD700;
+}
+
+.bb-card p{
+    color:#f2f2f2;
+    font-size:16px;
+    line-height:1.6;
+}
+
+.status{
+    margin-top:22px;
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:8px;
+    border:1px solid yellowgreen;
+    color:yellowgreen;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.disabled{
+    opacity:0.45;
+    pointer-events:none;
+}
+
+.disabled .status{
+    border-color:#777;
+    color:#777;
+}
+
+footer{
+    text-align:center;
+    margin-top:50px;
+    color:#777;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>⚔ POLYDEV BLACK BELT</h1>
+    <p>Hardcore Engineering Lab | Escolha sua área de combate técnico</p>
+</header>
+
+<div class="topo">
+    <a class="btn" href="home.html">⬅ Home POLYDEV</a>
+    <a class="btn" href="guia_black_belt.html">📘 Guia Black Belt</a>
+</div>
+
+<div class="grid">
+
+    <a class="bb-card" href="bbquery.html">
+        <span class="icon">🧠</span>
+        <h2>SQL Engineering</h2>
+        <p>
+            Procedures, Functions e Views BLACK BELT para metadata,
+            diagnóstico, documentação, operação e engenharia SQL.
+        </p>
+        <span class="status">DISPONÍVEL</span>
+    </a>
+
+    <a class="bb-card disabled" href="#">
+        <span class="icon">⚔</span>
+        <h2>DBA War Tools</h2>
+        <p>
+            Monitoramento, health check, waits, locks, IO, tempdb,
+            memory pressure e diagnóstico avançado.
+        </p>
+        <span class="status">PRÓXIMA FASE</span>
+    </a>
+
+    <a class="bb-card disabled" href="#">
+        <span class="icon">🛰</span>
+        <h2>SQL Intelligence</h2>
+        <p>
+            Mapas de objetos, dependências dinâmicas, geração de CRUD,
+            schema compare e análise inteligente de metadata.
+        </p>
+        <span class="status">PLANEJADO</span>
+    </a>
+
+    <a class="bb-card disabled" href="#">
+        <span class="icon">🐍</span>
+        <h2>Python Engineering</h2>
+        <p>
+            Crawlers, parsers, indexadores, documentação automática,
+            automação Git e integração com banco de dados.
+        </p>
+        <span class="status">PLANEJADO</span>
+    </a>
+
+    <a class="bb-card disabled" href="#">
+        <span class="icon">🧬</span>
+        <h2>Low Level Thinking</h2>
+        <p>
+            Bitwise, máscaras, flags, hexadecimal, lógica booleana,
+            mapas binários e raciocínio técnico profundo.
+        </p>
+        <span class="status">PLANEJADO</span>
+    </a>
+
+    <a class="bb-card disabled" href="#">
+        <span class="icon">♟</span>
+        <h2>Jack of All Trades</h2>
+        <p>
+            Soluções universais combinando arquivos, SQL, Python,
+            parsers, automação e engenharia prática.
+        </p>
+        <span class="status">PLANEJADO</span>
+    </a>
+
+</div>
+
+<footer>
+    POLYDEV BLACK BELT | Sistema Avançado dentro do POLYDEV
+</footer>
+
+</div>
+
+</body>
+</html>
