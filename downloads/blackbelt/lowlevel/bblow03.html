@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>BBLOW03 - Bit Masks</title>
+<style>
+body{background:#050505;color:#FFD700;font-family:Consolas,Arial;padding:30px;}
+h1,h2{color:#FFD700;}
+p,li{color:#f2f2f2;line-height:1.7;font-size:17px;}
+.box{border:2px solid #FFD700;border-left:8px solid yellowgreen;border-radius:12px;padding:20px;margin:20px 0;background:#0b0b0b;}
+pre{background:#000;color:#00ff66;padding:18px;border-radius:8px;overflow:auto;}
+</style>
+</head>
+<body>
+
+<h1>BBLOW03 - Bit Masks</h1>
+
+<div class="box">
+<h2>Conceito</h2>
+<p>
+Máscaras binárias permitem ligar, desligar e testar flags dentro de um único número.
+</p>
+</div>
+
+<div class="box">
+<h2>Exemplo de Flags</h2>
+<pre>
+READ    = 0001
+WRITE   = 0010
+EXECUTE = 0100
+ADMIN   = 1000
+</pre>
+</div>
+
+<div class="box">
+<h2>Combinando Permissões</h2>
+<pre>
+READ + WRITE
+
+0001
+OR
+0010
+----
+0011
+</pre>
+</div>
+
+<div class="box">
+<h2>Testando Flag</h2>
+<pre>
+valor = 0011
+READ  = 0001
+
+valor AND READ = 0001
+Logo READ está ativo.
+</pre>
+</div>
+
+</body>
+</html>
