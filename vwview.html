@@ -186,7 +186,7 @@ async function carregarProgramas(){
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,descricao,categoria,arquivo_url,downloads")
-        .eq("categoria", "bbview")
+        .eq("categoria", "pyadv")
         .order("titulo", { ascending:true });
 
     if(error){
@@ -196,7 +196,7 @@ async function carregarProgramas(){
     }
 
     if(!data || data.length === 0){
-        lista.innerHTML = "Nenhum programa PUYHON encontrado na categoria bbview.";
+        lista.innerHTML = "Nenhum programa PUYHON encontrado na categoria pyadv.";
         return;
     }
 
