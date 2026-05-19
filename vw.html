@@ -104,12 +104,62 @@ onclick="window.location.href='home.html'">
     <div id="lista"></div>
 </div>
 
-<script>
-btn.onclick = () => {
-    window.location.href = "viewer_py.html?id=" + item.id;
-};
+<div class="container">
+    <div id="msg">Carregando programas Python...</div>
+    <div id="lista"></div>
+</div>
 
-carregarPython();
+<script>
+
+async function carregarProgramas() {
+
+    const params = new URLSearchParams(window.location.search);
+    const categoria = params.get("categoria") || "python";
+
+    const { data, error } = await db
+        .from("conteudos")
+        .select("*")
+        .eq("categoria", categoria)
+        .eq("ativo", true)
+        .order("titulo", { ascending: true });
+
+    if (error) {
+        console.error(error);
+        document.getElementById("msg").innerHTML =
+            "Erro ao carregar programas.";
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        document.getElementById("msg").innerHTML =
+            "Nenhum programa encontrado.";
+        return;
+    }
+
+    document.getElementById("msg").style.display = "none";
+
+    document.getElementById("lista").innerHTML = data.map(item => `
+        <div class="card">
+
+            <h3>${item.titulo}</h3>
+
+            <p>${item.descricao || ""}</p>
+
+            <button onclick="window.location.href='viewer_py.html?id=${item.id}'">
+                👁 Exibir
+            </button>
+
+            <a href="${item.arquivo_url}" download>
+                <button>⬇ Download</button>
+            </a>
+
+        </div>
+    `).join("");
+
+}
+
+carregarProgramas();
+
 </script>
 
 </body>
