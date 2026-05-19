@@ -39,38 +39,30 @@ h1{
 }
 </style>
 
-</head>
-<button onclick="window.location.href='vw.html'">
-⬅ Voltar
-</button>
+<header>
+    <h1>🐍 PYTHON AVANÇADO</h1>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+
 <body>
 
-<h1>🐍 PYTHON PROGRAMAS</h1>
-<p>Leia • Entenda • Execute seu código</p>
 
-<div class="container" id="menu"></div>
 
-<script>
+<button onclick="window.location.href='conteudos.html?categoria=pyadv'">
+⬅ Voltar
+</button>
 
-// 🔹 cria os 34 programas automaticamente
-const container = document.getElementById("menu");
+<div class="container">
 
-for(let i = 1; i <= 34; i++){
+    <button onclick="window.location.href='conteudos.html?categoria=pyadv'">
+        🚀 Acessar Programas Python
+    </button>
 
-    const nome = "python_prog" + i;
+</div>
 
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerText = "Programa " + i;
-
-    div.onclick = () => {
-        window.location.href = "viewer_py.html?prog=" + nome;
-    };
-
-    container.appendChild(div);
-}
-
-</script>
+</body>
+</html>
 
 </body>
 </html>
