@@ -118,7 +118,13 @@ async function carregarPrograma(){
     msg.innerHTML = data.titulo + " | Categoria: " + data.categoria.toUpperCase();
 
     try{
-        const resp = await fetch(data.arquivo_url);
+        let caminho = data.arquivo_url;
+
+    if(caminho.startsWith("/")){
+        caminho = "https://degmvp.github.io/polidev" + caminho;
+}
+
+const resp = await fetch(caminho);
 
         if(!resp.ok){
             codigo.textContent = "Erro ao carregar arquivo: " + data.arquivo_url;
@@ -156,7 +162,11 @@ async function baixar(){
 
     await incrementar();
 
-    const url = programaAtual.arquivo_url;
+    let url = programaAtual.arquivo_url;
+
+    if(url.startsWith("/")){
+        url = "https://degmvp.github.io/polidev" + url;
+}
     const nomeArquivo = url.split("/").pop();
 
     const a = document.createElement("a");
