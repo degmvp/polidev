@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | LinkedIn Post</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top, #333 0%, #000 45%, #050505 100%);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.banner{
+    width:100%;
+    max-width:1100px;
+    min-height:720px;
+    background:linear-gradient(145deg, #050505, #111, #000);
+    border:3px solid #FFD700;
+    border-radius:28px;
+    box-shadow:
+        0 0 25px rgba(255,215,0,0.45),
+        0 0 80px rgba(255,215,0,0.15);
+    padding:50px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.banner::before{
+    content:"";
+    position:absolute;
+    top:-120px;
+    right:-120px;
+    width:300px;
+    height:300px;
+    background:rgba(255,215,0,0.12);
+    border-radius:50%;
+}
+
+.banner::after{
+    content:"";
+    position:absolute;
+    bottom:-140px;
+    left:-140px;
+    width:340px;
+    height:340px;
+    background:rgba(154,205,50,0.12);
+    border-radius:50%;
+}
+
+.content{
+    position:relative;
+    z-index:2;
+}
+
+.logo{
+    font-size:24px;
+    color:#FFD700;
+    letter-spacing:4px;
+    font-weight:bold;
+    margin-bottom:18px;
+}
+
+h1{
+    font-size:72px;
+    color:#FFD700;
+    margin:0;
+    letter-spacing:5px;
+    text-shadow:0 0 20px rgba(255,215,0,0.5);
+}
+
+.subtitle{
+    font-size:28px;
+    color:yellowgreen;
+    font-weight:bold;
+    margin-top:12px;
+}
+
+.status{
+    display:inline-block;
+    margin-top:28px;
+    padding:14px 32px;
+    border:2px solid #FFD700;
+    border-radius:50px;
+    color:#000;
+    background:#FFD700;
+    font-size:22px;
+    font-weight:bold;
+    box-shadow:0 0 18px rgba(255,215,0,0.5);
+}
+
+.description{
+    max-width:850px;
+    margin:35px auto 25px;
+    font-size:22px;
+    line-height:1.6;
+    color:#eee;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:16px;
+    margin:35px auto;
+    max-width:900px;
+}
+
+.card{
+    background:#000;
+    border:1px solid #FFD700;
+    color:#FFD700;
+    padding:18px 10px;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:bold;
+    box-shadow:0 8px 18px rgba(0,0,0,0.6);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    background:#FFD700;
+    color:#000;
+}
+
+.quote{
+    margin-top:35px;
+    font-size:26px;
+    color:white;
+    font-style:italic;
+}
+
+.quote span{
+    color:#FFD700;
+    font-weight:bold;
+}
+
+.footer{
+    margin-top:35px;
+    padding-top:25px;
+    border-top:1px solid rgba(255,215,0,0.4);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.author{
+    text-align:left;
+}
+
+.author strong{
+    color:#FFD700;
+    font-size:22px;
+}
+
+.author p{
+    margin:6px 0 0;
+    color:#ccc;
+    font-size:16px;
+}
+
+.link{
+    background:yellowgreen;
+    color:#000;
+    padding:14px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.link:hover{
+    background:#FFD700;
+}
+
+.badge{
+    color:#FFD700;
+    font-size:16px;
+    letter-spacing:2px;
+    font-weight:bold;
+}
+
+@media(max-width:800px){
+    h1{
+        font-size:48px;
+    }
+
+    .subtitle{
+        font-size:22px;
+    }
+
+    .description{
+        font-size:18px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+
+    .footer{
+        text-align:center;
+        justify-content:center;
+    }
+
+    .author{
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+
+    <div class="content">
+
+        <div class="logo">PROJETO EDUCACIONAL</div>
+
+        <h1>POLYDEV</h1>
+
+        <div class="subtitle">
+            Leia • Entenda • Execute seu código
+        </div>
+
+        <div class="status">
+            VERSÃO ESTÁVEL PUBLICADA
+        </div>
+
+        <div class="description">
+            Uma plataforma educacional prática para programação, bancos de dados,
+            SQL avançado, dashboards e conteúdos técnicos organizados para quem
+            deseja aprender através de código real.
+        </div>
+
+        <div class="grid">
+            <div class="card">Python</div>
+            <div class="card">C / C++</div>
+            <div class="card">Rust</div>
+            <div class="card">Golang</div>
+
+            <div class="card">Pandas</div>
+            <div class="card">Streamlit</div>
+            <div class="card">SQL Server</div>
+            <div class="card">PostgreSQL</div>
+
+            <div class="card">MySQL</div>
+            <div class="card">Oracle</div>
+            <div class="card">SQL Modern</div>
+            <div class="card">Black Belt SQL</div>
+        </div>
+
+        <div class="quote">
+            <span>Where there's a will, there's a way.</span><br>
+            Querer é poder.
+        </div>
+
+        <div class="footer">
+
+            <div class="author">
+                <strong>DEGBAR BARBOSA</strong>
+                <p>Programador • DBA • Criador do POLYDEV</p>
+            </div>
+
+            <a class="link" href="https://degmvp.github.io/polidev/" target="_blank">
+                Acessar POLYDEV
+            </a>
+
+            <div class="badge">
+                GITHUB PAGES • SUPABASE • CODE LAB
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
