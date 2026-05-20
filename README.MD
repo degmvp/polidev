@@ -1,5 +1,8 @@
 POLYDEV
 
+🚀 Acesse o portal:https://degmvp.github.io/polidev/landing.html
+
+
 Leia • Entenda • Execute seu código
 
 POLYDEV é uma plataforma educacional voltada ao ensino prático de programação, bancos de dados e desenvolvimento moderno através de exemplos reais, organizados e autoexplicativos.
