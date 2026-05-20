@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Portal Oficial</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#000 0%,#111 55%,#2d3f00 100%);
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:70px 20px 40px;
+}
+
+.logo{
+    font-size:52px;
+    font-weight:bold;
+    color:#FFD700;
+    letter-spacing:3px;
+}
+
+.slogan{
+    color:yellowgreen;
+    font-size:22px;
+    margin-top:12px;
+    font-weight:bold;
+}
+
+.hero{
+    max-width:1100px;
+    margin:30px auto;
+    padding:40px 25px;
+    text-align:center;
+}
+
+.hero h1{
+    color:#FFD700;
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    color:#eee;
+    font-size:20px;
+    line-height:1.7;
+}
+
+.btns{
+    margin-top:35px;
+}
+
+.btn{
+    display:inline-block;
+    margin:10px;
+    padding:15px 28px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    background:#FFD700;
+    color:black;
+    box-shadow:0 6px 0 #8a7200;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 0 #8a7200;
+}
+
+.btn-green{
+    background:yellowgreen;
+    box-shadow:0 6px 0 #4f6f00;
+}
+
+section{
+    max-width:1200px;
+    margin:50px auto;
+    padding:20px;
+}
+
+h2{
+    text-align:center;
+    color:#FFD700;
+    font-size:34px;
+    margin-bottom:30px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:24px;
+}
+
+.card{
+    background:rgba(0,0,0,.72);
+    border:1px solid #FFD700;
+    border-radius:18px;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(255,215,0,.18);
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-8px) skewY(-1deg);
+    box-shadow:0 0 30px rgba(255,215,0,.35);
+}
+
+.card h3{
+    color:yellowgreen;
+    font-size:24px;
+}
+
+.card p{
+    color:#ddd;
+    line-height:1.6;
+}
+
+.highlight{
+    background:#FFD700;
+    color:black;
+    padding:45px 25px;
+    text-align:center;
+    margin-top:60px;
+}
+
+.highlight h2{
+    color:black;
+}
+
+.highlight p{
+    font-size:21px;
+    max-width:900px;
+    margin:auto;
+    line-height:1.7;
+    font-weight:bold;
+}
+
+footer{
+    text-align:center;
+    padding:35px 15px;
+    color:#ccc;
+    background:#050505;
+    border-top:1px solid #FFD700;
+}
+
+footer strong{
+    color:#FFD700;
+}
+
+@media(max-width:700px){
+    .logo{font-size:38px;}
+    .hero h1{font-size:31px;}
+    .hero p{font-size:18px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">POLYDEV</div>
+    <div class="slogan">Leia • Entenda • Execute seu código</div>
+</header>
+
+<div class="hero">
+    <h1>Portal Polyglot para Desenvolvedores e DBAs</h1>
+
+    <p>
+        O POLYDEV é um laboratório educacional criado para quem deseja aprender,
+        praticar e evoluir com código real, múltiplas linguagens, bancos de dados,
+        exemplos funcionais, guias técnicos e trilhas de estudo organizadas.
+    </p>
+
+    <div class="btns">
+        <a class="btn" href="index.html">Iniciar Cadastro</a>
+        <a class="btn btn-green" href="index.html">Acessar Sistema</a>
+    </div>
+</div>
+
+<section>
+    <h2>O que é o POLYDEV?</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>💻 Código Real</h3>
+            <p>Programas pequenos, objetivos e funcionais para leitura, estudo, execução e adaptação.</p>
+        </div>
+
+        <div class="card">
+            <h3>🧠 Black Belt</h3>
+            <p>Área avançada com SQL, procedures, functions, views, bitwise e técnicas de alto nível.</p>
+        </div>
+
+        <div class="card">
+            <h3>🗄 Bancos de Dados</h3>
+            <p>Guias e exemplos envolvendo SQL Server, MySQL, PostgreSQL, Oracle e modelagem prática.</p>
+        </div>
+
+        <div class="card">
+            <h3>🚀 Multi Linguagem</h3>
+            <p>Python, Pandas, Streamlit, C, C++, Rust, Go, T-SQL, Flet e novas trilhas em expansão.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Trilhas Disponíveis</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Python</h3>
+            <p>Fundamentos, exemplos, automações, classes e programação aplicada.</p>
+        </div>
+
+        <div class="card">
+            <h3>Pandas</h3>
+            <p>Manipulação de dados, CSV, Excel, filtros, estatísticas e análise prática.</p>
+        </div>
+
+        <div class="card">
+            <h3>SQL Moderno</h3>
+            <p>Consultas, catálogo, views, procedures, functions e técnicas profissionais.</p>
+        </div>
+
+        <div class="card">
+            <h3>Polyglot Dev</h3>
+            <p>Conteúdo para quem deseja pensar como desenvolvedor em várias linguagens.</p>
+        </div>
+    </div>
+</section>
+
+<div class="highlight">
+    <h2>Mais que um curso. Um laboratório de evolução.</h2>
+    <p>
+        O POLYDEV nasceu da prática, da experiência e da vontade de entregar valor.
+        Aqui o foco é simples: ler, entender, executar, testar, melhorar e crescer.
+    </p>
+
+</div>
+
+<section>
+    <h2>Próximos Passos</h2>
+
+    <div class="grid">
+        <div class="card">
+            <h3>🎥 Canal YouTube</h3>
+            <p>Conteúdo visual para apoiar as trilhas, apresentar códigos e divulgar a metodologia.</p>
+        </div>
+
+        <div class="card">
+            <h3>📚 Novos Cards</h3>
+            <p>Expansão contínua com novas linguagens, bancos, frameworks e exemplos aplicados.</p>
+        </div>
+
+        <div class="card">
+            <h3>🌐 Divulgação</h3>
+            <p>GitHub, LinkedIn, GitHub Pages e materiais públicos fortalecendo a marca POLYDEV.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p><strong>POLYDEV</strong> — Portal educacional para desenvolvedores, DBAs e estudantes de tecnologia.</p>
+    <p>Read • Understand • Execute your code</p>
+</footer>
+
+</body>
+</html>
