@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | SQL Guru Tricks</title>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=s1HI_YQMDRm9Yc761PVffPxcl0HpSA6cGU8pgghfJitsaVBdBLPANADA4iouoaki0NsrmBspvdBIrnPPFF4BDbjl4vF5dvDvJ-juzku5iJbUsbPwzwNdVU8HZX4oVTOJwssu70vjG5ARUzGh__jDby5INTCZZuoKAVPRJQgbvoq61p3JRgzszZbUzEIxUWGwYCYpzsym1av1FxhRQ1pg3zWuZ16H7KdSG-BnybYsE6ZSTsMCLhMTIVh5AZQjrCO93SjbLd06uOO6k4b2s-FAWA" charset="UTF-8"></script><style>
+:root{
+    --gold:#FFD700;
+    --black:#050505;
+    --dark:#101010;
+    --soft:#1b1b1b;
+    --white:#f5f5f5;
+    --muted:#cccccc;
+}
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:radial-gradient(circle at top,#333 0,#111 35%,#050505 100%);
+    color:var(--white);
+    line-height:1.6;
+}
+.header{
+    text-align:center;
+    padding:70px 20px 45px;
+    border-bottom:2px solid var(--gold);
+}
+.badge{
+    display:inline-block;
+    background:var(--gold);
+    color:#000;
+    padding:8px 18px;
+    border-radius:999px;
+    font-weight:bold;
+    letter-spacing:.5px;
+    margin-bottom:22px;
+}
+h1{
+    margin:0;
+    color:var(--gold);
+    font-size:clamp(2.4rem,6vw,5rem);
+    text-shadow:0 0 22px rgba(255,215,0,.35);
+}
+.subtitle{
+    margin:16px auto 0;
+    max-width:900px;
+    color:#fff;
+    font-size:1.25rem;
+}
+.tagline{
+    margin-top:22px;
+    color:var(--gold);
+    font-size:1.1rem;
+    font-weight:bold;
+}
+.container{
+    width:min(1180px,92%);
+    margin:0 auto;
+    padding:42px 0 70px;
+}
+.intro{
+    background:linear-gradient(145deg,#111,#080808);
+    border:1px solid var(--gold);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 0 30px rgba(255,215,0,.15);
+    margin-bottom:34px;
+}
+.intro h2{
+    color:var(--gold);
+    margin-top:0;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(310px,1fr));
+    gap:24px;
+}
+.card{
+    background:linear-gradient(160deg,#141414,#080808);
+    border:1px solid rgba(255,215,0,.85);
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 12px 35px rgba(0,0,0,.45);
+}
+.card h3{
+    color:var(--gold);
+    margin:0 0 12px;
+    font-size:1.25rem;
+}
+.card p{
+    color:var(--muted);
+    margin:14px 0 0;
+}
+.btns{display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:34px}
+.btn{
+  display:inline-block;
+  padding:14px 24px;
+  border-radius:12px;
+  background:var(--gold);
+  color:#000;
+  text-decoration:none;
+  font-weight:bold;
+}
+.btn.secondary{background:#111; color:var(--gold); border:1px solid var(--gold)}
+
+pre{
+    background:#000;
+    color:#f8f8f2;
+    border-left:5px solid var(--gold);
+    border-radius:12px;
+    padding:18px;
+    overflow:auto;
+    font-size:.92rem;
+    line-height:1.45;
+    white-space:pre-wrap;
+}
+.footer{
+    text-align:center;
+    color:#aaa;
+    border-top:1px solid rgba(255,215,0,.55);
+    padding:30px 20px 45px;
+}
+.footer strong{color:var(--gold);}
+</style>
+</head>
+<body>
+<header class="header">
+    <div class="badge">POLYDEV BLACK/GOLD</div>
+    <h1>SQL Guru Tricks</h1>
+    <p class="subtitle">10 funções SQL úteis para produtividade, validação, datas, texto, análise e rotinas do dia a dia.</p>
+    <div class="tagline">Leia • Entenda • Execute seu código</div>
+</header>
+
+<main class="container">
+    <section class="intro">
+        <h2>Comida aos peixes 🎣</h2>
+        <p>
+            Uma seleção direta de rotinas SQL Server simples, úteis e reaproveitáveis.
+            Material pensado para publicação técnica, demonstração de valor e divulgação do projeto POLYDEV.
+        </p>
+    </section>
+
+    <section class="grid">
+        <article class="card">
+            <h3>01. Verificar se uma data é fim de semana</h3>
+<pre><code>CREATE FUNCTION dbo.IsWeekend(@Date DATE)
+RETURNS BIT
+AS
+BEGIN
+    -- Retorna 1 se a data for sábado ou domingo, caso contrário, 0
+    RETURN CASE WHEN DATEPART(WEEKDAY, @Date) IN (7, 1) THEN 1 ELSE 0 END
+END</code></pre>
+            <p>Útil para filtrar ou marcar registros que caem em finais de semana, ajudando em análises de produtividade ou vendas.</p>
+        </article>
+
+        <article class="card">
+            <h3>02. Obter o último dia do mês</h3>
+<pre><code>CREATE FUNCTION dbo.LastDayOfMonth(@Date DATE)
+RETURNS DATE
+AS
+BEGIN
+    -- Retorna o último dia do mês da data fornecida
+    RETURN DATEADD(DAY, -DAY(DATEADD(MONTH, 1, @Date)), DATEADD(MONTH, 1, @Date))
+END</code></pre>
+            <p>Facilita cálculos de fechamento de períodos ou geração de relatórios mensais.</p>
+        </article>
+
+        <article class="card">
+            <h3>03. Calcular diferença em dias</h3>
+<pre><code>CREATE FUNCTION dbo.DaysDifference(@StartDate DATE, @EndDate DATE)
+RETURNS INT
+AS
+BEGIN
+    -- Retorna a quantidade de dias entre duas datas
+    RETURN DATEDIFF(DAY, @StartDate, @EndDate)
+END</code></pre>
+            <p>Essencial para métricas de tempo, como prazos ou períodos de validade.</p>
+        </article>
+
+        <article class="card">
+            <h3>04. Normalizar texto</h3>
+<pre><code>CREATE FUNCTION dbo.NormalizeText(@Text VARCHAR(100))
+RETURNS VARCHAR(100)
+AS
+BEGIN
+    -- Remove espaços extras e converte para maiúsculas
+    RETURN UPPER(LTRIM(RTRIM(@Text)))
+END</code></pre>
+            <p>Ajuda na padronização de dados antes de comparações ou inserções.</p>
+        </article>
+
+        <article class="card">
+            <h3>05. Verificar nulo ou vazio</h3>
+<pre><code>CREATE FUNCTION dbo.IsNullOrEmpty(@Value VARCHAR(100))
+RETURNS BIT
+AS
+BEGIN
+    -- Retorna 1 se o valor for nulo ou vazio, caso contrário, 0
+    RETURN CASE WHEN @Value IS NULL OR @Value = '' THEN 1 ELSE 0 END
+END</code></pre>
+            <p>Útil para validações rápidas em consultas complexas.</p>
+        </article>
+
+        <article class="card">
+            <h3>06. Gerar um GUID único</h3>
+<pre><code>CREATE FUNCTION dbo.GenerateGUID()
+RETURNS UNIQUEIDENTIFIER
+AS
+BEGIN
+    -- Retorna um novo GUID
+    RETURN NEWID()
+END</code></pre>
+            <p>Facilita a criação de chaves únicas para registros.</p>
+        </article>
+
+        <article class="card">
+            <h3>07. Percentual de crescimento</h3>
+<pre><code>CREATE FUNCTION dbo.PercentageGrowth(@Previous DECIMAL(18,2), @Current DECIMAL(18,2))
+RETURNS DECIMAL(5,2)
+AS
+BEGIN
+    -- Calcula o percentual de crescimento
+    RETURN CASE WHEN @Previous = 0 THEN NULL ELSE ((@Current - @Previous) / @Previous) * 100 END
+END</code></pre>
+            <p>Essencial para análises de desempenho ou vendas.</p>
+        </article>
+
+        <article class="card">
+            <h3>08. Buscar substring sem diferenciar maiúsculas/minúsculas</h3>
+<pre><code>CREATE FUNCTION dbo.ContainsIgnoreCase(@Text VARCHAR(100), @SubString VARCHAR(50))
+RETURNS BIT
+AS
+BEGIN
+    -- Retorna 1 se @Text contém @SubString, ignorando maiúsculas/minúsculas
+    RETURN CASE WHEN CHARINDEX(LOWER(@SubString), LOWER(@Text)) > 0 THEN 1 ELSE 0 END
+END</code></pre>
+            <p>Facilita buscas flexíveis em textos.</p>
+        </article>
+
+        <article class="card">
+            <h3>09. Calcular IMC</h3>
+<pre><code>CREATE FUNCTION dbo.CalcIMC(@Weight DECIMAL(5,2), @Height DECIMAL(4,2))
+RETURNS DECIMAL(4,2)
+AS
+BEGIN
+    -- Calcula o IMC (peso em kg / altura em metros ao quadrado)
+    RETURN @Weight / POWER(@Height, 2)
+END</code></pre>
+            <p>Útil em sistemas de saúde ou fitness.</p>
+        </article>
+
+        <article class="card">
+            <h3>10. Converter string em data com segurança</h3>
+<pre><code>CREATE FUNCTION dbo.SafeConvertToDate(@DateString VARCHAR(10))
+RETURNS DATE
+AS
+BEGIN
+    -- Tenta converter a string para data, retornando NULL se inválido
+    RETURN TRY_CAST(@DateString AS DATE)
+END</code></pre>
+            <p>Ajuda a evitar erros de conversão em consultas dinâmicas.</p>
+        </article>
+    </section>
+    <div class="btns">
+    <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">⬆ Voltar ao topo</a>
+    <a class="btn secondary" href="index.html">POLYDEV</a>
+  </div>
+
+</main>
+
+<footer class="footer">
+    <strong>POLYDEV</strong> • SQL Guru Tricks • Black/Gold Edition<br>
+    Conteúdo técnico para quem gosta de código real.
+</footer>
+</body>
+</html>

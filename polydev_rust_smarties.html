@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Rust Smarties</title>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=QLJueoCLkEJdTb09QJsGN_ZDmduT58iguhHqvPvco8fdYUt0EbY5IoHI4MdYRTG5COtKBtRYTJq6uHoxUL3Qcj4e400nrrZZ3o8vwiZJMOrnVRsLlGtyGQi7n3FC63CES0-lw3VRJdZFvU1OYFyzDPFuOVNSLw24otm7NNwRBADQ1C9hhn53n4k866_Kl9ak9piQKT3LEZDjuDUyfnqDqbzq0hmufqVmCLahGhxSq2l2JvlcjyF9bAhTLJ5r-17AwrEelZgp3y1l5XKvr2RyOw" charset="UTF-8"></script><style>
+:root {
+  --gold:#FFD700;
+  --gold2:#f4c542;
+  --bg:#050505;
+  --panel:#0d0d0d;
+  --text:#f5f5f5;
+  --muted:#cfcfcf;
+  --rust:#ce412b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:radial-gradient(circle at top, #261b00 0, #090909 38%, #000 100%);
+  color:var(--text);
+}
+.hero{
+  min-height:92vh;
+  padding:72px 24px 48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border-bottom:2px solid var(--gold);
+}
+.hero-box{
+  max-width:1120px;
+  padding:52px 36px;
+  background:linear-gradient(145deg, rgba(255,215,0,.10), rgba(0,0,0,.92));
+  border:2px solid var(--gold);
+  border-radius:28px;
+  box-shadow:0 0 42px rgba(255,215,0,.22);
+}
+.logo{font-size:84px; margin-bottom:10px}
+h1{
+  margin:0;
+  font-size:clamp(42px,7vw,82px);
+  color:var(--gold);
+  letter-spacing:1px;
+  text-shadow:0 0 20px rgba(255,215,0,.35);
+}
+.subtitle{font-size:clamp(20px,3vw,32px); margin:18px 0 26px; color:white}
+.tagline{
+  display:inline-block;
+  padding:12px 22px;
+  border:1px solid var(--gold);
+  border-radius:999px;
+  color:#111;
+  background:var(--gold);
+  font-weight:bold;
+}
+.intro{max-width:930px; margin:28px auto 0; color:#efefef; font-size:19px; line-height:1.75}
+.smart-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  margin-top:38px;
+}
+.smart{
+  background:#080808;
+  border:1px solid rgba(255,215,0,.75);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 26px rgba(0,0,0,.55);
+}
+.smart strong{color:var(--gold)}
+.wrap{width:min(1180px,92%); margin:0 auto; padding:46px 0 70px}
+.section-title{
+  color:var(--gold);
+  font-size:34px;
+  margin:12px 0 24px;
+  text-align:center;
+}
+.code-card{
+  margin:28px 0;
+  background:linear-gradient(180deg,#111,#070707);
+  border:1px solid rgba(255,215,0,.72);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 18px 34px rgba(0,0,0,.45);
+}
+.card-head{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:22px 24px;
+  background:linear-gradient(90deg,#000,#171100,#000);
+  border-bottom:1px solid rgba(255,215,0,.55);
+}
+.badge{
+  flex:0 0 auto;
+  background:var(--rust);
+  color:white;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:bold;
+  border:1px solid #ff9a81;
+}
+h2{margin:0; color:var(--gold); font-size:24px}
+.desc{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.65;
+  padding:20px 24px 0;
+}
+pre{
+  margin:20px 24px 26px;
+  padding:22px;
+  background:#000;
+  color:#f6f6f6;
+  border:1px solid #333;
+  border-left:5px solid var(--gold);
+  border-radius:14px;
+  overflow:auto;
+  line-height:1.55;
+  font-size:15px;
+}
+code{font-family:Consolas, 'Courier New', monospace}
+.notes{
+  background:#0b0b0b;
+  border:1px solid var(--gold);
+  border-radius:20px;
+  padding:26px;
+  color:#ddd;
+  line-height:1.75;
+}
+.notes h2{margin-bottom:12px}
+.btns{display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:34px}
+.btn{
+  display:inline-block;
+  padding:14px 24px;
+  border-radius:12px;
+  background:var(--gold);
+  color:#000;
+  text-decoration:none;
+  font-weight:bold;
+}
+.btn.secondary{background:#111; color:var(--gold); border:1px solid var(--gold)}
+footer{text-align:center; color:#aaa; padding:36px 16px; border-top:1px solid #332a00}
+@media(max-width:700px){.card-head{align-items:flex-start; flex-direction:column} pre{font-size:13px; margin-left:14px; margin-right:14px}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-box">
+    <div class="logo">🦀</div>
+    <h1>Rust Smarties</h1>
+    <div class="subtitle">Advanced Rust Tricks para programadores experientes</div>
+    <div class="tagline">POLYDEV • Leia • Entenda • Execute seu código</div>
+    <p class="intro">
+      Uma coleção de 15 exemplos avançados em Rust cobrindo paralelismo, concorrência, iterators, trait objects, unsafe controlado, atomic operations, macros, channels, mmap, FFI, pattern matching e alocação customizada.
+      Material de vitrine para quem gosta de código real, direto e inteligente.
+    </p>
+    <div class="smart-grid">
+      <div class="smart"><strong>Performance</strong><br>Rayon, mmap, allocator e atomic.</div>
+      <div class="smart"><strong>Concorrência</strong><br>Tokio, threads, channels e lock-free.</div>
+      <div class="smart"><strong>Abstrações</strong><br>Traits, iterators, macros e pattern matching.</div>
+      <div class="smart"><strong>Baixo nível</strong><br>Unsafe, raw pointers e FFI com C.</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <h2 class="section-title">15 códigos Rust para Smarties</h2>
+  
+<section class="code-card" id="rust01">
+  <div class="card-head">
+    <span class="badge">RS-01</span>
+    <h2>01 — Parallelismo com Rayon (data parallelism)</h2>
+  </div>
+  <p class="desc">Demonstra paralelismo de dados com Rayon. Processa grandes coleções de forma eficiente em múltiplos núcleos.</p>
+  <pre><code>// Cargo.toml: rayon = &quot;1.10&quot;
+use rayon::prelude::*;
+
+fn main() {
+    let numbers: Vec&lt;i32&gt; = (0..1_000_000).collect();
+    let sum: i32 = numbers.par_iter().map(|&amp;x| x * x).sum();
+    println!(&quot;Soma dos quadrados (paralelo): {}&quot;, sum);
+}</code></pre>
+</section>
+<section class="code-card" id="rust02">
+  <div class="card-head">
+    <span class="badge">RS-02</span>
+    <h2>02 — Async/Await com Tokio (concorrência)</h2>
+  </div>
+  <p class="desc">Exemplo prático de tarefas assíncronas com Tokio. Útil para I/O concorrente.</p>
+  <pre><code>// Cargo.toml: tokio = { version = &quot;1&quot;, features = [&quot;full&quot;] }
+#[tokio::main]
+async fn main() {
+    let handles = (0..5).map(|i| {
+        tokio::spawn(async move {
+            println!(&quot;Tarefa {} iniciada&quot;, i);
+            tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+            i * 10
+        })
+    }).collect::&lt;Vec&lt;_&gt;&gt;();
+
+    for h in handles {
+        println!(&quot;Resultado: {}&quot;, h.await.unwrap());
+    }
+}</code></pre>
+</section>
+<section class="code-card" id="rust03">
+  <div class="card-head">
+    <span class="badge">RS-03</span>
+    <h2>03 — Custom Iterator com State</h2>
+  </div>
+  <p class="desc">Implementa um Iterator customizado. Demonstra zero-cost abstractions.</p>
+  <pre><code>struct Fibonacci {
+    curr: u64,
+    next: u64,
+}
+
+impl Iterator for Fibonacci {
+    type Item = u64;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        let current = self.curr;
+        self.curr = self.next;
+        self.next += current;
+        Some(current)
+    }
+}
+
+fn main() {
+    let fib: u64 = Fibonacci { curr: 0, next: 1 }.take(20).sum();
+    println!(&quot;Soma dos primeiros 20 Fibonacci: {}&quot;, fib);
+}</code></pre>
+</section>
+<section class="code-card" id="rust04">
+  <div class="card-head">
+    <span class="badge">RS-04</span>
+    <h2>04 — Trait Objects + Dyn Dispatch</h2>
+  </div>
+  <p class="desc">Polimorfismo em tempo de execução com trait objects (vtable).</p>
+  <pre><code>trait Drawable {
+    fn draw(&amp;self);
+}
+
+struct Circle;
+struct Square;
+
+impl Drawable for Circle { fn draw(&amp;self) { println!(&quot;Desenhando círculo&quot;); } }
+impl Drawable for Square { fn draw(&amp;self) { println!(&quot;Desenhando quadrado&quot;); } }
+
+fn main() {
+    let shapes: Vec&lt;Box&lt;dyn Drawable&gt;&gt; = vec![Box::new(Circle), Box::new(Square)];
+    for shape in shapes {
+        shape.draw();
+    }
+}</code></pre>
+</section>
+<section class="code-card" id="rust05">
+  <div class="card-head">
+    <span class="badge">RS-05</span>
+    <h2>05 — Unsafe + Raw Pointers (com segurança controlada)</h2>
+  </div>
+  <p class="desc">Uso controlado de código unsafe para manipulação direta de memória. Cuidado: só para performance crítica.</p>
+  <pre><code>fn main() {
+    let mut data = vec![1, 2, 3, 4, 5];
+    let ptr = data.as_mut_ptr();
+    unsafe {
+        *ptr.add(2) = 42;  // modifica índice 2
+    }
+    println!(&quot;Vetor modificado com unsafe: {:?}&quot;, data);
+}</code></pre>
+</section>
+<section class="code-card" id="rust06">
+  <div class="card-head">
+    <span class="badge">RS-06</span>
+    <h2>06 — Interior Mutability com RefCell</h2>
+  </div>
+  <p class="desc">Mutabilidade interna em contexto single-threaded (borrow checker em runtime).</p>
+  <pre><code>use std::cell::RefCell;
+
+fn main() {
+    let data = RefCell::new(vec![1, 2, 3]);
+    {
+        let mut borrowed = data.borrow_mut();
+        borrowed.push(4);
+    }
+    println!(&quot;RefCell: {:?}&quot;, data.borrow());
+}</code></pre>
+</section>
+<section class="code-card" id="rust07">
+  <div class="card-head">
+    <span class="badge">RS-07</span>
+    <h2>07 — Lock-free com Atomic (multi-thread)</h2>
+  </div>
+  <p class="desc">Contador thread-safe sem mutex (melhor performance).</p>
+  <pre><code>use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(AtomicUsize::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = counter.clone();
+        handles.push(thread::spawn(move || {
+            for _ in 0..1000 {
+                counter.fetch_add(1, Ordering::Relaxed);
+            }
+        }));
+    }
+
+    for h in handles { h.join().unwrap(); }
+    println!(&quot;Contador final: {}&quot;, counter.load(Ordering::SeqCst));
+}</code></pre>
+</section>
+<section class="code-card" id="rust08">
+  <div class="card-head">
+    <span class="badge">RS-08</span>
+    <h2>08 — Macro Declarativa Avançada</h2>
+  </div>
+  <p class="desc">Geração de código em tempo de compilação.</p>
+  <pre><code>macro_rules! create_struct {
+    ($name:ident, $($field:ident: $type:ty),*) =&gt; {
+        struct $name {
+            $($field: $type),*
+        }
+        impl $name {
+            fn new($($field: $type),*) -&gt; Self {
+                Self { $($field),* }
+            }
+        }
+    };
+}
+
+create_struct!(Person, name: String, age: u32);
+
+fn main() {
+    let p = Person::new(&quot;Alice&quot;.to_string(), 30);
+    println!(&quot;{} tem {} anos&quot;, p.name, p.age);
+}</code></pre>
+</section>
+<section class="code-card" id="rust09">
+  <div class="card-head">
+    <span class="badge">RS-09</span>
+    <h2>09 — Channels MPSC para Comunicação entre Threads</h2>
+  </div>
+  <p class="desc">Comunicação thread-safe producer-consumer.</p>
+  <pre><code>use std::sync::mpsc;
+use std::thread;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+    thread::spawn(move || {
+        for i in 0..5 {
+            tx.send(i).unwrap();
+            thread::sleep(std::time::Duration::from_millis(50));
+        }
+    });
+
+    for received in rx {
+        println!(&quot;Recebido: {}&quot;, received);
+    }
+}</code></pre>
+</section>
+<section class="code-card" id="rust10">
+  <div class="card-head">
+    <span class="badge">RS-10</span>
+    <h2>10 — Memory Mapping de Arquivo (mmap)</h2>
+  </div>
+  <p class="desc">Acesso eficiente a arquivos grandes via memory mapping.</p>
+  <pre><code>use std::fs::File;
+use std::io::{self, Write};
+use memmap2::MmapOptions; // Cargo.toml: memmap2 = &quot;0.9&quot;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let mut file = File::create(&quot;test.bin&quot;)?;
+    file.write_all(b&quot;Hello Rust mmap!&quot;)?;
+    let file = File::open(&quot;test.bin&quot;)?;
+    let mmap = unsafe { MmapOptions::new().map(&amp;file)? };
+    println!(&quot;Conteúdo mmap: {}&quot;, String::from_utf8_lossy(&amp;mmap));
+    Ok(())
+}</code></pre>
+</section>
+<section class="code-card" id="rust11">
+  <div class="card-head">
+    <span class="badge">RS-11</span>
+    <h2>11 — Error Handling com thiserror + anyhow (recomendado)</h2>
+  </div>
+  <p class="desc">Tratamento de erros moderno e contextualizado.</p>
+  <pre><code>// Cargo.toml: thiserror = &quot;1&quot;, anyhow = &quot;1&quot;
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+enum MyError {
+    #[error(&quot;IO error: {0}&quot;)]
+    Io(#[from] std::io::Error),
+    #[error(&quot;Custom error: {0}&quot;)]
+    Custom(String),
+}
+
+fn main() -&gt; anyhow::Result&lt;()&gt; {
+    std::fs::File::open(&quot;arquivo_inexistente.txt&quot;)?;
+    Ok(())
+}</code></pre>
+</section>
+<section class="code-card" id="rust12">
+  <div class="card-head">
+    <span class="badge">RS-12</span>
+    <h2>12 — FFI com C (extern &quot;C&quot;)</h2>
+  </div>
+  <p class="desc">Interoperabilidade com código C (compile com `rustc main.rs -L /path` se necessário).</p>
+  <pre><code>extern &quot;C&quot; {
+    fn abs(input: i32) -&gt; i32;
+}
+
+fn main() {
+    let x = -42;
+    unsafe {
+        println!(&quot;Absoluto de {} = {}&quot;, x, abs(x));
+    }
+}</code></pre>
+</section>
+<section class="code-card" id="rust13">
+  <div class="card-head">
+    <span class="badge">RS-13</span>
+    <h2>13 — Lazy Static Initialization</h2>
+  </div>
+  <p class="desc">Inicialização preguiçosa de dados globais thread-safe.</p>
+  <pre><code>// Cargo.toml: lazy_static = &quot;1.4&quot;
+use lazy_static::lazy_static;
+use std::collections::HashMap;
+
+lazy_static! {
+    static ref CONFIG: HashMap&lt;String, String&gt; = {
+        let mut m = HashMap::new();
+        m.insert(&quot;host&quot;.to_string(), &quot;localhost&quot;.to_string());
+        m
+    };
+}
+
+fn main() {
+    println!(&quot;Host: {}&quot;, CONFIG.get(&quot;host&quot;).unwrap());
+}</code></pre>
+</section>
+<section class="code-card" id="rust14">
+  <div class="card-head">
+    <span class="badge">RS-14</span>
+    <h2>14 — Advanced Pattern Matching + Guards</h2>
+  </div>
+  <p class="desc">Pattern matching poderoso com guards.</p>
+  <pre><code>enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+
+fn process(msg: Message) {
+    match msg {
+        Message::Quit =&gt; println!(&quot;Quit&quot;),
+        Message::Move { x, y } if x + y &gt; 100 =&gt; println!(&quot;Movimento grande&quot;),
+        Message::Move { x, y } =&gt; println!(&quot;Move para ({}, {})&quot;, x, y),
+        Message::Write(s) if s.len() &gt; 10 =&gt; println!(&quot;Texto longo: {}&quot;, s),
+        Message::Write(s) =&gt; println!(&quot;Texto: {}&quot;, s),
+    }
+}
+
+fn main() {
+    process(Message::Move { x: 60, y: 50 });
+    process(Message::Write(&quot;Olá Rust!&quot;.to_string()));
+}</code></pre>
+</section>
+<section class="code-card" id="rust15">
+  <div class="card-head">
+    <span class="badge">RS-15</span>
+    <h2>15 — Custom Allocator (Global Allocator)</h2>
+  </div>
+  <p class="desc">Controle fino sobre alocação de memória (útil em sistemas embarcados ou performance crítica).</p>
+  <pre><code>use std::alloc::{GlobalAlloc, System, Layout};
+
+struct MyAllocator;
+
+unsafe impl GlobalAlloc for MyAllocator {
+    unsafe fn alloc(&amp;self, layout: Layout) -&gt; *mut u8 {
+        println!(&quot;Alocando {} bytes&quot;, layout.size());
+        System.alloc(layout)
+    }
+    unsafe fn dealloc(&amp;self, ptr: *mut u8, layout: Layout) {
+        System.dealloc(ptr, layout);
+    }
+}
+
+#[global_allocator]
+static ALLOCATOR: MyAllocator = MyAllocator;
+
+fn main() {
+    let v = vec![1; 1000];
+    println!(&quot;Vetor de {} elementos criado&quot;, v.len());
+}</code></pre>
+</section>
+  <section class="notes">
+    <h2>Como executar</h2>
+    <p><strong>Std-only:</strong> salve como <code>main.rs</code> e execute <code>rustc main.rs && ./main</code>.</p>
+    <p><strong>Com crates:</strong> crie um projeto com <code>cargo new projeto</code>, adicione as dependências indicadas no <code>Cargo.toml</code> e rode <code>cargo run</code>.</p>
+    <p><strong>Observação POLYDEV:</strong> os exemplos foram organizados para publicação como artigo/capa técnica. Depois podem virar cards, viewer e downloads oficiais dentro do portal.</p>
+  </section>
+  <div class="btns">
+    <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">⬆ Voltar ao topo</a>
+    <a class="btn secondary" href="index.html">POLYDEV</a>
+  </div>
+</main>
+<footer>POLYDEV • Rust Smarties • Black/Gold Edition</footer>
+</body>
+</html>
