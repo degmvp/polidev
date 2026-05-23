@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Cython Performance</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#FFD700;
+    color:black;
+}
+
+.banner{
+    display:block;
+    margin:20px auto;
+    max-width:1000px;
+    width:90%;
+    height:auto;
+    object-fit:contain;
+    border-radius:12px;
+    box-shadow:0 0 18px rgba(0,0,0,0.35);
+}
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:20px;
+}
+
+h1{
+    color:black;
+    text-align:center;
+    font-size:38px;
+}
+
+h2{
+    color:#FFD700;
+    border-left:6px solid #FFD700;
+    padding-left:12px;
+    margin-top:35px;
+}
+
+
+h3{
+    color:#00ff99;
+}
+
+p, li{
+    color:lightgreen;
+    font-size:18px;
+    line-height:1.6;
+}
+
+.card{
+    background:#050505;
+    border:2px solid black;
+    border-radius:14px;
+    padding:22px;
+    margin:25px 0;
+    box-shadow:0 0 18px rgba(0,0,0,0.35);
+}
+pre{
+    background:white;
+    color:black;
+    padding:20px;
+    overflow-x:auto;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+}
+
+code{
+    font-family:Consolas, monospace;
+}
+
+.footer{
+    text-align:center;
+    margin:45px 0 20px;
+    color:#FFD700;
+    font-size:18px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#FFD700;
+    color:black;
+    padding:12px 22px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<img src="banner_poly.jpg" class="banner" alt="POLYDEV Banner">
+<div class="container">
+
+<h1>POLYDEV | Cython Performance</h1>
+
+<div class="card">
+<h2>Brief — O que é Cython?</h2>
+
+<p>
+Cython é uma linguagem de programação que combina Python com elementos de C.
+Ela permite escrever código com aparência próxima ao Python, mas que pode ser
+compilado para código de máquina altamente eficiente, semelhante ao C.
+</p>
+
+<p>
+Seu principal objetivo é otimizar partes críticas de programas Python,
+principalmente em cálculos intensivos, manipulação de grandes volumes de dados,
+processamento científico, machine learning e integração com bibliotecas C/C++.
+</p>
+
+<p>
+Resumindo: <strong>Cython é uma ponte entre Python e C</strong>, permitindo
+desenvolver código mais rápido e eficiente sem abandonar o ecossistema Python.
+</p>
+</div>
+
+<div class="card">
+<h2>Código Base — Cython + NumPy</h2>
+
+<pre><code>import numpy as np
+cimport numpy as np</code></pre>
+</div>
+
+<div class="card">
+<h2>1. Soma de Arrays Numéricos</h2>
+<p>Soma elemento a elemento de dois arrays numéricos grandes.</p>
+
+<pre><code>def sum_arrays(np.ndarray[np.float64_t, ndim=1] arr1,
+               np.ndarray[np.float64_t, ndim=1] arr2):
+    cdef int n = arr1.shape[0]
+    cdef np.ndarray[np.float64_t, ndim=1] result = np.zeros(n)
+    cdef int i
+
+    for i in range(n):
+        result[i] = arr1[i] + arr2[i]
+
+    return result</code></pre>
+</div>
+
+<div class="card">
+<h2>2. Filtro de Média Móvel</h2>
+<p>Filtra dados para suavizar sinais, comum em séries temporais.</p>
+
+<pre><code>def moving_average(np.ndarray[np.float64_t, ndim=1] data,
+                   int window_size):
+    cdef int n = data.shape[0]
+    cdef np.ndarray[np.float64_t, ndim=1] result = np.zeros(n - window_size + 1)
+    cdef double soma = 0
+    cdef int i
+
+    for i in range(window_size):
+        soma += data[i]
+
+    result[0] = soma / window_size
+
+    for i in range(1, n - window_size + 1):
+        soma += data[i + window_size - 1] - data[i - 1]
+        result[i] = soma / window_size
+
+    return result</code></pre>
+</div>
+
+<div class="card">
+<h2>3. Distância Euclidiana entre Pontos</h2>
+<p>Usada para medir similaridade entre vetores, muito comum em machine learning.</p>
+
+<pre><code>def euclidean_distance(np.ndarray[np.float64_t, ndim=1] point1,
+                       np.ndarray[np.float64_t, ndim=1] point2):
+    cdef int n = point1.shape[0]
+    cdef double dist = 0
+    cdef int i
+
+    for i in range(n):
+        dist += (point1[i] - point2[i]) ** 2
+
+    return dist ** 0.5</code></pre>
+</div>
+
+<div class="card">
+<h2>4. Encontrar o Máximo em um Grande Array</h2>
+<p>Localiza rapidamente o índice e o valor máximo em grandes conjuntos de dados.</p>
+
+<pre><code>def find_max(np.ndarray[np.float64_t, ndim=1] data):
+    cdef double max_val = data[0]
+    cdef int max_idx = 0
+    cdef int i
+
+    for i in range(1, data.shape[0]):
+        if data[i] > max_val:
+            max_val = data[i]
+            max_idx = i
+
+    return max_idx, max_val</code></pre>
+</div>
+
+<div class="card">
+<h2>5. Multiplicação de Matrizes</h2>
+<p>Fundamental em álgebra linear, computação científica e aprendizado de máquina.</p>
+
+<pre><code>def matmul(np.ndarray[np.float64_t, ndim=2] A,
+           np.ndarray[np.float64_t, ndim=2] B):
+    cdef int i, j, k
+    cdef int m = A.shape[0]
+    cdef int n = B.shape[1]
+    cdef int p = A.shape[1]
+    cdef np.ndarray[np.float64_t, ndim=2] C = np.zeros((m, n))
+
+    for i in range(m):
+        for j in range(n):
+            for k in range(p):
+                C[i, j] += A[i, k] * B[k, j]
+
+    return C</code></pre>
+</div>
+
+<div class="card">
+<h2>6. Média de uma Lista de Números</h2>
+<p>Cálculo eficiente de média em listas grandes.</p>
+
+<pre><code>def mean_list(list data):
+    cdef double total = 0
+    cdef int n = len(data)
+    cdef int i
+
+    for i in range(n):
+        total += data[i]
+
+    return total / n</code></pre>
+</div>
+
+<div class="card">
+<h2>7. Elemento Mais Próximo</h2>
+<p>Encontra o índice do valor mais próximo dentro de um vetor.</p>
+
+<pre><code>def find_nearest(np.ndarray[np.float64_t, ndim=1] data,
+                 double value):
+    cdef double min_diff = abs(data[0] - value)
+    cdef int min_idx = 0
+    cdef int i
+    cdef double diff
+
+    for i in range(1, data.shape[0]):
+        diff = abs(data[i] - value)
+
+        if diff < min_diff:
+            min_diff = diff
+            min_idx = i
+
+    return min_idx</code></pre>
+</div>
+
+<div class="card">
+<h2>8. Variância de Dados</h2>
+<p>Calcula a dispersão estatística de um conjunto de dados.</p>
+
+<pre><code>def variance(np.ndarray[np.float64_t, ndim=1] data):
+    cdef double mean = 0
+    cdef double var = 0
+    cdef int n = data.shape[0]
+    cdef int i
+
+    for i in range(n):
+        mean += data[i]
+
+    mean /= n
+
+    for i in range(n):
+        var += (data[i] - mean) ** 2
+
+    return var / n</code></pre>
+</div>
+
+<div class="card">
+<h2>9. Interpolação Linear</h2>
+<p>Estima valores intermediários entre dois pontos conhecidos.</p>
+
+<pre><code>def linear_interpolation(double x0, double y0,
+                         double x1, double y1,
+                         double x):
+    return y0 + (y1 - y0) * (x - x0) / (x1 - x0)</code></pre>
+</div>
+
+<div class="card">
+<h2>10. Contar Ocorrências</h2>
+<p>Conta quantas vezes um valor aparece em um array numérico.</p>
+
+<pre><code>def count_occurrences(np.ndarray[np.float64_t, ndim=1] data,
+                      double value):
+    cdef int count = 0
+    cdef int i
+
+    for i in range(data.shape[0]):
+        if data[i] == value:
+            count += 1
+
+    return count</code></pre>
+</div>
+
+<div class="card">
+<h2>Conclusão</h2>
+<p>
+Cython é uma ferramenta poderosa para quem deseja manter a produtividade do
+Python, mas precisa de desempenho próximo ao C em pontos críticos da aplicação.
+</p>
+
+<p>
+No POLYDEV, esse tipo de conteúdo representa exatamente a proposta:
+<strong>ler, entender e executar código com valor técnico real.</strong>
+</p>
+</div>
+
+<div class="footer">
+POLYDEV — Leia • Entenda • Execute seu código
+<br>
+<a href="index.html" class="btn">Acessar POLYDEV</a>
+</div>
+
+</div>
+
+</body>
+</html>
