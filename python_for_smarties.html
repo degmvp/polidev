@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Python For Smarties</title>
+
+<style>
+:root{
+    --gold:#ffd700;
+    --gold2:#ffb300;
+    --black:#050505;
+    --dark:#111111;
+    --card:#171717;
+    --white:#f7f7f7;
+    --green:#9acd32;
+    --blue:#61dafb;
+    --code:#0b0f14;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at top left, rgba(255,215,0,.22), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(154,205,50,.16), transparent 32%),
+        linear-gradient(135deg, #050505 0%, #141414 55%, #050505 100%);
+    color:var(--white);
+    font-family:Arial, Helvetica, sans-serif;
+    line-height:1.6;
+}
+
+header{
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px 20px 10px;
+    text-align:center;
+}
+
+.banner-img-wrap{
+    max-width:980px;
+    margin:0 auto 18px;
+    text-align:center;
+}
+
+.banner-img{
+    display:block;
+    max-width:100%;
+    width:auto;
+    height:auto;
+    max-height:260px;
+    margin:0 auto;
+    object-fit:contain;
+    border-radius:18px;
+    border:2px solid rgba(255,215,0,.70);
+    box-shadow:0 18px 45px rgba(0,0,0,.45);
+    background:#050505;
+}
+
+.banner{
+    max-width:980px;
+    width:100%;
+    margin:0 auto 22px;
+    padding:22px;
+    border:2px solid rgba(255,215,0,.75);
+    border-radius:24px;
+    background:linear-gradient(135deg, rgba(255,215,0,.95), rgba(255,179,0,.86));
+    color:#050505;
+    box-shadow:0 20px 55px rgba(0,0,0,.45);
+}
+
+.banner h1{
+    margin:0;
+    font-size:clamp(2rem, 5vw, 4.2rem);
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.banner h2{
+    margin:8px 0 0;
+    font-size:clamp(1.1rem, 2.6vw, 1.65rem);
+    font-weight:800;
+}
+
+.tagline{
+    display:inline-block;
+    margin-top:16px;
+    padding:10px 18px;
+    border-radius:999px;
+    background:#050505;
+    color:var(--gold);
+    font-weight:bold;
+    letter-spacing:.5px;
+}
+
+.container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:22px 20px 55px;
+}
+
+.hero{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:22px;
+    align-items:stretch;
+    margin-top:18px;
+}
+
+.panel{
+    background:rgba(17,17,17,.92);
+    border:1px solid rgba(255,215,0,.35);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 16px 40px rgba(0,0,0,.35);
+}
+
+.panel h2, .section-title{
+    color:var(--gold);
+    margin-top:0;
+}
+
+.panel p{
+    margin-bottom:0;
+    color:#eeeeee;
+}
+
+.badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+}
+
+.badge{
+    background:#050505;
+    color:var(--green);
+    border:1px solid rgba(154,205,50,.5);
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:.92rem;
+    font-weight:bold;
+}
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.metric{
+    background:linear-gradient(145deg,#0a0a0a,#1d1d1d);
+    border:1px solid rgba(255,215,0,.35);
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+}
+
+.metric strong{
+    display:block;
+    color:var(--gold);
+    font-size:2rem;
+}
+
+.metric span{
+    color:#ddd;
+    font-weight:bold;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+    margin-top:24px;
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(145deg,#101010,#1b1b1b);
+    border:1px solid rgba(255,215,0,.32);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 12px 32px rgba(0,0,0,.28);
+    transition:.25s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    border-color:var(--gold);
+    box-shadow:0 20px 45px rgba(255,215,0,.13);
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    right:-45px;
+    top:-45px;
+    background:rgba(255,215,0,.13);
+    border-radius:50%;
+}
+
+.card .num{
+    display:inline-flex;
+    width:42px;
+    height:42px;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--gold);
+    color:#050505;
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.card h3{
+    color:var(--gold);
+    margin:6px 0 8px;
+}
+
+.card p{
+    color:#e8e8e8;
+    margin:0;
+}
+
+.smart-note{
+    margin-top:28px;
+    border-left:6px solid var(--green);
+    background:rgba(154,205,50,.12);
+    padding:18px 20px;
+    border-radius:16px;
+}
+
+.smart-note strong{ color:var(--green); }
+
+.code-wrap{
+    margin-top:28px;
+    background:#050505;
+    border:1px solid rgba(255,215,0,.42);
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.42);
+}
+
+.code-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:16px 20px;
+    background:linear-gradient(90deg,var(--gold),var(--gold2));
+    color:#050505;
+    font-weight:900;
+}
+
+.code-title span:last-child{
+    background:#050505;
+    color:var(--gold);
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:.88rem;
+}
+
+pre{
+    margin:0;
+    padding:24px;
+    background:var(--code);
+    color:#e9f2ff;
+    overflow:auto;
+    font-size:.94rem;
+    line-height:1.55;
+    tab-size:4;
+}
+
+code{
+    font-family:Consolas, Monaco, 'Courier New', monospace;
+}
+
+.footer{
+    margin-top:34px;
+    text-align:center;
+    color:#ddd;
+}
+
+.footer strong{
+    color:var(--gold);
+}
+
+.buttons{
+    margin-top:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    justify-content:center;
+}
+
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    background:var(--gold);
+    color:#050505;
+    padding:12px 18px;
+    border-radius:999px;
+    font-weight:900;
+    box-shadow:0 10px 22px rgba(0,0,0,.25);
+}
+
+.btn.secondary{
+    background:#050505;
+    color:var(--gold);
+    border:1px solid rgba(255,215,0,.6);
+}
+
+@media(max-width:850px){
+    .hero{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:1fr 1fr; }
+}
+
+@media(max-width:520px){
+    .metrics{ grid-template-columns:1fr; }
+    .code-title{ flex-direction:column; align-items:flex-start; }
+    pre{ font-size:.84rem; padding:18px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <div class="banner-img-wrap">
+        <img class="banner-img" src="banner_poly.jpg" alt="POLYDEV Banner">
+    </div>
+    <div class="banner">
+        <h1>Python For Smarties</h1>
+        <h2>10 funções inteligentes para programadores experientes</h2>
+        <div class="tagline">POLYDEV • Leia • Entenda • Execute seu código</div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <div class="panel">
+            <h2>Python em modo avançado</h2>
+            <p>
+                Este artigo reúne recursos elegantes do Python moderno: cache, context managers,
+                currying com <strong>partial</strong>, pipelines funcionais, generators, decorators com TTL
+                e composição de funções. É conteúdo direto para quem já programa e quer escrever código
+                mais limpo, expressivo e poderoso.
+            </p>
+            <div class="badges">
+                <span class="badge">@cache</span>
+                <span class="badge">contextmanager</span>
+                <span class="badge">partial</span>
+                <span class="badge">reduce</span>
+                <span class="badge">generators</span>
+                <span class="badge">decorators</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Mapa do artigo</h2>
+            <div class="metrics">
+                <div class="metric"><strong>10</strong><span>funções</span></div>
+                <div class="metric"><strong>100%</strong><span>código prático</span></div>
+                <div class="metric"><strong>#2</strong><span>série Smarties</span></div>
+                <div class="metric"><strong>Py</strong><span>modo guru</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title" style="margin-top:34px;">Os 10 recursos demonstrados</h2>
+        <div class="grid">
+            <article class="card"><span class="num">1</span><h3>Cache infinito</h3><p>Memoization com <code>@cache</code> para acelerar chamadas repetidas, como Fibonacci.</p></article>
+            <article class="card"><span class="num">2</span><h3>Timer com Context Manager</h3><p>Mede tempo de execução usando <code>@contextmanager</code> de forma limpa.</p></article>
+            <article class="card"><span class="num">3</span><h3>Partial e Currying</h3><p>Cria funções especializadas como <code>square</code> e <code>cube</code>.</p></article>
+            <article class="card"><span class="num">4</span><h3>Agrupamento flexível</h3><p>Agrupa itens por qualquer regra usando <code>defaultdict</code>.</p></article>
+            <article class="card"><span class="num">5</span><h3>Flatten recursivo</h3><p>Achata listas aninhadas em qualquer profundidade com generator.</p></article>
+            <article class="card"><span class="num">6</span><h3>Pipeline funcional</h3><p>Executa sequência de funções usando <code>reduce</code>.</p></article>
+            <article class="card"><span class="num">7</span><h3>Sliding Window</h3><p>Gera janelas móveis sobre iteráveis com <code>tee</code> e <code>zip</code>.</p></article>
+            <article class="card"><span class="num">8</span><h3>Únicos com ordem</h3><p>Remove duplicatas preservando a ordem original dos dados.</p></article>
+            <article class="card"><span class="num">9</span><h3>Cache com TTL</h3><p>Decorator customizado com expiração por tempo.</p></article>
+            <article class="card"><span class="num">10</span><h3>Composição</h3><p>Combina funções no estilo matemático: <code>f(g(h(x)))</code>.</p></article>
+        </div>
+    </section>
+
+    <div class="smart-note">
+        <strong>Nota técnica POLYDEV:</strong> no item 7, o código usa <code>islice</code> dentro de
+        <code>sliding_window</code>. Para executar sem erro, ele precisa estar importado de
+        <code>itertools</code>. A versão abaixo já inclui esse ajuste no import.
+    </div>
+
+    <section class="code-wrap">
+        <div class="code-title">
+            <span>Código-fonte completo — python_for_smarties.html</span>
+            <span>Python Smarties #2</span>
+        </div>
+<pre><code># ====================== 10 FUNÇÕES PYTHON FOR SMARTIES #2 ======================
+
+from functools import cache, lru_cache, partial, reduce
+from itertools import chain, tee, zip_longest, islice
+import time
+from contextlib import contextmanager
+from collections import defaultdict
+
+
+# 1 - Cache Infinito (Memoization)
+@cache
+def fibonacci(n: int) -> int:
+    """Fibonacci ultra-rápido com cache infinito (LRU sem limite)"""
+    return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)
+
+
+# 2 - Context Manager para medir tempo
+@contextmanager
+def timer(name: str = "Operação"):
+    """Context manager elegante para medir tempo de execução"""
+    start = time.perf_counter()
+    try:
+        yield
+    finally:
+        end = time.perf_counter()
+        print(f"⏱️  {name} executada em {end - start:.6f} segundos")
+
+
+# 3 - Partial + Currying Simples
+def power(base: int, exponent: int) -> int:
+    return base ** exponent
+
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+
+# 4 - Agrupar itens por chave (mais poderoso que groupby)
+def group_by(items: list, key_func):
+    """Agrupa lista de dicionários ou objetos por qualquer critério"""
+    grouped = defaultdict(list)
+    for item in items:
+        grouped[key_func(item)].append(item)
+    return dict(grouped)
+
+
+# 5 - Flatten aninhado arbitrário
+def flatten(nested_list):
+    """Achata listas aninhadas em qualquer nível de profundidade"""
+    for item in nested_list:
+        if isinstance(item, list):
+            yield from flatten(item)
+        else:
+            yield item
+
+
+# 6 - Pipeline de funções (estilo functional)
+def pipeline(value, *functions):
+    """Aplica várias funções em sequência (pipe)"""
+    return reduce(lambda v, f: f(v), functions, value)
+
+
+# 7 - Gerador de janelas deslizantes (sliding window)
+def sliding_window(iterable, size: int):
+    """Gera janelas deslizantes de tamanho fixo"""
+    iters = tee(iterable, size)
+    for i, it in enumerate(iters):
+        next(islice(it, i, None), None)   # avançar cada iterador
+    return zip(*iters)
+
+
+# 8 - Detectar duplicatas mantendo ordem
+def unique_preserve_order(items):
+    """Remove duplicatas mantendo a ordem de aparição (Python 3.7+)"""
+    seen = set()
+    return [x for x in items if not (x in seen or seen.add(x))]
+
+
+# 9 - Memoization com TTL (expiração)
+from functools import wraps
+import time as _time
+
+def ttl_cache(seconds: int = 60):
+    """Decorator de cache com tempo de vida (TTL)"""
+    def decorator(func):
+        cache_dict = {}
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            key = args + tuple(sorted(kwargs.items()))
+            now = _time.time()
+            if key in cache_dict:
+                result, timestamp = cache_dict[key]
+                if now - timestamp < seconds:
+                    return result
+            result = func(*args, **kwargs)
+            cache_dict[key] = (result, now)
+            return result
+        return wrapper
+    return decorator
+
+
+# 10 - Operador de composição de funções
+def compose(*functions):
+    """Compor funções: compose(f, g, h)(x) = f(g(h(x)))"""
+    def composed(x):
+        for f in reversed(functions):
+            x = f(x)
+        return x
+    return composed
+
+
+# =========================== TESTES ===========================
+
+if __name__ == "__main__":
+    print("=== 10 Funções Python For Smarties #2 ===\n")
+    
+    print("1. fibonacci(40):", fibonacci(40))
+    
+    with timer("Teste de tempo"):
+        time.sleep(0.15)
+    
+    print("3. square(7):", square(7))
+    print("3. cube(5):", cube(5))
+    
+    data = [{"idade": 25, "cidade": "SP"}, {"idade": 30, "cidade": "RJ"}, 
+            {"idade": 25, "cidade": "BH"}]
+    print("4. group_by por idade:", group_by(data, lambda x: x["idade"]))
+    
+    nested = [1, [2, [3, 4], 5], 6, [7, 8]]
+    print("5. flatten:", list(flatten(nested)))
+    
+    # Pipeline
+    result = pipeline(5, lambda x: x*2, lambda x: x**2, lambda x: x+10)
+    print("6. pipeline:", result)
+    
+    print("8. unique_preserve_order:", unique_preserve_order([1, 2, 2, 3, 4, 1, 5, 3]))
+    
+    @ttl_cache(seconds=2)
+    def slow_func(x):
+        time.sleep(0.3)
+        return x * 10
+    
+    print("9. ttl_cache primeiro:", slow_func(7))
+    print("9. ttl_cache (cache):", slow_func(7))
+    
+    # Compose
+    f = compose(lambda x: x+1, lambda x: x*2, lambda x: x**2)
+    print("10. compose(3):", f(3))</code></pre>
+    </section>
+
+    <section class="panel" style="margin-top:28px;">
+        <h2>Resumo para publicação</h2>
+        <p>
+            <strong>Python For Smarties</strong> é uma peça da série POLYDEV voltada a programadores
+            que gostam de código enxuto, forte e reaproveitável. O artigo não ensina apenas sintaxe:
+            mostra padrões úteis para performance, organização, composição e automação.
+        </p>
+        <div class="buttons">
+            <a class="btn" href="index.html">Acessar POLYDEV</a>
+            <a class="btn secondary" href="home.html">Voltar ao Sistema</a>
+        </div>
+    </section>
+
+    <div class="footer">
+        <p><strong>POLYDEV</strong> — Multiprogramming • Multidatabase • Smart Code</p>
+        <p>Leia • Entenda • Execute seu código</p>
+    </div>
+</main>
+</body>
+</html>
