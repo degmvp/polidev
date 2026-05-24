@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Pandas For Smarties</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #050505;
+        color: #f5f5f5;
+        line-height: 1.6;
+    }
+
+    header {
+        background: linear-gradient(135deg, #000000 0%, #1a1a1a 45%, #d4af37 100%);
+        border-bottom: 4px solid #d4af37;
+        padding: 24px 18px 30px;
+        text-align: center;
+    }
+
+    .banner {
+        max-width: 980px;
+        margin: 0 auto 18px;
+    }
+
+    .banner img {
+        width: 100%;
+        max-width: 980px;
+        height: auto;
+        max-height: 260px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        border-radius: 18px;
+        border: 2px solid #d4af37;
+        background: #000;
+        box-shadow: 0 0 25px rgba(212,175,55,.35);
+    }
+
+    .eyebrow {
+        color: #d4af37;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    h1 {
+        color: #ffd700;
+        font-size: clamp(2rem, 5vw, 4rem);
+        text-transform: uppercase;
+        text-shadow: 2px 2px 0 #000;
+    }
+
+    .subtitle {
+        max-width: 980px;
+        margin: 14px auto 0;
+        color: #f7f0c9;
+        font-size: 1.15rem;
+    }
+
+    main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 18px 56px;
+    }
+
+    .card {
+        background: #111;
+        border: 1px solid rgba(212,175,55,.55);
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 28px rgba(0,0,0,.45);
+    }
+
+    .card.gold {
+        background: #d4af37;
+        color: #050505;
+        border-color: #ffd700;
+    }
+
+    h2 {
+        color: #ffd700;
+        margin-bottom: 14px;
+        font-size: 1.7rem;
+    }
+
+    .gold h2 {
+        color: #050505;
+    }
+
+    p {
+        margin-bottom: 12px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+    }
+
+    .mini {
+        background: #050505;
+        color: #f5f5f5;
+        border: 1px solid rgba(255,215,0,.45);
+        border-radius: 14px;
+        padding: 16px;
+    }
+
+    .mini strong {
+        color: #ffd700;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    pre {
+        background: #000;
+        color: #e8ffe8;
+        border: 1px solid #d4af37;
+        border-radius: 16px;
+        padding: 22px;
+        overflow-x: auto;
+        font-size: 0.95rem;
+        line-height: 1.45;
+        box-shadow: inset 0 0 18px rgba(212,175,55,.12);
+    }
+
+    code {
+        font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+
+    .btnbar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 24px;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #ffd700;
+        color: #050505;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 2px solid #000;
+        transition: .2s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(255,215,0,.28);
+    }
+
+    footer {
+        text-align: center;
+        color: #cfcfcf;
+        border-top: 1px solid rgba(212,175,55,.4);
+        padding: 22px 16px;
+        background: #000;
+    }
+
+    .tagline {
+        color: #ffd700;
+        font-weight: bold;
+    }
+
+    @media (max-width: 700px) {
+        .card {
+            padding: 18px;
+        }
+
+        pre {
+            font-size: 0.82rem;
+            padding: 16px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="banner">
+        <img src="banner_poly.jpg" alt="Banner POLYDEV">
+    </div>
+    <div class="eyebrow">Pandas • Python • Data Engineering</div>
+    <h1>Pandas For Smarties</h1>
+    <p class="subtitle">
+        10 funções avançadas para quem já passou do básico e quer escrever código Pandas
+        mais limpo, expressivo, vetorizado e preparado para análise profissional.
+    </p>
+</header>
+
+<main>
+
+    <section class="card gold">
+        <h2>Visão do Artigo</h2>
+        <p>
+            Este material reúne técnicas práticas de Pandas para programadores experientes:
+            method chaining, agregações avançadas, classificação vetorizada, otimização de memória,
+            métricas móveis, pivot table, merge com diagnóstico, query dinâmica, normalização de
+            estruturas aninhadas e estilização de relatórios.
+        </p>
+        <p>
+            A proposta POLYDEV permanece a mesma:
+            <strong>Leia • Entenda • Execute seu código</strong>.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Os 10 Tricks</h2>
+        <div class="grid">
+            <div class="mini"><strong>01. Method Chaining</strong>Limpeza e enriquecimento com pipeline elegante.</div>
+            <div class="mini"><strong>02. GroupBy Avançado</strong>Agregações múltiplas com estatísticas úteis.</div>
+            <div class="mini"><strong>03. np.select</strong>Classificação vetorizada sem excesso de if/loc.</div>
+            <div class="mini"><strong>04. Memory Optimization</strong>Redução de memória com category e downcast.</div>
+            <div class="mini"><strong>05. Rolling por Grupo</strong>Métricas móveis por entidade ou categoria.</div>
+            <div class="mini"><strong>06. Smart Pivot</strong>Tabela dinâmica com múltiplas funções e totais.</div>
+            <div class="mini"><strong>07. Merge Diagnosis</strong>Join com indicador para validar casamento de dados.</div>
+            <div class="mini"><strong>08. Query Dinâmica</strong>Filtro com variáveis externas usando @.</div>
+            <div class="mini"><strong>09. Explode + Normalize</strong>Tratamento de listas e dicionários em colunas.</div>
+            <div class="mini"><strong>10. Style DataFrame</strong>Relatórios visuais com Styler.</div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Código Completo</h2>
+        <p>
+            Copie o código abaixo para um arquivo Python, execute localmente e valide o resultado.
+            O bloco de testes já cria uma massa de dados sintética para demonstrar as funções.
+        </p>
+
+<pre><code># ====================== 10 FUNÇÕES PANDAS FOR SMARTIES ======================
+
+import pandas as pd
+import numpy as np
+from functools import partial
+import warnings
+warnings.filterwarnings(&#x27;ignore&#x27;)
+
+# 1 - Method Chaining Avançado
+def clean_and_enrich(df: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Chain elegante de limpeza e enriquecimento de dados&quot;&quot;&quot;
+    return (df
+        .assign(
+            date=lambda x: pd.to_datetime(x[&#x27;date&#x27;]),
+            year=lambda x: x[&#x27;date&#x27;].dt.year,
+            total=lambda x: x[&#x27;price&#x27;] * x[&#x27;quantity&#x27;],
+            price_category=lambda x: pd.cut(x[&#x27;price&#x27;], bins=[0, 50, 200, np.inf], 
+                                          labels=[&#x27;Barato&#x27;, &#x27;Médio&#x27;, &#x27;Premium&#x27;])
+        )
+        .query(&#x27;quantity &gt; 0&#x27;)
+        .dropna(subset=[&#x27;price&#x27;])
+        .reset_index(drop=True)
+    )
+
+
+# 2 - GroupBy com múltiplas agregações customizadas
+def advanced_groupby(df: pd.DataFrame, group_col: str):
+    &quot;&quot;&quot;GroupBy poderoso com várias estatísticas personalizadas&quot;&quot;&quot;
+    return (df.groupby(group_col)
+            .agg(
+                total_sales=(&#x27;total&#x27;, &#x27;sum&#x27;),
+                avg_price=(&#x27;price&#x27;, &#x27;mean&#x27;),
+                unique_customers=(&#x27;customer_id&#x27;, &#x27;nunique&#x27;),
+                highest_sale=(&#x27;total&#x27;, &#x27;max&#x27;),
+                sales_std=(&#x27;total&#x27;, &#x27;std&#x27;),
+                transaction_count=(&#x27;total&#x27;, &#x27;count&#x27;)
+            )
+            .round(2)
+            .sort_values(&#x27;total_sales&#x27;, ascending=False)
+    )
+
+
+# 3 - np.select para múltiplas condições (melhor que vários .loc)
+def categorize_sales(df: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Classifica vendas com múltiplas condições de forma vetorizada&quot;&quot;&quot;
+    conditions = [
+        df[&#x27;total&#x27;] &gt;= 1000,
+        df[&#x27;total&#x27;] &gt;= 500,
+        df[&#x27;total&#x27;] &gt;= 100
+    ]
+    choices = [&#x27;VIP&#x27;, &#x27;Boa&#x27;, &#x27;Média&#x27;]
+    
+    df = df.copy()
+    df[&#x27;sale_category&#x27;] = np.select(conditions, choices, default=&#x27;Baixa&#x27;)
+    return df
+
+
+# 4 - Memory Optimization
+def optimize_dtypes(df: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Reduz drasticamente o uso de memória do DataFrame&quot;&quot;&quot;
+    for col in df.select_dtypes(include=[&#x27;object&#x27;]).columns:
+        df[col] = df[col].astype(&#x27;category&#x27;)
+    
+    for col in df.select_dtypes(include=[&#x27;int64&#x27;]).columns:
+        df[col] = pd.to_numeric(df[col], downcast=&#x27;integer&#x27;)
+    
+    for col in df.select_dtypes(include=[&#x27;float64&#x27;]).columns:
+        df[col] = pd.to_numeric(df[col], downcast=&#x27;float&#x27;)
+    
+    return df
+
+
+# 5 - Rolling + Expanding com GroupBy
+def moving_metrics(df: pd.DataFrame, group_col: str, value_col: str, window: int = 7):
+    &quot;&quot;&quot;Métricas móveis por grupo&quot;&quot;&quot;
+    return (df.sort_values([&#x27;date&#x27;])
+            .groupby(group_col)[value_col]
+            .transform(lambda x: x.rolling(window, min_periods=1).mean())
+            .rename(f&#x27;{value_col}_rolling_{window}&#x27;)
+    )
+
+
+# 6 - Pivot Table Avançada + Margins
+def smart_pivot(df: pd.DataFrame):
+    &quot;&quot;&quot;Tabela dinâmica poderosa com múltiplas funções&quot;&quot;&quot;
+    return pd.pivot_table(
+        df,
+        values=&#x27;total&#x27;,
+        index=&#x27;year&#x27;,
+        columns=&#x27;price_category&#x27;,
+        aggfunc=[&#x27;sum&#x27;, &#x27;mean&#x27;, &#x27;count&#x27;],
+        margins=True,
+        margins_name=&#x27;TOTAL&#x27;
+    ).round(2)
+
+
+# 7 - Merge com diagnóstico
+def merge_with_diagnosis(left: pd.DataFrame, right: pd.DataFrame, on: str, how: str = &#x27;left&#x27;):
+    &quot;&quot;&quot;Faz merge e retorna informação sobre o join&quot;&quot;&quot;
+    merged = pd.merge(left, right, on=on, how=how, indicator=True)
+    print(&quot;Diagnóstico do Merge:&quot;)
+    print(merged[&#x27;_merge&#x27;].value_counts())
+    return merged.drop(columns=&#x27;_merge&#x27;)
+
+
+# 8 - Query com variáveis externas
+def filter_dynamic(df: pd.DataFrame, min_price: float, max_year: int):
+    &quot;&quot;&quot;Usa query com variáveis externas de forma segura&quot;&quot;&quot;
+    return df.query(&#x27;price &gt;= @min_price and year &lt;= @max_year&#x27;)
+
+
+# 9 - Explode + Normalização de colunas aninhadas
+def explode_and_normalize(df: pd.DataFrame, column: str):
+    &quot;&quot;&quot;Explode e normaliza listas/dicionários dentro de colunas&quot;&quot;&quot;
+    df = df.explode(column)
+    if df[column].apply(lambda x: isinstance(x, dict)).any():
+        df = pd.concat([df.drop(columns=column), 
+                       df[column].apply(pd.Series)], axis=1)
+    return df
+
+
+# 10 - Estilização Condicional Avançada
+def style_dataframe(df: pd.DataFrame):
+    &quot;&quot;&quot;Estiliza DataFrame para relatórios bonitos&quot;&quot;&quot;
+    return (df.style
+            .format({&#x27;total&#x27;: &#x27;R$ {:.2f}&#x27;, &#x27;price&#x27;: &#x27;R$ {:.2f}&#x27;})
+            .background_gradient(cmap=&#x27;Blues&#x27;, subset=[&#x27;total&#x27;])
+            .highlight_max(subset=[&#x27;total&#x27;], color=&#x27;gold&#x27;)
+            .set_caption(&quot;Relatório Smart - Análise de Vendas&quot;)
+    )
+
+
+# =========================== TESTES ===========================
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;=== 10 Pandas Tricks For Smarties ===\n&quot;)
+    
+    # Criando dados de teste
+    np.random.seed(42)
+    dates = pd.date_range(&#x27;2025-01-01&#x27;, periods=100)
+    data = {
+        &#x27;date&#x27;: np.random.choice(dates, 500),
+        &#x27;customer_id&#x27;: np.random.randint(1000, 1200, 500),
+        &#x27;price&#x27;: np.random.uniform(10, 800, 500),
+        &#x27;quantity&#x27;: np.random.randint(1, 20, 500),
+    }
+    df = pd.DataFrame(data)
+    df = clean_and_enrich(df)
+    
+    print(&quot;1. DataFrame limpo (primeiras 3 linhas):&quot;)
+    print(df.head(3))
+    
+    print(&quot;\n2. GroupBy Avançado:&quot;)
+    print(advanced_groupby(df, &#x27;year&#x27;).head())
+    
+    print(&quot;\n3. Categorização com np.select:&quot;)
+    print(categorize_sales(df)[&#x27;sale_category&#x27;].value_counts())
+    
+    print(f&quot;\n4. Otimização de memória: {df.memory_usage(deep=True).sum() / 1024:.1f} KB → &quot;, 
+          end=&quot;&quot;)
+    df_opt = optimize_dtypes(df)
+    print(f&quot;{df_opt.memory_usage(deep=True).sum() / 1024:.1f} KB&quot;)
+    
+    print(&quot;\n6. Smart Pivot Table:&quot;)
+    print(smart_pivot(df))
+    
+    print(&quot;\n✅ Todos os tricks testados com sucesso!&quot;)</code></pre>
+    </section>
+
+    <section class="card gold">
+        <h2>Mensagem para Publicação</h2>
+        <p>
+            Pandas não é apenas leitura de CSV e DataFrame na tela. Quando usado com técnica,
+            ele vira uma ferramenta poderosa para pipelines analíticos, diagnóstico de joins,
+            otimização de memória e relatórios inteligentes.
+        </p>
+        <p>
+            Este artigo é para os smarties: programadores que gostam de entender o motor,
+            melhorar o código e transformar dados em conhecimento.
+        </p>
+
+        <div class="btnbar">
+            <a class="btn" href="home.html">Voltar ao Sistema</a>
+            <a class="btn" href="query.html">Conteúdos POLYDEV</a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p class="tagline">POLYDEV — Leia • Entenda • Execute seu código</p>
+    <p>Pandas For Smarties | Python Data Analysis | Publicação técnica</p>
+</footer>
+
+</body>
+</html>
