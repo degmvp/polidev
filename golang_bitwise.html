@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | Go Bitwise for Smarties</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#050505;
+    color:#FFD700;
+}
+header{
+    text-align:center;
+    padding:25px;
+    background:linear-gradient(135deg,#000,#222,#000);
+    border-bottom:3px solid #FFD700;
+}
+header img{
+    max-width:950px;
+    width:90%;
+    border-radius:14px;
+    box-shadow:0 0 25px #FFD700;
+}
+h1{color:#FFD700}
+.subtitle{color:white;font-size:18px}
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:20px;
+}
+.card{
+    background:#111;
+    border:1px solid #FFD700;
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:25px;
+    box-shadow:0 0 18px rgba(255,215,0,.25);
+}
+.card h2{
+    color:#FFD700;
+}
+p{
+    color:#f2f2f2;
+    line-height:1.6;
+}
+pre{
+    background:#000;
+    color:#00ff99;
+    padding:18px;
+    overflow:auto;
+    border-radius:10px;
+    border-left:5px solid #FFD700;
+}
+code{
+    font-family:Consolas, monospace;
+}
+.btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 18px;
+    background:#FFD700;
+    color:#000;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+footer{
+    text-align:center;
+    padding:25px;
+    border-top:2px solid #FFD700;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="banner_poly.jpg" alt="Banner Polydev">
+    <h1>POLYDEV | Go Bitwise for Smarties</h1>
+    <p class="subtitle">Leia • Entenda • Execute seu código</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>1. Verificar se um Número é Potência de Dois</h2>
+<p>Usa a técnica clássica <code>n & (n - 1)</code>. Se o resultado for zero, existe apenas um bit ligado.</p>
+<pre><code>package main
+
+import "fmt"
+
+func EhPotenciaDeDois(n int) bool {
+    return n > 0 && (n&(n-1)) == 0
+}
+
+func main() {
+    fmt.Println(EhPotenciaDeDois(8))
+    fmt.Println(EhPotenciaDeDois(10))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>2. Contar Bits 1 em um Número</h2>
+<p>Conta quantos bits estão ligados deslocando o número para a direita.</p>
+<pre><code>package main
+
+import "fmt"
+
+func ContarBits1(n int) int {
+    count := 0
+
+    for n > 0 {
+        count += n & 1
+        n >>= 1
+    }
+
+    return count
+}
+
+func main() {
+    fmt.Println(ContarBits1(7))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>3. Inverter os Bits de um Número</h2>
+<p>O operador <code>^</code> em Go inverte todos os bits do número.</p>
+<pre><code>package main
+
+import "fmt"
+
+func InverterBits(n int) int {
+    return ^n
+}
+
+func main() {
+    fmt.Println(InverterBits(5))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>4. Trocar Dois Números Usando XOR</h2>
+<p>Troca valores sem variável auxiliar usando XOR.</p>
+<pre><code>package main
+
+import "fmt"
+
+func Trocar(a, b *int) {
+    *a = *a ^ *b
+    *b = *a ^ *b
+    *a = *a ^ *b
+}
+
+func main() {
+    a, b := 5, 10
+    Trocar(&a, &b)
+    fmt.Println(a, b)
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>5. Adicionar Dois Números sem Operador de Adição</h2>
+<p>O XOR calcula a soma sem carry; o AND calcula o carry.</p>
+<pre><code>package main
+
+import "fmt"
+
+func Adicionar(a, b int) int {
+    for b != 0 {
+        carry := a & b
+        a = a ^ b
+        b = carry << 1
+    }
+
+    return a
+}
+
+func main() {
+    fmt.Println(Adicionar(15, 32))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>6. Multiplicar Dois Números Usando Bitwise</h2>
+<p>Usa deslocamento à esquerda para dobrar e à direita para reduzir o multiplicador.</p>
+<pre><code>package main
+
+import "fmt"
+
+func Multiplicar(a, b int) int {
+    resultado := 0
+
+    for b > 0 {
+        if b&1 == 1 {
+            resultado += a
+        }
+
+        a <<= 1
+        b >>= 1
+    }
+
+    return resultado
+}
+
+func main() {
+    fmt.Println(Multiplicar(5, 3))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>7. Dividir Dois Números Usando Bitwise</h2>
+<p>Versão usando deslocamentos para montar o quociente bit a bit.</p>
+<pre><code>package main
+
+import (
+    "fmt"
+    "strconv"
+)
+
+func Dividir(dividendo, divisor int) int {
+    if divisor <= 0 {
+        return 0
+    }
+
+    resultado := 0
+
+    for i := strconv.IntSize - 1; i >= 0; i-- {
+        if (divisor << i) <= dividendo {
+            dividendo -= divisor << i
+            resultado |= 1 << i
+        }
+    }
+
+    return resultado
+}
+
+func main() {
+    fmt.Println(Dividir(15, 3))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>8. Obter o Máximo de Dois Números Usando Bitwise</h2>
+<p>Em Go, booleano não vira inteiro automaticamente. Por isso usamos uma função auxiliar.</p>
+<pre><code>package main
+
+import "fmt"
+
+func boolToInt(b bool) int {
+    if b {
+        return 1
+    }
+    return 0
+}
+
+func Max(a, b int) int {
+    mask := -boolToInt(a < b)
+    return a ^ ((a ^ b) & mask)
+}
+
+func main() {
+    fmt.Println(Max(10, 20))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>9. Verificar se um Número é Par ou Ímpar</h2>
+<p>Se o último bit for zero, o número é par.</p>
+<pre><code>package main
+
+import "fmt"
+
+func EhPar(n int) bool {
+    return (n & 1) == 0
+}
+
+func main() {
+    fmt.Println(EhPar(4))
+    fmt.Println(EhPar(5))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>10. Limitar um Número a um Intervalo</h2>
+<p>Versão corrigida para Go usando máscaras inteiras.</p>
+<pre><code>package main
+
+import "fmt"
+
+func boolToInt(b bool) int {
+    if b {
+        return 1
+    }
+    return 0
+}
+
+func Limitar(n, min, max int) int {
+    maskMin := -boolToInt(n < min)
+    maskMax := -boolToInt(n > max)
+
+    return (n & ^maskMin & ^maskMax) |
+           (min & maskMin) |
+           (max & maskMax)
+}
+
+func main() {
+    fmt.Println(Limitar(15, 10, 20))
+    fmt.Println(Limitar(25, 10, 20))
+}</code></pre>
+</div>
+
+<div class="card">
+<h2>Observação Polydev</h2>
+<p>
+Dois exemplos originais precisavam de ajuste para Go puro:
+<code>-(a &lt; b)</code> e expressões como <code>min &amp; (n &lt; min)</code> não compilam em Go,
+porque Go não converte booleanos automaticamente para inteiros.
+</p>
+</div>
+
+<a class="btn" href="home.html">⬅ Voltar ao Sistema</a>
+
+</div>
+
+<footer>
+    POLYDEV — Go Bitwise for Smarties<br>
+    Leia • Entenda • Execute seu código
+</footer>
+
+</body>
+</html>
