@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Embedded Java Bitwise 05</title>
+
+<style>
+body{
+    margin:0;
+    background:#050505;
+    font-family:Arial, sans-serif;
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+}
+
+.banner{
+    width:900px;
+    max-width:95%;
+    border-radius:14px;
+    box-shadow:0 0 25px gold;
+}
+
+h1{
+    color:gold;
+    font-size:42px;
+}
+
+h2{
+    color:yellowgreen;
+    margin-top:35px;
+}
+
+h3{
+    color:gold;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding-bottom:70px;
+}
+
+.card{
+    background:#111;
+    border-left:8px solid gold;
+    padding:25px;
+    margin-top:30px;
+    border-radius:14px;
+    box-shadow:0 0 14px rgba(255,215,0,.25);
+}
+
+pre{
+    background:black;
+    color:#00ff88;
+    padding:20px;
+    overflow:auto;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+}
+
+p, li{
+    font-size:18px;
+    line-height:1.7;
+}
+
+.destaque{
+    color:gold;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:gray;
+    border-top:1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <img src="banner_poly.jpg" class="banner">
+
+    <h1>POLYDEV | Embedded Java Bitwise</h1>
+
+    <p style="color:gold;font-size:22px;">
+        Artigo 05 de 05 — XOR Checksum e Shift Engine
+    </p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Visão Geral</h2>
+
+<p>
+Neste último artigo da série
+<span class="destaque">Embedded Java Bitwise</span>,
+vamos trabalhar com duas classes extremamente utilizadas
+em sistemas profissionais:
+</p>
+
+<ul>
+<li>
+<span class="destaque">ChecksumXor.java</span> —
+validação rápida usando XOR
+</li>
+
+<li>
+<span class="destaque">ShiftEngine.java</span> —
+deslocamento binário Left/Right
+</li>
+</ul>
+
+<p>
+Essas técnicas aparecem em:
+</p>
+
+<ul>
+<li>✔ Protocolos de comunicação</li>
+<li>✔ Firmware</li>
+<li>✔ Redes</li>
+<li>✔ Criptografia</li>
+<li>✔ Compressão</li>
+<li>✔ Drivers</li>
+<li>✔ Engines gráficas</li>
+<li>✔ Sistemas realtime</li>
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Classe 09 — ChecksumXor.java</h2>
+
+<p>
+Esta classe calcula um checksum usando operação XOR.
+</p>
+
+<p>
+O XOR possui uma característica poderosa:
+bits iguais geram 0 e bits diferentes geram 1.
+</p>
+
+<pre>
+
+public class ChecksumXor {
+
+    private int[] data;
+
+    public ChecksumXor(int[] data) {
+        this.data = data;
+    }
+
+    public int calculateChecksum() {
+
+        int checksum = 0;
+
+        for (int value : data) {
+            checksum ^= value;
+        }
+
+        return checksum;
+    }
+
+    public String toBinary(int value) {
+
+        return String.format("%8s",
+                Integer.toBinaryString(value))
+                .replace(' ', '0');
+    }
+
+    public void showData() {
+
+        System.out.println("=== DATA PACKET ===");
+
+        for (int value : data) {
+
+            System.out.println(
+                value + " -> " + toBinary(value)
+            );
+        }
+
+        int checksum = calculateChecksum();
+
+        System.out.println();
+        System.out.println(
+            "CHECKSUM = " +
+            checksum +
+            " -> " +
+            toBinary(checksum)
+        );
+    }
+
+    public static void main(String[] args) {
+
+        int[] packet = {12, 45, 78, 23, 99};
+
+        ChecksumXor check =
+            new ChecksumXor(packet);
+
+        check.showData();
+    }
+}
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Saída Esperada — ChecksumXor.java</h3>
+
+<pre>
+
+=== DATA PACKET ===
+
+12 -> 00001100
+45 -> 00101101
+78 -> 01001110
+23 -> 00010111
+99 -> 01100011
+
+CHECKSUM = 31 -> 00011111
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>Classe 10 — ShiftEngine.java</h2>
+
+<p>
+Esta classe demonstra deslocamento binário para esquerda
+e direita.
+</p>
+
+<p>
+Shift é uma das operações mais importantes da computação.
+</p>
+
+<pre>
+
+public class ShiftEngine {
+
+    private int value;
+
+    public ShiftEngine(int value) {
+        this.value = value;
+    }
+
+    public int shiftLeft(int bits) {
+        return value << bits;
+    }
+
+    public int shiftRight(int bits) {
+        return value >> bits;
+    }
+
+    public String toBinary(int number) {
+
+        return String.format("%16s",
+                Integer.toBinaryString(number))
+                .replace(' ', '0');
+    }
+
+    public void showShifts() {
+
+        System.out.println(
+            "ORIGINAL : " +
+            value +
+            " -> " +
+            toBinary(value)
+        );
+
+        int left = shiftLeft(2);
+
+        System.out.println(
+            "LEFT <<2 : " +
+            left +
+            " -> " +
+            toBinary(left)
+        );
+
+        int right = shiftRight(2);
+
+        System.out.println(
+            "RIGHT >>2: " +
+            right +
+            " -> " +
+            toBinary(right)
+        );
+    }
+
+    public static void main(String[] args) {
+
+        ShiftEngine engine =
+            new ShiftEngine(25);
+
+        System.out.println(
+            "=== SHIFT ENGINE ==="
+        );
+
+        engine.showShifts();
+    }
+}
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Saída Esperada — ShiftEngine.java</h3>
+
+<pre>
+
+=== SHIFT ENGINE ===
+
+ORIGINAL : 25 -> 0000000000011001
+
+LEFT <<2 : 100 -> 0000000001100100
+
+RIGHT >>2: 6 -> 0000000000000110
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>Resumo Técnico</h2>
+
+<pre>
+
+valor ^= outroValor   // XOR
+
+valor << n            // Shift Left
+valor >> n            // Shift Right
+
+</pre>
+
+<p>
+O operador XOR é muito utilizado em:
+</p>
+
+<ul>
+<li>✔ Checksums</li>
+<li>✔ Criptografia simples</li>
+<li>✔ Verificação de integridade</li>
+<li>✔ Protocolos de comunicação</li>
+</ul>
+
+<p>
+Já os shifts são fundamentais para:
+</p>
+
+<ul>
+<li>✔ Multiplicação rápida</li>
+<li>✔ Divisão rápida</li>
+<li>✔ Manipulação binária</li>
+<li>✔ Empacotamento de dados</li>
+<li>✔ Registradores</li>
+<li>✔ Sistemas embarcados</li>
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Conclusão da Série</h2>
+
+<p>
+A série
+<span class="destaque">Embedded Java Bitwise</span>
+mostrou como Java pode operar em um nível muito mais próximo
+do hardware utilizando técnicas binárias profissionais.
+</p>
+
+<p>
+Bitwise continua sendo uma das ferramentas mais poderosas
+da computação  moderna.
+</p>
+
+<p>
+Dominar esse tipo de programação leva o desenvolvedor
+para um novo nível técnico.
+</p>
+
+<p style="color:gold;font-size:24px;">
+Leia • Entenda • Execute seu código
+</p>
+
+</div>
+
+<div class="footer">
+
+POLYDEV • Embedded Java Bitwise • Artigo 05 de 05
+
+</div>
+
+</div>
+
+</body>
+</html>

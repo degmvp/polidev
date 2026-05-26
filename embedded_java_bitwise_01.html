@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Embedded Java Bitwise 01 </title>
+
+<style>
+body{
+    margin:0;
+    background:#050505;
+    font-family:Arial, sans-serif;
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+}
+
+.banner{
+    width:900px;
+    max-width:95%;
+    border-radius:14px;
+    box-shadow:0 0 25px gold;
+}
+
+h1{
+    color:gold;
+    font-size:42px;
+}
+
+h2{
+    color:yellowgreen;
+    margin-top:35px;
+}
+
+h3{
+    color:gold;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding-bottom:70px;
+}
+
+.card{
+    background:#111;
+    border-left:8px solid gold;
+    padding:25px;
+    margin-top:30px;
+    border-radius:14px;
+    box-shadow:0 0 14px rgba(255,215,0,.25);
+}
+
+pre{
+    background:black;
+    color:#00ff88;
+    padding:20px;
+    overflow:auto;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+}
+
+p, li{
+    font-size:18px;
+    line-height:1.7;
+}
+
+.destaque{
+    color:gold;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:gray;
+    border-top:1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="banner_poly.jpg" class="banner">
+
+    <h1>POLYDEV | Embedded Java Bitwise</h1>
+
+    <p style="color:gold;font-size:22px;">
+        Artigo 01 de 05 — Classes Java para Devs que Pensam em Bits
+    </p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Visão Geral</h2>
+
+<p>
+Neste primeiro artigo da série <span class="destaque">Embedded Java Bitwise</span>,
+vamos trabalhar com duas classes fundamentais:
+</p>
+
+<ul>
+<li><span class="destaque">BitFlag.java</span> — controle de permissões com máscara binária</li>
+<li><span class="destaque">DeviceRegister.java</span> — simulação de registrador embarcado</li>
+</ul>
+
+<p>
+A proposta é mostrar Java com classe, encapsulamento, métodos e lógica bitwise
+aplicada em cenários reais.
+</p>
+</div>
+
+<div class="card">
+<h2>Classe 01 — BitFlag.java</h2>
+
+<p>
+Esta classe controla permissões usando bits individuais dentro de um único inteiro.
+</p>
+
+<pre>
+public class BitFlag {
+
+    private static final int READ    = 1;   // 0001
+    private static final int WRITE   = 2;   // 0010
+    private static final int EXECUTE = 4;   // 0100
+    private static final int DELETE  = 8;   // 1000
+
+    private int permissions;
+
+    public BitFlag() {
+        this.permissions = 0;
+    }
+
+    public void addPermission(int permission) {
+        permissions |= permission;
+    }
+
+    public void removePermission(int permission) {
+        permissions &= ~permission;
+    }
+
+    public boolean hasPermission(int permission) {
+        return (permissions & permission) != 0;
+    }
+
+    public void showBinary() {
+        System.out.println(
+            "BINÁRIO : " +
+            String.format("%4s", Integer.toBinaryString(permissions))
+            .replace(' ', '0')
+        );
+    }
+
+    public void showPermissions() {
+        System.out.println("READ    : " + hasPermission(READ));
+        System.out.println("WRITE   : " + hasPermission(WRITE));
+        System.out.println("EXECUTE : " + hasPermission(EXECUTE));
+        System.out.println("DELETE  : " + hasPermission(DELETE));
+    }
+
+    public static void main(String[] args) {
+
+        BitFlag user = new BitFlag();
+
+        System.out.println("=== ADICIONANDO FLAGS ===");
+
+        user.addPermission(READ);
+        user.addPermission(WRITE);
+        user.addPermission(EXECUTE);
+
+        user.showBinary();
+        user.showPermissions();
+
+        System.out.println();
+
+        System.out.println("=== REMOVENDO WRITE ===");
+
+        user.removePermission(WRITE);
+
+        user.showBinary();
+        user.showPermissions();
+    }
+}
+</pre>
+</div>
+
+<div class="card">
+<h3>Saída Esperada — BitFlag.java</h3>
+
+<pre>
+=== ADICIONANDO FLAGS ===
+BINÁRIO : 0111
+
+READ    : true
+WRITE   : true
+EXECUTE : true
+DELETE  : false
+
+=== REMOVENDO WRITE ===
+BINÁRIO : 0101
+
+READ    : true
+WRITE   : false
+EXECUTE : true
+DELETE  : false
+</pre>
+</div>
+
+<div class="card">
+<h2>Classe 02 — DeviceRegister.java</h2>
+
+<p>
+Esta classe simula um registrador de dispositivo embarcado, onde cada bit
+representa um estado do hardware.
+</p>
+
+<pre>
+public class DeviceRegister {
+
+    private static final int POWER_ON  = 1;   // 0001
+    private static final int READY     = 2;   // 0010
+    private static final int ERROR     = 4;   // 0100
+    private static final int INTERRUPT = 8;   // 1000
+
+    private int register;
+
+    public DeviceRegister() {
+        this.register = 0;
+    }
+
+    public void setBit(int bit) {
+        register |= bit;
+    }
+
+    public void clearBit(int bit) {
+        register &= ~bit;
+    }
+
+    public boolean isSet(int bit) {
+        return (register & bit) != 0;
+    }
+
+    public void printRegister() {
+        System.out.println(
+            "REGISTER: " +
+            String.format("%4s", Integer.toBinaryString(register))
+            .replace(' ', '0')
+        );
+    }
+
+    public void showStatus() {
+        System.out.println("POWER_ON  : " + isSet(POWER_ON));
+        System.out.println("READY     : " + isSet(READY));
+        System.out.println("ERROR     : " + isSet(ERROR));
+        System.out.println("INTERRUPT : " + isSet(INTERRUPT));
+    }
+
+    public static void main(String[] args) {
+
+        DeviceRegister device = new DeviceRegister();
+
+        System.out.println("=== DEVICE START ===");
+
+        device.setBit(POWER_ON);
+        device.setBit(READY);
+
+        device.printRegister();
+        device.showStatus();
+
+        System.out.println();
+
+        System.out.println("=== ERROR INTERRUPT ===");
+
+        device.setBit(ERROR);
+        device.setBit(INTERRUPT);
+        device.clearBit(READY);
+
+        device.printRegister();
+        device.showStatus();
+    }
+}
+</pre>
+</div>
+
+<div class="card">
+<h3>Saída Esperada — DeviceRegister.java</h3>
+
+<pre>
+=== DEVICE START ===
+REGISTER: 0011
+
+POWER_ON  : true
+READY     : true
+ERROR     : false
+INTERRUPT : false
+
+=== ERROR INTERRUPT ===
+REGISTER: 1101
+
+POWER_ON  : true
+READY     : false
+ERROR     : true
+INTERRUPT : true
+</pre>
+</div>
+
+<div class="card">
+<h2>Resumo Técnico</h2>
+
+<pre>
+valor |= bit;      // Liga um bit
+valor &= ~bit;     // Desliga um bit
+(valor & bit) != 0 // Testa se o bit está ativo
+</pre>
+
+<p>
+Essas três operações formam a base de controle binário em permissões,
+registradores, sensores, flags, protocolos e sistemas embarcados.
+</p>
+
+<p style="color:gold;font-size:22px;">
+Leia • Entenda • Execute seu código
+</p>
+</div>
+
+<div class="footer">
+POLYDEV • Embedded Java Bitwise • Artigo 01 de 05
+</div>
+
+</div>
+
+</body>
+</html>

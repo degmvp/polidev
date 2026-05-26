@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Embedded Java Bitwise 02 </title>
+
+<style>
+body{
+    margin:0;
+    background:#050505;
+    font-family:Arial, sans-serif;
+    color:white;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+}
+
+.banner{
+    width:900px;
+    max-width:95%;
+    border-radius:14px;
+    box-shadow:0 0 25px gold;
+}
+
+h1{
+    color:gold;
+    font-size:42px;
+}
+
+h2{
+    color:yellowgreen;
+    margin-top:35px;
+}
+
+h3{
+    color:gold;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding-bottom:70px;
+}
+
+.card{
+    background:#111;
+    border-left:8px solid gold;
+    padding:25px;
+    margin-top:30px;
+    border-radius:14px;
+    box-shadow:0 0 14px rgba(255,215,0,.25);
+}
+
+pre{
+    background:black;
+    color:#00ff88;
+    padding:20px;
+    overflow:auto;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+}
+
+p, li{
+    font-size:18px;
+    line-height:1.7;
+}
+
+.destaque{
+    color:gold;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:gray;
+    border-top:1px solid #333;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="banner_poly.jpg" class="banner">
+
+    <h1>POLYDEV | Embedded Java Bitwise</h1>
+
+    <p style="color:gold;font-size:22px;">
+        Artigo 02 de 05 — Sensores e Estados com Classes Java
+    </p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Visão Geral</h2>
+
+<p>
+Neste segundo artigo da série <span class="destaque">Embedded Java Bitwise</span>,
+vamos trabalhar com duas classes muito úteis para sistemas reais:
+</p>
+
+<ul>
+<li><span class="destaque">SensorStatus.java</span> — controle de status de sensores</li>
+<li><span class="destaque">WorkflowState.java</span> — combinação de estados de workflow</li>
+</ul>
+
+<p>
+O foco aqui é mostrar como bits podem representar condições simultâneas,
+falhas, alertas e estados de processamento.
+</p>
+</div>
+
+<div class="card">
+<h2>Classe 03 — SensorStatus.java</h2>
+
+<p>
+Esta classe simula sensores em um sistema embarcado. Cada bit representa
+um tipo de leitura ou condição operacional.
+</p>
+
+<pre>
+public class SensorStatus {
+
+    private static final int TEMPERATURE_OK = 1;   // 0001
+    private static final int PRESSURE_OK    = 2;   // 0010
+    private static final int HUMIDITY_OK    = 4;   // 0100
+    private static final int BATTERY_LOW    = 8;   // 1000
+
+    private int status;
+
+    public SensorStatus() {
+        this.status = 0;
+    }
+
+    public void activate(int flag) {
+        status |= flag;
+    }
+
+    public void deactivate(int flag) {
+        status &= ~flag;
+    }
+
+    public boolean isActive(int flag) {
+        return (status & flag) != 0;
+    }
+
+    public void showBinary() {
+        System.out.println(
+            "STATUS: " +
+            String.format("%4s", Integer.toBinaryString(status))
+            .replace(' ', '0')
+        );
+    }
+
+    public void showStatus() {
+        System.out.println("TEMPERATURE_OK : " + isActive(TEMPERATURE_OK));
+        System.out.println("PRESSURE_OK    : " + isActive(PRESSURE_OK));
+        System.out.println("HUMIDITY_OK    : " + isActive(HUMIDITY_OK));
+        System.out.println("BATTERY_LOW    : " + isActive(BATTERY_LOW));
+    }
+
+    public static void main(String[] args) {
+
+        SensorStatus sensor = new SensorStatus();
+
+        System.out.println("=== SENSOR NORMAL ===");
+
+        sensor.activate(TEMPERATURE_OK);
+        sensor.activate(PRESSURE_OK);
+        sensor.activate(HUMIDITY_OK);
+
+        sensor.showBinary();
+        sensor.showStatus();
+
+        System.out.println();
+
+        System.out.println("=== BATTERY WARNING ===");
+
+        sensor.activate(BATTERY_LOW);
+        sensor.deactivate(PRESSURE_OK);
+
+        sensor.showBinary();
+        sensor.showStatus();
+    }
+}
+</pre>
+</div>
+
+<div class="card">
+<h3>Saída Esperada — SensorStatus.java</h3>
+
+<pre>
+=== SENSOR NORMAL ===
+STATUS: 0111
+
+TEMPERATURE_OK : true
+PRESSURE_OK    : true
+HUMIDITY_OK    : true
+BATTERY_LOW    : false
+
+=== BATTERY WARNING ===
+STATUS: 1101
+
+TEMPERATURE_OK : true
+PRESSURE_OK    : false
+HUMIDITY_OK    : true
+BATTERY_LOW    : true
+</pre>
+</div>
+
+<div class="card">
+<h2>Classe 04 — WorkflowState.java</h2>
+
+<p>
+Esta classe mostra como múltiplos estados de workflow podem coexistir
+dentro de uma única variável inteira.
+</p>
+
+<pre>
+public class WorkflowState {
+
+    private static final int CREATED   = 1;    // 00001
+    private static final int VALIDATED = 2;    // 00010
+    private static final int APPROVED  = 4;    // 00100
+    private static final int SENT      = 8;    // 01000
+    private static final int ARCHIVED  = 16;   // 10000
+
+    private int state;
+
+    public WorkflowState() {
+        this.state = 0;
+    }
+
+    public void addState(int flag) {
+        state |= flag;
+    }
+
+    public void removeState(int flag) {
+        state &= ~flag;
+    }
+
+    public boolean hasState(int flag) {
+        return (state & flag) != 0;
+    }
+
+    public void showBinary() {
+        System.out.println(
+            "STATE: " +
+            String.format("%5s", Integer.toBinaryString(state))
+            .replace(' ', '0')
+        );
+    }
+
+    public void showStates() {
+        System.out.println("CREATED   : " + hasState(CREATED));
+        System.out.println("VALIDATED : " + hasState(VALIDATED));
+        System.out.println("APPROVED  : " + hasState(APPROVED));
+        System.out.println("SENT      : " + hasState(SENT));
+        System.out.println("ARCHIVED  : " + hasState(ARCHIVED));
+    }
+
+    public static void main(String[] args) {
+
+        WorkflowState order = new WorkflowState();
+
+        System.out.println("=== WORKFLOW START ===");
+
+        order.addState(CREATED);
+        order.addState(VALIDATED);
+
+        order.showBinary();
+        order.showStates();
+
+        System.out.println();
+
+        System.out.println("=== WORKFLOW APPROVED AND SENT ===");
+
+        order.addState(APPROVED);
+        order.addState(SENT);
+
+        order.showBinary();
+        order.showStates();
+
+        System.out.println();
+
+        System.out.println("=== ARCHIVING ===");
+
+        order.addState(ARCHIVED);
+        order.removeState(SENT);
+
+        order.showBinary();
+        order.showStates();
+    }
+}
+</pre>
+</div>
+
+<div class="card">
+<h3>Saída Esperada — WorkflowState.java</h3>
+
+<pre>
+=== WORKFLOW START ===
+STATE: 00011
+
+CREATED   : true
+VALIDATED : true
+APPROVED  : false
+SENT      : false
+ARCHIVED  : false
+
+=== WORKFLOW APPROVED AND SENT ===
+STATE: 01111
+
+CREATED   : true
+VALIDATED : true
+APPROVED  : true
+SENT      : true
+ARCHIVED  : false
+
+=== ARCHIVING ===
+STATE: 10111
+
+CREATED   : true
+VALIDATED : true
+APPROVED  : true
+SENT      : false
+ARCHIVED  : true
+</pre>
+</div>
+
+<div class="card">
+<h2>Resumo Técnico</h2>
+
+<pre>
+status |= flag;       // Ativa um estado
+status &= ~flag;      // Remove um estado
+(status & flag) != 0  // Verifica se o estado existe
+</pre>
+
+<p>
+Esse padrão é muito útil quando vários estados podem coexistir ao mesmo tempo,
+sem necessidade de múltiplas variáveis booleanas.
+</p>
+
+<p style="color:gold;font-size:22px;">
+Leia • Entenda • Execute seu código
+</p>
+</div>
+
+<div class="footer">
+POLYDEV • Embedded Java Bitwise • Artigo 02 de 05
+</div>
+
+</div>
+
+</body>
+</html>
