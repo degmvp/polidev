@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<title>POLYDEV | Embedded Ruby Bitwise</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:#050505;
+    color:#FFD700;
+    font-family:Arial;
+}
+
+header{
+    text-align:center;
+    padding:30px;
+}
+
+header img{
+    width:100%;
+    max-width:1200px;
+    border-radius:12px;
+    border:3px solid #FFD700;
+}
+
+h1{
+    margin-top:25px;
+    font-size:42px;
+    color:#FFD700;
+}
+
+h2{
+    color:yellowgreen;
+    margin-top:40px;
+}
+
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:#111;
+    border-left:6px solid #FFD700;
+    padding:25px;
+    margin-bottom:35px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(255,215,0,0.25);
+}
+
+pre{
+    background:black;
+    color:white;
+    padding:20px;
+    overflow:auto;
+    border-radius:8px;
+    border:1px solid #333;
+    font-size:16px;
+}
+
+p{
+    color:#DDD;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.footer{
+    text-align:center;
+    padding:40px;
+    color:gray;
+    font-size:18px;
+}
+
+.destaque{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<img src="banner_poly.jpg" alt="POLYDEV">
+
+<h1>
+POLYDEV | Embedded Ruby Bitwise
+</h1>
+
+<p class="destaque">
+Ruby for Smarties • Embedded Techniques • Bitwise Operations • Low Level Logic
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>1 - Verificação de Flag Binária</h2>
+
+<p>
+Checa rapidamente se um determinado bit está ativo em uma máscara de status.
+Muito utilizado em sistemas embarcados e registradores de hardware.
+</p>
+
+<pre>
+flags = 0b1010
+
+if (flags & 0b0010) != 0
+    puts "Flag ativa"
+else
+    puts "Flag desligada"
+end
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>2 - Ativando Bits (SET)</h2>
+
+<p>
+Liga um bit específico preservando os demais estados do registrador.
+</p>
+
+<pre>
+flags = 0b0000
+
+flags |= 0b0100
+
+puts flags.to_s(2)
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>3 - Limpando Bits (CLEAR)</h2>
+
+<p>
+Remove apenas o bit desejado sem afetar os demais.
+</p>
+
+<pre>
+flags = 0b1111
+
+flags &= ~0b0100
+
+puts flags.to_s(2)
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>4 - Toggle de Bits</h2>
+
+<p>
+Inverte um bit específico usando XOR.
+Muito útil para alternar estados ON/OFF.
+</p>
+
+<pre>
+flags = 0b1000
+
+flags ^= 0b1000
+
+puts flags.to_s(2)
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>5 - Simulação de Registrador Embedded</h2>
+
+<p>
+Exemplo simples simulando um registrador de controle.
+</p>
+
+<pre>
+register = 0x00
+
+# Liga motor
+register |= 0b00000001
+
+# Liga sensor
+register |= 0b00000100
+
+puts "Estado: #{register.to_s(2)}"
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>6 - Shift Left para Multiplicação Rápida</h2>
+
+<p>
+Operações de deslocamento continuam extremamente rápidas e úteis.
+</p>
+
+<pre>
+valor = 8
+
+resultado = valor << 2
+
+puts resultado
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>7 - Shift Right para Divisão Binária</h2>
+
+<p>
+Deslocamento à direita simulando divisão inteira por potência de dois.
+</p>
+
+<pre>
+valor = 64
+
+resultado = valor >> 3
+
+puts resultado
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>8 - Checksum XOR</h2>
+
+<p>
+Técnica clássica de validação leve utilizada em protocolos simples.
+</p>
+
+<pre>
+dados = [12, 44, 98, 10]
+
+checksum = 0
+
+dados.each do |b|
+    checksum ^= b
+end
+
+puts checksum
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>9 - Compactação de Estados Binários</h2>
+
+<p>
+Empacota múltiplos estados booleanos em apenas um inteiro.
+</p>
+
+<pre>
+estado = 0
+
+wifi   = true
+gps    = true
+sensor = false
+
+estado |= 1 << 0 if wifi
+estado |= 1 << 1 if gps
+estado |= 1 << 2 if sensor
+
+puts estado.to_s(2)
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>10 - Extração de Campo Empacotado</h2>
+
+<p>
+Extrai partes específicas de um pacote binário.
+</p>
+
+<pre>
+pacote = 0b11010110
+
+campo = (pacote >> 2) & 0b111
+
+puts campo
+</pre>
+
+</div>
+
+<div class="card">
+
+<h2>Considerações Técnicas</h2>
+
+<p>
+Apesar de Ruby ser conhecida como linguagem de produtividade e alto nível,
+suas operações bitwise continuam extremamente poderosas para:
+</p>
+
+<ul style="color:white; line-height:2; font-size:18px;">
+
+<li>Simulações Embedded</li>
+<li>Manipulação de Protocolos</li>
+<li>Empacotamento Binário</li>
+<li>Engenharia Reversa</li>
+<li>Ferramentas de Diagnóstico</li>
+<li>Automação Low-Level</li>
+<li>Flags e Permissões</li>
+<li>Parsing de Pacotes</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+POLYDEV © Embedded Ruby Bitwise Series<br>
+Leia • Entenda • Execute seu código
+
+</div>
+
+</body>
+</html>
