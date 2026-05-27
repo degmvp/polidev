@@ -190,6 +190,7 @@ input{
     <button onclick="location.href='vwcs.html'">🔷 C#</button>
     <button onclick="location.href='vwtsql.html'">🧠 T-SQL</button>
     <button onclick="location.href='vwtsfn.html'">🧠 T-SQLFN</button>
+    <button onclick="location.href='vwruby.html'">🧠 RUBY</button>
 
 </div>
 
@@ -213,6 +214,10 @@ function abrirCategoria(){
         return;
     }
 
+    if(cat === "ruby" || cat === "ruby"){
+        location.href = "vwruby.html";
+        return;
+    }
     if(cat === "rust" || cat === "rs"){
         location.href = "rust.html";
         return;
