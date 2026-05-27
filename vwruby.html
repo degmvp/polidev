@@ -166,15 +166,9 @@ let listaItens = [];
 function normalizarUrl(url){
     if(!url) return "";
 
-    if(url.startsWith("http://") || url.startsWith("https://")){
-        return url;
-    }
+    const arquivo = url.split("/").pop();
 
-    if(url.startsWith("/")){
-        return "https://degmvp.github.io" + url;
-    }
-
-    return "https://degmvp.github.io/polidev/" + url;
+    return "https://raw.githubusercontent.com/degmvp/polidev/main/downloads/ruby/" + arquivo;
 }
 
 async function carregarProgramas(){
