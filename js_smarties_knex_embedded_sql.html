@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>POLYDEV | JS for Smarties | Embedded SQL with Knex.js</title>
+
+<style>
+body{
+    margin:0;
+    background:#050505;
+    color:#f5f5f5;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.banner{
+    width:100%;
+    max-height:360px;
+    object-fit:cover;
+    display:block;
+}
+
+.container{
+    max-width:1100px;
+    margin:40px auto;
+    padding:25px;
+}
+
+h1{
+    color:#FFD700;
+    font-size:42px;
+    margin-bottom:5px;
+}
+
+h2{
+    color:#00ff99;
+    margin-top:35px;
+}
+
+.subtitle{
+    color:#ddd;
+    font-size:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #333;
+    border-radius:16px;
+    padding:25px;
+    margin:25px 0;
+    box-shadow:0 0 20px rgba(255,215,0,0.15);
+}
+
+pre{
+    background:#000;
+    color:#00ff99;
+    padding:22px;
+    border-radius:12px;
+    overflow:auto;
+    font-size:15px;
+    line-height:1.5;
+    border:1px solid #444;
+}
+
+code{
+    font-family:Consolas, monospace;
+}
+
+.badge{
+    display:inline-block;
+    background:#FFD700;
+    color:#000;
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:bold;
+    margin:6px;
+}
+
+.footer{
+    text-align:center;
+    margin-top:60px;
+    color:#aaa;
+    border-top:1px solid #333;
+    padding-top:25px;
+}
+
+a{
+    color:#FFD700;
+    text-decoration:none;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="container">
+
+<h1>JS for Smarties</h1>
+<p class="subtitle">Embedded SQL with Knex.js</p>
+
+<div>
+    <span class="badge">JavaScript</span>
+    <span class="badge">Knex.js</span>
+    <span class="badge">SQL</span>
+    <span class="badge">PostgreSQL</span>
+    <span class="badge">Backend</span>
+</div>
+
+<div class="card">
+<h2>Concept</h2>
+<p>
+Knex.js allows JavaScript developers to build SQL queries programmatically while keeping
+the power of relational databases, transactions, joins, aggregations and query composition.
+</p>
+
+<p>
+This example simulates a real POLYDEV backend routine: generating a ranking of downloaded
+contents using joins, grouping, transaction control and system logging.
+</p>
+</div>
+
+<div class="card">
+<h2>Advanced JavaScript + Knex.js Example</h2>
+
+<pre><code>// polydev_knex_advanced.js
+// JavaScript + Knex.js | Embedded SQL Style
+
+import knex from "knex";
+
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "localhost",
+    port: 5432,
+    user: "postgres",
+    password: "postgres",
+    database: "polydev"
+  }
+});
+
+async function gerarRankingDownloads() {
+  try {
+    const resultado = await db.transaction(async trx => {
+
+      const ranking = await trx("downloads as d")
+        .join("conteudos as c", "c.id", "d.conteudo_id")
+        .select(
+          "c.categoria",
+          "c.titulo"
+        )
+        .count("d.id as total_downloads")
+        .max("d.created_at as ultimo_download")
+        .where("c.ativo", true)
+        .groupBy("c.categoria", "c.titulo")
+        .orderBy("total_downloads", "desc")
+        .limit(10);
+
+      await trx("logs_sistema").insert({
+        evento: "RANKING_DOWNLOADS_GERADO",
+        detalhe: "Top 10 conteúdos calculados com Knex.js",
+        created_at: trx.fn.now()
+      });
+
+      return ranking;
+    });
+
+    console.table(resultado);
+
+  } catch (error) {
+    console.error("Erro ao gerar ranking:", error.message);
+
+  } finally {
+    await db.destroy();
+  }
+}
+
+gerarRankingDownloads();
+</code></pre>
+</div>
+
+<div class="card">
+<h2>Why this matters</h2>
+<p>
+This pattern is useful when JavaScript applications need strong database interaction
+without writing raw SQL everywhere.
+</p>
+
+<p>
+Knex.js works as a bridge between application logic and relational database power.
+It keeps the code expressive, reusable and closer to real backend architecture.
+</p>
+</div>
+
+<div class="card">
+<h2>POLYDEV Insight</h2>
+<p>
+Embedded SQL inside JavaScript is not just syntactic convenience.
+It is a practical way to combine application flow, business rules and database intelligence
+in the same backend pipeline.
+</p>
+</div>
+
+<div class="footer">
+<p><strong>POLYDEV</strong></p>
+<p>Read • Understand • Execute your code</p>
+<p>
+Access the full platform:<br>
+<a href="https://degmvp.github.io/polidev/index.html">
+https://degmvp.github.io/polidev/index.html
+</a>
+</p>
+</div>
+
+</div>
+
+</body>
+</html>
