@@ -331,21 +331,11 @@ function goTo(i){
     });
     setActive(i);
 }
+
 function updateProgress(){
-
-    const percent =
-        ((index) / sections.length) * 100;
-
-    document.getElementById(
-        "progress-bar"
-    ).style.width = percent + "%";
+    const percent = ((index) / sections.length) * 100;
+    document.getElementById("progress-bar").style.width = percent + "%";
 }
-
-<div id="progress-container">
-    <div id="progress-bar"></div>
-</div>
-
-
 
 function next(){
     if(!running) return;
@@ -355,11 +345,9 @@ function next(){
         return;
     }
 
-goTo(index);
-
-updateProgress();
-
-index++;
+    goTo(index);
+    updateProgress();
+    index++;
 
     timer = setTimeout(next, READ_TIME);
 }
@@ -379,14 +367,18 @@ function restartVideo(){
     pauseVideo();
     index = 0;
     stage.scrollTo({top:0, behavior:"smooth"});
+    document.getElementById("progress-bar").style.width = "0%";
+
     setTimeout(() => {
         running = true;
         next();
     }, 800);
 }
-
-
 </script>
+
+
+
+
 
 </body>
 </html>
