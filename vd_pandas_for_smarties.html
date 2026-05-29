@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 :root{
     --gold:#FFD700;
     --green:#00ff99;
@@ -14,7 +15,9 @@
     --line:#333;
 }
 
-*{ box-sizing:border-box; }
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -22,74 +25,6 @@ body{
     color:#f5f5f5;
     font-family:Arial, Helvetica, sans-serif;
     overflow:hidden;
-}
-
-#stage{
-    height:100vh;
-    overflow-y:auto;
-    scroll-behavior:smooth;
-    background:
-        radial-gradient(circle at top, rgba(255,215,0,.18), transparent 35%),
-        linear-gradient(180deg,#050505,#000);
-}
-
-.banner{
-    display:block;
-    width:auto;
-    max-width:95%;
-    max-height:320px;
-    height:auto;
-    object-fit:contain;
-    margin:10px auto 20px auto;
-}
-
-.hero{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:30px;
-}
-
-h1{
-    color:var(--gold);
-    font-size:56px;
-    margin:10px 0;
-}
-
-.subtitle{
-    color:#ddd;
-    font-size:24px;
-    max-width:900px;
-}
-
-.command{
-    margin-top:25px;
-    color:var(--green);
-    font-size:22px;
-    font-weight:bold;
-}
-
-.controls{
-    position:fixed;
-    top:20px;
-    right:20px;
-    z-index:100000;
-    display:flex;
-    gap:10px;
-    max-width:90vw;
-}
-.controls button{
-    background:#FFD700;
-    color:#000;
-    border:0;
-    padding:12px 18px;
-    border-radius:30px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 0 15px rgba(255,215,0,.35);
 }
 
 #progress-container{
@@ -108,35 +43,136 @@ h1{
     background:linear-gradient(90deg,#FFD700,#00ff99);
     transition:width .5s ease;
 }
+
+.controls{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:100000;
+    display:flex;
+    gap:10px;
+}
+
+.controls button{
+    background:#FFD700;
+    color:#000;
+    border:0;
+    padding:12px 18px;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(255,215,0,.35);
+}
+
+#stage{
+    height:100vh;
+    overflow-y:auto;
+    scroll-behavior:smooth;
+
+    background:
+        radial-gradient(circle at top,
+        rgba(255,215,0,.18),
+        transparent 35%),
+
+        linear-gradient(
+            180deg,
+            #050505,
+            #000
+        );
+}
+
+.banner{
+    display:block;
+    width:auto;
+    max-width:95%;
+    max-height:320px;
+    height:auto;
+    object-fit:contain;
+    margin:10px auto 20px auto;
+}
+
+.hero{
+    min-height:100vh;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+    padding:30px;
+}
+
+h1{
+    color:#FFD700;
+    font-size:56px;
+    margin:10px 0;
+}
+
+.subtitle{
+    color:#ddd;
+    font-size:24px;
+    max-width:900px;
+}
+
+.command{
+    margin-top:25px;
+    color:#00ff99;
+    font-size:22px;
+    font-weight:bold;
+}
+
 .section{
     min-height:100vh;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     padding:60px 25px;
 }
 
 .card{
-    width:min(1050px, 94%);
-    background:linear-gradient(145deg,#111,#050505);
-    border:1px solid var(--line);
+    width:min(1050px,94%);
+
+    background:
+        linear-gradient(
+            145deg,
+            #111,
+            #050505
+        );
+
+    border:1px solid #333;
+
     border-radius:24px;
+
     padding:38px;
-    box-shadow:0 0 35px rgba(255,215,0,.14);
+
+    box-shadow:
+        0 0 35px
+        rgba(255,215,0,.14);
+
     transform:scale(.96);
+
     opacity:.75;
+
     transition:all .8s ease;
 }
 
 .card.active{
     transform:scale(1);
+
     opacity:1;
-    border-color:var(--gold);
-    box-shadow:0 0 55px rgba(255,215,0,.35);
+
+    border-color:#FFD700;
+
+    box-shadow:
+        0 0 55px
+        rgba(255,215,0,.35);
 }
 
 .card h2{
-    color:var(--gold);
+    color:#FFD700;
     font-size:42px;
     margin-top:0;
 }
@@ -149,30 +185,43 @@ h1{
 
 .badge{
     display:inline-block;
-    background:var(--gold);
+
+    background:#FFD700;
     color:#000;
+
     padding:9px 16px;
+
     border-radius:20px;
+
     font-weight:bold;
+
     margin:6px;
 }
 
 pre{
     background:#000;
-    color:var(--green);
+
+    color:#00ff99;
+
     padding:22px;
+
     border-radius:14px;
+
     overflow:auto;
+
     font-size:18px;
+
     line-height:1.55;
+
     border:1px solid #444;
+
     max-height:420px;
 }
 
 .cta{
     text-align:center;
     font-size:28px;
-    color:var(--gold);
+    color:#FFD700;
 }
 
 .footer{
@@ -182,14 +231,30 @@ pre{
     margin-top:30px;
 }
 
-a{ color:var(--gold); }
+a{
+    color:#FFD700;
+}
 
 @media(max-width:700px){
-    h1{ font-size:38px; }
-    .subtitle{ font-size:19px; }
-    .card h2{ font-size:30px; }
-    .card p, pre{ font-size:16px; }
+
+    h1{
+        font-size:38px;
+    }
+
+    .subtitle{
+        font-size:19px;
+    }
+
+    .card h2{
+        font-size:30px;
+    }
+
+    .card p,
+    pre{
+        font-size:16px;
+    }
 }
+
 </style>
 </head>
 
@@ -208,177 +273,261 @@ a{ color:var(--gold); }
 <main id="stage">
 
 <section class="hero">
-    <img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
-    <h1>Pandas for Smarties</h1>
-    <p class="subtitle">
-        Fast data analysis, clean transformations and practical Python workflows.
-    </p>
-    <div class="command">Don’t beat about the bush — get down to the point.</div>
+
+<img src="banpol.jpg"
+class="banner"
+alt="POLYDEV Banner">
+
+<h1>Pandas for Smarties</h1>
+
+<p class="subtitle">
+Fast data analysis,
+clean transformations and practical Python workflows.
+</p>
+
+<div class="command">
+Don’t beat about the bush — get down to the point.
+</div>
+
 </section>
 
 <section class="section">
-    <div class="card">
-        <h2>1. Why Pandas?</h2>
-        <p>
-            Pandas is the bridge between raw data and real decisions.
-            It lets Python developers clean, transform, filter, group and analyze datasets
-            with expressive code.
-        </p>
-        <span class="badge">Python</span>
-        <span class="badge">DataFrames</span>
-        <span class="badge">Analytics</span>
-    </div>
+<div class="card">
+
+<h2>1. Why Pandas?</h2>
+
+<p>
+Pandas is the bridge between raw data and real decisions.
+</p>
+
+<span class="badge">Python</span>
+<span class="badge">DataFrames</span>
+<span class="badge">Analytics</span>
+
+</div>
 </section>
 
 <section class="section">
-    <div class="card">
-        <h2>2. DataFrame Creation</h2>
+<div class="card">
+
+<h2>2. DataFrame Creation</h2>
+
 <pre><code>import pandas as pd
 
 dados = {
-    "curso": ["Python", "SQL", "Pandas", "Streamlit"],
-    "downloads": [120, 95, 180, 75]
+    "curso": ["Python", "SQL", "Pandas"],
+    "downloads": [120, 95, 180]
 }
 
 df = pd.DataFrame(dados)
-print(df)</code></pre>
-    </div>
+
+print(df)
+</code></pre>
+
+</div>
 </section>
 
 <section class="section">
-    <div class="card cta">
-        <h2>Want the full code?</h2>
+<div class="card">
 
-        <p>
-            Open the POLYDEV platform and explore the complete material.
-        </p>
+<h2>3. Filtering Smart Data</h2>
 
-        <p style="font-size:34px;color:#00ff99;font-weight:bold;">
-            degmvp.github.io/polidev
-        </p>
+<pre><code>top = df[df["downloads"] >= 100]
 
-        <p>
-            Link in the YouTube description.
-        </p>
+print(top)
+</code></pre>
 
-        <div class="footer">
-            Read • Understand • Execute your code
-        </div>
-    </div>
+<p>
+Filtering transforms raw information into real insight.
+</p>
+
+</div>
 </section>
 
 <section class="section">
-    <div class="card">
-        <h2>4. Sorting the Ranking</h2>
+<div class="card">
+
+<h2>4. Sorting the Ranking</h2>
+
 <pre><code>ranking = df.sort_values(
     by="downloads",
     ascending=False
 )
 
-print(ranking)</code></pre>
-    </div>
+print(ranking)
+</code></pre>
+
+</div>
 </section>
 
 <section class="section">
-    <div class="card">
-        <h2>5. POLYDEV Insight</h2>
-        <p>
-            This is exactly the kind of logic behind dashboards, download counters,
-            content rankings and learning analytics inside a real educational platform.
-        </p>
-        <span class="badge">GitHub Pages</span>
-        <span class="badge">Supabase</span>
-        <span class="badge">Dashboard</span>
-    </div>
+<div class="card">
+
+<h2>5. POLYDEV Insight</h2>
+
+<p>
+Real educational platforms use this exact logic
+for dashboards and analytics.
+</p>
+
+<span class="badge">GitHub Pages</span>
+<span class="badge">Supabase</span>
+<span class="badge">Dashboard</span>
+
+</div>
 </section>
 
 <section class="section">
-    <div class="card cta">
-        <h2>POLYDEV</h2>
-        <p>Read • Understand • Execute your code</p>
-        <p>
-            Full platform:<br>
-            <a href="https://degmvp.github.io/polidev/index.html">
-                degmvp.github.io/polidev
-            </a>
-        </p>
-        <div class="footer">Video Engine Prototype | vd_pandas_for_smarties.html</div>
-    </div>
+<div class="card cta">
+
+<h2>Want the full code?</h2>
+
+<p>
+Open the POLYDEV platform and explore the complete material.
+</p>
+
+<p style="
+font-size:34px;
+color:#00ff99;
+font-weight:bold;
+">
+degmvp.github.io/polidev
+</p>
+
+<p>
+Link in the YouTube description.
+</p>
+
+<div class="footer">
+Read • Understand • Execute your code
+</div>
+
+</div>
 </section>
 
 </main>
 
 <script>
-const stage = document.getElementById("stage");
-const sections = [...document.querySelectorAll(".section, .hero")];
+
+const stage =
+    document.getElementById("stage");
+
+const sections =
+    [...document.querySelectorAll(
+        ".section, .hero"
+    )];
 
 let index = 0;
+
 let running = false;
+
 let timer = null;
 
 const READ_TIME = 5200;
 
 function setActive(i){
-    document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-    const card = sections[i].querySelector(".card");
-    if(card) card.classList.add("active");
+
+    document
+    .querySelectorAll(".card")
+    .forEach(c =>
+        c.classList.remove("active")
+    );
+
+    const card =
+        sections[i]
+        .querySelector(".card");
+
+    if(card)
+        card.classList.add("active");
 }
 
 function goTo(i){
+
     sections[i].scrollIntoView({
         behavior:"smooth",
         block:"center"
     });
+
     setActive(i);
 }
 
 function updateProgress(){
-    const percent = ((index) / sections.length) * 100;
-    document.getElementById("progress-bar").style.width = percent + "%";
+
+    const percent =
+        ((index) / sections.length) * 100;
+
+    document
+    .getElementById("progress-bar")
+    .style.width = percent + "%";
 }
 
 function next(){
-    if(!running) return;
+
+    if(!running)
+        return;
 
     if(index >= sections.length){
+
         running = false;
+
         return;
     }
 
     goTo(index);
+
     updateProgress();
+
     index++;
 
-    timer = setTimeout(next, READ_TIME);
+    timer =
+        setTimeout(
+            next,
+            READ_TIME
+        );
 }
 
 function startVideo(){
-    if(running) return;
+
+    if(running)
+        return;
+
     running = true;
+
     next();
 }
 
 function pauseVideo(){
+
     running = false;
+
     clearTimeout(timer);
 }
 
 function restartVideo(){
+
     pauseVideo();
+
     index = 0;
-    stage.scrollTo({top:0, behavior:"smooth"});
-    document.getElementById("progress-bar").style.width = "0%";
+
+    stage.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    document
+    .getElementById("progress-bar")
+    .style.width = "0%";
 
     setTimeout(() => {
+
         running = true;
+
         next();
+
     }, 800);
 }
+
 </script>
-
-
-
-
 
 </body>
 </html>
