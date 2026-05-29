@@ -523,12 +523,17 @@ function goTo(i){
 
 function updateProgress(){
 
+    const maxScroll =
+        stage.scrollHeight -
+        stage.clientHeight;
+
     const percent =
-        ((index) / sections.length) * 100;
+        (stage.scrollTop / maxScroll) * 100;
 
     document
     .getElementById("progress-bar")
-    .style.width = percent + "%";
+    .style.width =
+        percent + "%";
 }
 
 function next(){
@@ -606,7 +611,7 @@ function startAutoScroll(){
             behavior:"auto"
         });
 
-        updateScrollProgress();
+        updateProgress();
 
         if(stage.scrollTop + stage.clientHeight >= stage.scrollHeight - 5){
 
