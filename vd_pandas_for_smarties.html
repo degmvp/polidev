@@ -183,9 +183,10 @@ h1{
     box-shadow:
         0 0 55px
         rgba(255,215,0,.35);
-
+    
     animation:
-        fadeCinema 1.4s ease;
+        fadeCinema .65s ease-out,
+        glowPulse 3s ease-in-out infinite;
 }
 
 @keyframes fadeCinema{
@@ -212,6 +213,28 @@ h1{
         filter:blur(0);
     }
 }
+
+@keyframes glowPulse{
+
+    0%{
+        box-shadow:
+            0 0 25px
+            rgba(255,215,0,.18);
+    }
+
+    50%{
+        box-shadow:
+            0 0 60px
+            rgba(255,215,0,.38);
+    }
+
+    100%{
+        box-shadow:
+            0 0 25px
+            rgba(255,215,0,.18);
+    }
+}
+
 
 .card h2{
     color:#FFD700;
