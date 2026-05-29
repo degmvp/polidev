@@ -175,25 +175,6 @@ pre{
     color:var(--gold);
 }
 
-#scene-indicator{
-    position:fixed;
-    bottom:18px;
-    left:18px;
-    z-index:100000;
-
-    background:rgba(0,0,0,.78);
-    border:1px solid #FFD700;
-    color:#FFD700;
-
-    padding:8px 16px;
-    border-radius:20px;
-
-    font-size:14px;
-    font-weight:bold;
-    letter-spacing:1px;
-
-    box-shadow:0 0 12px rgba(255,215,0,.25);
-}
 .footer{
     color:#aaa;
     text-align:center;
@@ -366,28 +347,6 @@ function updateProgress(){
     <div id="progress-bar"></div>
 </div>
 
-<div id="scene-indicator">
-    Scene 01 / 07
-</div>
-
-
-function updateScene(){
-
-    const current =
-        String(index + 1)
-        .padStart(2,"0");
-
-    const total =
-        String(sections.length)
-        .padStart(2,"0");
-
-    document.getElementById(
-        "scene-indicator"
-    ).innerHTML =
-        "Scene " + current +
-        " / " + total;
-}
-
 
 
 function next(){
@@ -401,8 +360,6 @@ function next(){
 goTo(index);
 
 updateProgress();
-
-updateScene();
 
 index++;
 
