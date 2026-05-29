@@ -331,6 +331,7 @@ a{
 
 <div class="controls">
     <button onclick="startVideo()">▶ Start</button>
+    <button onclick="startAutoScroll()">🎬 Auto Scroll</button>
     <button onclick="pauseVideo()">⏸ Pause</button>
     <button onclick="restartVideo()">↻ Restart</button>
 </div>
@@ -488,6 +489,9 @@ let running = false;
 
 let timer = null;
 
+let scrollTimer = null;
+let autoScrollRunning = false;
+
 const READ_TIME = 5200;
 
 function setActive(i){
@@ -570,12 +574,60 @@ function pauseVideo(){
 
     running = false;
 
+    autoScrollRunning = false;
+
     clearTimeout(timer);
+
+    clearInterval(scrollTimer);
 
     document
     .querySelector(".controls")
     .classList.remove("hide");
 }
+
+function startAutoScroll(){
+
+    pauseVideo();
+
+    autoScrollRunning = true;
+
+    document
+    .querySelector(".controls")
+    .classList.add("hide");
+
+    scrollTimer = setInterval(() => {
+
+        if(!autoScrollRunning)
+            return;
+
+        stage.scrollBy({
+            top:1,
+            behavior:"auto"
+        });
+
+        updateScrollProgress();
+
+        if(stage.scrollTop + stage.clientHeight >= stage.scrollHeight - 5){
+
+            pauseVideo();
+        }
+
+    }, 25);
+}
+
+function updateScrollProgress(){
+
+    const maxScroll =
+        stage.scrollHeight - stage.clientHeight;
+
+    const percent =
+        (stage.scrollTop / maxScroll) * 100;
+
+    document
+    .getElementById("progress-bar")
+    .style.width = percent + "%";
+}
+
 
 function restartVideo(){
 
