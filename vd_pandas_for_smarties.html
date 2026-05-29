@@ -533,16 +533,25 @@ function startVideo(){
     if(running)
         return;
 
+    document
+    .querySelector(".controls")
+    .classList.add("hide");
+
     running = true;
 
     next();
 }
+
 
 function pauseVideo(){
 
     running = false;
 
     clearTimeout(timer);
+
+    document
+    .querySelector(".controls")
+    .classList.remove("hide");
 }
 
 function restartVideo(){
