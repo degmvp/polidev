@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>VD Embedded SQL Monsters</title>
+<style>
+body{
+  margin:0;
+  background:#050505;
+  color:#FFD700;
+  font-family:Consolas, Arial, sans-serif;
+  overflow:hidden;
+}
+header{
+  text-align:center;
+  padding:25px;
+}
+header img{
+  max-width:100%;
+  height:auto;
+  border-radius:14px;
+}
+#content{
+  width:88%;
+  margin:auto;
+  font-size:30px;
+  line-height:1.7;
+  animation:scrollUp 95s linear forwards;
+}
+h1{
+  font-size:52px;
+  text-align:center;
+  color:#FFD700;
+  text-shadow:0 0 18px #FFD700;
+}
+h2{
+  color:white;
+  border-left:8px solid #FFD700;
+  padding-left:18px;
+  margin-top:70px;
+}
+.card{
+  background:#111;
+  border:2px solid #FFD700;
+  border-radius:18px;
+  padding:28px;
+  margin:35px 0;
+  box-shadow:0 0 20px #FFD70055;
+}
+pre{
+  background:#000;
+  color:#00ff99;
+  padding:24px;
+  border-radius:12px;
+  overflow:hidden;
+  font-size:24px;
+}
+.footer{
+  text-align:center;
+  font-size:38px;
+  margin-top:80px;
+  color:white;
+}
+@keyframes scrollUp{
+  from{transform:translateY(35vh);}
+  to{transform:translateY(-100%);}
+}
+
+<style>
+
+.break-blackbelt{
+  background:#111;
+  color:#00ff99;
+  text-align:center;
+  font-size:34px;
+  padding:45px;
+  border:3px solid #00ff99;
+  border-radius:18px;
+  margin:50px 0;
+  box-shadow:0 0 25px #00ff9955;
+}
+
+</style>
+</style>
+</head>
+
+<body>
+
+<div id="content">
+
+<header>
+  <img src="banpol.jpg" alt="POLYDEV Banner">
+</header>
+
+<h1>Embedded SQL Monsters</h1>
+
+<div class="card">
+  <p>
+    Quando o SQL sai do banco e entra no código,
+    nasce um monstro de produtividade.
+  </p>
+  <p>
+    O programador deixa de apenas consultar dados
+    e passa a construir motores inteligentes.
+  </p>
+</div>
+
+<div class="break-blackbelt">
+
+Embedded SQL is where<br>
+backend engineering starts<br>
+to become weaponized.
+
+</div>
+
+<h2>1. JavaScript + Knex.js</h2>
+
+<div class="card">
+  <p>
+    Knex.js transforma SQL em construção dinâmica.
+    Ideal para APIs, dashboards, filtros avançados
+    e backends modernos.
+  </p>
+
+<pre>
+const users = await knex("users")
+  .select("id", "name", "email")
+  .where("active", true)
+  .orderBy("name");
+</pre>
+
+  <p>
+    Aqui o SQL não desaparece.
+    Ele vira arquitetura dentro do JavaScript.
+  </p>
+</div>
+
+<div class="break-blackbelt">
+
+Embedded SQL is where<br>
+backend engineering starts<br>
+to become weaponized.
+
+</div>
+
+<h2>2. Python + SQLAlchemy</h2>
+
+<div class="card">
+  <p>
+    Python domina automação, análise, ETL e integração.
+    Com SQLAlchemy, o banco conversa com objetos,
+    consultas e pipelines.
+  </p>
+
+<pre>
+users = session.query(User)
+  .filter(User.active == True)
+  .order_by(User.name)
+  .all()
+</pre>
+
+  <p>
+    O resultado é simples:
+    código limpo, banco forte e automação pesada.
+  </p>
+</div>
+
+<div class="break-blackbelt">
+
+Embedded SQL is where<br>
+backend engineering starts<br>
+to become weaponized.
+
+</div>
+
+<h2>3. Golang + PostgreSQL</h2>
+
+<div class="card">
+  <p>
+    Go entrega performance, concorrência e APIs rápidas.
+    PostgreSQL entrega robustez, SQL avançado e segurança.
+  </p>
+
+<pre>
+rows, err := db.Query(`
+  SELECT id, name, email
+  FROM users
+  WHERE active = true
+  ORDER BY name
+`)
+</pre>
+
+  <p>
+    Juntos, eles formam backend de guerra.
+    Rápido, direto e escalável.
+  </p>
+</div>
+
+<div class="break-blackbelt">
+
+Embedded SQL is where<br>
+backend engineering starts<br>
+to become weaponized.
+
+</div>
+
+<h2>O Pulo do Gato</h2>
+
+<div class="card">
+  <p>
+    Embedded SQL não é apenas colocar comandos SQL no código.
+  </p>
+  <p>
+    É aproximar regra de negócio,
+    performance e inteligência de dados
+    dentro do mesmo fluxo.
+  </p>
+</div>
+
+<div class="break-blackbelt">
+
+Embedded SQL is where<br>
+backend engineering starts<br>
+to become weaponized.
+
+</div>
+
+<h2>Onde mora o monstro?</h2>
+
+<div class="card">
+  <p>✔ APIs inteligentes</p>
+  <p>✔ Sistemas de busca</p>
+  <p>✔ Dashboards dinâmicos</p>
+  <p>✔ ETL e automação</p>
+  <p>✔ Backends de alta performance</p>
+</div>
+
+<div class="footer">
+  POLYDEV<br>
+  Leia • Entenda • Execute seu código
+</div>
+
+</div>
+
+</body>
+</html>
