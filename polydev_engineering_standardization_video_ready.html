@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLYDEV Code Standardization</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=vCJT94yA56SSYy8auPvDuhsFgdqEsLmZWugiy1IUEmQ4_IYLpCTjraXySiy3VORyD-NdngAAuYiDTXLPhG95UJRzH-jmoAWKeEw9ECTPlPBHxcSfF6CZYQ2YV8n_5kTZiDk3goqy7MVDaAUC4_xXrovbmfF1NG54edm_f0fmAbtb8ZMwEnyNR9V5SoYEEvBNeJSTJGVgV9EHrgpqfrslAZBj760anUO39UJVJdwxPRSLIk9FUnJ-xrW7YeyA-EknkwPtNXQIBbVV6pngbBqrplfglns6AgHgTMYf_-N7W9BUdr5LfxBOTGjaYwqmm2YOzS9ONbWambExpegnWmC4U-zjbL7tJPXlGVcNiqoVUtQ" charset="UTF-8"></script><style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #f5f5f5;
+            --accent-color: #FFD700;
+            --secondary-accent: #00ff99;
+            --card-bg: #111111;
+            --card-bg-2: #181818;
+            --border-color: #FFD700;
+            --muted-gold: #b88a00;
+            --code-bg: #000000;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(255,215,0,0.13), transparent 34%),
+                linear-gradient(180deg, #050505 0%, #0a0a0a 55%, #000 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0;
+            overflow: auto;
+        }
+
+        body.video-mode{
+            overflow: hidden;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:0 auto;
+        }
+
+        body.video-mode .container{
+            animation:scrollUp 95s linear forwards;
+        }
+
+        body.video-mode .tabs{
+            display:none;
+        }
+
+        body.video-mode .tab-content{
+            display:block;
+            margin-bottom:34px;
+        }
+        .hero-banner {
+            width: 100%;
+            margin: 0 auto 26px auto;
+            background: #000;
+            border-bottom: 3px solid var(--accent-color);
+            box-shadow: 0 0 28px rgba(255,215,0,0.35);
+        }
+
+        .hero-banner img {
+            width: 100%;
+            max-height: 320px;
+            object-fit: contain;
+            display: block;
+            background: #000;
+        }
+
+.top-banner{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.top-banner img{
+  width:100%;
+  max-width:1000px;
+  height:auto;
+  border-radius:16px;
+  box-shadow:0 0 30px #FFD70066;
+}
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,215,0,0.65);
+            border-radius: 22px;
+            padding: 2.2rem;
+            background: linear-gradient(145deg, rgba(255,215,0,0.10), rgba(0,0,0,0.70));
+            box-shadow: 0 0 24px rgba(255,215,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.09), transparent);
+            pointer-events: none;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .brand-logo {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 18px rgba(255,215,0,0.65);
+            background: #000;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 18px rgba(255,215,0,0.55);
+            position: relative;
+        }
+
+        .subtitle {
+            color: var(--secondary-accent);
+            font-size: 1.12rem;
+            font-style: italic;
+            font-weight: 500;
+            max-width: 850px;
+            margin: 0 auto 18px auto;
+            position: relative;
+        }
+
+        .motto {
+            display: inline-block;
+            color: #000;
+            background: var(--accent-color);
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 0 18px rgba(255,215,0,0.35);
+            position: relative;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 1px solid rgba(255,215,0,0.75);
+            padding: 12px 22px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            transition: all 0.25s ease;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .tab-btn:hover {
+            background: #1b1b1b;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px rgba(255,215,0,0.30);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: 900;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(255,215,0,0.55);
+        }
+
+        .tab-content {
+            display: none;
+            background: linear-gradient(180deg, var(--card-bg) 0%, #080808 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,215,0,0.70);
+            animation: fadeIn 0.4s ease-in-out;
+            box-shadow: 0 0 24px rgba(255,215,0,0.18);
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes scrollUp{
+            from{
+                transform:translateY(0);
+            }
+            to{
+                transform:translateY(calc(-100% + 100vh));
+            }
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.65rem;
+            border-left: 8px solid var(--accent-color);
+            padding-left: 16px;
+        }
+
+        p { margin-bottom: 1.5rem; font-size: 1.06rem; color: #f0f0f0; }
+        strong { color: var(--accent-color); }
+
+        pre {
+            border-radius: 12px;
+            font-size: 0.92rem;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,215,0,0.20);
+            margin-top: 1rem;
+            border: 1px solid rgba(255,215,0,0.35);
+        }
+
+        .strategy-tag {
+            display: inline-block;
+            background: rgba(0,255,153,0.10);
+            color: var(--secondary-accent);
+            border: 1px solid rgba(0,255,153,0.55);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-family: Consolas, monospace;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 1.2rem;
+        }
+
+        .break-blackbelt {
+            background:#111;
+            color:#00ff99;
+            text-align:center;
+            font-size: clamp(1.35rem, 3vw, 2rem);
+            line-height: 1.45;
+            padding: 36px;
+            border:3px solid #00ff99;
+            border-radius:18px;
+            margin: 34px 0;
+            box-shadow:0 0 25px #00ff9955;
+            font-weight: 800;
+        }
+
+        footer {
+            margin-top: 36px;
+            text-align: center;
+            padding: 26px 18px;
+            border-top: 1px solid rgba(255,215,0,0.55);
+            color: var(--accent-color);
+        }
+
+        footer img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 16px rgba(255,215,0,0.55);
+            margin-bottom: 10px;
+        }
+
+        footer .site {
+            color: #fff;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 720px) {
+            .container { padding: 16px; }
+            header { padding: 1.4rem; }
+            .brand-row { flex-direction: column; }
+            .tab-content { padding: 1.2rem; }
+            pre { font-size: 0.78rem; }
+        }
+#startBtn{
+  position:fixed !important;
+  top:25px !important;
+  right:25px !important;
+  left:auto !important;
+
+  z-index:2147483647 !important;
+
+  background:#FFD700 !important;
+  color:#000 !important;
+
+  border:3px solid #000 !important;
+
+  padding:18px 32px !important;
+
+  font-size:24px !important;
+  font-weight:bold !important;
+
+  border-radius:14px !important;
+
+  cursor:pointer !important;
+
+  box-shadow:0 0 22px #FFD700 !important;
+
+  letter-spacing:2px !important;
+
+  opacity:0.95 !important;
+}
+    </style>
+</head>
+<body>
+<button id="startBtn" onclick="startVideo()">START</button>
+
+    <div class="container">
+        <div class="hero-banner">
+            <img src="banpol.jpg" alt="POLYDEV Banner">
+        </div>
+
+        <header>
+            <div class="brand-row">
+                <img class="brand-logo" src="poly.jpg" alt="POLYDEV Logo">
+                <h1>POLYDEV Standardization</h1>
+            </div>
+            <div class="subtitle">"When Polyglot Programming stops being chaos and starts becoming engineered standardization."</div>
+            <div class="motto">Leia • Entenda • Execute seu código</div>
+        </header>
+
+        <div class="break-blackbelt">
+            Polyglot programming is not chaos.<br>
+            It becomes architecture when every language has a mission.
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="tab1">TS / Node.js</button>
+            <button class="tab-btn" data-target="tab2">Golang</button>
+            <button class="tab-btn" data-target="tab3">Python</button>
+            <button class="tab-btn" data-target="tab4">Java / C#</button>
+            <button class="tab-btn" data-target="tab5">Rust / C++</button>
+        </div>
+
+        <!-- 1. TypeScript/Node.js -->
+        <div id="tab1" class="tab-content active">
+            <span class="strategy-tag">STRATEGY: BOUNDARY ENFORCEMENT</span>
+            <h2>1. TypeScript / Node.js: The Integration Standard</h2>
+            <p>
+                In a Polyglot system, Node.js shouldn't do heavy lifting. Its strategic role is the <strong>Boundary Layer</strong>.
+                We use TypeScript's strict type system not just for bugs, but to enforce API contracts. If data crosses the Node.js boundary,
+                it must conform to the exact algebraic shape the system demands, preventing garbage in/garbage out scenarios.
+            </p>
+            <pre><code class="language-typescript">// Strategic Boundary Enforcement using Branded Types
+type UserId = string & { readonly __brand: unique symbol };
+type OrderId = string & { readonly __brand: unique symbol };
+
+// Factory functions to guarantee type safety at the edge
+function createUserId(id: string): UserId {
+    if (!id.match(/^USR_[A-Z0-9]{8}$/)) {
+        throw new Error(`Invalid UserId format: ${id}`);
+    }
+    return id as UserId;
+}
+
+// This function ONLY accepts strictly validated IDs.
+// No raw strings can accidentally bypass business logic.
+function processOrder(user: UserId, order: OrderId): void {
+    console.log(`Processing secure order ${order} for user ${user}`);
+}
+
+// Usage:
+const rawInput = "MALICIOUS_INPUT_123";
+try {
+    // Fails at runtime before reaching core logic
+    processOrder(rawInput as UserId, "ORD_12345678" as OrderId);
+} catch (e) {
+    console.error("Boundary blocked invalid data:", e.message);
+}</code></pre>
+        </div>
+
+        <!-- 2. Golang -->
+        <div id="tab2" class="tab-content">
+            <span class="strategy-tag">STRATEGY: RESOURCE CONTROL & I/O</span>
+            <h2>2. Golang: The Concurrency Standard</h2>
+            <p>
+                Go isn't just about "fast APIs". In a standardized architecture, Go is the <strong>I/O Shield</strong>.
+                We use Goroutines combined with semaphores (buffered channels) to strictly limit how many concurrent operations
+                hit our databases or external APIs. It prevents cascading failures when traffic spikes.
+            </p>
+            <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+// Strategy: A Worker Pool that acts as a circuit breaker / rate limiter
+func ProcessDataConcurrently(data []string, maxWorkers int) {
+    sem := make(chan struct{}, maxWorkers) // Buffer limits concurrency
+    var wg sync.WaitGroup
+
+    for _, item := range data {
+        wg.Add(1)
+
+        go func(val string) {
+            defer wg.Done()
+
+            sem <- struct{}{}        // Acquire lock (blocks if maxWorkers are busy)
+            defer func() { <-sem }() // Release lock
+
+            // Simulate I/O bound work (DB query, HTTP call)
+            time.Sleep(500 * time.Millisecond)
+            fmt.Printf("Processed: %s\n", val)
+        }(item)
+    }
+    wg.Wait()
+}
+
+func main() {
+    hugePayload := make([]string, 100)
+    for i := range hugePayload {
+        hugePayload[i] = fmt.Sprintf("TASK_%d", i)
+    }
+
+    // Even with 100 tasks, ONLY 3 will hit the database at any given millisecond
+    ProcessDataConcurrently(hugePayload, 3)
+}</code></pre>
+        </div>
+
+        <!-- 3. Python -->
+        <div id="tab3" class="tab-content">
+            <span class="strategy-tag">STRATEGY: CONTEXTUAL ABSTRACTION</span>
+            <h2>3. Python: The Orchestration Standard</h2>
+            <p>
+                Python is the glue, but standardization means abstracting infrastructure complexity so junior devs don't break things.
+                We use Context Managers and Dunder methods to create <strong>Deterministic State Machines</strong>.
+                Resources are acquired, used, and released in a mathematically predictable way, mirroring algebraic scoping.
+            </p>
+            <pre><code class="language-python">from contextlib import contextmanager
+import time
+
+class InfrastructureOrchestrator:
+    def __init__(self, resource_name):
+        self.resource_name = resource_name
+        self.state = "IDLE"
+
+    @contextmanager
+    def safe_execution(self):
+        # Acquire
+        print(f"[{self.state}] Acquiring locks for {self.resource_name}...")
+        self.state = "LOCKED"
+        try:
+            # Yield control to the block inside the 'with' statement
+            yield self
+        except Exception as e:
+            # Strategic Error Containment
+            self.state = "ERROR"
+            print(f"Orchestrator intercepted error: {e}")
+            raise
+        finally:
+            # Release (Guaranteed execution, like a boolean TRUE at the end of a logic gate)
+            print(f"[{self.state}] Releasing resources for {self.resource_name}.")
+            self.state = "IDLE"
+
+# Standardized Usage
+orch = InfrastructureOrchestrator("Postgres-Primary-DB")
+
+with orch.safe_execution() as executor:
+    print("Executing critical business logic...")
+    # If this fails, the 'finally' block still releases the lock safely
+    # raise ValueError("Simulated crash")</code></pre>
+        </div>
+
+        <!-- 4. Java / C# -->
+        <div id="tab4" class="tab-content">
+            <span class="strategy-tag">STRATEGY: DOMAIN INVARIANCE</span>
+            <h2>4. Java / C#: The Domain Standard</h2>
+            <p>
+                In the polyglot ecosystem, Enterprise languages are reserved for the <strong>Core Domain</strong>.
+                We don't use them for simple CRUD. We use advanced OOP (Interfaces, Generics, and Dependency Inversion)
+                to make illegal states unrepresentable. The compiler becomes your strictest code reviewer.
+            </p>
+            <pre><code class="language-csharp">using System;
+
+// Strategy: Forcing architectural rules via the compiler
+public interface IStandardizedRepository&lt;T&gt; where T : class
+{
+    void ExecuteTransaction(T entity);
+}
+
+// A domain service that CANNOT be instantiated without a valid, standardized repository
+public class CoreBillingEngine
+{
+    private readonly IStandardizedRepository&lt;Invoice&gt; _repo;
+
+    // Dependency Injection enforces that this class only works with standardized contracts
+    public CoreBillingEngine(IStandardizedRepository&lt;Invoice&gt; repo)
+    {
+        _repo = repo ?? throw new ArgumentNullException(nameof(repo), "Violation: Engine requires a standardized repo.");
+    }
+
+    public void ProcessStrategicBilling(Invoice invoice)
+    {
+        if (invoice.Amount <= 0)
+            throw new InvalidOperationException("Invariant violated: Amount must be positive.");
+
+        _repo.ExecuteTransaction(invoice);
+    }
+}
+
+// Implementation example
+public class PostgresStandardizedRepo : IStandardizedRepository&lt;Invoice&gt;
+{
+    public void ExecuteTransaction(Invoice entity)
+    {
+        // Actual DB logic here, strictly following the interface contract
+        Console.WriteLine($"Persisting invoice {entity.Id} strategically.");
+    }
+}</code></pre>
+        </div>
+
+        <!-- 5. Rust / C++ -->
+        <div id="tab5" class="tab-content">
+            <span class="strategy-tag">STRATEGY: ZERO-COST ABSTRACTIONS</span>
+            <h2>5. Rust / C++: The Performance Standard</h2>
+            <p>
+                You don't write microservices in Rust for fun. You write the <strong>Critical Path</strong> in Rust.
+                When Polyglot systems need to parse millions of rows, encrypt data, or handle memory manually,
+                we drop down to Rust. We use its ownership model to achieve C-level speed without segmentation faults.
+            </p>
+            <pre><code class="language-rust">// Strategy: Safe memory manipulation without Garbage Collector overhead
+// This handles the heavy lifting that Python/Node cannot safely manage at scale.
+
+#[derive(Debug)]
+pub struct SecurePayload {
+    data: Vec<u8>,
+    is_locked: bool,
+}
+
+impl SecurePayload {
+    // Constructor forces the user to acknowledge memory allocation
+    pub fn new(raw_data: &str) -> Self {
+        Self {
+            data: raw_data.as_bytes().to_vec(),
+            is_locked: false,
+        }
+    }
+
+    // Mutability is controlled strictly by the compiler based on state
+    pub fn lock_and_hash(&mut self) -> String {
+        if self.is_locked {
+            panic!("Boolean violation: Payload is already locked!");
+        }
+
+        // Simulate heavy cryptographic hashing directly in memory
+        let hash = format!("HASH_{}", self.data.len());
+        self.is_locked = true;
+        hash
+    }
+}
+
+fn main() {
+    let mut payload = SecurePayload::new("Critical financial data stream");
+
+    // Borrow checker ensures we cannot read the raw bytes after hashing if we design it that way
+    let secure_token = payload.lock_and_hash();
+    println!("Generated token: {}", secure_token);
+}</code></pre>
+        </div>
+
+        <footer>
+            <img src="poly.jpg" alt="POLYDEV Logo">
+            <div><strong>POLYDEV</strong> — Multiprogramming & Multidatabase Engineering</div>
+            <div class="site">https://degmvp.github.io/polidev</div>
+        </footer>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+
+    <script>
+        const buttons = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                const targetId = btn.getAttribute('data-target');
+                btn.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+    </script>
+    <script>
+function startVideo(){
+    document.body.classList.add("video-mode");
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(".tab-content").forEach(section => {
+        section.classList.add("active");
+    });
+
+    const btn = document.getElementById("startBtn");
+    btn.remove();
+}
+</script>
+</body>
+</html>

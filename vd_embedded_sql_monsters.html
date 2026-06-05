@@ -20,12 +20,15 @@ header img{
   height:auto;
   border-radius:14px;
 }
+
+
 #content{
   width:88%;
   margin:auto;
   font-size:30px;
   line-height:1.7;
   animation:scrollUp 95s linear forwards;
+  animation-play-state: paused;
 }
 h1{
   font-size:52px;
@@ -80,11 +83,34 @@ pre{
   box-shadow:0 0 25px #00ff9955;
 }
 
-</style>
+#startBtn{
+  position:fixed !important;
+  top:25px !important;
+  right:25px !important;
+  left:auto !important;
+  z-index:2147483647 !important;
+
+  display:block !important;
+  visibility:visible !important;
+  opacity:0.95 !important;
+
+  background:#FFD700 !important;
+  color:#000 !important;
+  border:3px solid #000 !important;
+
+  padding:18px 32px !important;
+  font-size:24px !important;
+  font-weight:bold !important;
+  border-radius:14px !important;
+  cursor:pointer !important;
+  box-shadow:0 0 22px #FFD700 !important;
+  letter-spacing:2px !important;
+}
 </style>
 </head>
 
 <body>
+<button id="startBtn" onclick="startVideo()">START</button>
 
 <div id="content">
 
@@ -241,6 +267,17 @@ to become weaponized.
 </div>
 
 </div>
+<script>
+function startVideo(){
+
+  const content = document.getElementById("content");
+  content.style.animationPlayState = "running";
+
+  const btn = document.getElementById("startBtn");
+  btn.remove();
+
+}
+</script>
 
 </body>
 </html>
