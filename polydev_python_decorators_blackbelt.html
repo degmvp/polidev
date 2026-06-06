@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>polydev_python_decorators_blackbelt.html</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:#050505;
+    color:white;
+    font-family:Consolas,monospace;
+    line-height:1.7;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:15px auto 30px auto;
+    border:2px solid gold;
+    border-radius:8px;
+}
+
+.container{
+    width:92%;
+    margin:auto;
+    padding:20px;
+}
+
+h1{
+    color:gold;
+    text-align:center;
+    font-size:42px;
+}
+
+h2{
+    color:gold;
+    margin-top:40px;
+    border-left:5px solid gold;
+    padding-left:15px;
+}
+
+p{
+    color:white;
+    font-size:18px;
+}
+
+.highlight{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+pre{
+    background:black;
+    color:#00FF99;
+    padding:20px;
+    border-radius:8px;
+    overflow-x:auto;
+    border:1px solid gold;
+    font-size:16px;
+}
+
+.section{
+    margin-bottom:45px;
+}
+
+.footer{
+    background:#111;
+    border-top:4px solid gold;
+    text-align:center;
+    padding:40px;
+    margin-top:50px;
+}
+
+.footer img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid gold;
+    box-shadow:0 0 20px gold;
+}
+
+.footer h3{
+    color:gold;
+    margin-top:20px;
+}
+
+.quote{
+    color:yellowgreen;
+    font-size:22px;
+    margin-top:20px;
+}
+
+ul{
+    color:white;
+    font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<img src="banpol.jpg" class="banner">
+
+<div class="container">
+
+<h1>Python Advanced Decorators Black Belt</h1>
+
+<p class="highlight">
+
+10 decorators profissionais utilizados em engenharia Python,
+automação,
+performance tuning,
+microservices
+e arquitetura moderna.
+
+</p>
+
+
+
+<div class="section">
+
+<h2>Decorators Beyond Basics</h2>
+
+<p>
+
+Decorators representam uma das funcionalidades mais elegantes e poderosas do Python.
+
+Eles permitem modificar comportamentos de funções sem alterar diretamente o código original.
+
+Neste artigo avançado vamos explorar decorators usados em:
+
+</p>
+
+<ul>
+
+<li>Performance Engineering</li>
+<li>Retry Automation</li>
+<li>Caching Inteligente</li>
+<li>Logging Profissional</li>
+<li>Rate Limiting</li>
+<li>Async Processing</li>
+<li>Singleton Pattern</li>
+<li>Code Profiling</li>
+
+</ul>
+
+<p class="highlight">
+
+Material voltado para aplicações reais utilizadas em ambientes profissionais.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>1 - Timer Profissional</h2>
+
+<p>
+
+Decorator para medir tempo de execução com precisão usando
+time.perf_counter().
+
+</p>
+
+<pre>
+def timer(name: str = None):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            start = time.perf_counter()
+
+            result = func(*args, **kwargs)
+
+            end = time.perf_counter()
+
+            print(f"{end - start:.6f} segundos")
+
+            return result
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Excelente para benchmark,
+tuning
+e análise de performance.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>2 - Retry com Exponential Backoff</h2>
+
+<p>
+
+Padrão extremamente utilizado em APIs,
+cloud computing,
+microservices
+e automação resiliente.
+
+</p>
+
+<pre>
+def retry(max_attempts=3, delay=1.0):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            for attempt in range(1, max_attempts + 1):
+
+                try:
+                    return func(*args, **kwargs)
+
+                except Exception:
+
+                    wait = delay * (2 ** (attempt - 1))
+
+                    time.sleep(wait)
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p class="highlight">
+
+Uma das técnicas mais importantes para sistemas distribuídos.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>3 - TTL Cache Inteligente</h2>
+
+<p>
+
+Implementação manual de cache com expiração temporal.
+
+</p>
+
+<pre>
+def ttl_cache(seconds=60):
+
+    def decorator(func):
+
+        cache = {}
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            key = args + tuple(sorted(kwargs.items()))
+
+            now = time.time()
+
+            if key in cache:
+
+                result, timestamp = cache[key]
+
+                if now - timestamp < seconds:
+                    return result
+
+            result = func(*args, **kwargs)
+
+            cache[key] = (result, now)
+
+            return result
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Excelente para APIs,
+machine learning,
+queries pesadas
+e cálculos repetitivos.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>4 - Logging Automático</h2>
+
+<pre>
+def log_execution(level="info"):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            logger = logging.getLogger(func.__module__)
+
+            logger.info(f"Executando {func.__name__}")
+
+            result = func(*args, **kwargs)
+
+            logger.info(f"Retorno: {result}")
+
+            return result
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Muito utilizado em observabilidade,
+debugging
+e rastreabilidade corporativa.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>5 - Rate Limiter</h2>
+
+<pre>
+def rate_limiter(calls_per_second=1.0):
+
+    min_interval = 1.0 / calls_per_second
+
+    last_call = [0.0]
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            now = time.time()
+
+            elapsed = now - last_call[0]
+
+            if elapsed < min_interval:
+
+                time.sleep(min_interval - elapsed)
+
+            last_call[0] = time.time()
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Proteção elegante contra abuso de APIs públicas.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>6 - Async Timer</h2>
+
+<pre>
+async def wrapper(*args, **kwargs):
+
+    start = time.perf_counter()
+
+    result = await func(*args, **kwargs)
+
+    end = time.perf_counter()
+
+    print(f"[Async] {end - start:.6f}s")
+
+    return result
+</pre>
+
+<p>
+
+Ideal para aplicações modernas usando asyncio.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>7 - Singleton Pattern</h2>
+
+<pre>
+def singleton(cls):
+
+    instances = {}
+
+    def wrapper(*args, **kwargs):
+
+        if cls not in instances:
+
+            instances[cls] = cls(*args, **kwargs)
+
+        return instances[cls]
+
+    return wrapper
+</pre>
+
+<p>
+
+Muito utilizado em:
+
+</p>
+
+<ul>
+
+<li>Conexões de banco</li>
+<li>Cache centralizado</li>
+<li>Configuration Managers</li>
+<li>Serviços globais</li>
+
+</ul>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>8 - Deprecated Warning</h2>
+
+<pre>
+def deprecated(reason=""):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            print("Função depreciada")
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Excelente para evolução segura de sistemas legados.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>9 - Validate Input Types</h2>
+
+<pre>
+def validate_types(**type_hints):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            for name, expected_type in type_hints.items():
+
+                if name in kwargs and \
+                   not isinstance(kwargs[name], expected_type):
+
+                    raise TypeError()
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p>
+
+Ajuda na robustez,
+segurança
+e padronização corporativa.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>10 - Performance Profiler</h2>
+
+<pre>
+def profile(sort_by="cumulative", lines=10):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            pr = cProfile.Profile()
+
+            pr.enable()
+
+            result = func(*args, **kwargs)
+
+            pr.disable()
+
+            return result
+
+        return wrapper
+
+    return decorator
+</pre>
+
+<p class="highlight">
+
+Ferramenta extremamente poderosa para tuning avançado.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>Conclusão</h2>
+
+<p>
+
+Esses decorators representam técnicas utilizadas em projetos profissionais,
+engenharia de software,
+automação,
+observabilidade
+e aplicações de alta performance.
+
+</p>
+
+<p class="highlight">
+
+Python continua sendo uma das linguagens mais elegantes do mercado
+quando o assunto é metaprogramação.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div class="footer">
+
+    <img src="poly.jpg">
+
+    <h3>POLYDEV</h3>
+
+    <p>
+    Multiprogramming • Multidatabase • Performance Engineering
+    </p>
+
+    <p style="color:gold;font-size:18px;">
+    https://degmvp.github.io/polidev
+    </p>
+
+    <p class="quote">
+    Read • Understand • Execute your code
+    </p>
+
+</div>
+
+</body>
+</html>
