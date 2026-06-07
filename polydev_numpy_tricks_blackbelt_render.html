@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>polydev_numpy_tricks_blackbelt.html</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:#050505;
+    color:white;
+    font-family:Consolas,monospace;
+    line-height:1.7;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:15px auto 30px auto;
+    border:2px solid gold;
+    border-radius:8px;
+}
+
+.container{
+    width:92%;
+    margin:auto;
+    padding:20px;
+}
+
+h1{
+    color:gold;
+    text-align:center;
+    font-size:42px;
+}
+
+h2{
+    color:gold;
+    margin-top:40px;
+    border-left:5px solid gold;
+    padding-left:15px;
+}
+
+p{
+    color:white;
+    font-size:18px;
+}
+
+.highlight{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+pre{
+    background:black;
+    color:#00FF99;
+    padding:20px;
+    border-radius:8px;
+    overflow-x:auto;
+    border:1px solid gold;
+    font-size:16px;
+}
+
+.section{
+    margin-bottom:45px;
+}
+
+.footer{
+    background:#111;
+    border-top:4px solid gold;
+    text-align:center;
+    padding:40px;
+    margin-top:50px;
+}
+
+.footer img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid gold;
+    box-shadow:0 0 20px gold;
+}
+
+.footer h3{
+    color:gold;
+    margin-top:20px;
+}
+
+.quote{
+    color:yellowgreen;
+    font-size:22px;
+    margin-top:20px;
+}
+
+ul{
+    color:white;
+    font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<img src="assets/banpol.jpg" class="banner">
+
+<div class="container">
+
+<h1>NumPy Tricks For Real Systems</h1>
+
+<p class="highlight">
+
+10 técnicas avançadas com NumPy utilizadas em processamento vetorial,
+machine learning,
+engenharia de performance
+e sistemas de alta escala.
+
+</p>
+
+
+
+<div class="section">
+
+<h2>High Performance NumPy Engineering</h2>
+
+<p>
+
+NumPy continua sendo uma das bibliotecas mais poderosas do ecossistema Python.
+
+Muito além de operações matemáticas simples,
+ele permite criar soluções extremamente rápidas,
+vetorizadas
+e eficientes em memória.
+
+Neste artigo exploramos técnicas reais utilizadas em:
+
+</p>
+
+<ul>
+
+<li>Machine Learning</li>
+<li>Data Engineering</li>
+<li>Scientific Computing</li>
+<li>Large Scale Processing</li>
+<li>Broadcasting Optimization</li>
+<li>Batch Processing</li>
+<li>Sparse Computation</li>
+
+</ul>
+
+<p class="highlight">
+
+Material voltado para aplicações práticas e ambientes profissionais.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>1 - Batch Processing para Grandes Volumes</h2>
+
+<p>
+
+Processamento em lotes reduz drasticamente o consumo de memória.
+
+</p>
+
+<pre>
+def batch_process_large_array(data, batch_size=10000):
+
+    results = []
+
+    for i in range(0, len(data), batch_size):
+
+        batch = data[i:i+batch_size]
+
+        batch_norm = (
+            batch - batch.mean(axis=0)
+        ) / (
+            batch.std(axis=0) + 1e-8
+        )
+
+        results.append(batch_norm)
+
+    return np.vstack(results)
+</pre>
+
+<p>
+
+Excelente para pipelines de machine learning
+e datasets gigantescos.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>2 - Lookup Ultra-Rápido</h2>
+
+<p>
+
+Uso de searchsorted para buscas extremamente eficientes.
+
+</p>
+
+<pre>
+def fast_lookup(codes, values, lookup_table):
+
+    sorted_idx = np.argsort(codes)
+
+    sorted_codes = codes[sorted_idx]
+
+    positions = np.searchsorted(sorted_codes, values)
+
+    return lookup_table[sorted_idx[positions]]
+</pre>
+
+<p class="highlight">
+
+Muito mais rápido que loops tradicionais em Python.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>3 - Filtragem Vetorizada</h2>
+
+<pre>
+def filter_outliers(data, n_std=3.0):
+
+    mean = np.mean(data)
+
+    std = np.std(data)
+
+    mask = np.abs(data - mean) < n_std * std
+
+    return data[mask], mask
+</pre>
+
+<p>
+
+Remoção de outliers usando operações totalmente vetorizadas.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>4 - Rolling Window Sem Cópia</h2>
+
+<pre>
+def rolling_window(a, window):
+
+    shape = a.shape[:-1] + (
+        a.shape[-1] - window + 1,
+        window
+    )
+
+    strides = a.strides + (
+        a.strides[-1],
+    )
+
+    return np.lib.stride_tricks.as_strided(
+        a,
+        shape=shape,
+        strides=strides
+    )
+</pre>
+
+<p>
+
+Técnica extremamente poderosa para análise temporal
+e séries financeiras.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>5 - Group Normalization</h2>
+
+<pre>
+def group_normalize(data, groups):
+
+    unique_groups = np.unique(groups)
+
+    result = np.zeros_like(data, dtype=float)
+
+    for g in unique_groups:
+
+        mask = groups == g
+
+        group_data = data[mask]
+
+        result[mask] = (
+            group_data - group_data.mean()
+        ) / (
+            group_data.std() + 1e-8
+        )
+
+    return result
+</pre>
+
+<p>
+
+Muito utilizado em analytics,
+deep learning
+e pipelines estatísticos.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>6 - Pairwise Distance com Broadcasting</h2>
+
+<pre>
+def pairwise_distance(X, Y=None):
+
+    if Y is None:
+        Y = X
+
+    X2 = np.sum(X**2, axis=1, keepdims=True)
+
+    Y2 = np.sum(Y**2, axis=1)
+
+    XY = X @ Y.T
+
+    return np.sqrt(X2 + Y2 - 2 * XY)
+</pre>
+
+<p class="highlight">
+
+Fundamental em clustering,
+KNN
+e algoritmos geométricos.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>7 - Interpolação Linear Vetorizada</h2>
+
+<pre>
+def fast_linear_interpolate(x, y, x_new):
+
+    return np.interp(x_new, x, y)
+</pre>
+
+<p>
+
+Solução extremamente rápida para interpolação numérica.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>8 - Fast Smooth</h2>
+
+<pre>
+def fast_smooth(data, window_size=5):
+
+    kernel = np.ones(window_size) / window_size
+
+    return np.convolve(
+        data,
+        kernel,
+        mode='valid'
+    )
+</pre>
+
+<p>
+
+Muito utilizado em:
+</p>
+
+<ul>
+
+<li>DSP</li>
+<li>Séries temporais</li>
+<li>Suavização estatística</li>
+<li>Pré-processamento ML</li>
+
+</ul>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>9 - Top-K Ultra-Eficiente</h2>
+
+<pre>
+def top_k_fast(arr, k=10):
+
+    idx = np.argpartition(arr, -k)[-k:]
+
+    idx = idx[np.argsort(arr[idx])[::-1]]
+
+    return arr[idx], idx
+</pre>
+
+<p>
+
+Muito mais eficiente que argsort completo.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>10 - Sparse Correlation</h2>
+
+<pre>
+def sparse_correlation(a, b, threshold=0.01):
+
+    mask = (
+        np.abs(a) > threshold
+    ) | (
+        np.abs(b) > threshold
+    )
+
+    if mask.sum() == 0:
+        return 0.0
+
+    return np.corrcoef(
+        a[mask],
+        b[mask]
+    )[0,1]
+</pre>
+
+<p class="highlight">
+
+Excelente para dados esparsos e otimização de memória.
+
+</p>
+
+</div>
+
+
+
+<div class="section">
+
+<h2>Conclusão</h2>
+
+<p>
+
+Essas técnicas demonstram como NumPy pode atingir níveis extremamente altos de performance
+quando utilizado corretamente.
+
+Em muitos cenários,
+operações vetorizadas substituem loops Python lentos
+com ganhos gigantescos de velocidade.
+
+</p>
+
+<p class="highlight">
+
+NumPy continua sendo uma das bases mais importantes
+da engenharia de dados moderna.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div class="footer">
+
+<img src="assets/poly.jpg">
+
+<h3>POLYDEV</h3>
+
+<p>
+Multiprogramming • Multidatabase • Performance Engineering
+</p>
+
+<p style="color:gold;font-size:18px;">
+https://degmvp.github.io/polidev
+</p>
+
+<p class="quote">
+Read • Understand • Execute your code
+</p>
+
+</div>
+
+</body>
+</html>
+
