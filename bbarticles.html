@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,6 +11,7 @@
 <script src="config.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -89,15 +91,12 @@ button:hover{
     min-width:150px;
 }
 
-pre{
-    background:#000;
-    color:white;
-    padding:18px;
-    border-radius:10px;
-    min-height:430px;
-    overflow:auto;
+#viewerFrame{
+    width:100%;
+    height:75vh;
     border:1px solid #FFD700;
-    text-align:left;
+    border-radius:10px;
+    background:white;
 }
 
 #tituloArquivo{
@@ -110,6 +109,7 @@ pre{
 }
 
 @media(max-width:800px){
+
     .container{
         flex-direction:column;
     }
@@ -126,79 +126,119 @@ pre{
     .acoes button{
         width:100%;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
-    <h1>💻 POLYDEV BBARTICLES </h1>
+    <h1>💻 POLYDEV BBARTICLES</h1>
     <p>Leia • Entenda • Execute seu código</p>
 </header>
 
 <div class="container">
 
     <aside class="menu">
+
         <h2>Black Belt Articles</h2>
-        <div id="listaProgramas">Carregando programas...</div>
+
+        <div id="listaProgramas">
+            Carregando programas...
+        </div>
+
     </aside>
 
     <main class="viewer">
-        <h2 id="tituloArquivo">Selecione um programa black belt</h2>
+
+        <h2 id="tituloArquivo">
+            Selecione um programa black belt
+        </h2>
+
         <p class="desc" id="descricaoArquivo"></p>
 
         <div class="acoes">
-            <button onclick="baixar()">⬇ Download</button>
-            <button onclick="location.href='isom.html'">⬅ Menu</button>
-            <button onclick="location.href='home.html'">🏠 Home</button>
+
+            <button onclick="baixar()">
+                ⬇ Download
+            </button>
+
+            <button onclick="location.href='isom.html'">
+                ⬅ Menu
+            </button>
+
+            <button onclick="location.href='home.html'">
+                🏠 Home
+            </button>
+
         </div>
 
-        <pre id="codigo">// selecione um programa Black Belt Articles no menu lateral</pre>
+        <iframe id="viewerFrame"></iframe>
+
     </main>
 
 </div>
 
 <script>
+
 let itemAtual = null;
 let listaItens = [];
 
 function normalizarUrl(url){
+
     if(!url) return "";
 
-    const arquivo = url.split("/").pop();
-
-    return "https://raw.githubusercontent.com/degmvp/polidev/main/downloads/bbart/" + arquivo;
+    return url;
 }
 
 async function carregarProgramas(){
+
     const lista = document.getElementById("listaProgramas");
-    lista.innerHTML = "Carregando Black Belt Articles...";
+
+    lista.innerHTML =
+        "Carregando Black Belt Articles...";
 
     const { data, error } = await db
         .from("conteudos")
-        .select("id,titulo,descricao,categoria,arquivo_url,downloads")
+        .select(
+            "id,titulo,descricao,categoria,arquivo_url,downloads"
+        )
         .eq("categoria", "bbart")
         .order("titulo", { ascending:true });
 
     if(error){
-        lista.innerHTML = "Erro ao consultar o banco.";
-        document.getElementById("codigo").innerText = error.message;
+
+        lista.innerHTML =
+            "Erro ao consultar o banco.";
+
         return;
     }
 
     if(!data || data.length === 0){
-        lista.innerHTML = "Nenhum programa Black Belt Articles encontrado na categoria bbart.";
+
+        lista.innerHTML =
+            "Nenhum artigo encontrado.";
+
         return;
     }
 
     listaItens = data;
+
     lista.innerHTML = "";
 
     data.forEach(item => {
+
         const btn = document.createElement("button");
-        btn.innerText = item.titulo || item.arquivo_url || "Programa Black Belt Articles";
+
+        btn.innerText =
+            item.titulo ||
+            item.arquivo_url ||
+            "Black Belt Article";
+
         btn.onclick = () => exibirPrograma(item);
+
         lista.appendChild(btn);
     });
 
@@ -206,34 +246,26 @@ async function carregarProgramas(){
 }
 
 async function exibirPrograma(item){
+
     itemAtual = item;
 
-    const titulo = item.titulo || "Programa Black Belt Articles";
-    const url = normalizarUrl(item.arquivo_url);
+    document.getElementById("tituloArquivo").innerText =
+        item.titulo || "Black Belt Article";
 
-    document.getElementById("tituloArquivo").innerText = titulo;
-    document.getElementById("descricaoArquivo").innerText = item.descricao || "";
-    document.getElementById("codigo").innerText = "Carregando código...";
+    document.getElementById("descricaoArquivo").innerText =
+        item.descricao || "";
 
-    try{
-        const resposta = await fetch(url + "?v=" + Date.now());
-
-        if(!resposta.ok){
-            throw new Error("HTTP " + resposta.status);
-        }
-
-        const texto = await resposta.text();
-        document.getElementById("codigo").innerText = texto;
-
-    }catch(e){
-        document.getElementById("codigo").innerText =
-            "Erro ao abrir:\n" + url + "\n\n" + e.message;
-    }
+    document.getElementById("viewerFrame").src =
+        item.arquivo_url;
 }
 
 async function incrementarDownload(item){
-    const atual = Number(item.downloads || 0);
-    const novoTotal = atual + 1;
+
+    const atual =
+        Number(item.downloads || 0);
+
+    const novoTotal =
+        atual + 1;
 
     const { error } = await db
         .from("conteudos")
@@ -246,24 +278,38 @@ async function incrementarDownload(item){
 }
 
 async function baixar(){
+
     if(!itemAtual){
-        alert("Selecione primeiro um programa BBA.");
+
+        alert(
+            "Selecione primeiro um programa."
+        );
+
         return;
     }
 
-    const url = normalizarUrl(itemAtual.arquivo_url);
+    const url =
+        normalizarUrl(itemAtual.arquivo_url);
 
     await incrementarDownload(itemAtual);
 
-    const link = document.createElement("a");
+    const link =
+        document.createElement("a");
+
     link.href = url;
-    link.download = url.split("/").pop();
+
+    link.download =
+        url.split("/").pop();
+
     document.body.appendChild(link);
+
     link.click();
+
     document.body.removeChild(link);
 }
 
 carregarProgramas();
+
 </script>
 
 </body>
