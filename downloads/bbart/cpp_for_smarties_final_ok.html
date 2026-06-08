@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ for Smarties | POLYDEV</title>
+  <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=nc38hO2lwT41XLitBMUUCBKJ_9Ljstvk28jHPmziESvu4COXi9hB7uIJy2JPYKSyU4zWJCHoHl8Kn8WNc8Zdss3xcG-sDc8QIn6e5kswFcAD5C6dEIfg95R5wrvaKe-dcOWOugFtnWSvNYi4_BlZmda4ItcpuOKPMQg8lBVq_OAf3IqnpXqdjiOVP1Nh3zRquGa1KiydK15n7-MEB66urEW73ofO4ViNnHK5k9kbjn2K0QHGC5Q4VXBnOV0VHVcENkZ9VorMrMr9O7wTWGYZeQPkmGRoCOTFuJuKr8CAMANO5_VhUJgHK9O-oQKzLjWPOThQmWZNus9w_Xt45nKM6w" charset="UTF-8"></script><style>
+    :root {
+      --gold:#FFD700;
+      --bg:#050505;
+      --panel:#111;
+      --text:#f5f5f5;
+      --muted:#d7d7d7;
+      --border:rgba(255,215,0,.42);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      background:linear-gradient(180deg,#000,#070707,#000);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+      line-height:1.65;
+    }
+
+  .banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:15px auto 30px auto;
+    border:2px solid gold;
+    border-radius:8px;
+}
+
+
+
+    .hero {
+      text-align:center;
+      padding:28px 18px 36px;
+      background:radial-gradient(circle at top,rgba(255,215,0,.12),transparent 34%),#000;
+      border-bottom:1px solid var(--border);
+    }
+    .badge {
+      display:inline-block;
+      border:1px solid var(--gold);
+      color:var(--gold);
+      border-radius:999px;
+      padding:8px 18px;
+      font-weight:bold;
+      letter-spacing:1px;
+      margin-bottom:14px;
+    }
+    h1 {
+      color:var(--gold);
+      font-size:clamp(2.5rem,5vw,5rem);
+      margin:8px 0;
+      text-shadow:0 0 18px rgba(255,215,0,.28);
+    }
+    .subtitle {
+      max-width:900px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:1.15rem;
+    }
+    main {
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:34px 0 54px;
+    }
+    .intro,.note {
+      background:linear-gradient(135deg,rgba(255,215,0,.13),rgba(255,255,255,.025));
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:24px;
+      margin-bottom:26px;
+      box-shadow:0 0 28px rgba(255,215,0,.10);
+    }
+    h2 {
+      color:var(--gold);
+      border-left:6px solid var(--gold);
+      padding-left:14px;
+      margin-top:0;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:22px;
+    }
+    .card {
+      background:linear-gradient(180deg,#111,#090909);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 12px 30px rgba(0,0,0,.45);
+      overflow:hidden;
+    }
+    .num {
+      color:var(--gold);
+      font-weight:bold;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+    }
+    h3 {
+      color:var(--gold);
+      margin:8px 0;
+      font-size:1.35rem;
+    }
+    p { color:#e9e9e9; }
+    pre {
+      background:#000;
+      border:1px solid rgba(255,215,0,.30);
+      border-radius:14px;
+      padding:18px;
+      overflow-x:auto;
+      color:#f8f8f2;
+      font-size:.94rem;
+      line-height:1.48;
+    }
+    code { font-family:Consolas,"Courier New",monospace; }
+    footer {
+      text-align:center;
+      background:#000;
+      border-top:3px solid var(--gold);
+      padding:34px 18px 28px;
+      color:var(--muted);
+    }
+    .footer-logo {
+      width:92px;
+      height:92px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid var(--gold);
+      box-shadow:0 0 24px rgba(255,215,0,.30);
+    }
+    .footer-title {
+      color:var(--gold);
+      font-size:1.45rem;
+      font-weight:bold;
+      letter-spacing:1.2px;
+      margin-top:10px;
+    }
+    .motto {
+      color:var(--gold);
+      font-weight:bold;
+      letter-spacing:1px;
+    }
+    @media(max-width:880px) {
+      .grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <img src="banpol.jpg" alt="POLYDEV Banner" class="banner">
+
+  <header class="hero">
+    <div class="badge">POLYDEV • C++ ENGINEERING SERIES</div>
+    <h1>C++ for Smarties</h1>
+    <p class="subtitle">
+      Modern C++ aplicado a performance, memória, paralelismo,
+      precisão financeira, cache locality e processamento escalável.
+    </p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Manifesto técnico</h2>
+      <p>
+        Esta peça inaugura a série <strong>C++ for Smarties</strong> dentro do ecossistema POLYDEV.
+        O objetivo é apresentar C++ moderno em cenários de engenharia real:
+        folha de pagamento, cálculo financeiro, processamento paralelo, busca binária,
+        reserva de memória, movimentação de objetos pesados e consolidação assíncrona.
+      </p>
+      <p><strong>Leia • Entenda • Execute seu código.</strong></p>
+    </section>
+
+    <section class="grid">
+      
+      <article class="card">
+        <div class="num">01 • std::reduce</div>
+        <h3>Soma paralela de folha</h3>
+        <p>Soma o salário bruto de 500 mil funcionários usando múltiplos núcleos do processador.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;numeric&gt;
+#include &lt;execution&gt;
+
+int main() {
+    std::vector&lt;double&gt; salarios_brutos(500000, 3500.00);
+
+    double total_folha = std::reduce(
+        std::execution::par,
+        salarios_brutos.begin(),
+        salarios_brutos.end(),
+        0.0
+    );
+
+    std::cout &lt;&lt; "Total da folha: " &lt;&lt; total_folha &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">02 • std::for_each</div>
+        <h3>Cálculo de juros em paralelo</h3>
+        <p>Aplica juros diários a uma lista de saldos simultaneamente.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;execution&gt;
+
+int main() {
+    std::vector&lt;double&gt; saldos_contas = {1500.00, 3200.50, 800.00, 45000.00};
+    double taxa_juros_diaria = 1.0001;
+
+    std::for_each(std::execution::par, saldos_contas.begin(), saldos_contas.end(),
+        [&amp;taxa_juros_diaria](double&amp; saldo) {
+            saldo *= taxa_juros_diaria;
+        }
+    );
+
+    std::cout &lt;&lt; "Saldo conta 1 apos juros: " &lt;&lt; saldos_contas[0] &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">03 • std::lower_bound</div>
+        <h3>Busca rápida de faixa de IR</h3>
+        <p>Encontra a alíquota correta usando busca binária.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+struct FaixaIR {
+    double limite;
+    double aliquota;
+};
+
+int main() {
+    std::vector&lt;FaixaIR&gt; tabela_ir = {
+        {1903.98, 0.0},
+        {2826.65, 0.075},
+        {3751.05, 0.15},
+        {4664.68, 0.225},
+        {99999.99, 0.275}
+    };
+
+    double salario = 3500.00;
+
+    auto it = std::lower_bound(tabela_ir.begin(), tabela_ir.end(), salario,
+        [](const FaixaIR&amp; faixa, double valor) {
+            return faixa.limite &lt; valor;
+        }
+    );
+
+    double aliquota_encontrada = it-&gt;aliquota;
+    std::cout &lt;&lt; "Aliquota encontrada: " &lt;&lt; aliquota_encontrada * 100 &lt;&lt; "%\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">04 • vector::reserve</div>
+        <h3>Evita travamentos ao ler DB</h3>
+        <p>Reserva memória de uma vez antes de inserir milhões de registros.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+struct RegistroFolha {
+    int id;
+    double valor;
+};
+
+int main() {
+    std::vector&lt;RegistroFolha&gt; folha_processed;
+
+    folha_processed.reserve(2000000);
+
+    for (int i = 0; i &lt; 2000000; ++i) {
+        folha_processed.push_back({i, 2500.00});
+    }
+
+    std::cout &lt;&lt; "Tamanho final: " &lt;&lt; folha_processed.size() &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">05 • constexpr</div>
+        <h3>Cálculo em tempo de compilação</h3>
+        <p>Calcula a taxa de juros diária antes mesmo do programa rodar.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+constexpr double calcularTaxaDiaria(double taxaAnual) {
+    return std::pow(1.0 + taxaAnual, 1.0 / 252.0) - 1.0;
+}
+
+int main() {
+    constexpr double TAXA_ANUAL = 0.12;
+    constexpr double TAXA_DIARIA = calcularTaxaDiaria(TAXA_ANUAL);
+
+    double saldo = 10000.00;
+    saldo += saldo * TAXA_DIARIA;
+
+    std::cout &lt;&lt; "Taxa diaria compilada: " &lt;&lt; TAXA_DIARIA &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">06 • int64_t</div>
+        <h3>Cálculo financeiro preciso e rápido</h3>
+        <p>Trabalha com centavos para evitar erro de ponto flutuante.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+int main() {
+    int64_t salario_centavos = 150050;
+    int64_t desconto_percentual = 8;
+
+    int64_t desconto_centavos = (salario_centavos * desconto_percentual) / 100;
+    int64_t liquido_centavos = salario_centavos - desconto_centavos;
+
+    std::cout &lt;&lt; "Salario Liquido: R$ " &lt;&lt; liquido_centavos / 100.0 &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">07 • std::sort com lambda</div>
+        <h3>Otimização de cache</h3>
+        <p>Ordena a folha por departamento antes de processar.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+
+struct Funcionario {
+    std::string departamento;
+    std::string nome;
+    double salario;
+};
+
+int main() {
+    std::vector&lt;Funcionario&gt; empresa = {
+        {"TI", "Joao", 5000.0},
+        {"RH", "Maria", 4000.0},
+        {"TI", "Ana", 6000.0}
+    };
+
+    std::sort(empresa.begin(), empresa.end(),
+        [](const Funcionario&amp; a, const Funcionario&amp; b) {
+            if (a.departamento != b.departamento)
+                return a.departamento &lt; b.departamento;
+            return a.nome &lt; b.nome;
+        }
+    );
+
+    std::cout &lt;&lt; "Primeiro da lista ordenada: "
+              &lt;&lt; empresa[0].departamento &lt;&lt; " - " &lt;&lt; empresa[0].nome &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">08 • std::move</div>
+        <h3>Transferência de memória</h3>
+        <p>Evita copiar um objeto pesado ao passá-lo para outra função.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;utility&gt;
+
+struct GrandeRelatorio {
+    std::vector&lt;double&gt; todos_os_calculos;
+
+    GrandeRelatorio(size_t tam)
+        : todos_os_calculos(tam, 0.0) {}
+};
+
+void salvarNoBanco(GrandeRelatorio relatorio) {
+    std::cout &lt;&lt; "Relatorio salvo. Tamanho: "
+              &lt;&lt; relatorio.todos_os_calculos.size() &lt;&lt; "\n";
+}
+
+int main() {
+    GrandeRelatorio folha_mes_atual(1000000);
+
+    salvarNoBanco(std::move(folha_mes_atual));
+
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">09 • std::transform</div>
+        <h3>Geração de resultado em lote</h3>
+        <p>Gera salários líquidos a partir de salários brutos.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    std::vector&lt;double&gt; brutos = {3000.00, 5000.00, 7000.00};
+    std::vector&lt;double&gt; liquidos(brutos.size());
+
+    std::transform(brutos.begin(), brutos.end(), liquidos.begin(),
+        [](double bruto) {
+            return bruto * 0.80;
+        }
+    );
+
+    std::cout &lt;&lt; "Liquido do primeiro: " &lt;&lt; liquidos[0] &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+
+      <article class="card">
+        <div class="num">10 • std::async e std::future</div>
+        <h3>Processamento por filiais</h3>
+        <p>Calcula balanços de filiais ao mesmo tempo e junta o resultado no final.</p>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;future&gt;
+#include &lt;thread&gt;
+#include &lt;chrono&gt;
+#include &lt;string&gt;
+
+double calcularBalancoFilial(std::string nome_filial) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    return 150000.00;
+}
+
+int main() {
+    std::future&lt;double&gt; fut_sul =
+        std::async(std::launch::async, calcularBalancoFilial, "Filial Sul");
+
+    std::future&lt;double&gt; fut_norte =
+        std::async(std::launch::async, calcularBalancoFilial, "Filial Norte");
+
+    std::cout &lt;&lt; "Processando filiais...\n";
+
+    double total_geral = fut_sul.get() + fut_norte.get();
+
+    std::cout &lt;&lt; "Balanco consolidado: R$ " &lt;&lt; total_geral &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+      </article>
+    </section>
+
+    <section class="note">
+      <h2>Engineering note</h2>
+      <p>
+        C++ não é apenas sintaxe. É custo de CPU, custo de memória, cache,
+        precisão numérica, concorrência e desenho de estrutura de dados.
+        Em sistemas grandes, esses detalhes são o próprio sistema.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <img src="poly.jpg" alt="POLYDEV Logo" class="footer-logo">
+    <div class="footer-title">POLYDEV</div>
+    <p class="motto">Leia • Entenda • Execute seu código</p>
+    <p>Multiprogramming & Multidatabase</p>
+    <p>C++ for Smarties • Engineering Series</p>
+  </footer>
+</body>
+</html>
