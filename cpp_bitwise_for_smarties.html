@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Bitwise for Smarties | POLYDEV</title>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=8hIpihXOTepRu9ixW2bFZRgUTe-DG103vMunE_4KTLUeF4jmFhBkG4x4BRF6q9jLJDgS_xE506TQxl6R8oi9aLvsoy1-oqjrR6SxYKRIs4EKfykON2lFw4iCxDJyMKGMCXPDUW2DTPcnjdJ3PYY3dWgB3ENbEmjonpP0Y4srPiB6GJ0N2h-OTYCqp3AugPMg4-yUg1SEQgYD_16KBATa_JYze0AC9uveYT6CwINNPScbE9JzA0G70t6Z7uLmD9bHHCagxZAsKtbFOl3E3MeJo0BBjeH3oaPSCdw8TxglQuHbR5NPwt3WzJeFu_A_0bJyBjJ7-WzeOnbYgICRAaz2Cw" charset="UTF-8"></script><style>
+:root{--gold:#FFD700;--text:#f5f5f5;--muted:#d7d7d7;--border:rgba(255,215,0,.42)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,rgba(255,215,0,.12),transparent 32%),linear-gradient(180deg,#000,#070707,#000);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.65}.banner{width:55%;max-width:700px;display:block;margin:15px auto 30px auto;border:2px solid gold;border-radius:8px;background:#000}.hero{text-align:center;padding:10px 18px 36px;background:#000;border-bottom:1px solid var(--border)}.badge{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:8px 18px;font-weight:bold;letter-spacing:1px;margin-bottom:14px;text-transform:uppercase}h1{color:var(--gold);font-size:clamp(2.3rem,5vw,5rem);margin:8px 0;text-shadow:0 0 18px rgba(255,215,0,.28)}.subtitle{max-width:930px;margin:0 auto;color:var(--muted);font-size:1.15rem}main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:34px 0 54px}.intro,.note{background:linear-gradient(135deg,rgba(255,215,0,.13),rgba(255,255,255,.025));border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:26px;box-shadow:0 0 28px rgba(255,215,0,.10)}h2{color:var(--gold);border-left:6px solid var(--gold);padding-left:14px;margin-top:0;line-height:1.2}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.card{background:linear-gradient(180deg,#111,#090909);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,.45);overflow:hidden}.num{color:var(--gold);font-weight:bold;letter-spacing:.6px;text-transform:uppercase}h3{color:var(--gold);margin:8px 0;font-size:1.35rem}p{color:#e9e9e9}pre{background:#000;border:1px solid rgba(255,215,0,.30);border-radius:14px;padding:18px;overflow-x:auto;color:#f8f8f2;font-size:.94rem;line-height:1.48}code{font-family:Consolas,"Courier New",monospace}footer{text-align:center;background:#000;border-top:3px solid var(--gold);padding:34px 18px 28px;color:var(--muted)}.footer-logo{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 24px rgba(255,215,0,.30)}.footer-title{color:var(--gold);font-size:1.45rem;font-weight:bold;letter-spacing:1.2px;margin-top:10px}.motto{color:var(--gold);font-weight:bold;letter-spacing:1px}@media(max-width:880px){.banner{width:88%}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<img src="banpol.jpg" alt="POLYDEV Banner" class="banner">
+<header class="hero"><div class="badge">POLYDEV • C++ BITWISE ENGINEERING SERIES</div><h1>C++ Bitwise for Smarties</h1><p class="subtitle">Flags, masks, rotations, permissions, hashes and memory validation: bitwise thinking applied to real system engineering.</p></header>
+<main>
+<section class="intro"><h2>Manifesto técnico</h2><p>Esta peça apresenta <strong>C++ Bitwise for Smarties</strong>, uma série focada em operações de baixo nível aplicadas a cenários reais: permissões, transações, auditoria, memória, integridade, compressão de estados, criptografia leve e geração de hash.</p><p>Bitwise não é apenas truque de linguagem. É uma forma de pensar próxima da CPU, onde cada bit pode representar decisão, estado, segurança, compactação ou performance.</p><p><strong>Leia • Entenda • Execute seu código.</strong></p></section>
+<section class="grid">
+<article class="card"><div class="num">01 • Permission Flags</div><h3>Controle de permissões de usuário</h3><p>Simula permissões de acesso em sistemas bancários usando bits para READ, WRITE e EXEC.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+enum Permission {
+    READ  = 0,
+    WRITE = 1,
+    EXEC  = 2
+};
+
+uint32_t setBit(uint32_t value, int bit) {
+    return value | (1u &lt;&lt; bit);
+}
+
+bool isBitSet(uint32_t value, int bit) {
+    return (value &amp; (1u &lt;&lt; bit)) != 0;
+}
+
+uint32_t grantPermission(uint32_t userFlags, Permission p) {
+    return setBit(userFlags, p);
+}
+
+bool hasPermission(uint32_t userFlags, Permission p) {
+    return isBitSet(userFlags, p);
+}
+
+int main() {
+    uint32_t user = 0;
+    user = grantPermission(user, READ);
+    user = grantPermission(user, WRITE);
+    std::cout &lt;&lt; "Permissao de leitura? " &lt;&lt; hasPermission(user, READ) &lt;&lt; "\n";
+    std::cout &lt;&lt; "Permissao de execucao? " &lt;&lt; hasPermission(user, EXEC) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">02 • Bit Mask</div><h3>Máscara para extrair código de agência</h3><p>Extrai uma parte específica de um identificador binário empacotado.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t maskBits(uint32_t value, int start, int length) {
+    uint32_t mask = ((1u &lt;&lt; length) - 1u) &lt;&lt; start;
+    return (value &amp; mask) &gt;&gt; start;
+}
+
+uint32_t extractAgencyCode(uint32_t accountData) {
+    return maskBits(accountData, 8, 8);
+}
+
+int main() {
+    uint32_t accountPacked = 0b1010101100110010;
+    std::cout &lt;&lt; "Agencia: " &lt;&lt; extractAgencyCode(accountPacked) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">03 • Transaction Flags</div><h3>Compressão de flags de transação</h3><p>Compacta múltiplos estados booleanos em um único inteiro.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t setBit(uint32_t value, int bit) {
+    return value | (1u &lt;&lt; bit);
+}
+
+uint32_t compressFlags(bool approved, bool fraud, bool priority) {
+    uint32_t flags = 0;
+    if (approved) flags = setBit(flags, 0);
+    if (fraud)    flags = setBit(flags, 1);
+    if (priority) flags = setBit(flags, 2);
+    return flags;
+}
+
+int main() {
+    uint32_t txFlags = compressFlags(true, false, true);
+    std::cout &lt;&lt; "Flags da transacao: " &lt;&lt; txFlags &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">04 • Rotation + XOR</div><h3>Rotação para criptografia simples</h3><p>Demonstra criptografia leve combinando rotação de bits e XOR.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t rotateLeft(uint32_t value, int shift) {
+    return (value &lt;&lt; shift) | (value &gt;&gt; (32 - shift));
+}
+
+uint32_t rotateRight(uint32_t value, int shift) {
+    return (value &gt;&gt; shift) | (value &lt;&lt; (32 - shift));
+}
+
+uint32_t simpleEncrypt(uint32_t value) {
+    return rotateLeft(value, 5) ^ 0xA5A5A5A5;
+}
+
+uint32_t simpleDecrypt(uint32_t value) {
+    return rotateRight(value ^ 0xA5A5A5A5, 5);
+}
+
+int main() {
+    uint32_t data = 123456;
+    auto enc = simpleEncrypt(data);
+    auto dec = simpleDecrypt(enc);
+    std::cout &lt;&lt; "Original: " &lt;&lt; data &lt;&lt; " | Decriptado: " &lt;&lt; dec &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">05 • Integrity Check</div><h3>Verificação de integridade</h3><p>Valida uma condição estrutural do pacote usando menor bit ativo.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t lowestBit(uint32_t value) {
+    return value &amp; -value;
+}
+
+bool isPowerOfTwo(uint32_t value) {
+    return value != 0 &amp;&amp; (value &amp; (value - 1)) == 0;
+}
+
+bool checkIntegrity(uint32_t value) {
+    return isPowerOfTwo(lowestBit(value));
+}
+
+int main() {
+    uint32_t packet = 0b1001000;
+    std::cout &lt;&lt; "Integridade ok? " &lt;&lt; checkIntegrity(packet) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">06 • Toggle Flag</div><h3>Controle de status de transações</h3><p>Alterna rapidamente o estado de fraude em uma transação.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t toggleBit(uint32_t value, int bit) {
+    return value ^ (1u &lt;&lt; bit);
+}
+
+void toggleFraudFlag(uint32_t&amp; txFlags) {
+    txFlags = toggleBit(txFlags, 1);
+}
+
+int main() {
+    uint32_t txFlags = 0b001;
+    toggleFraudFlag(txFlags);
+    std::cout &lt;&lt; "Flags apos toggle: " &lt;&lt; txFlags &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">07 • Popcount</div><h3>Contagem de operações ativas</h3><p>Conta quantos processos estão ativos em um sistema usando flags.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+int countBits(uint32_t value) {
+    int count = 0;
+    while (value) {
+        value &amp;= (value - 1);
+        ++count;
+    }
+    return count;
+}
+
+int activeOperations(uint32_t opsFlags) {
+    return countBits(opsFlags);
+}
+
+int main() {
+    uint32_t ops = 0b101101;
+    std::cout &lt;&lt; "Operacoes ativas: " &lt;&lt; activeOperations(ops) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">08 • Power of Two</div><h3>Validação de blocos de memória</h3><p>Garante que blocos de memória respeitem tamanhos potência de 2.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+bool isPowerOfTwo(uint32_t value) {
+    return value != 0 &amp;&amp; (value &amp; (value - 1)) == 0;
+}
+
+bool validateBlockSize(uint32_t size) {
+    return isPowerOfTwo(size);
+}
+
+int main() {
+    std::cout &lt;&lt; "Bloco 64 valido? " &lt;&lt; validateBlockSize(64) &lt;&lt; "\n";
+    std::cout &lt;&lt; "Bloco 70 valido? " &lt;&lt; validateBlockSize(70) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">09 • Lowest Active Bit</div><h3>Extração do menor bit ativo para auditoria</h3><p>Identifica a menor flag ativa em um conjunto de estados.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t lowestBit(uint32_t value) {
+    return value &amp; -value;
+}
+
+void auditLowestFlag(uint32_t flags) {
+    uint32_t lsb = lowestBit(flags);
+    std::cout &lt;&lt; "Menor flag ativa: " &lt;&lt; lsb &lt;&lt; "\n";
+}
+
+int main() {
+    auditLowestFlag(0b101100);
+    return 0;
+}</code></pre></article>
+<article class="card"><div class="num">10 • Rotate Hash</div><h3>Rotação para gerar hash simples</h3><p>Combina rotações opostas para produzir uma assinatura binária simples.</p><pre><code>#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+
+uint32_t rotateLeft(uint32_t value, int shift) {
+    return (value &lt;&lt; shift) | (value &gt;&gt; (32 - shift));
+}
+
+uint32_t rotateRight(uint32_t value, int shift) {
+    return (value &gt;&gt; shift) | (value &lt;&lt; (32 - shift));
+}
+
+uint32_t generateHash(uint32_t key) {
+    return rotateLeft(key, 7) ^ rotateRight(key, 3);
+}
+
+int main() {
+    uint32_t key = 12345;
+    std::cout &lt;&lt; "Hash: " &lt;&lt; generateHash(key) &lt;&lt; "\n";
+    return 0;
+}</code></pre></article>
+</section>
+<section class="note"><h2>Engineering note</h2><p>Sistemas reais frequentemente precisam representar muitos estados com pouco espaço, extrair campos binários, alternar flags, validar alinhamento de memória e construir assinaturas rápidas. Em C++, operações bitwise dão controle direto sobre esses detalhes.</p><p>O objetivo desta série é mostrar como esse controle pode ser aplicado com clareza, contexto e disciplina de engenharia.</p></section>
+</main>
+<footer><img src="poly.jpg" alt="POLYDEV Logo" class="footer-logo"><div class="footer-title">POLYDEV</div><p class="motto">Leia • Entenda • Execute seu código</p><p>Multiprogramming & Multidatabase</p><p>C++ Bitwise for Smarties • Engineering Series</p></footer>
+</body>
+</html>
