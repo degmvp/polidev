@@ -158,25 +158,26 @@ main{
     background:white;
 }
 
-.blackbelt-card-menu{
+.bbarticles-card{
     background:#050505 !important;
     color:#FFD700 !important;
     border:2px solid #FFD700 !important;
-    box-shadow:0 0 18px rgba(255,215,0,0.35);
+    box-shadow:0 0 22px rgba(255,215,0,0.45);
     transition:0.3s;
 }
 
-.blackbelt-card-menu span{
+.bbarticles-card span{
     color:#FFD700 !important;
     font-weight:bold;
     letter-spacing:1px;
 }
 
-.blackbelt-card-menu:hover{
-    background:#111 !important;
-    border-color:yellowgreen !important;
-    box-shadow:0 0 25px rgba(154,205,50,0.45);
-    transform:translateY(-4px);
+.bbarticles-card:hover{
+    background:#FFD700 !important;
+    color:#050505 !important;
+    border-color:#FFD700 !important;
+    box-shadow:0 0 25px rgba(255,215,0,0.60);
+    transform:translate(10px,-10px);
 }
 
 footer{
@@ -224,21 +225,90 @@ footer{
 }
 
 .spcat-card{
-    background:navy !important;
-    color:white !important;
-    border:2px solid white !important;
-    box-shadow:0 0 22px rgba(255,255,255,0.45);
+    background:#050505 !important;
+    color:#FFD700 !important;
+    border:2px solid #FFD700 !important;
+    box-shadow:0 0 22px rgba(255,215,0,0.45);
+    transition:0.3s;
 }
 
 .spcat-card span{
-    color:white !important;
+    color:#FFD700 !important;
     font-weight:bold;
+    letter-spacing:1px;
 }
 
 .spcat-card:hover{
-    background:#001f5c !important;
+    background:#FFD700 !important;
+    color:#050505 !important;
     border-color:#FFD700 !important;
-    box-shadow:0 0 25px rgba(255,215,0,0.55);
+    box-shadow:0 0 25px rgba(255,215,0,0.60);
+    transform:translate(10px,-10px);
+}
+
+
+/* Correção final cards especiais POLYDEV */
+
+.blackbelt-card-menu{
+    background:#050505 !important;
+    color:#FFD700 !important;
+    border:2px solid #FFD700 !important;
+}
+
+.blackbelt-card-menu span{
+    color:#FFD700 !important;
+}
+
+.blackbelt-card-menu:hover{
+    background:#FFD700 !important;
+    color:#050505 !important;
+    border-color:#FFD700 !important;
+}
+
+.blackbelt-card-menu:hover span{
+    color:#050505 !important;
+}
+
+
+.bbarticles-card{
+    background:#050505 !important;
+    color:#FFD700 !important;
+    border:2px solid #FFD700 !important;
+}
+
+.bbarticles-card span{
+    color:#FFD700 !important;
+}
+
+.bbarticles-card:hover{
+    background:#FFD700 !important;
+    color:#050505 !important;
+    border-color:#FFD700 !important;
+}
+
+.bbarticles-card:hover span{
+    color:#050505 !important;
+}
+
+
+.spcat-card{
+    background:#050505 !important;
+    color:#FFD700 !important;
+    border:2px solid #FFD700 !important;
+}
+
+.spcat-card span{
+    color:#FFD700 !important;
+}
+
+.spcat-card:hover{
+    background:#FFD700 !important;
+    color:#050505 !important;
+    border-color:#FFD700 !important;
+}
+
+.spcat-card:hover span{
+    color:#050505 !important;
 }
 </style>
 </head>
@@ -293,7 +363,7 @@ footer{
         </a>
 
         <a class="iso-card spcat-card" href="spcat.html">
-            <span>🗂️ SPCAT<br>SQL Server Catalog Explorer</span>
+            <span>🗂️ SPCAT<br>SQL Server Catalog </span>
         </a>
         <a class="iso-card" href="isom.html">
             <span>🏠 Menu Isometrico </span>
