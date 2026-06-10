@@ -1,53 +1,46 @@
 /********************************************************************************************
 POLYDEV - SQL SERVER CATALOG EXPLORER
 
-Arquivo.........: spcat03.sql
-Título..........: Catalog Explorer - List Procedures
-Procedure.......: poly_cat_ListProcedures
+Arquivo.........: spcat05.sql
+Título..........: Catalog Explorer - List Constraints
+Procedure.......: poly_cat_ListConstraints
 Categoria.......: spcat
 Versão..........: 1.0
 
 Objetivo:
-Listar todas as stored procedures existentes no banco atual.
+Listar todas as constraints existentes no banco atual.
 
 Aplicações:
-- Inventário de procedures
+- Inventário de regras de integridade
 - Engenharia reversa
 - Auditoria técnica
 - Documentação automática
 
 Catálogo utilizado:
-sys.procedures
-sys.schemas
-sys.sql_modules
+sys.objects
 
 Execução:
-EXEC poly_cat_ListProcedures;
+EXEC poly_cat_ListConstraints;
 
 ********************************************************************************************/
 
-CREATE OR ALTER PROCEDURE poly_cat_ListProcedures
+CREATE OR ALTER PROCEDURE poly_cat_ListConstraints
 AS
 BEGIN
 SET NOCOUNT ON;
 
-```
 SELECT
-    s.name AS SchemaName,
-    p.name AS ProcedureName,
-    m.definition AS ProcedureDefinition
-FROM sys.procedures p
-     INNER JOIN sys.schemas s
-        ON p.schema_id = s.schema_id
-     INNER JOIN sys.sql_modules m
-        ON p.object_id = m.object_id
+    OBJECT_NAME(parent_object_id) AS TableName,
+    name AS ConstraintName,
+    type_desc AS ConstraintType
+FROM sys.objects
+WHERE type_desc LIKE '%CONSTRAINT%'
 ORDER BY
-    s.name,
-    p.name;
-```
+    TableName,
+    ConstraintName;
 
 END;
 GO
 
-EXEC poly_cat_ListProcedures;
+EXEC poly_cat_ListConstraints;
 GO
