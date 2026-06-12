@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Convite</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:22px 15px 12px;
+    border-bottom:3px solid #FFD700;
+}
+
+.logo-banner{
+    max-width:360px;
+    width:80%;
+    height:auto;
+    display:block;
+    margin:0 auto 12px;
+}
+
+header h1{
+    margin:8px 0 4px;
+    font-size:34px;
+    letter-spacing:2px;
+}
+
+header p{
+    margin:5px 0;
+    color:#fff;
+    font-size:17px;
+}
+
+main{
+    max-width:980px;
+    margin:0 auto;
+    padding:28px 18px;
+    text-align:center;
+}
+
+.hero{
+    border:2px solid #FFD700;
+    border-radius:14px;
+    padding:26px 22px;
+    background:#050505;
+    box-shadow:0 0 18px rgba(255,215,0,.25);
+}
+
+.hero h2{
+    margin:0 0 14px;
+    font-size:28px;
+}
+
+.hero p{
+    max-width:780px;
+    margin:10px auto;
+    color:#fff;
+    font-size:18px;
+    line-height:1.6;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:18px;
+    margin:28px 0;
+}
+
+.card{
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:22px 14px;
+    background:#111;
+    color:#FFD700;
+    min-height:130px;
+}
+
+.card h3{
+    margin:0 0 10px;
+    font-size:21px;
+}
+
+.card p{
+    margin:0;
+    color:#fff;
+    font-size:15px;
+    line-height:1.5;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:8px;
+    padding:15px 34px;
+    background:#FFD700;
+    color:#000;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:10px;
+    font-size:18px;
+}
+
+.btn:hover{
+    background:#fff;
+    color:#000;
+}
+
+footer{
+    text-align:center;
+    padding:24px 15px;
+    border-top:3px solid #FFD700;
+    margin-top:30px;
+}
+
+.footer-logo{
+    max-width:95px;
+    width:95px;
+    height:auto;
+    display:block;
+    margin:0 auto 10px;
+}
+
+footer p{
+    margin:5px 0;
+    color:#fff;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:28px;
+    }
+
+    .hero h2{
+        font-size:24px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    .logo-banner{
+        max-width:300px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="banpol.jpg" alt="POLYDEV" class="logo-banner">
+    <h1>POLYDEV</h1>
+    <p>Multiprogramming & Multidatabase</p>
+    <p>Leia • Entenda • Execute seu código</p>
+</header>
+
+<main>
+
+    <section class="hero">
+        <h2>Um convite para explorar tecnologia de verdade</h2>
+
+        <p>
+            O POLYDEV reúne exemplos práticos, artigos técnicos, códigos executáveis,
+            bancos de dados, linguagens de programação, ferramentas DBA Black Belt
+            e conteúdos preparados para quem gosta de aprender fazendo.
+        </p>
+
+        <p>
+            Consulte os cards, escolha sua trilha e acesse um ecossistema técnico
+            organizado para estudo, prática e evolução profissional.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Bancos de Dados</h3>
+                <p>SQL Server, PostgreSQL, MySQL, Oracle, MongoDB, Cassandra e mais.</p>
+            </div>
+
+            <div class="card">
+                <h3>Linguagens</h3>
+                <p>Python, C, C++, C#, JavaScript, Go, Rust, Ruby e Shell.</p>
+            </div>
+
+            <div class="card">
+                <h3>Black Belt DBA</h3>
+                <p>Procedures, views, functions, monitoração, catálogo e inteligência SQL.</p>
+            </div>
+
+            <div class="card">
+                <h3>Artigos & Vídeos</h3>
+                <p>Conteúdos publicados, estudos guiados e demonstrações do ecossistema.</p>
+            </div>
+
+        </div>
+
+        <a href="index.html" class="btn">ENTRAR NO POLYDEV</a>
+    </section>
+
+</main>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV Footer" class="footer-logo">
+    <p>POLYDEV | Engineering Platform</p>
+    <p>Multiprogramming & Multidatabase</p>
+</footer>
+
+</body>
+</html>
