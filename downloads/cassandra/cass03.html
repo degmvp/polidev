@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 03 - TTL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        h3 {
+            margin-top: 25px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        code {
+            color: #00ff90;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 03<br>TTL (Time To Live)</h1>
+
+<p>
+Neste laboratório você aprenderá a utilizar <b>TTL (Time To Live)</b>,
+recurso fundamental do Cassandra para <b>expiração automática de dados</b>.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Entender o conceito de TTL</li>
+    <li>Aplicar TTL em INSERT</li>
+    <li>Aplicar TTL em UPDATE</li>
+    <li>Consultar o tempo restante de vida</li>
+</ul>
+</div>
+
+<h2>1️⃣ O que é TTL?</h2>
+
+<p>
+TTL define por quanto tempo um dado permanecerá armazenado no Cassandra.
+Após esse período, o registro é automaticamente marcado para remoção.
+</p>
+
+<div class="box">
+<b>Uso comum de TTL</b>
+<ul>
+    <li>Logs</li>
+    <li>Sessões de usuário</li>
+    <li>Eventos temporários</li>
+    <li>Auditoria com retenção limitada</li>
+</ul>
+</div>
+
+<h2>2️⃣ Criando tabela para logs</h2>
+
+<pre>
+CREATE TABLE logs_acesso (
+    usuario text,
+    data_evento timestamp,
+    evento text,
+    PRIMARY KEY (usuario, data_evento)
+);
+</pre>
+
+<h2>3️⃣ INSERT com TTL</h2>
+
+<p>
+TTL é definido em <b>segundos</b>.
+</p>
+
+<pre>
+INSERT INTO logs_acesso (usuario, data_evento, evento)
+VALUES ('ana', toTimestamp(now()), 'LOGIN')
+USING TTL 60;
+</pre>
+
+<div class="obs">
+<b>Explicação:</b><br>
+O registro será removido automaticamente após 60 segundos.
+</div>
+
+<h2>4️⃣ Verificando TTL restante</h2>
+
+<pre>
+SELECT usuario,
+       evento,
+       TTL(evento)
+FROM logs_acesso
+WHERE usuario = 'ana';
+</pre>
+
+<h2>5️⃣ UPDATE com TTL</h2>
+
+<pre>
+UPDATE logs_acesso
+USING TTL 120
+SET evento = 'LOGOUT'
+WHERE usuario = 'ana'
+AND data_evento = '2025-01-01 10:00:00';
+</pre>
+
+<div class="obs">
+<b>Atenção:</b><br>
+TTL aplicado em UPDATE substitui o TTL anterior.
+</div>
+
+<h2>6️⃣ TTL em nível de coluna</h2>
+
+<p>
+É possível aplicar TTL apenas a uma coluna específica.
+</p>
+
+<pre>
+UPDATE logs_acesso
+USING TTL 30
+SET evento = 'TIMEOUT'
+WHERE usuario = 'ana'
+AND data_evento = '2025-01-01 10:05:00';
+</pre>
+
+<h2>7️⃣ Comportamento Interno</h2>
+
+<div class="box">
+<ul>
+    <li>Dados expirados viram <b>tombstones</b></li>
+    <li>Remoção física ocorre em compaction</li>
+    <li>TTL excessivo pode degradar performance</li>
+</ul>
+</div>
+
+<h2>8️⃣ Boas Práticas</h2>
+
+<div class="box">
+<ul>
+    <li>Use TTL para dados temporários</li>
+    <li>Evite TTL em dados permanentes</li>
+    <li>Planeje retenção de logs</li>
+    <li>Monitore tombstones</li>
+</ul>
+</div>
+
+<h2>9️⃣ Encerramento do LAB</h2>
+
+<ul>
+    <li>Você aplicou TTL com sucesso</li>
+    <li>Entendeu o ciclo de vida do dado</li>
+    <li>Preparou ambiente para índices</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 03 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

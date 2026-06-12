@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 01 - CQL Básico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        h3 {
+            margin-top: 25px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        code {
+            color: #00ff90;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 01<br>CQL Básico</h1>
+
+<p>
+Este laboratório introduz os comandos fundamentais da linguagem <b>CQL (Cassandra Query Language)</b>,
+utilizando o <b>DataStax Astra DB</b> ou um cluster Cassandra padrão.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Criar Keyspace</li>
+    <li>Criar Tabela</li>
+    <li>Inserir Dados</li>
+    <li>Consultar Dados</li>
+</ul>
+</div>
+
+<h2>1️⃣ Conectando ao CQL</h2>
+
+<p>
+No Astra DB, utilize o <b>CQL Console</b>.<br>
+Em ambiente local, utilize:
+</p>
+
+<pre>
+cqlsh
+</pre>
+
+<h2>2️⃣ Criando o Keyspace</h2>
+
+<p>
+O <b>Keyspace</b> equivale conceitualmente a um <i>database</i> em bancos relacionais.
+</p>
+
+<pre>
+CREATE KEYSPACE labks
+WITH replication = {
+  'class': 'NetworkTopologyStrategy',
+  'datacenter1': 3
+};
+</pre>
+
+<div class="obs">
+<b>Observação:</b><br>
+No Astra DB, o Keyspace geralmente já vem criado.
+Use este comando apenas para fins didáticos.
+</div>
+
+<h2>3️⃣ Selecionando o Keyspace</h2>
+
+<pre>
+USE labks;
+</pre>
+
+<h2>4️⃣ Criando a Tabela</h2>
+
+<p>
+Tabela simples para armazenar clientes.
+</p>
+
+<pre>
+CREATE TABLE clientes (
+    id UUID PRIMARY KEY,
+    nome   text,
+    email  text,
+    cidade text
+);
+</pre>
+
+<div class="box">
+<b>Chave Primária</b><br>
+No Cassandra, a chave primária define:
+<ul>
+    <li>Distribuição dos dados</li>
+    <li>Particionamento</li>
+    <li>Ordem física</li>
+</ul>
+</div>
+
+<h2>5️⃣ Inserindo Dados</h2>
+
+<pre>
+INSERT INTO clientes (id, nome, email, cidade)
+VALUES (uuid(), 'Ana Silva', 'ana@email.com', 'Recife');
+
+INSERT INTO clientes (id, nome, email, cidade)
+VALUES (uuid(), 'Carlos Lima', 'carlos@email.com', 'São Paulo');
+</pre>
+
+<h2>6️⃣ Consultando Dados</h2>
+
+<pre>
+SELECT * FROM clientes;
+</pre>
+
+<p>Resultado esperado:</p>
+
+<pre>
+ id                                   | cidade      | email             | nome
+--------------------------------------+-------------+-------------------+------------
+ 36b32b03-6a21-4fcf-b667-523051615132 | Recife      | ana@email.com     | Ana Silva
+</pre>
+
+<h2>7️⃣ Conceitos Importantes</h2>
+
+<div class="box">
+<ul>
+    <li>Cassandra <b>NÃO</b> suporta JOIN</li>
+    <li>Consultas devem ser planejadas antes da modelagem</li>
+    <li>SELECT sem WHERE só é aceitável em LAB</li>
+    <li>Escalabilidade horizontal é o foco</li>
+</ul>
+</div>
+
+<h2>8️⃣ Encerramento do LAB</h2>
+
+<p>
+Neste LAB você:
+</p>
+
+<ul>
+    <li>Executou comandos CQL básicos</li>
+    <li>Entendeu a estrutura mínima de um banco Cassandra</li>
+    <li>Preparou o ambiente para os próximos LABs</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 01 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

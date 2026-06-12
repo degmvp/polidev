@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 04 - Índices Secundários</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        h3 {
+            margin-top: 25px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        code {
+            color: #00ff90;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 04<br>Índices Secundários</h1>
+
+<p>
+Neste laboratório você aprenderá como funcionam os <b>Secondary Indexes</b>,
+quando utilizá-los e quais erros comuns devem ser evitados.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Criar índices secundários</li>
+    <li>Executar consultas usando índices</li>
+    <li>Entender limitações</li>
+    <li>Analisar erros reais do Cassandra</li>
+</ul>
+</div>
+
+<h2>1️⃣ O que é um Índice Secundário?</h2>
+
+<p>
+Índices secundários permitem consultas por colunas que <b>não fazem parte da chave primária</b>.
+</p>
+
+<div class="box">
+<b>Importante</b><br>
+Índices secundários não substituem modelagem correta.
+</div>
+
+<h2>2️⃣ Criando Índice Secundário</h2>
+
+<p>
+Tabela base utilizada:
+</p>
+
+<pre>
+CREATE TABLE clientes (
+    id UUID PRIMARY KEY,
+    nome   text,
+    email  text,
+    cidade text
+);
+</pre>
+
+<pre>
+CREATE INDEX idx_clientes_email
+ON clientes (email);
+</pre>
+
+<h2>3️⃣ Consultando usando Índice</h2>
+
+<pre>
+SELECT * FROM clientes
+WHERE email = 'ana@email.com';
+</pre>
+
+<div class="box">
+<b>✔ Consulta permitida</b><br>
+O índice secundário é utilizado.
+</div>
+
+<h2>4️⃣ Erro Real: INDEX_BUILD_IN_PROGRESS</h2>
+
+<pre>
+ReadFailure: Error from server: code=1300 [Replica(s) failed to execute read]
+message="Operation failed - received 0 responses and 2 failures:
+INDEX_BUILD_IN_PROGRESS"
+</pre>
+
+<div class="obs">
+<b>Causa:</b><br>
+O índice ainda estava sendo construído no cluster.
+</div>
+
+<div class="box">
+<b>Solução</b>
+<ul>
+    <li>Aguardar a finalização do build do índice</li>
+    <li>Evitar consultas durante o build</li>
+</ul>
+</div>
+
+<h2>5️⃣ Verificando Índices Existentes</h2>
+
+<p>
+No Cassandra, o comando abaixo <b>não funciona</b>:
+</p>
+
+<pre>
+DESCRIBE INDEXES ON clientes;
+</pre>
+
+<div class="obs">
+<b>Comando correto:</b>
+</div>
+
+<pre>
+DESCRIBE TABLE clientes;
+</pre>
+
+<p>
+O índice aparecerá na definição da tabela.
+</p>
+
+<h2>6️⃣ Quando NÃO usar Índice Secundário</h2>
+
+<div class="box">
+<ul>
+    <li>Tabelas com alto volume de dados</li>
+    <li>Alta cardinalidade</li>
+    <li>Consultas frequentes</li>
+    <li>Ambientes de alta escrita</li>
+</ul>
+</div>
+
+<h2>7️⃣ Alternativa Correta</h2>
+
+<p>
+Em Cassandra, a alternativa ao índice secundário é:
+</p>
+
+<div class="box">
+<b>✔ Criar tabela específica para a consulta</b>
+</div>
+
+<pre>
+CREATE TABLE clientes_por_email (
+    email text PRIMARY KEY,
+    id UUID,
+    nome text,
+    cidade text
+);
+</pre>
+
+<h2>8️⃣ Boas Práticas</h2>
+
+<div class="box">
+<ul>
+    <li>Use índice apenas em LAB ou baixa cardinalidade</li>
+    <li>Prefira tabelas modeladas por consulta</li>
+    <li>Evite índices em produção</li>
+    <li>Conheça o padrão de acesso antes de modelar</li>
+</ul>
+</div>
+
+<h2>9️⃣ Encerramento do LAB</h2>
+
+<ul>
+    <li>Você criou índices secundários</li>
+    <li>Entendeu erros comuns</li>
+    <li>Aprendeu alternativas corretas</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 04 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

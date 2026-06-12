@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 07 - Consistency Level</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 07<br>Consistency Level & ReadFailure</h1>
+
+<p>
+Neste laboratório você entenderá como funcionam os <b>níveis de consistência</b>
+e por que erros como <b>ReadFailure</b> acontecem.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Entender Consistency Level</li>
+    <li>Usar ONE, QUORUM e LOCAL_QUORUM</li>
+    <li>Interpretar erros reais</li>
+</ul>
+</div>
+
+<h2>1️⃣ O que é Consistency Level?</h2>
+
+<p>
+Define quantos nós precisam responder para uma operação ser considerada válida.
+</p>
+
+<div class="box">
+<b>Cassandra ≠ SQL</b><br>
+Você escolhe o nível de consistência por operação.
+</div>
+
+<h2>2️⃣ Níveis mais usados</h2>
+
+<pre>
+ONE            → 1 nó responde
+QUORUM        → maioria dos nós
+LOCAL_QUORUM  → maioria do datacenter local
+ALL            → todos os nós
+</pre>
+
+<h2>3️⃣ Definindo Consistency Level</h2>
+
+<pre>
+CONSISTENCY LOCAL_QUORUM;
+</pre>
+
+<h2>4️⃣ Exemplo de ReadFailure (erro real)</h2>
+
+<pre>
+ReadFailure: Operation failed - received 0 responses and 2 failures
+INDEX_BUILD_IN_PROGRESS
+consistency: LOCAL_QUORUM
+</pre>
+
+<div class="box">
+<b>Causa</b>
+<ul>
+    <li>Índice ainda em construção</li>
+    <li>Nós indisponíveis</li>
+    <li>Consistency muito alta</li>
+</ul>
+</div>
+
+<h2>5️⃣ Testando consistência mais baixa</h2>
+
+<pre>
+CONSISTENCY ONE;
+
+SELECT * FROM clientes
+WHERE email = 'ana@email.com';
+</pre>
+
+<div class="box">
+✔ Pode funcionar mesmo com nós indisponíveis
+</div>
+
+<h2>6️⃣ Relação Consistência × Performance</h2>
+
+<div class="box">
+<ul>
+    <li>Alta consistência → mais latência</li>
+    <li>Baixa consistência → mais performance</li>
+    <li>Trade-off consciente</li>
+</ul>
+</div>
+
+<h2>7️⃣ Regra prática</h2>
+
+<div class="box">
+<b>Astra DB (produção)</b>
+<ul>
+    <li>Leitura: LOCAL_QUORUM</li>
+    <li>Escrita: LOCAL_QUORUM</li>
+</ul>
+</div>
+
+<h2>8️⃣ Encerramento</h2>
+
+<ul>
+    <li>Você entendeu ReadFailure</li>
+    <li>Aprendeu a ajustar consistência</li>
+    <li>Completou o guia Cassandra</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 07 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

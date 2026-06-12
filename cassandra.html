@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Apache Cassandra</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:20px;
+    border-bottom:3px solid #FFD700;
+}
+
+header img{
+    max-width:260px;
+    width:90%;
+}
+
+header h1{
+    margin:12px 0 0;
+    font-size:36px;
+}
+
+header p{
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:20px;
+}
+
+.menu{
+    width:30%;
+    background:#111;
+    border:2px solid #FFD700;
+    border-radius:12px;
+    padding:15px;
+    max-height:82vh;
+    overflow:auto;
+}
+
+.viewer{
+    width:70%;
+    background:#111;
+    border:2px solid yellowgreen;
+    border-radius:12px;
+    padding:15px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:12px;
+    background:#FFD700;
+    color:#000;
+    border:0;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    text-align:left;
+}
+
+button:hover{
+    background:yellowgreen;
+}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+}
+
+.acoes button{
+    width:auto;
+    min-width:140px;
+    text-align:center;
+}
+
+iframe{
+    width:100%;
+    height:78vh;
+    border:1px solid #FFD700;
+    border-radius:10px;
+    background:yellowgreen;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    border-top:3px solid #FFD700;
+}
+
+footer img{
+    max-width:120px;
+}
+
+@media(max-width:800px){
+    .container{ flex-direction:column; }
+    .menu,.viewer{ width:100%; }
+    .acoes{ flex-direction:column; }
+    .acoes button{ width:100%; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="banpol.jpg" alt="POLYDEV">
+    <h1>Apache Cassandra</h1>
+    <p>NoSQL Engineering · Leia • Entenda • Execute</p>
+</header>
+
+<div class="container">
+
+    <aside class="menu">
+        <h2>Laboratórios Cassandra</h2>
+
+        <button onclick="abrirLab('downloads/cassandra/cass01.html')">01 · CQL Básico</button>
+        <button onclick="abrirLab('downloads/cassandra/cass02.html')">02 · Partition Key & Clustering Key</button>
+        <button onclick="abrirLab('downloads/cassandra/cass03.html')">03 · TTL (Time To Live)</button>
+        <button onclick="abrirLab('downloads/cassandra/cass04.html')">04 · Índices Secundários</button>
+        <button onclick="abrirLab('downloads/cassandra/cass05.html')">05 · Modelagem Correta</button>
+        <button onclick="abrirLab('downloads/cassandra/cass06.html')">06 · Cassandra × SQL</button>
+        <button onclick="abrirLab('downloads/cassandra/cass07.html')">07 · Consistency Level & ReadFailure</button>
+    </aside>
+
+    <main class="viewer">
+        <h2 id="tituloArquivo">LAB 01 · CQL Básico</h2>
+
+        <div class="acoes">
+            <button onclick="location.href='home.html'">🏠 Home</button>
+            <button onclick="location.href='menu.html'">⬅ Menu</button>
+        </div>
+
+        <iframe id="viewer" src="downloads/cassandra/cass01.html"></iframe>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <p>Projeto POLYDEV · Apache Cassandra · NoSQL Engineering</p>
+</footer>
+
+<script>
+function abrirLab(arquivo){
+    document.getElementById("viewer").src = arquivo;
+
+    const nomes = {
+        "downloads/cassandra/cass01.html": "LAB 01 · CQL Básico",
+        "downloads/cassandra/cass02.html": "LAB 02 · Partition Key & Clustering Key",
+        "downloads/cassandra/cass03.html": "LAB 03 · TTL (Time To Live)",
+        "downloads/cassandra/cass04.html": "LAB 04 · Índices Secundários",
+        "downloads/cassandra/cass05.html": "LAB 05 · Modelagem Correta",
+        "downloads/cassandra/cass06.html": "LAB 06 · Cassandra × SQL",
+        "downloads/cassandra/cass07.html": "LAB 07 · Consistency Level & ReadFailure"
+    };
+
+    document.getElementById("tituloArquivo").innerText = nomes[arquivo] || "Apache Cassandra";
+}
+</script>
+
+</body>
+</html>

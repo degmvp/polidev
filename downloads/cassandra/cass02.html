@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 02 - Partition & Clustering Key</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        h3 {
+            margin-top: 25px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        code {
+            color: #00ff90;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 02<br>Partition Key & Clustering Key</h1>
+
+<p>
+Neste laboratório você entenderá como o Cassandra distribui e organiza dados
+utilizando <b>Partition Key</b> e <b>Clustering Key</b>.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Entender o papel da Partition Key</li>
+    <li>Entender o papel da Clustering Key</li>
+    <li>Criar tabelas corretamente modeladas</li>
+    <li>Executar consultas válidas em Cassandra</li>
+</ul>
+</div>
+
+<h2>1️⃣ Conceito de Partition Key</h2>
+
+<p>
+A <b>Partition Key</b> define:
+</p>
+
+<ul>
+    <li>Em qual nó os dados serão armazenados</li>
+    <li>Como os dados são distribuídos no cluster</li>
+</ul>
+
+<div class="box">
+<b>Regra de Ouro</b><br>
+A maioria das consultas em Cassandra deve usar a Partition Key.
+</div>
+
+<h2>2️⃣ Criando tabela com Partition Key</h2>
+
+<pre>
+CREATE TABLE clientes_por_cidade (
+    cidade text,
+    id UUID,
+    nome text,
+    email text,
+    PRIMARY KEY (cidade, id)
+);
+</pre>
+
+<div class="obs">
+<b>Explicação:</b><br>
+<ul>
+    <li><code>cidade</code> → Partition Key</li>
+    <li><code>id</code> → Clustering Key</li>
+</ul>
+</div>
+
+<h2>3️⃣ Inserindo Dados</h2>
+
+<pre>
+INSERT INTO clientes_por_cidade (cidade, id, nome, email)
+VALUES ('Recife', uuid(), 'Ana Silva', 'ana@email.com');
+
+INSERT INTO clientes_por_cidade (cidade, id, nome, email)
+VALUES ('Recife', uuid(), 'João Costa', 'joao@email.com');
+
+INSERT INTO clientes_por_cidade (cidade, id, nome, email)
+VALUES ('São Paulo', uuid(), 'Carlos Lima', 'carlos@email.com');
+</pre>
+
+<h2>4️⃣ Consultando com Partition Key</h2>
+
+<pre>
+SELECT * FROM clientes_por_cidade
+WHERE cidade = 'Recife';
+</pre>
+
+<div class="box">
+<b>✔ Consulta válida</b><br>
+Utiliza a Partition Key.
+</div>
+
+<h2>5️⃣ Consulta INVÁLIDA</h2>
+
+<pre>
+SELECT * FROM clientes_por_cidade
+WHERE nome = 'Ana Silva';
+</pre>
+
+<div class="obs">
+<b>Erro esperado:</b><br>
+Cassandra não permite consultas sem a Partition Key.
+</div>
+
+<h2>6️⃣ Clustering Key</h2>
+
+<p>
+A <b>Clustering Key</b> define a <b>ordem dos dados dentro da mesma partição</b>.
+</p>
+
+<pre>
+CREATE TABLE acessos_por_usuario (
+    usuario text,
+    data_acesso timestamp,
+    ip text,
+    PRIMARY KEY (usuario, data_acesso)
+) WITH CLUSTERING ORDER BY (data_acesso DESC);
+</pre>
+
+<h2>7️⃣ Consulta usando Clustering Key</h2>
+
+<pre>
+SELECT * FROM acessos_por_usuario
+WHERE usuario = 'ana'
+LIMIT 5;
+</pre>
+
+<div class="box">
+<b>Benefício</b><br>
+Busca rápida dos últimos registros por usuário.
+</div>
+
+<h2>8️⃣ Boas Práticas</h2>
+
+<div class="box">
+<ul>
+    <li>Modele a tabela conforme a consulta</li>
+    <li>Evite tabelas genéricas</li>
+    <li>Duplicar dados é normal em Cassandra</li>
+    <li>Partition Key mal escolhida gera gargalos</li>
+</ul>
+</div>
+
+<h2>9️⃣ Encerramento do LAB</h2>
+
+<ul>
+    <li>Você modelou tabelas corretamente</li>
+    <li>Entendeu erros comuns de consulta</li>
+    <li>Preparou base para TTL e índices</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 02 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

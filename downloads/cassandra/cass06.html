@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 06 - Cassandra x SQL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        table {
+            border-collapse: collapse;
+            background-color: white;
+            margin: 25px 0;
+            width: 100%;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        th, td {
+            border: 2px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d4e157;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 06<br>Cassandra × SQL</h1>
+
+<p>
+Este laboratório apresenta um comparativo direto entre
+<b>Apache Cassandra</b> e <b>bancos relacionais SQL</b>,
+destacando diferenças conceituais, técnicas e de uso real.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Comparar conceitos fundamentais</li>
+    <li>Entender quando usar Cassandra</li>
+    <li>Entender quando usar SQL</li>
+    <li>Fixar o mindset NoSQL</li>
+</ul>
+</div>
+
+<h2>1️⃣ Visão Geral</h2>
+
+<table>
+<tr>
+    <th>Aspecto</th>
+    <th>Cassandra</th>
+    <th>SQL</th>
+</tr>
+<tr>
+    <td>Modelo</td>
+    <td>Wide-column / NoSQL</td>
+    <td>Relacional</td>
+</tr>
+<tr>
+    <td>Escalabilidade</td>
+    <td>Horizontal (scale-out)</td>
+    <td>Vertical (scale-up)</td>
+</tr>
+<tr>
+    <td>Schema</td>
+    <td>Flexível</td>
+    <td>Rígido</td>
+</tr>
+<tr>
+    <td>Alta disponibilidade</td>
+    <td>Nativa</td>
+    <td>Depende de configuração</td>
+</tr>
+</table>
+
+<h2>2️⃣ Escrita de Dados</h2>
+
+<div class="box">
+<b>Cassandra</b><br>
+Alta taxa de escrita, distribuída e paralela.
+</div>
+
+<pre>
+INSERT INTO clientes_por_cidade (cidade, id, nome)
+VALUES ('Recife', uuid(), 'Ana Silva');
+</pre>
+
+<div class="box">
+<b>SQL</b><br>
+Escrita transacional com bloqueios e controle ACID.
+</div>
+
+<pre>
+INSERT INTO clientes (nome, cidade)
+VALUES ('Ana Silva', 'Recife');
+</pre>
+
+<h2>3️⃣ Leitura de Dados</h2>
+
+<div class="box">
+<b>Cassandra</b><br>
+Leitura rápida quando a tabela foi modelada corretamente.
+</div>
+
+<pre>
+SELECT * FROM clientes_por_cidade
+WHERE cidade = 'Recife';
+</pre>
+
+<div class="box">
+<b>SQL</b><br>
+Leitura flexível usando JOINs e filtros variados.
+</div>
+
+<pre>
+SELECT c.nome, p.nome
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id;
+</pre>
+
+<h2>4️⃣ JOINs</h2>
+
+<table>
+<tr>
+    <th>Recurso</th>
+    <th>Cassandra</th>
+    <th>SQL</th>
+</tr>
+<tr>
+    <td>JOIN</td>
+    <td>❌ Não existe</td>
+    <td>✔ Totalmente suportado</td>
+</tr>
+<tr>
+    <td>Subqueries</td>
+    <td>❌ Não</td>
+    <td>✔ Sim</td>
+</tr>
+</table>
+
+<h2>5️⃣ Consistência</h2>
+
+<div class="box">
+<b>Cassandra</b><br>
+Consistência eventual (configurável por nível).
+</div>
+
+<div class="box">
+<b>SQL</b><br>
+Consistência forte (ACID).
+</div>
+
+<h2>6️⃣ Casos de Uso</h2>
+
+<table>
+<tr>
+    <th>Cassandra</th>
+    <th>SQL</th>
+</tr>
+<tr>
+    <td>Logs</td>
+    <td>Financeiro</td>
+</tr>
+<tr>
+    <td>IoT</td>
+    <td>ERP</td>
+</tr>
+<tr>
+    <td>Eventos</td>
+    <td>CRM</td>
+</tr>
+<tr>
+    <td>Alta escrita</td>
+    <td>Relatórios complexos</td>
+</tr>
+</table>
+
+<h2>7️⃣ Erros Comuns</h2>
+
+<div class="box">
+<ul>
+    <li>Tentar usar Cassandra como SQL</li>
+    <li>Esperar JOINs</li>
+    <li>Usar índices indiscriminadamente</li>
+</ul>
+</div>
+
+<h2>8️⃣ Regra Final</h2>
+
+<div class="box">
+<b>Use Cassandra quando:</b>
+<ul>
+    <li>Alta disponibilidade é crítica</li>
+    <li>Escalabilidade horizontal é necessária</li>
+    <li>Modelo de leitura é previsível</li>
+</ul>
+</div>
+
+<div class="box">
+<b>Use SQL quando:</b>
+<ul>
+    <li>Relacionamentos complexos</li>
+    <li>Consultas dinâmicas</li>
+    <li>Consistência forte</li>
+</ul>
+</div>
+
+<h2>9️⃣ Encerramento</h2>
+
+<ul>
+    <li>Você concluiu o guia Cassandra</li>
+    <li>Entendeu diferenças estruturais</li>
+    <li>Adotou o mindset correto</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 06 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>

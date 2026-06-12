@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cassandra LAB 05 - Modelagem Correta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: yellowgreen;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            border-bottom: 4px solid black;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-left: 8px solid black;
+            padding-left: 12px;
+        }
+
+        p {
+            max-width: 1100px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 6px solid black;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        pre {
+            background-color: #111;
+            color: #00ff90;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        .obs {
+            background-color: #fff3cd;
+            border-left: 6px solid #856404;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 2px solid black;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Apache Cassandra – LAB 05<br>Modelagem Correta</h1>
+
+<p>
+Este laboratório consolida o conceito mais importante do Cassandra:
+<b>modelar os dados a partir da consulta</b>.
+</p>
+
+<div class="box">
+<b>Objetivo do LAB</b>
+<ul>
+    <li>Entender por que Cassandra não é relacional</li>
+    <li>Evitar índices e materialized views</li>
+    <li>Criar tabelas por padrão de acesso</li>
+    <li>Aplicar modelagem manual correta</li>
+</ul>
+</div>
+
+<h2>1️⃣ Erro Comum: Pensar como SQL</h2>
+
+<p>
+Tentar adaptar modelos relacionais ao Cassandra gera:
+</p>
+
+<div class="box">
+<ul>
+    <li>Índices ineficientes</li>
+    <li>Views bloqueadas</li>
+    <li>Consultas inválidas</li>
+</ul>
+</div>
+
+<h2>2️⃣ Erro Real: Materialized View Bloqueada</h2>
+
+<pre>
+InvalidRequest: Tables cannot have more than 0 materialized views,
+failed to create materialized view clientes_por_cidade
+</pre>
+
+<div class="obs">
+<b>Causa:</b><br>
+Materialized Views são limitadas e não recomendadas no Astra DB.
+</div>
+
+<h2>3️⃣ Solução Correta: Tabela Manual</h2>
+
+<p>
+Criar manualmente a tabela para a consulta desejada.
+</p>
+
+<pre>
+CREATE TABLE clientes_por_cidade (
+    cidade text,
+    id UUID,
+    nome text,
+    email text,
+    PRIMARY KEY (cidade, id)
+);
+</pre>
+
+<div class="box">
+<b>✔ Essa é a abordagem correta no Cassandra</b>
+</div>
+
+<h2>4️⃣ Duplicação de Dados</h2>
+
+<p>
+Duplicar dados é <b>normal</b> no Cassandra.
+</p>
+
+<div class="box">
+<ul>
+    <li>Mesmos dados em múltiplas tabelas</li>
+    <li>Cada tabela atende uma consulta</li>
+    <li>Consistência eventual</li>
+</ul>
+</div>
+
+<h2>5️⃣ Pipeline de Escrita</h2>
+
+<p>
+Em aplicações reais:
+</p>
+
+<div class="box">
+<ul>
+    <li>Aplicação grava em várias tabelas</li>
+    <li>Mesmo evento → múltiplas tabelas</li>
+    <li>Leitura sempre simples e rápida</li>
+</ul>
+</div>
+
+<h2>6️⃣ Exemplo Prático</h2>
+
+<pre>
+-- tabela principal
+INSERT INTO clientes (id, nome, email, cidade)
+VALUES (uuid(), 'Ana Silva', 'ana@email.com', 'Recife');
+
+-- tabela por cidade
+INSERT INTO clientes_por_cidade (cidade, id, nome, email)
+VALUES ('Recife', uuid(), 'Ana Silva', 'ana@email.com');
+</pre>
+
+<h2>7️⃣ Regra de Ouro</h2>
+
+<div class="box">
+<b>NUNCA</b> pergunte:
+<br><br>
+"Como faço JOIN no Cassandra?"
+<br><br>
+Pergunte:
+<br><br>
+<b>"Qual tabela eu crio para essa consulta?"</b>
+</div>
+
+<h2>8️⃣ Boas Práticas de Modelagem</h2>
+
+<div class="box">
+<ul>
+    <li>1 consulta = 1 tabela</li>
+    <li>Evite índices</li>
+    <li>Evite materialized views</li>
+    <li>Planeje antes de criar</li>
+</ul>
+</div>
+
+<h2>9️⃣ Encerramento do LAB</h2>
+
+<ul>
+    <li>Você modelou corretamente no Cassandra</li>
+    <li>Entendeu limitações reais</li>
+    <li>Adotou o mindset NoSQL</li>
+</ul>
+
+<div class="box">
+<b>Status:</b> ✅ LAB 05 CONCLUÍDO
+</div>
+
+<footer>
+Projeto PolyDev · Cassandra & Astra DB<br>
+Guia didático orientado ao código<br>
+<b>Leia · Entenda · Execute</b>
+</footer>
+
+</body>
+</html>
