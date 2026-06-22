@@ -280,7 +280,10 @@ function montarCombo() {
         select.appendChild(option);
     });
 }
-
+function normalizarUrl(url) {
+    if (!url) return "";
+    return String(url).replace(/^\/+/, "");
+}
 function exibirCategoria() {
     const cat = document.getElementById("categoriaSelect").value;
     const resultado = document.getElementById("resultado");
@@ -296,7 +299,7 @@ function exibirCategoria() {
         card.className = "card";
 
         const titulo = item.titulo || "Sem título";
-        const url = item.arquivo_url || "";
+        const url = normalizarUrl(item.arquivo_url || "");
         const categoria = nomesCategorias[item.categoria] || item.categoria;
         const downloads = item.downloads || 0;
 
