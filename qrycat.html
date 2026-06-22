@@ -191,7 +191,10 @@ footer img{
 </footer>
 
 <script>
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(
+    window.SUPABASE_URL || SUPABASE_URL,
+    window.SUPABASE_KEY || SUPABASE_KEY
+);
 
 let dados = [];
 let agrupado = {};
@@ -232,7 +235,7 @@ const nomesCategorias = {
 };
 
 async function carregar() {
-    const { data, error } = await supabase
+    const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads,ativo")
         .eq("ativo", true)
