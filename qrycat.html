@@ -191,10 +191,7 @@ footer img{
 </footer>
 
 <script>
-const db = window.supabase.createClient(
-    window.SUPABASE_URL || SUPABASE_URL,
-    window.SUPABASE_KEY || SUPABASE_KEY
-);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let dados = [];
 let agrupado = {};
@@ -235,7 +232,6 @@ const nomesCategorias = {
 };
 
 async function carregar() {
-    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads,ativo")
@@ -286,13 +282,15 @@ function exibirCategoria() {
         const card = document.createElement("div");
         card.className = "card";
 
+        const safeUrl = String(item.arquivo_url || "").replace(/'/g, "\\'");
+
         card.innerHTML = `
             <h3>${item.titulo}</h3>
             <p><strong>Categoria:</strong> ${nomesCategorias[item.categoria] || item.categoria}</p>
-            <p><strong>Arquivo:</strong> ${item.arquivo_url}</p>
+            <p><strong>Arquivo:</strong> ${item.arquivo_url || ""}</p>
             <p><strong>Downloads:</strong> ${item.downloads || 0}</p>
-            <button onclick="abrirConteudo('${item.arquivo_url.replace(/'/g, "\\'")}')">Visualizar</button>
-            <a class="btn" href="${item.arquivo_url}" download>Download</a>
+            <button onclick="abrirConteudo('${safeUrl}')">Visualizar</button>
+            <a class="btn" href="${item.arquivo_url || "#"}" download>Download</a>
         `;
 
         resultado.appendChild(card);
@@ -326,7 +324,7 @@ async function abrirConteudo(url) {
 }
 
 function escapeHtml(text) {
-    return text
+    return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
