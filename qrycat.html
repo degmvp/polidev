@@ -235,7 +235,6 @@ async function carregar() {
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads,ativo")
-        .eq("ativo", true)
         .order("categoria", { ascending:true })
         .order("id", { ascending:true });
 
@@ -260,14 +259,22 @@ function montarCombo() {
     const select = document.getElementById("categoriaSelect");
     select.innerHTML = '<option value="">-- Escolha uma categoria --</option>';
 
-    Object.keys(agrupado).sort().forEach(cat => {
+    const cats = Object.keys(agrupado).sort();
+
+    if (cats.length === 0) {
+        select.innerHTML = '<option value="">Nenhuma categoria encontrada</option>';
+        document.getElementById("viewer").innerHTML =
+            "<h2>Nenhum registro retornou do banco.</h2>";
+        return;
+    }
+
+    cats.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat;
         option.textContent = `${nomesCategorias[cat] || cat} (${agrupado[cat].length})`;
         select.appendChild(option);
     });
 }
-
 function exibirCategoria() {
     const cat = document.getElementById("categoriaSelect").value;
     const resultado = document.getElementById("resultado");
