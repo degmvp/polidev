@@ -102,7 +102,8 @@ select{
 
 button, .btn{
     display:inline-block;
-    margin-top:10px;
+    margin-top:12px;
+    margin-right:8px;
     padding:10px 14px;
     background:#FFD700;
     color:#000;
@@ -170,9 +171,12 @@ footer img{
 
     <div class="panel">
         <label for="categoriaSelect">Selecione uma categoria do ecossistema:</label>
+
         <select id="categoriaSelect" onchange="exibirCategoria()">
             <option value="">Carregando categorias...</option>
         </select>
+
+        <button onclick="novaConsulta()">Nova Consulta</button>
     </div>
 
     <div id="resultado" class="grid"></div>
@@ -236,7 +240,7 @@ async function carregar() {
         const { data, error } = await db
             .from("conteudos")
             .select("id,titulo,categoria,arquivo_url,downloads,ativo")
-            .limit(1000);
+            .limit(2000);
 
         if (error) {
             document.getElementById("viewer").innerHTML =
@@ -249,8 +253,14 @@ async function carregar() {
 
         dados.forEach(item => {
             if (!item.categoria) return;
-            if (!agrupado[item.categoria]) agrupado[item.categoria] = [];
-            agrupado[item.categoria].push(item);
+
+            const cat = String(item.categoria).trim().toLowerCase();
+
+            item.categoria_original = item.categoria;
+            item.categoria = cat;
+
+            if (!agrupado[cat]) agrupado[cat] = [];
+            agrupado[cat].push(item);
         });
 
         montarCombo();
@@ -263,12 +273,13 @@ async function carregar() {
 
 function montarCombo() {
     const select = document.getElementById("categoriaSelect");
+
     select.innerHTML = '<option value="">-- Escolha uma categoria --</option>';
 
     Object.keys(agrupado).sort().forEach(cat => {
         const option = document.createElement("option");
         option.value = cat;
-        option.textContent = `${nomesCategorias[cat] || cat} (${agrupado[cat].length})`;
+        option.textContent = `${nomesCategorias[cat] || cat} → ${cat} (${agrupado[cat].length})`;
         select.appendChild(option);
     });
 }
@@ -289,13 +300,14 @@ function exibirCategoria() {
 
         const titulo = item.titulo || "Sem título";
         const url = item.arquivo_url || "";
-        const categoria = nomesCategorias[item.categoria] || item.categoria;
+        const categoriaAmigavel = nomesCategorias[item.categoria] || item.categoria;
+        const categoriaBanco = item.categoria;
         const downloads = item.downloads || 0;
         const safeUrl = url.replace(/'/g, "\\'");
 
         card.innerHTML = `
             <h3>${titulo}</h3>
-            <p><strong>Categoria:</strong> ${categoria}</p>
+            <p><strong>Categoria:</strong> ${categoriaAmigavel} → ${categoriaBanco}</p>
             <p><strong>Arquivo:</strong> ${url}</p>
             <p><strong>Downloads:</strong> ${downloads}</p>
             <button onclick="abrirConteudo('${safeUrl}')">Visualizar</button>
@@ -304,6 +316,18 @@ function exibirCategoria() {
 
         resultado.appendChild(card);
     });
+}
+
+function novaConsulta() {
+    document.getElementById("categoriaSelect").value = "";
+    document.getElementById("resultado").innerHTML = "";
+
+    document.getElementById("viewer").innerHTML = `
+        <h2>Selecione uma categoria e depois um conteúdo.</h2>
+        <p>O QRYCAT lê as categorias diretamente do banco Supabase.</p>
+    `;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 async function abrirConteudo(url) {
