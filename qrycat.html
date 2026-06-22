@@ -235,6 +235,7 @@ const nomesCategorias = {
 };
 
 async function carregar() {
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads,ativo")
