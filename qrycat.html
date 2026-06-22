@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | QRYCAT</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:25px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:15px auto 30px auto;
+    border:2px solid gold;
+    border-radius:8px;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.panel{
+    border:2px solid #FFD700;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:25px;
+    background:#050505;
+}
+
+label{
+    font-size:18px;
+    display:block;
+    margin-bottom:10px;
+}
+
+select{
+    width:100%;
+    padding:14px;
+    font-size:17px;
+    border-radius:8px;
+    border:2px solid #FFD700;
+    background:#111;
+    color:#FFD700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+    margin-top:20px;
+}
+
+.card{
+    border:2px solid #FFD700;
+    border-radius:10px;
+    padding:16px;
+    background:#050505;
+    color:#fff;
+}
+
+.card h3{
+    color:#FFD700;
+    margin-top:0;
+}
+
+.card p{
+    color:#ccc;
+    font-size:14px;
+}
+
+button, .btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 14px;
+    background:#FFD700;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+button:hover, .btn:hover{
+    background:#fff;
+}
+
+.viewer{
+    margin-top:25px;
+    border:2px solid #FFD700;
+    border-radius:10px;
+    background:#0b1a00;
+    padding:18px;
+    min-height:300px;
+    color:#fff;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    color:#fff;
+    font-size:15px;
+}
+
+iframe{
+    width:100%;
+    height:650px;
+    border:none;
+    background:#fff;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:3px solid #FFD700;
+    margin-top:40px;
+}
+
+footer img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid #FFD700;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | QRYCAT</h1>
+    <p>Category Explorer do Ecossistema POLYDEV</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="container">
+
+    <div class="panel">
+        <label for="categoriaSelect">Selecione uma categoria do ecossistema:</label>
+        <select id="categoriaSelect" onchange="exibirCategoria()">
+            <option value="">Carregando categorias...</option>
+        </select>
+    </div>
+
+    <div id="resultado" class="grid"></div>
+
+    <div id="viewer" class="viewer">
+        <h2>Selecione uma categoria e depois um conteúdo.</h2>
+        <p>O QRYCAT lê as categorias diretamente do banco Supabase.</p>
+    </div>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let dados = [];
+let agrupado = {};
+
+const nomesCategorias = {
+    bbart: "Black Belt Articles",
+    bbfunc: "Black Belt Functions",
+    bbintel: "Black Belt Intelligence",
+    bbjack: "Jack of All Trades",
+    bblow: "Low Level Engineering",
+    bbpart: "Big Data Partitioning",
+    bbproc: "Black Belt Procedures",
+    bbpy: "Black Belt Python",
+    bbview: "Black Belt Views",
+    bbwar: "Data Warehouse",
+    c: "Linguagem C",
+    cpp: "C++",
+    cs: "C#",
+    flet: "Flet",
+    go: "Golang",
+    js: "JavaScript",
+    lang: "Linguagens",
+    pd: "Pandas",
+    pyadv: "Python Avançado",
+    pycl: "Python Classes",
+    pyoop: "Python OOP",
+    pypro: "Python Professional Functions",
+    python: "Python Fundamentals",
+    rs: "Rust",
+    ruby: "Ruby",
+    spcat: "SQL Server Catalog Explorer",
+    sql: "SQL Server",
+    sqlbit: "SQLBIT Smarties",
+    sqlmod: "SQL Moderno",
+    stlit: "Streamlit",
+    tsql: "T-SQL",
+    tsqlfn: "T-SQL Functions"
+};
+
+async function carregar() {
+    const { data, error } = await supabase
+        .from("conteudos")
+        .select("id,titulo,categoria,arquivo_url,downloads,ativo")
+        .eq("ativo", true)
+        .order("categoria", { ascending:true })
+        .order("id", { ascending:true });
+
+    if (error) {
+        document.getElementById("viewer").innerHTML =
+            "<h2>Erro ao carregar dados.</h2><pre>" + error.message + "</pre>";
+        return;
+    }
+
+    dados = data || [];
+    agrupado = {};
+
+    dados.forEach(item => {
+        if (!agrupado[item.categoria]) agrupado[item.categoria] = [];
+        agrupado[item.categoria].push(item);
+    });
+
+    montarCombo();
+}
+
+function montarCombo() {
+    const select = document.getElementById("categoriaSelect");
+    select.innerHTML = '<option value="">-- Escolha uma categoria --</option>';
+
+    Object.keys(agrupado).sort().forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent = `${nomesCategorias[cat] || cat} (${agrupado[cat].length})`;
+        select.appendChild(option);
+    });
+}
+
+function exibirCategoria() {
+    const cat = document.getElementById("categoriaSelect").value;
+    const resultado = document.getElementById("resultado");
+    const viewer = document.getElementById("viewer");
+
+    resultado.innerHTML = "";
+    viewer.innerHTML = "<h2>Selecione um conteúdo para visualizar.</h2>";
+
+    if (!cat) return;
+
+    agrupado[cat].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${item.titulo}</h3>
+            <p><strong>Categoria:</strong> ${nomesCategorias[item.categoria] || item.categoria}</p>
+            <p><strong>Arquivo:</strong> ${item.arquivo_url}</p>
+            <p><strong>Downloads:</strong> ${item.downloads || 0}</p>
+            <button onclick="abrirConteudo('${item.arquivo_url.replace(/'/g, "\\'")}')">Visualizar</button>
+            <a class="btn" href="${item.arquivo_url}" download>Download</a>
+        `;
+
+        resultado.appendChild(card);
+    });
+}
+
+async function abrirConteudo(url) {
+    const viewer = document.getElementById("viewer");
+
+    if (!url) {
+        viewer.innerHTML = "<h2>Arquivo não informado.</h2>";
+        return;
+    }
+
+    const ext = url.split(".").pop().toLowerCase();
+
+    if (ext === "html" || ext === "htm") {
+        viewer.innerHTML = `<iframe src="${url}"></iframe>`;
+        return;
+    }
+
+    try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Arquivo não encontrado: " + url);
+
+        const texto = await resp.text();
+        viewer.innerHTML = `<pre>${escapeHtml(texto)}</pre>`;
+    } catch (e) {
+        viewer.innerHTML = `<h2>Erro ao abrir conteúdo.</h2><pre>${e.message}</pre>`;
+    }
+}
+
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+carregar();
+</script>
+
+</body>
+</html>
