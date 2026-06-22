@@ -195,8 +195,6 @@ footer img{
 </footer>
 
 <script>
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let dados = [];
 let agrupado = {};
 
@@ -237,6 +235,8 @@ const nomesCategorias = {
 
 async function carregar() {
     try {
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const { data, error } = await db
             .from("conteudos")
             .select("id,titulo,categoria,arquivo_url,downloads,ativo")
@@ -255,8 +255,6 @@ async function carregar() {
             if (!item.categoria) return;
 
             const cat = String(item.categoria).trim().toLowerCase();
-
-            item.categoria_original = item.categoria;
             item.categoria = cat;
 
             if (!agrupado[cat]) agrupado[cat] = [];
@@ -273,7 +271,6 @@ async function carregar() {
 
 function montarCombo() {
     const select = document.getElementById("categoriaSelect");
-
     select.innerHTML = '<option value="">-- Escolha uma categoria --</option>';
 
     Object.keys(agrupado).sort().forEach(cat => {
@@ -300,17 +297,15 @@ function exibirCategoria() {
 
         const titulo = item.titulo || "Sem título";
         const url = item.arquivo_url || "";
-        const categoriaAmigavel = nomesCategorias[item.categoria] || item.categoria;
-        const categoriaBanco = item.categoria;
+        const categoria = nomesCategorias[item.categoria] || item.categoria;
         const downloads = item.downloads || 0;
-        const safeUrl = url.replace(/'/g, "\\'");
 
         card.innerHTML = `
             <h3>${titulo}</h3>
-            <p><strong>Categoria:</strong> ${categoriaAmigavel} → ${categoriaBanco}</p>
+            <p><strong>Categoria:</strong> ${categoria} → ${item.categoria}</p>
             <p><strong>Arquivo:</strong> ${url}</p>
             <p><strong>Downloads:</strong> ${downloads}</p>
-            <button onclick="abrirConteudo('${safeUrl}')">Visualizar</button>
+            <button onclick="abrirConteudo('${url}')">Visualizar</button>
             <a class="btn" href="${url}" download>Download</a>
         `;
 
@@ -321,12 +316,10 @@ function exibirCategoria() {
 function novaConsulta() {
     document.getElementById("categoriaSelect").value = "";
     document.getElementById("resultado").innerHTML = "";
-
     document.getElementById("viewer").innerHTML = `
         <h2>Selecione uma categoria e depois um conteúdo.</h2>
         <p>O QRYCAT lê as categorias diretamente do banco Supabase.</p>
     `;
-
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -365,6 +358,5 @@ function escapeHtml(text) {
 
 carregar();
 </script>
-
 </body>
 </html>
