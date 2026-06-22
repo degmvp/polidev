@@ -188,75 +188,61 @@ footer img{
     <img src="poly.jpg" alt="POLYDEV">
     <h2>POLYDEV</h2>
     <p>Leia • Entenda • Execute seu código</p>
-</footer>   
+</footer>
 
-
-
-
-</body>
-</html>
 <script>
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let dados = [];
 let agrupado = {};
 
 const nomesCategorias = {
-    bbart:"Black Belt Articles", bbfunc:"Black Belt Functions", bbintel:"Black Belt Intelligence",
-    bbjack:"Jack of All Trades", bblow:"Low Level Engineering", bbpart:"Big Data Partitioning",
-    bbproc:"Black Belt Procedures", bbpy:"Black Belt Python", bbview:"Black Belt Views",
-    bbwar:"Data Warehouse", c:"Linguagem C", cpp:"C++", cs:"C#", flet:"Flet",
-    go:"Golang", js:"JavaScript", lang:"Linguagens", pd:"Pandas",
-    pyadv:"Python Avançado", pycl:"Python Classes", pyoop:"Python OOP",
-    pypro:"Python Professional Functions", python:"Python Fundamentals", rs:"Rust",
-    ruby:"Ruby", spcat:"SQL Server Catalog Explorer", sql:"SQL Server",
-    sqlbit:"SQLBIT Smarties", sqlmod:"SQL Moderno", stlit:"Streamlit",
-    tsql:"T-SQL", tsqlfn:"T-SQL Functions"
+    bbart:"Black Belt Articles",
+    bbfunc:"Black Belt Functions",
+    bbintel:"Black Belt Intelligence",
+    bbjack:"Jack of All Trades",
+    bblow:"Low Level Engineering",
+    bbpart:"Big Data Partitioning",
+    bbproc:"Black Belt Procedures",
+    bbpy:"Black Belt Python",
+    bbview:"Black Belt Views",
+    bbwar:"Data Warehouse",
+    c:"Linguagem C",
+    cpp:"C++",
+    cs:"C#",
+    flet:"Flet",
+    go:"Golang",
+    js:"JavaScript",
+    lang:"Linguagens",
+    pd:"Pandas",
+    pyadv:"Python Avançado",
+    pycl:"Python Classes",
+    pyoop:"Python OOP",
+    pypro:"Python Professional Functions",
+    python:"Python Fundamentals",
+    rs:"Rust",
+    ruby:"Ruby",
+    spcat:"SQL Server Catalog Explorer",
+    sql:"SQL Server",
+    sqlbit:"SQLBIT Smarties",
+    sqlmod:"SQL Moderno",
+    stlit:"Streamlit",
+    tsql:"T-SQL",
+    tsqlfn:"T-SQL Functions"
 };
 
-function status(msg){
-    document.getElementById("viewer").innerHTML += `<p>${msg}</p>`;
-}
-
 async function carregar() {
-    const viewer = document.getElementById("viewer");
-    viewer.innerHTML = "<h2>Diagnóstico QRYCAT</h2>";
-
     try {
-        status("1. JavaScript iniciou.");
-
-        if (!window.supabase) {
-            status("ERRO: biblioteca Supabase não carregou.");
-            return;
-        }
-
-        status("2. Biblioteca Supabase carregada.");
-
-        if (typeof SUPABASE_URL === "undefined") {
-            status("ERRO: SUPABASE_URL não existe.");
-            return;
-        }
-
-        if (typeof SUPABASE_KEY === "undefined") {
-            status("ERRO: SUPABASE_KEY não existe.");
-            return;
-        }
-
-        status("3. config.js carregado.");
-
-        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        status("4. Conexão db criada.");
-
         const { data, error } = await db
             .from("conteudos")
             .select("id,titulo,categoria,arquivo_url,downloads,ativo")
             .limit(1000);
 
         if (error) {
-            status("ERRO SUPABASE: " + error.message);
+            document.getElementById("viewer").innerHTML =
+                "<h2>Erro ao carregar dados.</h2><pre>" + error.message + "</pre>";
             return;
         }
-
-        status("5. Registros retornados: " + data.length);
 
         dados = data || [];
         agrupado = {};
@@ -268,10 +254,10 @@ async function carregar() {
         });
 
         montarCombo();
-        status("6. Combo montado com " + Object.keys(agrupado).length + " categorias.");
 
     } catch (e) {
-        status("ERRO GERAL: " + e.message);
+        document.getElementById("viewer").innerHTML =
+            "<h2>Erro geral no QRYCAT.</h2><pre>" + e.message + "</pre>";
     }
 }
 
@@ -300,13 +286,19 @@ function exibirCategoria() {
     agrupado[cat].forEach(item => {
         const card = document.createElement("div");
         card.className = "card";
+
+        const titulo = item.titulo || "Sem título";
         const url = item.arquivo_url || "";
+        const categoria = nomesCategorias[item.categoria] || item.categoria;
+        const downloads = item.downloads || 0;
+        const safeUrl = url.replace(/'/g, "\\'");
 
         card.innerHTML = `
-            <h3>${item.titulo}</h3>
-            <p><strong>Categoria:</strong> ${nomesCategorias[item.categoria] || item.categoria}</p>
+            <h3>${titulo}</h3>
+            <p><strong>Categoria:</strong> ${categoria}</p>
             <p><strong>Arquivo:</strong> ${url}</p>
-            <button onclick="abrirConteudo('${url}')">Visualizar</button>
+            <p><strong>Downloads:</strong> ${downloads}</p>
+            <button onclick="abrirConteudo('${safeUrl}')">Visualizar</button>
             <a class="btn" href="${url}" download>Download</a>
         `;
 
@@ -329,9 +321,15 @@ async function abrirConteudo(url) {
         return;
     }
 
-    const resp = await fetch(url);
-    const texto = await resp.text();
-    viewer.innerHTML = `<pre>${escapeHtml(texto)}</pre>`;
+    try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Arquivo não encontrado: " + url);
+
+        const texto = await resp.text();
+        viewer.innerHTML = `<pre>${escapeHtml(texto)}</pre>`;
+    } catch (e) {
+        viewer.innerHTML = `<h2>Erro ao abrir conteúdo.</h2><pre>${e.message}</pre>`;
+    }
 }
 
 function escapeHtml(text) {
@@ -343,3 +341,6 @@ function escapeHtml(text) {
 
 carregar();
 </script>
+
+</body>
+</html>
