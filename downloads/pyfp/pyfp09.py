@@ -1,18 +1,29 @@
-10 - Classe Profissional para Processamento de Arquivos
+09 - Leitura Paralela de Múltiplos Arquivos
 
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-import json
+from typing import Dict
 
-class RobustFileProcessor:
+def read_multiple_files_parallel(file_list: list) -> Dict[str, str]:
     """
-    Classe completa e robusta para processamento de arquivos em produção.
+    Lê múltiplos arquivos simultaneamente usando threads.
+    Ideal para ler vários arquivos de configuração ou logs.
     """
-    def __init__(self, base_path: str):
-        self.base_path = Path(base_path)
-        self.base_path.mkdir(parents=True, exist_ok=True)
+    def read_file(path):
+        try:
+            return path, Path(path).read_text(encoding='utf-8')
+        except Exception:
+            return path, None
 
-    def safe_write_json(self, data, filename: str):
-        full_path = self.base_path / filename
-        # Aqui você pode chamar atomic_write()
-        with open(full_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        return dict(executor.map(read_file, file_list))
+
+
+
+
+
+
+
+
+
+
