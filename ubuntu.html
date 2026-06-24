@@ -216,8 +216,7 @@ async function carregarUbuntu(){
     const { data, error } = await db
         .from("conteudos")
         .select("id,titulo,categoria,arquivo_url,downloads,ativo")
-        .eq("categoria", "ubu")
-        .order("titulo", { ascending:true });
+        .limit(2000);
 
     if(error){
         document.getElementById("menuUbuntu").innerHTML = "Erro ao carregar.";
@@ -225,7 +224,12 @@ async function carregarUbuntu(){
         return;
     }
 
-    conteudos = data || [];
+    conteudos = (data || []).filter(item =>
+        String(item.categoria || "").trim().toLowerCase() === "ubu"
+    );
+
+    conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
+
     montarMenu();
 }
 
