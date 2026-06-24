@@ -200,9 +200,7 @@ footer img{
     <h2>POLYDEV</h2>
     <p>Leia • Entenda • Execute seu código</p>
 </footer>
-
 <script>
-
 let conteudos = [];
 let conteudoAtual = "";
 
@@ -210,12 +208,13 @@ function normalizarUrl(url){
     if(!url) return "";
     return String(url).replace(/^\/+/, "");
 }
+
 async function carregarUbuntu(){
     const menu = document.getElementById("menuUbuntu");
     const codigo = document.getElementById("codigo");
 
-    menu.innerHTML = "Diagnosticando...";
-    codigo.textContent = "Iniciando diagnóstico Ubuntu Viewer...";
+    menu.innerHTML = "Diagnóstico iniciado...";
+    codigo.textContent = "Ubuntu Viewer versão diagnóstico rodando.";
 
     try{
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -223,19 +222,13 @@ async function carregarUbuntu(){
         const { data, error } = await db
             .from("conteudos")
             .select("id,titulo,categoria,arquivo_url,downloads,ativo")
-            .limit(2000);
+            .limit(3000);
 
         if(error){
-            menu.innerHTML = "Erro Supabase.";
+            menu.innerHTML = "Erro Supabase";
             codigo.textContent = error.message;
             return;
         }
-
-        const total = data ? data.length : 0;
-
-        const categorias = [...new Set((data || []).map(x =>
-            String(x.categoria || "").trim().toLowerCase()
-        ))].sort();
 
         conteudos = (data || []).filter(item =>
             String(item.categoria || "").trim().toLowerCase() === "ubu"
@@ -243,15 +236,23 @@ async function carregarUbuntu(){
 
         conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
 
-        codigo.textContent =
-            "Registros lidos: " + total + "\n" +
-            "Categorias encontradas:\n" + categorias.join("\n") + "\n\n" +
-            "Registros categoria ubu: " + conteudos.length;
+        if(conteudos.length === 0){
+            menu.innerHTML = "Nenhum módulo UBU encontrado.";
+            codigo.textContent =
+                "Registros lidos: " + (data || []).length + "\n\n" +
+                "Categoria 'ubu' não encontrada.";
+            return;
+        }
 
         montarMenu();
 
+        codigo.textContent =
+            "Registros lidos: " + data.length + "\n" +
+            "Módulos Ubuntu encontrados: " + conteudos.length + "\n\n" +
+            "Selecione UBU01 a UBU09 no menu lateral.";
+
     }catch(e){
-        menu.innerHTML = "Erro geral.";
+        menu.innerHTML = "Erro geral";
         codigo.textContent = e.message;
     }
 }
@@ -259,11 +260,6 @@ async function carregarUbuntu(){
 function montarMenu(){
     const menu = document.getElementById("menuUbuntu");
     menu.innerHTML = "";
-
-    if(conteudos.length === 0){
-        menu.innerHTML = "Nenhum módulo Ubuntu encontrado.";
-        return;
-    }
 
     conteudos.forEach(item => {
         const btn = document.createElement("button");
