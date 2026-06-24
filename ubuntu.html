@@ -211,26 +211,50 @@ function normalizarUrl(url){
     if(!url) return "";
     return String(url).replace(/^\/+/, "");
 }
-
 async function carregarUbuntu(){
-    const { data, error } = await db
-        .from("conteudos")
-        .select("id,titulo,categoria,arquivo_url,downloads,ativo")
-        .limit(2000);
+    const menu = document.getElementById("menuUbuntu");
+    const codigo = document.getElementById("codigo");
 
-    if(error){
-        document.getElementById("menuUbuntu").innerHTML = "Erro ao carregar.";
-        document.getElementById("codigo").textContent = error.message;
-        return;
+    menu.innerHTML = "Diagnosticando...";
+    codigo.textContent = "Iniciando diagnóstico Ubuntu Viewer...";
+
+    try{
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const { data, error } = await db
+            .from("conteudos")
+            .select("id,titulo,categoria,arquivo_url,downloads,ativo")
+            .limit(2000);
+
+        if(error){
+            menu.innerHTML = "Erro Supabase.";
+            codigo.textContent = error.message;
+            return;
+        }
+
+        const total = data ? data.length : 0;
+
+        const categorias = [...new Set((data || []).map(x =>
+            String(x.categoria || "").trim().toLowerCase()
+        ))].sort();
+
+        conteudos = (data || []).filter(item =>
+            String(item.categoria || "").trim().toLowerCase() === "ubu"
+        );
+
+        conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
+
+        codigo.textContent =
+            "Registros lidos: " + total + "\n" +
+            "Categorias encontradas:\n" + categorias.join("\n") + "\n\n" +
+            "Registros categoria ubu: " + conteudos.length;
+
+        montarMenu();
+
+    }catch(e){
+        menu.innerHTML = "Erro geral.";
+        codigo.textContent = e.message;
     }
-
-    conteudos = (data || []).filter(item =>
-        String(item.categoria || "").trim().toLowerCase() === "ubu"
-    );
-
-    conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
-
-    montarMenu();
 }
 
 function montarMenu(){
