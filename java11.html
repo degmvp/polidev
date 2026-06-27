@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | Java 11 Engineering</title>
+
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=wX4lDwGFuGKYzq1-i9WeV9lLuwhSak7wF_jmiSz0X_u1TgpFY_uojf2T4OcnqbbqQpl8_Q3cKiTPCE0J_h2a86lgTtrOSnZ6UlGHFcp9SVDNf5AKDSQlXLt8uYrQRA2qwJkPLd3HmkJgM3ayIxVom-e3jL5tXY94hEhk7uB8p5_aZTj7lHd3hMciiurqiKqHYnHSsrJWHZxSxN0b-Gcmjy-_XO_A02aJTkdTea100oGPJW2xZ7coaA2uyNAsGPQBk6BlgvG1S4wKbvm_wSB_acCjbL9EGWLIn8RYVjwu1xllQEySR5P8Dr6b1hQDmu50" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐉 POLYDEV | Java 11 Engineering</h1>
+    <p>LTS • HTTP Client • JFR • Modern Java</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu Java 11</h2>
+        <div id="menuJava11">Carregando módulos...</div>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">Selecione um módulo Java 11</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="#" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione JV11_01 a JV11_10 no menu lateral.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudos = [];
+let conteudoAtual = "";
+
+function normalizarUrl(url){
+    if(!url) return "";
+    return String(url).replace(/^\/+/, "");
+}
+
+async function carregarJava11(){
+    const menu = document.getElementById("menuJava11");
+    const codigo = document.getElementById("codigo");
+
+    menu.innerHTML = "Carregando módulos Java 11...";
+
+    try{
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const { data, error } = await db
+            .from("conteudos")
+            .select("id,titulo,categoria,arquivo_url,downloads,ativo")
+            .limit(3000);
+
+        if(error){
+            menu.innerHTML = "Erro Supabase";
+            codigo.textContent = error.message;
+            return;
+        }
+
+        conteudos = (data || []).filter(item =>
+            String(item.categoria || "").trim().toLowerCase() === "jv11"
+        );
+
+        conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
+
+        if(conteudos.length === 0){
+            menu.innerHTML = "Nenhum módulo JV11 encontrado.";
+            codigo.textContent = "Categoria 'jv11' não encontrada no banco.";
+            return;
+        }
+
+        montarMenu();
+
+    }catch(e){
+        menu.innerHTML = "Erro geral";
+        codigo.textContent = e.message;
+    }
+}
+
+function montarMenu(){
+    const menu = document.getElementById("menuJava11");
+    menu.innerHTML = "";
+
+    conteudos.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "menu-btn";
+        btn.textContent = item.titulo;
+        btn.onclick = () => abrirConteudo(item);
+        menu.appendChild(btn);
+    });
+}
+
+async function abrirConteudo(item){
+    const url = normalizarUrl(item.arquivo_url);
+
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("downloadBtn").href = url;
+
+    try{
+        const resp = await fetch(url);
+        if(!resp.ok) throw new Error("Arquivo não encontrado: " + url);
+
+        conteudoAtual = await resp.text();
+        document.getElementById("codigo").textContent = conteudoAtual;
+    }catch(e){
+        conteudoAtual = "";
+        document.getElementById("codigo").textContent = e.message;
+    }
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        alert("Nenhum conteúdo carregado.");
+        return;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+
+carregarJava11();
+</script>
+
+</body>
+</html>

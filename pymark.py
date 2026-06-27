@@ -1,11 +1,11 @@
 from PIL import Image, ImageDraw, ImageFont
 
-imagem = Image.open("java10.jpg").convert("RGBA")
+imagem = Image.open("mod.jpg").convert("RGBA")
 
 camada = Image.new("RGBA", imagem.size, (255, 255, 255, 0))
 draw = ImageDraw.Draw(camada)
 
-texto = "JDK 10"
+texto = "JDK 11"
 
 try:
     fonte = ImageFont.truetype("arial.ttf", 28)
