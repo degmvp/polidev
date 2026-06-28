@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLYDEV | Rust Engineering</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#FFD700;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #FFD700;
+}
+
+header h1{margin:0;font-size:34px}
+header p{color:yellowgreen;font-size:18px}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:15px auto 30px auto;
+    border:2px solid gold;
+    border-radius:8px;
+}
+
+.container{
+    display:flex;
+    min-height:70vh;
+}
+
+aside{
+    width:340px;
+    background:#050505;
+    border-right:2px solid #FFD700;
+    padding:20px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    background:#000;
+    color:#FFD700;
+    border:1px solid #FFD700;
+    border-radius:6px;
+    cursor:pointer;
+    text-align:left;
+    font-size:14px;
+}
+
+button:hover{
+    background:#FFD700;
+    color:#000;
+}
+
+main{
+    flex:1;
+    padding:25px;
+}
+
+pre{
+    background:#0b1a00;
+    color:#fff;
+    padding:20px;
+    border:1px solid #FFD700;
+    border-radius:8px;
+    white-space:pre-wrap;
+    overflow:auto;
+    min-height:500px;
+    font-size:15px;
+    line-height:1.5;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:3px solid #FFD700;
+}
+
+footer img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid #FFD700;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | Rust Engineering</h1>
+    <p>Segurança, performance e controle de memória sem Garbage Collector.</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="container">
+<aside>
+    <h2>Rust Engineering</h2>
+
+    <button onclick="loadCode('downloads/rseng/rust01.rs')">RS01 — Ownership</button>
+    <button onclick="loadCode('downloads/rseng/rust02.rs')">RS02 — Borrow Checker</button>
+    <button onclick="loadCode('downloads/rseng/rust03.rs')">RS03 — Lifetimes</button>
+    <button onclick="loadCode('downloads/rseng/rust04.rs')">RS04 — Traits</button>
+    <button onclick="loadCode('downloads/rseng/rust05.rs')">RS05 — Enums</button>
+    <button onclick="loadCode('downloads/rseng/rust06.rs')">RS06 — Pattern Matching</button>
+    <button onclick="loadCode('downloads/rseng/rust07.rs')">RS07 — Result&lt;T,E&gt;</button>
+    <button onclick="loadCode('downloads/rseng/rust08.rs')">RS08 — Zero-Cost Abstractions</button>
+    <button onclick="loadCode('downloads/rseng/rust09.rs')">RS09 — Unsafe Rust</button>
+    <button onclick="loadCode('downloads/rseng/rust10.rs')">RS10 — Alta Performance</button>
+</aside>
+
+<main>
+    <pre id="codeArea">Selecione um item da série Rust Engineering...</pre>
+</main>
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+async function loadCode(file){
+    const area = document.getElementById("codeArea");
+
+    try{
+        const response = await fetch(file);
+        if(!response.ok){
+            throw new Error("Arquivo não encontrado");
+        }
+
+        const text = await response.text();
+        area.textContent = text;
+    }catch(error){
+        area.textContent = "Erro ao carregar: " + file;
+    }
+}
+</script>
+
+</body>
+</html>
