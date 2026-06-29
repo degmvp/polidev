@@ -1,17 +1,23 @@
-JV21_06 - Record Patterns
+JV21_05 - Sequenced Collections
 
-Descrição: Permite a "desconstrução" (destructuring) de um Record diretamente dentro de expressões instanceof ou switch. Em vez de pegar o objeto inteiro e chamar os métodos acessores (record.x()), você extrai as variáveis internas em uma única linha, tornando o código muito mais limpo.
+Descrição: Corrige uma dor antiga do Java: obter o primeiro ou último elemento de uma lista exigia métodos verbosos ou frágeis (como list.get(0) que lançava IndexOutOfBoundsException se a lista estivesse vazia, ou lidar com Deque). Agora, coleções que possuem ordem de encontro definida implementam SequencedCollection, trazendo métodos padronizados como getFirst(), getLast(), addFirst() e reversed().
 
-public class RecordPatternsExample {
-    public record Point(int x, int y) {}
+import java.util.LinkedHashSet;
+import java.util.SequencedCollection;
 
+public class SequencedCollectionsExample {
     public static void main(String[] args) {
-        Object obj = new Point(10, 20);
+        SequencedCollection<String> languages = new LinkedHashSet<>();
+        languages.add("Java");
+        languages.add("Python");
+        languages.add("C++");
 
-        // Antes: if (obj instanceof Point p) { int x = p.x(); int y = p.y(); ... }
-        // Agora (Desconstrução direta):
-        if (obj instanceof Point(int x, int y)) {
-            System.out.println("X: " + x + ", Y: " + y);
-        }
+        // Métodos novos e seguros
+        System.out.println("Primeiro: " + languages.getFirst()); // Java
+        System.out.println("Último: " + languages.getLast());   // C++
+
+        // Inverte a coleção facilmente
+        SequencedCollection<String> reversed = languages.reversed();
+        System.out.println("Invertido: " + reversed);           // [C++, Python, Java]
     }
 }
