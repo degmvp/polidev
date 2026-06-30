@@ -5,7 +5,7 @@ imagem = Image.open("mod.jpg").convert("RGBA")
 camada = Image.new("RGBA", imagem.size, (255, 255, 255, 0))
 draw = ImageDraw.Draw(camada)
 
-texto = "JDK 17"
+texto = "JDK 21"
 
 try:
     fonte = ImageFont.truetype("arial.ttf", 28)
@@ -24,6 +24,6 @@ draw.text(
 
 resultado = Image.alpha_composite(imagem, camada)
 resultado = resultado.convert("RGB")
-resultado.save("java10_marca.jpg")
+resultado.save("java21_marca.jpg")
 
-print("Imagem criada: java10_marca.jpg")
+print("Imagem criada: java21_marca.jpg")
