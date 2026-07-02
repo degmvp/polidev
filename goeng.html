@@ -228,9 +228,19 @@
   <img src="poly.jpg" alt="POLYDEV">
   <div>POLYDEV | Multiprogramming & Multidatabase</div>
 </footer>
-
 <script>
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let db = null;
+
+  function conectarSupabase() {
+    if (db) return db;
+
+    db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    return db;
+  }
 
   async function carregarModulo() {
     const modulo = document.getElementById("programa").value;
@@ -249,18 +259,18 @@
       return;
     }
 
-    const { data, error } = await db
+    const supabaseDb = conectarSupabase();
+
+    const { data, error } = await supabaseDb
       .from("conteudos")
-      .select("*")
+      .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
       .eq("categoria", "goeng")
       .eq("programa", modulo)
-      .eq("ativo", "true")
       .order("titulo", { ascending: true });
 
     if (error) {
-      menu.style.display = "none";
-      conteudo.innerHTML = "Erro ao consultar o Supabase.";
       console.error(error);
+      conteudo.innerHTML = "Erro ao consultar o Supabase.";
       return;
     }
 
@@ -291,24 +301,13 @@
     titulo.textContent = item.titulo;
     conteudo.innerHTML = "Carregando arquivo...";
 
-    try {
-      const resp = await fetch(item.arquivo_url);
+    const resp = await fetch(item.arquivo_url);
+    const texto = await resp.text();
 
-      if (!resp.ok) {
-        conteudo.innerHTML = "Erro ao carregar o arquivo.";
-        return;
-      }
-
-      const texto = await resp.text();
-
-      conteudo.innerHTML = `
-        <a class="download" href="${item.arquivo_url}" download>Download</a>
-        <pre>${escapeHtml(texto)}</pre>
-      `;
-    } catch (e) {
-      console.error(e);
-      conteudo.innerHTML = "Falha ao abrir o arquivo.";
-    }
+    conteudo.innerHTML = `
+      <a class="download" href="${item.arquivo_url}" download>Download</a>
+      <pre>${escapeHtml(texto)}</pre>
+    `;
   }
 
   function escapeHtml(text) {
