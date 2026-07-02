@@ -254,7 +254,7 @@
       .select("*")
       .eq("categoria", "goeng")
       .eq("programa", modulo)
-      .eq("ativo", true)
+      .eq("ativo", "true")
       .order("titulo", { ascending: true });
 
     if (error) {
