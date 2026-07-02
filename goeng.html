@@ -1,321 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>POLYDEV | Go Engineering</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
+<title>POLYDEV | Go Engineering</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #050505;
-      color: #f5f5f5;
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.modulo-box{
+    width:96%;
+    margin:0 auto 22px auto;
+    padding:18px;
+    background:#00101f;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    text-align:center;
+}
+
+.modulo-box h2{
+    margin:0 0 12px 0;
+    color:#FFD700;
+}
+
+.modulo-box p{
+    margin:8px 0 14px 0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+.modulo-select{
+    padding:11px 14px;
+    min-width:330px;
+    max-width:95%;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
     }
 
-    header {
-      text-align: center;
-      padding: 25px 15px 10px;
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
     }
 
-    header img {
-      width: 55%;
-      max-width: 620px;
-      border-radius: 12px;
+    .banner{
+        width:90%;
     }
-
-    h1 {
-      color: #FFD700;
-      margin: 20px 0 8px;
-      font-size: 2rem;
-    }
-
-    .subtitle {
-      color: yellowgreen;
-      font-size: 1rem;
-      margin-bottom: 20px;
-    }
-
-    .module-box {
-      max-width: 780px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #333;
-      border-radius: 12px;
-      background: #111;
-      text-align: center;
-    }
-
-    .module-box label {
-      display: block;
-      color: #FFD700;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    select, button {
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      margin: 6px;
-    }
-
-    select {
-      min-width: 280px;
-      background: #222;
-      color: #fff;
-      border: 1px solid #555;
-    }
-
-    button {
-      background: #FFD700;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #e6c200;
-    }
-
-    .layout {
-      display: flex;
-      min-height: 520px;
-    }
-
-    aside {
-      width: 320px;
-      background: #0d0d0d;
-      border-right: 1px solid #333;
-      padding: 20px;
-      display: none;
-    }
-
-    aside h2 {
-      color: #FFD700;
-      font-size: 1.1rem;
-      margin-top: 0;
-    }
-
-    .menu-item {
-      padding: 12px;
-      margin-bottom: 10px;
-      background: #1a1a1a;
-      border-left: 4px solid #FFD700;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.92rem;
-    }
-
-    .menu-item:hover {
-      background: #292929;
-    }
-
-    main {
-      flex: 1;
-      padding: 25px;
-    }
-
-    .viewer-title {
-      color: #FFD700;
-      margin-top: 0;
-    }
-
-    pre {
-      background: #101010;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 20px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      color: #e8e8e8;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .download {
-      display: inline-block;
-      margin: 12px 0 20px;
-      padding: 10px 14px;
-      background: #FFD700;
-      color: #000;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .msg {
-      text-align: center;
-      color: #ccc;
-      margin: 25px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 10px;
-      color: #aaa;
-    }
-
-    footer img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
-
-    @media (max-width: 800px) {
-      .layout {
-        flex-direction: column;
-      }
-
-      aside {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #333;
-      }
-
-      header img {
-        width: 90%;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <img src="banpol.jpg" alt="POLYDEV">
-  <h1>Go Engineering</h1>
-  <div class="subtitle">Concorrência, resiliência, HTTP e produção em Go</div>
+    <h1>🐹 POLYDEV | Go Engineering</h1>
+    <p>Goroutines • Channels • Context • HTTP • Produção</p>
 </header>
 
-<section class="module-box">
-  <label for="programa">Selecione o módulo de estudo</label>
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
 
-  <select id="programa">
-    <option value="">-- escolha o módulo --</option>
-    <option value="12">12 - Worker Pool + Fan-Out/Fan-In</option>
-    <option value="34">34 - Pipeline + Rate Limiter</option>
-    <option value="56">56 - Retry + Circuit Breaker</option>
-    <option value="78">78 - HTTP Client + Middleware</option>
-    <option value="99">99 - Health Check + Graceful Shutdown</option>
-  </select>
+<section class="modulo-box">
+    <h2>Filtro de Módulo</h2>
+    <p>Selecione uma etapa para carregar apenas os dois arquivos correspondentes no menu lateral.</p>
 
-  <button onclick="carregarModulo()">Consultar</button>
+    <select id="programa" class="modulo-select">
+        <option value="">Selecione o módulo GOENG</option>
+        <option value="12">12 — GOENG-01 e GOENG-02</option>
+        <option value="34">34 — GOENG-03 e GOENG-04</option>
+        <option value="56">56 — GOENG-05 e GOENG-06</option>
+        <option value="78">78 — GOENG-07 e GOENG-08</option>
+        <option value="99">99 — GOENG-09 e GOENG-10</option>
+    </select>
+
+    <button class="tool-btn" onclick="carregarGoEng()">Consultar</button>
 </section>
 
 <div class="layout">
-  <aside id="menu">
-    <h2>Módulo</h2>
-    <div id="menu-list"></div>
-  </aside>
 
-  <main>
-    <h2 class="viewer-title" id="titulo">Leia • Entenda • Execute seu código.</h2>
-    <div id="conteudo" class="msg">
-      Selecione um módulo para exibir os arquivos Go Engineering.
-    </div>
-  </main>
+    <aside class="sidebar">
+        <h2>Menu Go Engineering</h2>
+        <div id="menuGoEng">Selecione um módulo acima.</div>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">Selecione um módulo Go Engineering</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="#" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um módulo para listar dois arquivos GOENG no menu lateral.</pre>
+        </div>
+    </main>
+
 </div>
 
 <footer>
-  <img src="poly.jpg" alt="POLYDEV">
-  <div>POLYDEV | Multiprogramming & Multidatabase</div>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
 </footer>
+
 <script>
-  let db = null;
+let conteudos = [];
+let conteudoAtual = "";
 
-  function conectarSupabase() {
-    if (db) return db;
+function normalizarUrl(url){
+    if(!url) return "";
+    return String(url).replace(/^\/+/, "");
+}
 
-    db = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-    return db;
-  }
-
-  async function carregarModulo() {
+async function carregarGoEng(){
+    const menu = document.getElementById("menuGoEng");
+    const codigo = document.getElementById("codigo");
     const modulo = document.getElementById("programa").value;
-    const menu = document.getElementById("menu");
-    const menuList = document.getElementById("menu-list");
-    const conteudo = document.getElementById("conteudo");
-    const titulo = document.getElementById("titulo");
 
-    menuList.innerHTML = "";
-    conteudo.innerHTML = "Carregando módulo...";
-    titulo.textContent = "Go Engineering";
+    menu.innerHTML = "Carregando módulos Go Engineering...";
+    codigo.textContent = "Consultando módulo Go Engineering...";
+    document.getElementById("tituloConteudo").textContent = "Go Engineering";
+    document.getElementById("downloadBtn").href = "#";
+    conteudoAtual = "";
 
-    if (!modulo) {
-      menu.style.display = "none";
-      conteudo.innerHTML = "Selecione um módulo válido.";
-      return;
+    if(!modulo){
+        menu.innerHTML = "Selecione um módulo acima.";
+        codigo.textContent = "Nenhum módulo selecionado.";
+        return;
     }
 
-    const supabaseDb = conectarSupabase();
+    try{
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const { data, error } = await supabaseDb
-      .from("conteudos")
-      .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
-      .eq("categoria", "goeng")
-      .eq("programa", modulo)
-      .order("titulo", { ascending: true });
+        const { data, error } = await db
+            .from("conteudos")
+            .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
+            .limit(3000);
 
-    if (error) {
-      console.error(error);
-      conteudo.innerHTML = "Erro ao consultar o Supabase.";
-      return;
+        if(error){
+            menu.innerHTML = "Erro Supabase";
+            codigo.textContent = error.message;
+            return;
+        }
+
+        conteudos = (data || []).filter(item =>
+            String(item.categoria || "").trim().toLowerCase() === "goeng" &&
+            String(item.programa || "").trim() === String(modulo).trim()
+        );
+
+        conteudos.sort((a,b) => String(a.titulo).localeCompare(String(b.titulo)));
+
+        if(conteudos.length === 0){
+            menu.innerHTML = "Nenhum módulo GOENG encontrado.";
+            codigo.textContent = "Categoria 'goeng' com programa '" + modulo + "' não encontrada no banco.";
+            return;
+        }
+
+        montarMenu();
+
+    }catch(e){
+        menu.innerHTML = "Erro geral";
+        codigo.textContent = e.message;
     }
+}
 
-    if (!data || data.length === 0) {
-      menu.style.display = "none";
-      conteudo.innerHTML = "Nenhum arquivo encontrado para este módulo.";
-      return;
-    }
+function montarMenu(){
+    const menu = document.getElementById("menuGoEng");
+    menu.innerHTML = "";
 
-    menu.style.display = "block";
-    conteudo.innerHTML = "Selecione um item no menu lateral.";
-
-    data.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "menu-item";
-      div.textContent = item.titulo;
-      div.onclick = () => abrirArquivo(item);
-      menuList.appendChild(div);
+    conteudos.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "menu-btn";
+        btn.textContent = item.titulo;
+        btn.onclick = () => abrirConteudo(item);
+        menu.appendChild(btn);
     });
+}
 
-    abrirArquivo(data[0]);
-  }
+async function abrirConteudo(item){
+    const url = normalizarUrl(item.arquivo_url);
 
-  async function abrirArquivo(item) {
-    const titulo = document.getElementById("titulo");
-    const conteudo = document.getElementById("conteudo");
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("downloadBtn").href = url;
 
-    titulo.textContent = item.titulo;
-    conteudo.innerHTML = "Carregando arquivo...";
+    try{
+        const resp = await fetch(url);
+        if(!resp.ok) throw new Error("Arquivo não encontrado: " + url);
 
-    const resp = await fetch(item.arquivo_url);
-    const texto = await resp.text();
+        conteudoAtual = await resp.text();
+        document.getElementById("codigo").textContent = conteudoAtual;
+    }catch(e){
+        conteudoAtual = "";
+        document.getElementById("codigo").textContent = e.message;
+    }
+}
 
-    conteudo.innerHTML = `
-      <a class="download" href="${item.arquivo_url}" download>Download</a>
-      <pre>${escapeHtml(texto)}</pre>
-    `;
-  }
+function copiarConteudo(){
+    if(!conteudoAtual){
+        alert("Nenhum conteúdo carregado.");
+        return;
+    }
 
-  function escapeHtml(text) {
-    return text
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-  }
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
 </script>
 
 </body>
