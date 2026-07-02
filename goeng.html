@@ -6,7 +6,7 @@
 
 <title>POLYDEV | Go Engineering</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Ot6D88I7icwcYAfagJHqdDlrNgMj2d-TODPguI8vo46pUyIRS3NjNkmJ5tNqT1kmpjQHtHi5hu0kYMII6eaQ6ns1AfHIYRHLPNJs-tNvExVoiQ6L_eLGicK2iu8r5o_R0eTY8OOiG8p-C698LAct-dvKGifPEwoQvfxReUXQqopgQd3igZ1LwMq5AHiWnJ1kxVNsDr8dGfUQ_eOpssJ3bRMia1ajMEctwQPZRrb1pEC6C3FXn5NvmpAciJuN_YlqumIn8VZQBEAO0kjgm-OnsA" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <style>
@@ -255,7 +255,19 @@ let conteudoAtual = "";
 
 function normalizarUrl(url){
     if(!url) return "";
-    return String(url).replace(/^\/+/, "");
+    return String(url).trim().replace(/^\/+/, "");
+}
+
+function montarUrlLeitura(url){
+    const limpo = normalizarUrl(url);
+
+    // Se abrir goeng.html direto pelo Windows/file://, fetch relativo pode falhar.
+    // Nesse caso, tenta ler pelo GitHub Pages oficial do POLYDEV.
+    if(window.location.protocol === "file:"){
+        return "https://degmvp.github.io/polidev/" + limpo;
+    }
+
+    return limpo;
 }
 
 async function carregarGoEng(){
@@ -325,19 +337,29 @@ function montarMenu(){
 
 async function abrirConteudo(item){
     const url = normalizarUrl(item.arquivo_url);
+    const urlLeitura = montarUrlLeitura(item.arquivo_url);
 
     document.getElementById("tituloConteudo").textContent = item.titulo;
     document.getElementById("downloadBtn").href = url;
 
     try{
-        const resp = await fetch(url);
-        if(!resp.ok) throw new Error("Arquivo não encontrado: " + url);
+        const resp = await fetch(urlLeitura);
+        if(!resp.ok) throw new Error("Arquivo não encontrado: " + urlLeitura);
 
         conteudoAtual = await resp.text();
         document.getElementById("codigo").textContent = conteudoAtual;
     }catch(e){
         conteudoAtual = "";
-        document.getElementById("codigo").textContent = e.message;
+        document.getElementById("codigo").textContent =
+            "Falha ao carregar o arquivo.
+
+" +
+            "URL no banco: " + url + "
+" +
+            "URL tentada: " + urlLeitura + "
+
+" +
+            "Erro: " + e.message;
     }
 }
 
