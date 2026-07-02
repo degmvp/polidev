@@ -6,7 +6,7 @@
 
 <title>POLYDEV | Go Engineering</title>
 
-<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Ot6D88I7icwcYAfagJHqdDlrNgMj2d-TODPguI8vo46pUyIRS3NjNkmJ5tNqT1kmpjQHtHi5hu0kYMII6eaQ6ns1AfHIYRHLPNJs-tNvExVoiQ6L_eLGicK2iu8r5o_R0eTY8OOiG8p-C698LAct-dvKGifPEwoQvfxReUXQqopgQd3igZ1LwMq5AHiWnJ1kxVNsDr8dGfUQ_eOpssJ3bRMia1ajMEctwQPZRrb1pEC6C3FXn5NvmpAciJuN_YlqumIn8VZQBEAO0kjgm-OnsA" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <style>
@@ -48,29 +48,25 @@ header p{
 
 .modulo-box{
     width:96%;
-    margin:0 auto 22px auto;
-    padding:18px;
-    background:#00101f;
+    margin:0 auto 24px auto;
+    padding:16px;
     border:2px solid #4cc9f0;
     border-radius:10px;
+    background:#00101f;
     text-align:center;
 }
 
-.modulo-box h2{
-    margin:0 0 12px 0;
+.modulo-box label{
+    display:block;
     color:#FFD700;
-}
-
-.modulo-box p{
-    margin:8px 0 14px 0;
-    color:yellowgreen;
     font-weight:bold;
+    margin-bottom:10px;
 }
 
-.modulo-select{
-    padding:11px 14px;
+.modulo-box select{
     min-width:330px;
     max-width:95%;
+    padding:11px;
     background:#111;
     color:#FFD700;
     border:1px solid #4cc9f0;
@@ -199,25 +195,21 @@ footer img{
 
 <header>
     <h1>🐹 POLYDEV | Go Engineering</h1>
-    <p>Goroutines • Channels • Context • HTTP • Produção</p>
+    <p>Concurrency • Context • Channels • HTTP • Production</p>
 </header>
 
 <img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
 
 <section class="modulo-box">
-    <h2>Filtro de Módulo</h2>
-    <p>Selecione uma etapa para carregar apenas os dois arquivos correspondentes no menu lateral.</p>
-
-    <select id="programa" class="modulo-select">
-        <option value="">Selecione o módulo GOENG</option>
-        <option value="12">12 — GOENG-01 e GOENG-02</option>
-        <option value="34">34 — GOENG-03 e GOENG-04</option>
-        <option value="56">56 — GOENG-05 e GOENG-06</option>
-        <option value="78">78 — GOENG-07 e GOENG-08</option>
-        <option value="99">99 — GOENG-09 e GOENG-10</option>
+    <label for="programa">Selecione o módulo Go Engineering</label>
+    <select id="programa" onchange="carregarGoEng()">
+        <option value="">-- escolha o módulo --</option>
+        <option value="12">12 - Worker Pool + Fan-Out/Fan-In</option>
+        <option value="34">34 - Pipeline + Rate Limiter</option>
+        <option value="56">56 - Retry + Circuit Breaker</option>
+        <option value="78">78 - HTTP Client + Middleware</option>
+        <option value="99">99 - Health Check + Graceful Shutdown</option>
     </select>
-
-    <button class="tool-btn" onclick="carregarGoEng()">Consultar</button>
 </section>
 
 <div class="layout">
@@ -237,7 +229,7 @@ footer img{
         </div>
 
         <div class="viewer">
-            <pre id="codigo">Selecione um módulo para listar dois arquivos GOENG no menu lateral.</pre>
+            <pre id="codigo">Selecione um módulo para exibir os arquivos GOENG no menu lateral.</pre>
         </div>
     </main>
 
@@ -261,8 +253,8 @@ function normalizarUrl(url){
 function montarUrlLeitura(url){
     const limpo = normalizarUrl(url);
 
-    // Se abrir goeng.html direto pelo Windows/file://, fetch relativo pode falhar.
-    // Nesse caso, tenta ler pelo GitHub Pages oficial do POLYDEV.
+    if(!limpo) return "";
+
     if(window.location.protocol === "file:"){
         return "https://degmvp.github.io/polidev/" + limpo;
     }
@@ -351,14 +343,9 @@ async function abrirConteudo(item){
     }catch(e){
         conteudoAtual = "";
         document.getElementById("codigo").textContent =
-            "Falha ao carregar o arquivo.
-
-" +
-            "URL no banco: " + url + "
-" +
-            "URL tentada: " + urlLeitura + "
-
-" +
+            "Falha ao carregar o arquivo.\n\n" +
+            "URL no banco: " + url + "\n" +
+            "URL tentada: " + urlLeitura + "\n\n" +
             "Erro: " + e.message;
     }
 }
