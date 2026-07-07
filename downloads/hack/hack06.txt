@@ -1,0 +1,191 @@
+POLYDEV | Security Engineering
+HACK06 — Web Application Hacking: Do Básico ao Avançado
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK06 — Web Application Hacking: Do Básico ao Avançado
+
+Objetivo:
+
+Entender como aplicações web são avaliadas do ponto de vista de segurança, com foco em laboratório, metodologia, evidência e correção.
+
+A proposta não é “invadir sistemas”, mas aprender como falhas comuns aparecem em aplicações reais e como um profissional identifica, documenta e corrige riscos.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Fundamentos HTTP
+============================================================
+Fundamentos HTTP
+
+Uma aplicação web é uma conversa entre cliente e servidor.
+
+Elementos principais:
+
+- Método
+  GET, POST, PUT, PATCH, DELETE.
+
+- URL
+  Caminho e parâmetros.
+
+- Headers
+  Metadados como Authorization, Cookie, Content-Type.
+
+- Body
+  Dados enviados no corpo da requisição.
+
+- Status Code
+  200, 301, 400, 401, 403, 404, 500.
+
+Segurança web começa entendendo cada parte da requisição.
+
+============================================================
+03 - Superfície de Ataque
+============================================================
+Superfície de Ataque
+
+Pontos comuns de análise:
+
+- Formulários.
+- Login.
+- Upload de arquivos.
+- APIs internas.
+- Cookies e sessões.
+- Parâmetros em URL.
+- Cabeçalhos HTTP.
+- Rotas administrativas.
+- Integrações externas.
+
+Quanto maior a superfície, maior a necessidade de controle, validação e logging.
+
+============================================================
+04 - OWASP Top 10
+============================================================
+OWASP Top 10
+
+Falhas comuns em aplicações web:
+
+- Broken Access Control.
+- Cryptographic Failures.
+- Injection.
+- Insecure Design.
+- Security Misconfiguration.
+- Vulnerable Components.
+- Authentication Failures.
+- Software and Data Integrity Failures.
+- Logging and Monitoring Failures.
+- Server-Side Request Forgery.
+
+Use OWASP como mapa de estudo e checklist defensivo.
+
+============================================================
+05 - Laboratório Seguro
+============================================================
+Laboratório Seguro
+
+Ambiente recomendado:
+
+- VM Linux.
+- Aplicação vulnerável de laboratório.
+- Proxy HTTP.
+- Browser isolado.
+- Logs do servidor.
+- Banco de dados local.
+- Rede controlada.
+
+Regras:
+
+- Nunca testar sistemas de terceiros.
+- Documentar cada alteração.
+- Separar ambiente de estudo do ambiente real.
+- Restaurar snapshots quando necessário.
+
+============================================================
+06 - Validação de Entrada
+============================================================
+Validação de Entrada
+
+Toda entrada deve ser tratada como não confiável.
+
+Pontos de validação:
+
+- Tipo.
+- Tamanho.
+- Formato.
+- Faixa permitida.
+- Caracteres especiais.
+- Campos obrigatórios.
+- Dados inesperados.
+
+Exemplo conceitual:
+
+entrada -> validação -> normalização -> regra de negócio -> persistência
+
+A validação deve acontecer no cliente e no servidor, mas a decisão confiável sempre fica no servidor.
+
+============================================================
+07 - Autenticação e Sessão
+============================================================
+Autenticação e Sessão
+
+Verifique:
+
+- Senhas com hash forte.
+- Bloqueio contra força bruta.
+- MFA quando possível.
+- Cookies com HttpOnly.
+- Cookies com Secure.
+- SameSite configurado.
+- Expiração de sessão.
+- Renovação após login.
+- Logout real.
+
+Uma aplicação segura protege identidade, sessão e permissões.
+
+============================================================
+08 - Logging e Evidência
+============================================================
+Logging e Evidência
+
+Registre eventos relevantes:
+
+- Login com sucesso.
+- Falha de login.
+- Alteração de senha.
+- Acesso negado.
+- Mudança de perfil.
+- Erros internos.
+- Tentativas suspeitas.
+
+Evite registrar:
+
+- Senhas.
+- Tokens.
+- Dados sensíveis completos.
+- Cartões.
+- Segredos.
+
+Log bom ajuda defesa, auditoria e resposta a incidentes.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Fundamentos de HTTP.
+- Superfície de ataque web.
+- OWASP Top 10.
+- Laboratório seguro.
+- Validação de entrada.
+- Autenticação e sessão.
+- Logging defensivo.
+
+Próximo artigo:
+HACK07 — SQL Injection e Defesa Profissional
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

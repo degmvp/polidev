@@ -1,0 +1,200 @@
+POLYDEV | Security Engineering
+HACK09 — API Security e OWASP API Top 10
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK09 — API Security e OWASP API Top 10
+
+Objetivo:
+
+Organizar uma visão prática de segurança em APIs, cobrindo autenticação, autorização, rate limit, validação, logging e riscos do OWASP API Top 10.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - API é Contrato
+============================================================
+API é Contrato
+
+Uma API expõe regras de negócio para outros sistemas.
+
+Elementos:
+
+- Endpoint.
+- Método.
+- Payload.
+- Status code.
+- Autenticação.
+- Autorização.
+- Rate limit.
+- Logs.
+- Versionamento.
+
+Uma API insegura transforma regra de negócio em superfície de ataque.
+
+============================================================
+03 - Autenticação
+============================================================
+Autenticação em APIs
+
+Opções comuns:
+
+- API Key.
+- JWT.
+- OAuth2.
+- mTLS.
+- Session token.
+
+Boas práticas:
+
+- Expiração curta.
+- Rotação.
+- Escopo.
+- Revogação.
+- Transporte sempre com HTTPS.
+- Nunca token em URL.
+- Não logar segredo.
+
+Autenticação confirma identidade. Não confirma permissão.
+
+============================================================
+04 - Autorização
+============================================================
+Autorização
+
+Pergunta central:
+
+Este usuário pode executar esta ação neste recurso?
+
+Verifique:
+
+- Usuário.
+- Perfil.
+- Tenant.
+- Dono do recurso.
+- Escopo.
+- Papel.
+- Regra de negócio.
+
+Falhas comuns:
+
+- IDOR.
+- Permissão só no front-end.
+- Endpoint administrativo exposto.
+- Ausência de checagem por objeto.
+
+Autorização deve ser aplicada no servidor, em cada ação sensível.
+
+============================================================
+05 - Rate Limit
+============================================================
+Rate Limit
+
+Rate limit protege disponibilidade e reduz abuso.
+
+Aplicar por:
+
+- IP.
+- Usuário.
+- Token.
+- Endpoint.
+- Tenant.
+- Janela de tempo.
+
+Exemplos conceituais:
+
+- 100 requisições por minuto.
+- 5 tentativas de login por minuto.
+- Limite menor em endpoints caros.
+- Bloqueio progressivo.
+
+Rate limit não é só performance. É segurança operacional.
+
+============================================================
+06 - Validação de Payload
+============================================================
+Validação de Payload
+
+Toda API precisa validar:
+
+- Campos obrigatórios.
+- Tipos.
+- Tamanho.
+- Formato.
+- Valores permitidos.
+- Campos extras.
+- Aninhamento.
+- Arquivos enviados.
+
+Respostas devem ser claras para o cliente, mas não revelar detalhes internos.
+
+Validação forte reduz falhas, abuso e inconsistência.
+
+============================================================
+07 - OWASP API Top 10
+============================================================
+OWASP API Top 10
+
+Temas importantes:
+
+- Broken Object Level Authorization.
+- Broken Authentication.
+- Broken Object Property Level Authorization.
+- Unrestricted Resource Consumption.
+- Broken Function Level Authorization.
+- Unrestricted Access to Sensitive Business Flows.
+- Server Side Request Forgery.
+- Security Misconfiguration.
+- Improper Inventory Management.
+- Unsafe Consumption of APIs.
+
+Use como checklist de revisão.
+
+============================================================
+08 - Observabilidade
+============================================================
+Observabilidade em APIs
+
+Registrar:
+
+- Endpoint.
+- Método.
+- Status.
+- Latência.
+- Usuário ou client id.
+- Falhas de autenticação.
+- Falhas de autorização.
+- Rate limit acionado.
+- Erros internos.
+
+Evitar:
+
+- Senhas.
+- Tokens.
+- Dados sensíveis.
+- Payload completo sem necessidade.
+
+Sem observabilidade, a equipe descobre o incidente tarde demais.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- API como contrato.
+- Autenticação.
+- Autorização.
+- Rate limit.
+- Validação de payload.
+- OWASP API Top 10.
+- Observabilidade.
+
+Próximo artigo:
+HACK10 — Docker & Kubernetes Security
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK04 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK04 - Security Engineering</h1>
+    <p>Kali • Linux • Automation • Python • Labs</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK04</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Por que Customizar o Kali?</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Atualização Inicial</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Script de Automação</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Ferramentas Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Customização Avançada</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Estrutura de Diretórios</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Laboratório Recomendado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m9')">09 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK04 - Kali Linux para Programadores: Customização e Automação</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack04.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK04 — Kali Linux para Programadores: Customização e Automação
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK04 — Kali Linux para Programadores: Customização e Automação
+
+Objetivo:
+
+Transformar o Kali Linux de uma ferramenta pronta em um ambiente personalizado, organizado e automatizado para programadores.
+
+O foco é preparar uma estação de laboratório com ferramentas, scripts, aliases, Python e estrutura de diretórios.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Por que Customizar o Kali?",
+texto: `Por que customizar o Kali?
+
+O Kali padrão é bom para começar, mas um programador avançado precisa de um ambiente rápido, previsível e automatizado.
+
+Customizar ajuda a:
+
+- Reduzir tempo de preparação.
+- Padronizar ferramentas.
+- Recriar o ambiente rapidamente.
+- Organizar laboratórios.
+- Criar scripts próprios.
+- Trabalhar com produtividade.
+
+A máquina deixa de ser apenas uma VM e vira uma bancada técnica.`
+},
+m3: {
+titulo: "03 - Atualização Inicial",
+texto: `Atualização Inicial e Configurações Básicas
+
+Comandos:
+
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install git python3-pip gobuster feroxbuster ffuf bloodhound -y
+
+Recomendações:
+
+- Faça snapshot antes de atualizar.
+- Atualize repositórios.
+- Instale ferramentas essenciais.
+- Teste as ferramentas após instalar.
+- Documente o que foi alterado.
+
+Em ambiente profissional, previsibilidade vale mais que improviso.`
+},
+m4: {
+titulo: "04 - Script de Automação",
+texto: `Criando seu Próprio Ambiente com Script
+
+Arquivo: kali-setup.sh
+
+#!/bin/bash
+# POLYDEV | HACK04
+# Kali Linux setup para laboratório
+
+set -e
+
+sudo apt update
+
+sudo apt install -y \\
+    seclists \\
+    wordlists \\
+    gobuster \\
+    feroxbuster \\
+    nmap \\
+    masscan \\
+    tmux \\
+    zsh
+
+pip3 install scapy requests beautifulsoup4 sqlalchemy
+
+echo "Ambiente configurado com sucesso!"
+
+O comando set -e faz o script parar quando ocorrer erro, evitando instalação parcial sem controle.`
+},
+m5: {
+titulo: "05 - Ferramentas Python",
+texto: `Ferramentas Python para Segurança
+
+Bibliotecas úteis:
+
+- scapy
+  Manipulação de pacotes.
+
+- requests
+  Automação HTTP.
+
+- beautifulsoup4
+  Parsing de HTML.
+
+- sqlalchemy
+  Persistência e análise estruturada.
+
+Exemplo:
+
+pip3 install scapy requests beautifulsoup4 sqlalchemy
+
+O programador não deve depender apenas de ferramentas prontas. Python transforma o Kali em ambiente programável.`
+},
+m6: {
+titulo: "06 - Customização Avançada",
+texto: `Dicas Avançadas de Customização
+
+Sugestões:
+
+- Instalar Zsh + Oh My Zsh.
+- Configurar aliases úteis no ~/.zshrc.
+- Usar tmux para sessões persistentes.
+- Criar scripts pessoais em Python.
+- Criar diretórios por laboratório.
+- Separar outputs, wordlists e relatórios.
+
+Exemplo de aliases:
+
+alias ports='sudo netstat -tulpen'
+alias myip='ip addr show'
+alias ll='ls -lah'
+alias update-kali='sudo apt update && sudo apt full-upgrade -y'`
+},
+m7: {
+titulo: "07 - Estrutura de Diretórios",
+texto: `Estrutura Recomendada
+
+Sugestão:
+
+~/labs/
+  hack01-networking/
+  hack02-scapy/
+  hack03-enumeration/
+  hack04-kali-setup/
+
+~/tools/
+  python/
+  bash/
+  wordlists/
+
+~/reports/
+  nmap/
+  web/
+  notes/
+
+Essa organização evita bagunça e facilita repetição dos estudos.`
+},
+m8: {
+titulo: "08 - Laboratório Recomendado",
+texto: `Laboratório Recomendado
+
+Exercício:
+
+1. Crie uma VM Kali limpa.
+2. Faça snapshot.
+3. Execute o script kali-setup.sh.
+4. Configure aliases.
+5. Crie diretórios de laboratório.
+6. Teste Nmap, Gobuster, FFUF e scripts Python.
+7. Documente alterações.
+
+Objetivo: transformar uma VM genérica em estação POLYDEV de Security Engineering.`
+},
+m9: {
+titulo: "09 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Por que customizar o Kali.
+- Como atualizar e instalar ferramentas.
+- Como criar um script de automação.
+- Como instalar bibliotecas Python.
+- Como organizar diretórios.
+- Como preparar laboratório.
+
+Próximo artigo:
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

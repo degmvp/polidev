@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK13 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK13 - Security Engineering</h1>
+    <p>IR • Forensics • Evidence • Timeline • Recovery</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK13</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Incidente</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Ciclo de Resposta</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Preservação de Evidência</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Coleta Inicial</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Timeline</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Contenção e Erradicação</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Recuperação e Pós-Incidente</button>
+        <button class="menu-btn" onclick="abrirConteudo('m9')">09 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK13 - Incident Response e Digital Forensics</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack13.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK13 — Incident Response e Digital Forensics
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK13 — Incident Response e Digital Forensics
+
+Objetivo:
+
+Organizar uma visão prática de resposta a incidentes e forense digital, com foco em evidência, contenção, análise, recuperação e lições aprendidas.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Incidente",
+texto: `O Que é Incidente
+
+Incidente é um evento que ameaça:
+
+- Confidencialidade.
+- Integridade.
+- Disponibilidade.
+- Identidade.
+- Operação.
+- Dados.
+- Reputação.
+
+Exemplos:
+
+- Conta comprometida.
+- Malware.
+- Vazamento.
+- Alteração indevida.
+- Acesso não autorizado.
+- Serviço indisponível.
+
+Nem todo alerta é incidente, mas todo alerta relevante merece triagem.`
+},
+m3: {
+titulo: "03 - Ciclo de Resposta",
+texto: `Ciclo de Resposta
+
+Fases comuns:
+
+1. Preparação.
+2. Identificação.
+3. Contenção.
+4. Erradicação.
+5. Recuperação.
+6. Lições aprendidas.
+
+O erro clássico é pular direto para apagar arquivos ou reiniciar servidores sem preservar evidências.
+
+Resposta profissional exige método.`
+},
+m4: {
+titulo: "04 - Preservação de Evidência",
+texto: `Preservação de Evidência
+
+Princípios:
+
+- Não alterar mais que o necessário.
+- Registrar horário.
+- Registrar responsável.
+- Copiar evidências.
+- Manter integridade.
+- Calcular hash quando aplicável.
+- Documentar cadeia de custódia.
+
+Evidência sem contexto perde valor técnico e jurídico.`
+},
+m5: {
+titulo: "05 - Coleta Inicial",
+texto: `Coleta Inicial
+
+Itens úteis:
+
+- Logs de sistema.
+- Logs de aplicação.
+- Logs de autenticação.
+- Processos ativos.
+- Conexões de rede.
+- Tarefas agendadas.
+- Usuários conectados.
+- Arquivos modificados.
+- Eventos de segurança.
+- Artefatos de malware, quando houver.
+
+A coleta deve respeitar prioridade e volatilidade.`
+},
+m6: {
+titulo: "06 - Timeline",
+texto: `Timeline
+
+Timeline ajuda a responder:
+
+- Quando começou?
+- Qual foi o primeiro sinal?
+- Que conta foi usada?
+- Que host foi afetado?
+- Que arquivo mudou?
+- Que conexão ocorreu?
+- Quando houve contenção?
+
+Uma boa timeline transforma caos em sequência lógica.`
+},
+m7: {
+titulo: "07 - Contenção e Erradicação",
+texto: `Contenção e Erradicação
+
+Contenção:
+
+- Isolar host.
+- Bloquear conta.
+- Revogar token.
+- Bloquear indicador.
+- Suspender rota ou serviço.
+- Preservar evidências.
+
+Erradicação:
+
+- Remover persistência.
+- Corrigir vulnerabilidade.
+- Atualizar credenciais.
+- Aplicar patches.
+- Revisar permissões.
+- Reinstalar quando necessário.
+
+Contenção reduz dano. Erradicação remove causa.`
+},
+m8: {
+titulo: "08 - Recuperação e Pós-Incidente",
+texto: `Recuperação e Pós-Incidente
+
+Recuperação:
+
+- Restaurar serviço.
+- Validar integridade.
+- Monitorar reincidência.
+- Comunicar envolvidos.
+- Confirmar correções.
+- Testar controles.
+
+Lições aprendidas:
+
+- O que falhou?
+- O que detectou?
+- O que demorou?
+- O que faltou?
+- Que controle será criado?
+
+Incidente bem tratado fortalece o ambiente.`
+},
+m9: {
+titulo: "09 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Conceito de incidente.
+- Ciclo de resposta.
+- Preservação de evidência.
+- Coleta inicial.
+- Timeline.
+- Contenção.
+- Erradicação.
+- Recuperação.
+- Pós-incidente.
+
+POLYDEV | Security Engineering
+Primeira temporada HACK01–HACK13 concluída.
+
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

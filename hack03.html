@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK03 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK03 - Security Engineering</h1>
+    <p>Nmap • NSE • Python • Network Enumeration</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK03</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Por que Enumeração é Importante?</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Nmap Avançado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Scripts NSE</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Enumeração com Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Enumeração Web</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Laboratório Recomendado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK03 - Enumeração Avançada de Redes e Serviços</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack03.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK03 — Enumeração Avançada de Redes e Serviços
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK03 — Enumeração Avançada de Redes e Serviços
+
+Objetivo:
+
+Ensinar técnicas profissionais de enumeração que vão além do básico, preparando o terreno para análise técnica, auditoria, hardening e exploração autorizada em laboratório.
+
+Enumeração é a fase em que o alvo deixa de ser desconhecido e passa a ser um mapa técnico.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Por que Enumeração é Importante?",
+texto: `Por que a enumeração é a fase mais importante?
+
+A maioria das análises bem-sucedidas começa com boa enumeração.
+
+Quanto mais informação técnica você coleta, melhor será sua leitura do ambiente.
+
+A enumeração permite identificar:
+
+- Hosts ativos.
+- Portas abertas.
+- Serviços expostos.
+- Versões de software.
+- Protocolos disponíveis.
+- Diretórios e arquivos web.
+- Compartilhamentos e banners.
+
+Sem enumeração, tudo vira chute.`
+},
+m3: {
+titulo: "03 - Nmap Avançado",
+texto: `Nmap em Nível Avançado
+
+Comando:
+
+nmap -sS -sV -sC -O -T4 --script vuln target_ip
+
+Explicação:
+
+- -sS
+  SYN Scan.
+
+- -sV
+  Detecção de versão do serviço.
+
+- -sC
+  Scripts padrão do NSE.
+
+- -O
+  Tentativa de identificação do sistema operacional.
+
+- -T4
+  Timing mais rápido, adequado para laboratório.
+
+- --script vuln
+  Executa scripts relacionados a vulnerabilidades conhecidas.
+
+Use em laboratório ou ambiente autorizado.`
+},
+m4: {
+titulo: "04 - Scripts NSE",
+texto: `Enumeração de Serviços com Scripts NSE
+
+Exemplos:
+
+# Enumeração de SMB
+nmap -p 445 --script smb-enum-shares,smb-vuln* target
+
+# Enumeração de HTTP
+nmap -p 80,443 --script http-enum,http-vuln* target
+
+O Nmap Scripting Engine permite executar scripts específicos por serviço.
+
+Aplicações:
+
+- SMB: shares, usuários, políticas e vulnerabilidades.
+- HTTP: diretórios, tecnologias, headers e páginas expostas.
+- DNS: zonas, registros e serviços.
+- SSH: versões e métodos disponíveis.`
+},
+m5: {
+titulo: "05 - Enumeração com Python",
+texto: `Enumeração com Python usando socket
+
+Código:
+
+import socket
+
+def banner_grabbing(target, port):
+    try:
+        s = socket.socket()
+        s.settimeout(2)
+        s.connect((target, port))
+
+        banner = s.recv(1024).decode(errors="ignore").strip()
+        print(f"[+] {target}:{port} -> {banner}")
+
+    except Exception:
+        pass
+
+    finally:
+        try:
+            s.close()
+        except Exception:
+            pass
+
+O banner grabbing ajuda a identificar serviços e versões expostas.`
+},
+m6: {
+titulo: "06 - Enumeração Web",
+texto: `Enumeração de Diretórios e Arquivos Web
+
+Ferramentas comuns:
+
+- Gobuster
+- FFUF
+- Dirsearch
+
+Objetivos:
+
+- Descobrir diretórios.
+- Encontrar arquivos esquecidos.
+- Localizar painéis administrativos.
+- Identificar endpoints.
+- Documentar superfície exposta.
+
+Exemplo conceitual:
+
+gobuster dir -u http://target -w wordlist.txt
+
+Use apenas em ambiente autorizado.`
+},
+m7: {
+titulo: "07 - Laboratório Recomendado",
+texto: `Laboratório Recomendado
+
+Configure:
+
+- Uma máquina vulnerável de laboratório.
+- Uma máquina Kali ou Linux.
+- Rede isolada.
+- Nmap instalado.
+- Python para scripts próprios.
+- Ferramentas web como Gobuster ou FFUF.
+
+Exercício:
+
+1. Enumerar portas.
+2. Identificar serviços.
+3. Capturar banners.
+4. Executar NSE por serviço.
+5. Enumerar diretórios web.
+6. Documentar tudo encontrado.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Por que enumeração é essencial.
+- Como usar Nmap em nível avançado.
+- Como usar scripts NSE.
+- Como capturar banners com Python.
+- Como enumerar diretórios web.
+- Como montar laboratório de enumeração.
+
+Próximo artigo:
+HACK04 — Kali Linux para Programadores: Customização e Automação
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

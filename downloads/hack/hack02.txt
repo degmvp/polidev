@@ -1,0 +1,151 @@
+POLYDEV | Security Engineering
+HACK02 — Reconhecimento e Coleta de Informações
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK02 — Reconhecimento e Coleta de Informações
+
+Objetivo:
+
+Entender a fase de reconhecimento em testes autorizados, separando coleta passiva, coleta ativa e organização de evidências.
+
+O foco é aprender a mapear contexto, superfície pública e pontos de atenção antes de qualquer teste técnico mais profundo.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Reconhecimento Passivo
+============================================================
+Reconhecimento Passivo
+
+Coleta passiva usa informações públicas sem interagir diretamente com o alvo.
+
+Exemplos:
+
+- Domínios e subdomínios públicos.
+- Registros DNS.
+- Tecnologias visíveis em sites.
+- Repositórios públicos.
+- Documentação exposta.
+- Vazamentos já publicados.
+- Informações de certificados TLS.
+
+Objetivo: entender a superfície antes de tocar no ambiente.
+
+============================================================
+03 - Reconhecimento Ativo
+============================================================
+Reconhecimento Ativo
+
+Coleta ativa interage com sistemas autorizados.
+
+Exemplos:
+
+- Consulta DNS direta.
+- Verificação HTTP controlada.
+- Descoberta de portas dentro do escopo.
+- Identificação de headers.
+- Testes leves de conectividade.
+
+Tudo deve respeitar escopo, horário, intensidade e autorização.
+
+============================================================
+04 - DNS e Domínios
+============================================================
+DNS e Domínios
+
+Comandos úteis para laboratório:
+
+nslookup exemplo.local
+
+dig exemplo.local A
+
+dig exemplo.local MX
+
+dig exemplo.local TXT
+
+dig exemplo.local NS
+
+Itens para observar:
+
+- Servidores autoritativos.
+- Registros MX.
+- Registros TXT.
+- SPF, DKIM e DMARC.
+- Subdomínios conhecidos.
+
+DNS revela arquitetura e dependências.
+
+============================================================
+05 - HTTP e Headers
+============================================================
+HTTP e Headers
+
+Coleta básica:
+
+curl -I https://exemplo.local
+
+Observe:
+
+- Server.
+- X-Powered-By.
+- Strict-Transport-Security.
+- Content-Security-Policy.
+- X-Frame-Options.
+- Cookies com Secure e HttpOnly.
+
+Headers não provam segurança sozinhos, mas revelam maturidade, tecnologia e possíveis lacunas.
+
+============================================================
+06 - Organização dos Dados
+============================================================
+Organização dos Dados
+
+Monte uma matriz:
+
+- Ativo.
+- Tipo.
+- IP ou URL.
+- Tecnologia.
+- Evidência.
+- Risco inicial.
+- Observações.
+- Próxima ação.
+
+Reconhecimento bom reduz tentativa aleatória e aumenta precisão.
+
+============================================================
+07 - Boas Práticas
+============================================================
+Boas Práticas
+
+- Não confunda coleta pública com autorização para teste.
+- Registre fontes e datas.
+- Evite varreduras agressivas no início.
+- Separe hipóteses de evidências.
+- Valide informações antigas.
+- Mantenha trilha de auditoria.
+
+Reconhecimento profissional é inteligência, não barulho.
+
+============================================================
+08 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Reconhecimento passivo.
+- Reconhecimento ativo.
+- DNS básico.
+- Headers HTTP.
+- Organização de evidências.
+- Boas práticas.
+
+Próximo artigo:
+HACK03 — Enumeração de Serviços
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

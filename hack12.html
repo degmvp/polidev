@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK12 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK12 - Security Engineering</h1>
+    <p>AD • Identity • Kerberos • GPO • Hardening</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK12</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Active Directory</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Privilégio Mínimo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Senhas e Autenticação</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Kerberos Visão Geral</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - GPO</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Monitoramento AD</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Checklist AD</button>
+        <button class="menu-btn" onclick="abrirConteudo('m9')">09 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK12 - Active Directory Security</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack12.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK12 — Active Directory Security
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK12 — Active Directory Security
+
+Objetivo:
+
+Entender os fundamentos de defesa em Active Directory, cobrindo identidade, grupos, Kerberos, GPO, hardening e monitoramento.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Active Directory",
+texto: `Active Directory
+
+Active Directory organiza:
+
+- Usuários.
+- Grupos.
+- Computadores.
+- Domínios.
+- Unidades organizacionais.
+- Políticas.
+- Autenticação.
+- Autorização.
+
+Em muitas empresas, AD é o coração da identidade.
+
+Proteger AD é proteger o ambiente inteiro.`
+},
+m3: {
+titulo: "03 - Privilégio Mínimo",
+texto: `Privilégio Mínimo no AD
+
+Regras:
+
+- Reduzir administradores.
+- Separar contas administrativas.
+- Evitar uso diário com conta privilegiada.
+- Revisar grupos sensíveis.
+- Remover permissões antigas.
+- Controlar delegações.
+- Auditar membros de Domain Admins.
+
+Conta privilegiada não deve ser conta comum de navegação e email.`
+},
+m4: {
+titulo: "04 - Senhas e Autenticação",
+texto: `Senhas e Autenticação
+
+Boas práticas:
+
+- Política de senha realista.
+- MFA para acessos críticos.
+- Bloqueio contra tentativa excessiva.
+- Senhas longas.
+- Proibição de senhas conhecidas.
+- Proteção de contas de serviço.
+- Revisão de contas inativas.
+
+Contas antigas e senhas fracas são portas silenciosas.`
+},
+m5: {
+titulo: "05 - Kerberos Visão Geral",
+texto: `Kerberos Visão Geral
+
+Kerberos usa tickets para autenticação.
+
+Conceitos:
+
+- KDC.
+- TGT.
+- Service Ticket.
+- SPN.
+- Conta de serviço.
+
+Pontos de atenção:
+
+- SPNs incorretos.
+- Contas de serviço com senha fraca.
+- Tickets longos demais.
+- Delegações inseguras.
+
+Kerberos é poderoso, mas exige administração cuidadosa.`
+},
+m6: {
+titulo: "06 - GPO",
+texto: `Group Policy Objects
+
+GPO aplica configurações em usuários e computadores.
+
+Usos:
+
+- Política de senha.
+- Firewall.
+- Bloqueio de recursos.
+- Scripts.
+- Configuração de auditoria.
+- Hardening.
+- Controle de dispositivos.
+
+Boas práticas:
+
+- Nome claro.
+- Escopo limitado.
+- Teste antes da produção.
+- Documentação.
+- Revisão periódica.
+- Evitar GPO genérica demais.`
+},
+m7: {
+titulo: "07 - Monitoramento AD",
+texto: `Monitoramento AD
+
+Eventos importantes:
+
+- Login privilegiado.
+- Alteração de grupo.
+- Criação de conta.
+- Reset de senha.
+- Falhas repetidas.
+- Alteração de GPO.
+- Uso de conta desativada.
+- Mudança em contas de serviço.
+
+Monitorar AD é observar identidade, privilégio e mudança.`
+},
+m8: {
+titulo: "08 - Checklist AD",
+texto: `Checklist AD
+
+- Reduzir Domain Admins.
+- Separar contas administrativas.
+- MFA onde possível.
+- Revisar contas inativas.
+- Proteger contas de serviço.
+- Auditar GPO.
+- Monitorar grupos críticos.
+- Revisar delegações.
+- Aplicar hardening.
+- Documentar exceções.
+
+AD seguro depende de governança e disciplina.`
+},
+m9: {
+titulo: "09 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Papel do Active Directory.
+- Privilégio mínimo.
+- Senhas e autenticação.
+- Kerberos.
+- GPO.
+- Monitoramento.
+- Checklist AD.
+
+Próximo artigo:
+HACK13 — Incident Response e Digital Forensics
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

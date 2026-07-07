@@ -1,0 +1,199 @@
+POLYDEV | Security Engineering
+HACK08 — XSS, CSRF e Segurança no Front-End
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK08 — XSS, CSRF e Segurança no Front-End
+
+Objetivo:
+
+Entender riscos comuns no navegador e aplicar defesas práticas contra XSS, CSRF, exposição de tokens e configurações inseguras de front-end.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - XSS Conceito
+============================================================
+XSS Conceito
+
+Cross-Site Scripting ocorre quando conteúdo não confiável é interpretado como código pelo navegador.
+
+Tipos comuns:
+
+- Reflected XSS.
+- Stored XSS.
+- DOM-based XSS.
+
+Impactos:
+
+- Roubo de sessão.
+- Ações em nome do usuário.
+- Alteração visual.
+- Coleta de dados.
+- Redirecionamento malicioso.
+
+Defesa principal: nunca renderizar entrada sem tratamento.
+
+============================================================
+03 - Output Encoding
+============================================================
+Output Encoding
+
+Regra:
+
+Entrada valida.
+Saída codifica.
+
+Onde aplicar:
+
+- HTML.
+- Atributos HTML.
+- JavaScript.
+- CSS.
+- URL.
+
+Boas práticas:
+
+- Usar templates com escape automático.
+- Evitar innerHTML.
+- Preferir textContent.
+- Sanitizar HTML quando HTML for realmente necessário.
+- Revisar bibliotecas de markdown e rich text.
+
+O contexto de saída define a proteção correta.
+
+============================================================
+04 - CSP
+============================================================
+Content Security Policy
+
+CSP reduz o impacto de XSS.
+
+Exemplo conceitual:
+
+Content-Security-Policy:
+default-src 'self';
+script-src 'self';
+object-src 'none';
+base-uri 'self';
+frame-ancestors 'none';
+
+Benefícios:
+
+- Restringe scripts.
+- Bloqueia fontes inesperadas.
+- Reduz execução inline.
+- Ajuda a detectar violações.
+
+CSP não substitui correção de código, mas cria uma camada forte de defesa.
+
+============================================================
+05 - CSRF Conceito
+============================================================
+CSRF Conceito
+
+Cross-Site Request Forgery força o navegador de uma vítima autenticada a enviar uma requisição indesejada.
+
+Alvos comuns:
+
+- Alterar email.
+- Trocar senha.
+- Criar transação.
+- Mudar configuração.
+- Executar ação administrativa.
+
+Defesas:
+
+- Token CSRF.
+- SameSite Cookies.
+- Verificação de origem.
+- Reautenticação para ações críticas.
+
+============================================================
+06 - Cookies Seguros
+============================================================
+Cookies Seguros
+
+Atributos importantes:
+
+HttpOnly
+Impede acesso via JavaScript.
+
+Secure
+Envia apenas via HTTPS.
+
+SameSite
+Reduz risco de CSRF.
+
+Path e Domain
+Limitam escopo do cookie.
+
+Expiração
+Controla tempo de vida.
+
+Sessão segura é uma combinação de autenticação, cookie correto e validação no servidor.
+
+============================================================
+07 - Tokens no Front-End
+============================================================
+Tokens no Front-End
+
+Riscos:
+
+- Token em localStorage.
+- Token em URL.
+- Token em log.
+- Token em erro.
+- Token exposto por extensão do navegador.
+
+Boas práticas:
+
+- Evitar tokens em URL.
+- Reduzir tempo de vida.
+- Usar refresh controlado.
+- Proteger endpoints.
+- Revogar sessões.
+- Registrar eventos suspeitos.
+
+Segredo exposto no cliente deve ser tratado como segredo perdido.
+
+============================================================
+08 - Checklist Front-End
+============================================================
+Checklist Front-End
+
+- Evitar innerHTML.
+- Usar escape automático.
+- Aplicar CSP.
+- Configurar cookies.
+- Usar SameSite.
+- Implementar CSRF token quando necessário.
+- Não expor segredos.
+- Validar também no servidor.
+- Auditar dependências.
+- Revisar headers de segurança.
+
+Front-end seguro não é estética. É superfície de defesa.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- XSS.
+- Output encoding.
+- CSP.
+- CSRF.
+- Cookies seguros.
+- Tokens no front-end.
+- Checklist defensivo.
+
+Próximo artigo:
+HACK09 — API Security e OWASP API Top 10
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

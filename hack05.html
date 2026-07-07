@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK05 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK05 - Security Engineering</h1>
+    <p>Nmap • Scanning • Evasion • Python • Lab</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK05</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Flags Essenciais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Scanning Avançado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Evasão de Detecção</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Scanner em Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Comparando Resultados</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Laboratório Recomendado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Boas Práticas</button>
+        <button class="menu-btn" onclick="abrirConteudo('m9')">09 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK05 - Scanning Avançado e Evasão com Nmap</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack05.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+Objetivo:
+
+Dominar o Nmap além do básico, aprendendo técnicas profissionais de scanning, identificação de serviços e testes controlados de evasão em laboratório.
+
+A proposta é entender o impacto das flags, o comportamento do tráfego e a diferença entre velocidade, precisão e discrição.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Flags Essenciais",
+texto: `Nmap Flags Essenciais para Profissionais
+
+Comando base:
+
+nmap -sS -sV -O -T4 --script vuln -p- target_ip
+
+Leitura:
+
+- -sS
+  SYN Scan.
+
+- -sV
+  Detecção de versão.
+
+- -O
+  Detecção de sistema operacional.
+
+- -T4
+  Timing agressivo para laboratório.
+
+- --script vuln
+  Scripts de vulnerabilidade.
+
+- -p-
+  Varre todas as portas TCP.
+
+Use com cuidado, porque varreduras completas geram muito tráfego.`
+},
+m3: {
+titulo: "03 - Scanning Avançado",
+texto: `Técnicas Avançadas de Scanning
+
+Opções úteis:
+
+-sS
+SYN Scan, comum para descoberta TCP.
+
+-sV
+Service Version Detection.
+
+--script vuln
+Execução de scripts relacionados a vulnerabilidades.
+
+-T4
+Timing agressivo.
+
+--min-rate 5000
+Acelera o envio de pacotes.
+
+Exemplo:
+
+nmap -sS -sV -T4 --min-rate 5000 -p- target_ip
+
+Em laboratório, teste diferentes velocidades e compare resultados.`
+},
+m4: {
+titulo: "04 - Evasão de Detecção",
+texto: `Evasão de Detecção
+
+Exemplos:
+
+# Decoys
+nmap -D RND:10 target
+
+# Fragmentação de pacotes
+nmap -f target
+
+# Source Port Manipulation
+nmap --source-port 53 target
+
+Essas técnicas devem ser estudadas apenas em laboratório para entender como firewalls, IDS e filtros reagem ao tráfego.
+
+Objetivo educacional:
+
+- Entender detecção.
+- Comparar logs.
+- Observar pacotes.
+- Melhorar defesa.`
+},
+m5: {
+titulo: "05 - Scanner em Python",
+texto: `Criando seu Próprio Scanner em Python
+
+Código:
+
+import nmap
+
+nm = nmap.PortScanner()
+
+nm.scan('192.168.1.0/24', '22-443')
+
+for host in nm.all_hosts():
+    print(f"Host: {host} - Status: {nm[host].state()}")
+
+Explicação:
+
+- nmap.PortScanner()
+  Cria o objeto de controle.
+
+- scan()
+  Executa a varredura.
+
+- all_hosts()
+  Lista os hosts encontrados.
+
+Esse modelo permite integrar Nmap com automações Python.`
+},
+m6: {
+titulo: "06 - Comparando Resultados",
+texto: `Comparando Resultados
+
+Em laboratório, execute o mesmo alvo com configurações diferentes:
+
+1. Scan simples:
+   nmap target_ip
+
+2. Scan de versão:
+   nmap -sV target_ip
+
+3. Scan completo:
+   nmap -p- target_ip
+
+4. Scan com scripts:
+   nmap -sC --script vuln target_ip
+
+5. Scan com timing agressivo:
+   nmap -T4 target_ip
+
+Documente:
+
+- Tempo.
+- Portas encontradas.
+- Serviços detectados.
+- Diferenças entre comandos.
+- Logs gerados no alvo.`
+},
+m7: {
+titulo: "07 - Laboratório Recomendado",
+texto: `Laboratório Recomendado
+
+Configure:
+
+- Uma VM Kali ou Linux.
+- Um alvo vulnerável de laboratório.
+- Wireshark para observar pacotes.
+- Logs no alvo.
+- Nmap instalado.
+- Python com python-nmap.
+
+Exercícios:
+
+1. Rodar scan padrão.
+2. Rodar scan completo de portas.
+3. Testar -sV.
+4. Testar NSE.
+5. Testar técnicas de evasão.
+6. Comparar resultados com e sem evasão.
+
+Tudo em rede isolada.`
+},
+m8: {
+titulo: "08 - Boas Práticas",
+texto: `Boas Práticas
+
+- Nunca execute scans em redes de terceiros.
+- Evite -p- e --min-rate alto fora de laboratório.
+- Salve outputs para análise posterior.
+- Comece com varreduras simples.
+- Separe descoberta, enumeração e validação.
+- Use Wireshark para entender o tráfego.
+- Documente comandos e resultados.
+
+Scanning profissional não é força bruta. É método, controle e evidência.`
+},
+m9: {
+titulo: "09 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Flags essenciais do Nmap.
+- Técnicas avançadas de scanning.
+- Noções de evasão em laboratório.
+- Integração do Nmap com Python.
+- Comparação de resultados.
+- Boas práticas de uso.
+
+Próximo artigo:
+HACK06 — Web Application Hacking: Do Básico ao Avançado
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

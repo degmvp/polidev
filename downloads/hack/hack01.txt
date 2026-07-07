@@ -1,0 +1,148 @@
+POLYDEV | Security Engineering
+HACK01 — Fundamentos de Ethical Hacking
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK01 — Fundamentos de Ethical Hacking
+
+Objetivo:
+
+Apresentar os fundamentos do Ethical Hacking com foco educacional, profissional e autorizado.
+
+A proposta é entender como pensar segurança ofensiva de forma responsável: escopo, autorização, metodologia, documentação e comunicação de risco.
+
+Este material não incentiva invasão. Ele organiza conhecimento para laboratório, estudo, defesa e melhoria de sistemas.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Conceitos Essenciais
+============================================================
+Conceitos Essenciais
+
+Ethical Hacking:
+Teste autorizado para identificar falhas antes que sejam exploradas por agentes maliciosos.
+
+Escopo:
+Define alvos, limites, horários, técnicas permitidas e contatos responsáveis.
+
+Autorização:
+Sem autorização explícita não existe teste ético.
+
+Risco:
+Toda descoberta precisa ser descrita com impacto, evidência e recomendação.
+
+Relatório:
+O resultado final deve ajudar o time técnico a corrigir, priorizar e validar melhorias.
+
+============================================================
+03 - Metodologia
+============================================================
+Metodologia Profissional
+
+Fluxo básico:
+
+1. Definir escopo.
+2. Coletar informações permitidas.
+3. Mapear superfície de ataque.
+4. Identificar vulnerabilidades.
+5. Validar riscos em ambiente autorizado.
+6. Documentar evidências.
+7. Recomendar correções.
+8. Retestar após correção.
+
+O objetivo não é quebrar sistemas.
+O objetivo é produzir evidência útil para fortalecer a segurança.
+
+============================================================
+04 - Ambiente de Laboratório
+============================================================
+Ambiente de Laboratório
+
+Monte uma rede isolada para estudo:
+
+- Uma VM Linux para ferramentas.
+- Uma VM alvo vulnerável de laboratório.
+- Snapshot antes dos testes.
+- Rede NAT ou host-only.
+- Sem exposição pública.
+- Wireshark para observar tráfego.
+- Logs habilitados no alvo.
+
+Nunca pratique técnicas em redes de terceiros.
+
+============================================================
+05 - Ferramentas Iniciais
+============================================================
+Ferramentas Iniciais
+
+Sugestões para laboratório:
+
+- Linux/Kali/Ubuntu.
+- Nmap para descoberta e enumeração.
+- curl/httpie para HTTP.
+- Browser com DevTools.
+- Burp Suite Community para proxy local.
+- Wireshark para pacotes.
+- Python para automação controlada.
+- Git para versionar anotações e scripts.
+
+Ferramenta sem método vira ruído. Método transforma resultado em evidência.
+
+============================================================
+06 - Ética e Legalidade
+============================================================
+Ética e Legalidade
+
+Regras básicas:
+
+- Teste apenas sistemas próprios ou autorizados.
+- Trabalhe com escopo documentado.
+- Evite impacto desnecessário.
+- Não acesse dados sensíveis sem necessidade.
+- Não compartilhe evidências de forma irresponsável.
+- Comunique achados de forma clara e profissional.
+
+Segurança profissional começa por responsabilidade.
+
+============================================================
+07 - Documentação
+============================================================
+Documentação de Achados
+
+Um bom achado contém:
+
+- Título.
+- Descrição.
+- Ambiente afetado.
+- Passos de reprodução autorizados.
+- Evidência.
+- Impacto.
+- Severidade.
+- Recomendação.
+- Referência técnica.
+- Status de correção.
+
+Sem documentação, o teste vira lembrança. Com documentação, vira melhoria.
+
+============================================================
+08 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- O que é Ethical Hacking.
+- Por que autorização é indispensável.
+- Como organizar escopo.
+- Como montar laboratório.
+- Quais ferramentas iniciar.
+- Como documentar evidências.
+
+Próximo artigo:
+HACK02 — Reconhecimento e Coleta de Informações
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

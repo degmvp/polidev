@@ -1,0 +1,188 @@
+POLYDEV | Security Engineering
+HACK11 — Cloud Security Fundamentals
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK11 — Cloud Security Fundamentals
+
+Objetivo:
+
+Construir uma base prática de segurança em cloud, cobrindo identidade, rede, storage, logging, criptografia e responsabilidade compartilhada.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Responsabilidade Compartilhada
+============================================================
+Responsabilidade Compartilhada
+
+Na cloud, segurança é dividida.
+
+Provedor cuida de:
+
+- Datacenter.
+- Hardware.
+- Camadas gerenciadas.
+- Disponibilidade da plataforma.
+
+Cliente cuida de:
+
+- Identidades.
+- Dados.
+- Configurações.
+- Permissões.
+- Aplicações.
+- Logs.
+- Chaves.
+- Rede lógica.
+
+Erro de configuração do cliente continua sendo risco do cliente.
+
+============================================================
+03 - IAM
+============================================================
+IAM
+
+Identity and Access Management é o centro da segurança cloud.
+
+Boas práticas:
+
+- MFA.
+- Menor privilégio.
+- Roles temporárias.
+- Evitar usuário root.
+- Rotação de chaves.
+- Revisão de permissões.
+- Separar ambientes.
+- Auditoria.
+
+A maioria dos incidentes cloud passa por identidade, chave ou permissão excessiva.
+
+============================================================
+04 - Rede Cloud
+============================================================
+Rede Cloud
+
+Componentes comuns:
+
+- VPC/VNet.
+- Subnets.
+- Security Groups.
+- Network ACLs.
+- Load Balancers.
+- NAT.
+- Private endpoints.
+- VPN.
+
+Boas práticas:
+
+- Separar público e privado.
+- Expor somente o necessário.
+- Bloquear administração pública.
+- Usar segmentação.
+- Registrar fluxo de rede.
+
+Rede cloud é software. Deve ser versionada e revisada.
+
+============================================================
+05 - Storage
+============================================================
+Storage Seguro
+
+Riscos comuns:
+
+- Bucket público.
+- Permissão ampla.
+- Dados sem criptografia.
+- Backup sem proteção.
+- Logs com dados sensíveis.
+- Compartilhamento indevido.
+
+Defesas:
+
+- Bloqueio público.
+- Criptografia.
+- Versionamento.
+- Lifecycle.
+- Auditoria.
+- Policy mínima.
+- Classificação de dados.
+
+Storage exposto é uma das falhas cloud mais perigosas.
+
+============================================================
+06 - Criptografia e Chaves
+============================================================
+Criptografia e Chaves
+
+Pontos importantes:
+
+- Criptografia em repouso.
+- Criptografia em trânsito.
+- KMS.
+- Rotação de chaves.
+- Controle de acesso às chaves.
+- Separação por ambiente.
+- Logs de uso da chave.
+
+A chave é tão sensível quanto o dado que ela protege.
+
+============================================================
+07 - Logging e Monitoramento
+============================================================
+Logging e Monitoramento
+
+Ativar e revisar:
+
+- Logs de auditoria.
+- Logs de rede.
+- Logs de aplicação.
+- Logs de autenticação.
+- Eventos IAM.
+- Alterações de configuração.
+- Alertas de exposição pública.
+
+Sem logs, não há investigação confiável.
+
+Cloud segura precisa de visibilidade contínua.
+
+============================================================
+08 - Checklist Cloud
+============================================================
+Checklist Cloud
+
+- MFA ativo.
+- Root protegido.
+- Menor privilégio.
+- Buckets privados.
+- Rede segmentada.
+- Criptografia ativa.
+- Logs habilitados.
+- Alertas configurados.
+- Backups testados.
+- Revisão periódica de permissões.
+
+Cloud Security é disciplina contínua, não configuração única.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Responsabilidade compartilhada.
+- IAM.
+- Rede cloud.
+- Storage seguro.
+- Criptografia.
+- Logging.
+- Checklist cloud.
+
+Próximo artigo:
+HACK12 — Active Directory Security
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

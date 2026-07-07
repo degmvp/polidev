@@ -1,0 +1,144 @@
+POLYDEV | Security Engineering
+HACK03 — Enumeração de Serviços
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK03 — Enumeração de Serviços
+
+Objetivo:
+
+Aprender a identificar serviços, versões, banners e comportamentos em ambientes autorizados.
+
+A enumeração transforma descoberta em entendimento técnico: quais portas existem, quais serviços respondem, quais versões aparecem e quais evidências devem ser registradas.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Descoberta Inicial
+============================================================
+Descoberta Inicial
+
+Em laboratório:
+
+nmap target_ip
+
+Resultado esperado:
+
+- Portas abertas.
+- Serviços aparentes.
+- Estado das portas.
+
+Esse primeiro passo deve ser leve. Depois dele, aprofunde apenas nos serviços encontrados.
+
+============================================================
+03 - Versões e Banners
+============================================================
+Versões e Banners
+
+Comando:
+
+nmap -sV target_ip
+
+Objetivo:
+
+- Identificar versões.
+- Confirmar protocolos.
+- Observar banners.
+- Detectar serviços fora do padrão.
+
+Banners podem estar incorretos, mascarados ou desatualizados. Use como pista, não como sentença final.
+
+============================================================
+04 - Enumeração HTTP
+============================================================
+Enumeração HTTP
+
+Comandos:
+
+curl -I http://target_ip
+curl -v http://target_ip
+
+Itens para observar:
+
+- Código HTTP.
+- Headers.
+- Cookies.
+- Redirecionamentos.
+- Métodos permitidos.
+- Mensagens de erro.
+
+HTTP geralmente revela muito sobre arquitetura e framework.
+
+============================================================
+05 - Enumeração SSH
+============================================================
+Enumeração SSH
+
+Comando:
+
+nc -v target_ip 22
+
+ou:
+
+ssh -v user@target_ip
+
+Itens para observar:
+
+- Banner.
+- Versão do servidor.
+- Métodos de autenticação.
+- Política de chave.
+
+Não tente credenciais sem autorização. Enumeração não é ataque de senha.
+
+============================================================
+06 - Registro de Evidências
+============================================================
+Registro de Evidências
+
+Modelo:
+
+Serviço: HTTP
+Porta: 80/TCP
+Evidência: curl -I
+Resultado: servidor responde com header X
+Risco inicial: versão antiga / header ausente / exposição indevida
+Próxima ação: validar configuração
+
+Evidência organizada acelera correção.
+
+============================================================
+07 - Boas Práticas
+============================================================
+Boas Práticas
+
+- Enumere apenas alvos autorizados.
+- Comece simples.
+- Aprofunde por serviço.
+- Não execute scripts agressivos sem necessidade.
+- Compare resultados entre ferramentas.
+- Documente comandos usados.
+
+Enumeração é precisão operacional.
+
+============================================================
+08 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Descoberta inicial de serviços.
+- Detecção de versões.
+- Enumeração HTTP.
+- Enumeração SSH.
+- Registro de evidências.
+- Boas práticas.
+
+Próximo artigo:
+HACK04 — Vulnerability Assessment
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

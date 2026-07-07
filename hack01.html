@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK01 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK01 - Security Engineering</h1>
+    <p>Networks • TCP/IP • Python • Ethical Security</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK01</h2>
+
+        <button class="menu-btn" onclick="abrirConteudo('intro')">01 - Introdução da Série</button>
+        <button class="menu-btn" onclick="abrirConteudo('redes')">02 - Por que Redes Importam?</button>
+        <button class="menu-btn" onclick="abrirConteudo('tcpip')">03 - Modelo TCP/IP</button>
+        <button class="menu-btn" onclick="abrirConteudo('handshake')">04 - TCP 3-Way Handshake</button>
+        <button class="menu-btn" onclick="abrirConteudo('scapy')">05 - Exemplo com Scapy</button>
+        <button class="menu-btn" onclick="abrirConteudo('lab')">06 - Laboratório Recomendado</button>
+        <button class="menu-btn" onclick="abrirConteudo('boas')">07 - Boas Práticas</button>
+        <button class="menu-btn" onclick="abrirConteudo('resumo')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK01 - Arquitetura de Redes e Modelo TCP/IP</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack01.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK01 — Arquitetura de Redes e Modelo TCP/IP para Programadores Avançados
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+intro: {
+titulo: "01 - Introdução da Série",
+texto: `POLYDEV | Security Engineering
+HACK01 — Arquitetura de Redes e Modelo TCP/IP para Programadores Avançados
+
+Introdução à Série POLYDEV Security:
+
+Esta série foi projetada para programadores experientes que desejam compreender segurança ofensiva e defensiva de forma ética, técnica e controlada.
+
+O foco não é usar ferramentas de forma automática. O foco é entender o fundamento: protocolos, pacotes, redes, serviços, automação, análise e laboratório.
+
+Nesta primeira etapa, o objetivo é revisar a arquitetura de redes e o modelo TCP/IP sob a ótica do programador.
+
+Leia • Entenda • Execute seu código.`
+},
+
+redes: {
+titulo: "02 - Por que Redes Importam para um Programador?",
+texto: `Por que redes importam para um programador?
+
+Entender TCP/IP em profundidade permite que o programador compreenda o caminho real da comunicação entre sistemas.
+
+Um programador que conhece redes consegue:
+
+- Criar ferramentas personalizadas.
+- Diagnosticar falhas de comunicação.
+- Entender APIs, sockets e protocolos.
+- Interpretar tráfego de rede.
+- Criar automações de laboratório.
+- Pensar como engenheiro de segurança.
+
+Segurança não começa na ferramenta. Segurança começa no entendimento da arquitetura.`
+},
+
+tcpip: {
+titulo: "03 - O Modelo TCP/IP na Prática",
+texto: `O Modelo TCP/IP na Prática
+
+O modelo TCP/IP organiza a comunicação em camadas. Cada camada tem responsabilidades específicas.
+
+1. Link Layer
+   - Ethernet
+   - Wi-Fi
+   - ARP
+   - Endereçamento físico
+   - Comunicação local
+
+2. Internet Layer
+   - IP
+   - ICMP
+   - Routing
+   - Endereçamento lógico
+   - Entrega entre redes
+
+3. Transport Layer
+   - TCP
+   - UDP
+   - Portas
+   - Conexões
+   - Controle de fluxo
+
+4. Application Layer
+   - HTTP
+   - DNS
+   - SSH
+   - SMTP
+   - APIs
+
+Para o programador, cada camada representa uma oportunidade de análise, diagnóstico e automação.`
+},
+
+handshake: {
+titulo: "04 - TCP 3-Way Handshake",
+texto: `TCP 3-Way Handshake
+
+Antes de uma conexão TCP ser estabelecida, cliente e servidor executam uma sequência clássica:
+
+SYN -> SYN-ACK -> ACK
+
+1. SYN
+   O cliente envia uma solicitação de conexão.
+
+2. SYN-ACK
+   O servidor confirma o recebimento e responde aceitando a tentativa.
+
+3. ACK
+   O cliente confirma a resposta do servidor.
+
+Esse processo cria o estado inicial da conexão TCP.
+
+Para segurança, o handshake é essencial porque scanners, firewalls, IDS, proxies e sistemas de monitoramento analisam esse comportamento.`
+},
+
+scapy: {
+titulo: "05 - Exemplo Prático com Scapy",
+texto: `Exemplo Prático com Scapy (Python)
+
+Scapy permite criar pacotes manualmente usando Python.
+
+Código:
+
+from scapy.all import *
+
+ip = IP(dst="192.168.1.1")
+tcp = TCP(dport=80, flags="S")
+pkt = ip / tcp
+resp = sr1(pkt, timeout=2)
+
+if resp:
+    resp.show()
+
+Explicação:
+
+- IP(dst="192.168.1.1")
+  Cria a camada IP com destino definido.
+
+- TCP(dport=80, flags="S")
+  Cria um segmento TCP para a porta 80 usando flag SYN.
+
+- pkt = ip / tcp
+  Combina as camadas IP e TCP.
+
+- sr1(pkt, timeout=2)
+  Envia o pacote e aguarda uma resposta.
+
+Este exemplo deve ser executado apenas em laboratório próprio ou rede autorizada.`
+},
+
+lab: {
+titulo: "06 - Laboratório Recomendado",
+texto: `Laboratório Recomendado
+
+Monte uma rede isolada para praticar com segurança.
+
+Sugestão de ambiente:
+
+- Kali Linux ou Ubuntu para execução dos scripts.
+- Máquina virtual alvo de laboratório.
+- Rede host-only ou interna.
+- Wireshark para observar o tráfego.
+- Python 3 instalado.
+- Scapy instalado.
+
+Comando de instalação:
+
+pip install scapy
+
+Boas práticas de laboratório:
+
+- Nunca execute testes em redes públicas.
+- Use IPs de máquinas virtuais próprias.
+- Documente cada teste.
+- Compare o que o script faz com o que o Wireshark mostra.`
+},
+
+boas: {
+titulo: "07 - Boas Práticas e Ética",
+texto: `Boas Práticas e Ética
+
+A série POLYDEV Security Engineering deve ser usada para aprendizado, defesa, laboratório, pesquisa autorizada e fortalecimento técnico.
+
+Regras essenciais:
+
+- Não testar redes de terceiros.
+- Não escanear ambientes sem autorização.
+- Não executar scripts contra serviços públicos.
+- Registrar laboratório, IPs e objetivos.
+- Separar estudo técnico de uso indevido.
+- Priorizar defesa, entendimento e documentação.
+
+A diferença entre estudo técnico e abuso está na autorização e no contexto.`
+},
+
+resumo: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, vimos a base da série HACK:
+
+- Por que redes importam para programadores.
+- Como o modelo TCP/IP organiza a comunicação.
+- Quais são as camadas principais.
+- Como funciona o TCP 3-Way Handshake.
+- Como montar um pacote simples com Scapy.
+- Como preparar um laboratório seguro.
+
+Próximo artigo:
+HACK02 — Análise Avançada de Pacotes com Scapy
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

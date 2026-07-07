@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK09 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK09 - Security Engineering</h1>
+    <p>API Security • JWT • Rate Limit • Authorization • OWASP</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK09</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - API é Contrato</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Autenticação</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Autorização</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Rate Limit</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Validação de Payload</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - OWASP API Top 10</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Observabilidade</button>
+        <button class="menu-btn" onclick="abrirConteudo('m9')">09 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK09 - API Security e OWASP API Top 10</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack09.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK09 — API Security e OWASP API Top 10
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK09 — API Security e OWASP API Top 10
+
+Objetivo:
+
+Organizar uma visão prática de segurança em APIs, cobrindo autenticação, autorização, rate limit, validação, logging e riscos do OWASP API Top 10.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - API é Contrato",
+texto: `API é Contrato
+
+Uma API expõe regras de negócio para outros sistemas.
+
+Elementos:
+
+- Endpoint.
+- Método.
+- Payload.
+- Status code.
+- Autenticação.
+- Autorização.
+- Rate limit.
+- Logs.
+- Versionamento.
+
+Uma API insegura transforma regra de negócio em superfície de ataque.`
+},
+m3: {
+titulo: "03 - Autenticação",
+texto: `Autenticação em APIs
+
+Opções comuns:
+
+- API Key.
+- JWT.
+- OAuth2.
+- mTLS.
+- Session token.
+
+Boas práticas:
+
+- Expiração curta.
+- Rotação.
+- Escopo.
+- Revogação.
+- Transporte sempre com HTTPS.
+- Nunca token em URL.
+- Não logar segredo.
+
+Autenticação confirma identidade. Não confirma permissão.`
+},
+m4: {
+titulo: "04 - Autorização",
+texto: `Autorização
+
+Pergunta central:
+
+Este usuário pode executar esta ação neste recurso?
+
+Verifique:
+
+- Usuário.
+- Perfil.
+- Tenant.
+- Dono do recurso.
+- Escopo.
+- Papel.
+- Regra de negócio.
+
+Falhas comuns:
+
+- IDOR.
+- Permissão só no front-end.
+- Endpoint administrativo exposto.
+- Ausência de checagem por objeto.
+
+Autorização deve ser aplicada no servidor, em cada ação sensível.`
+},
+m5: {
+titulo: "05 - Rate Limit",
+texto: `Rate Limit
+
+Rate limit protege disponibilidade e reduz abuso.
+
+Aplicar por:
+
+- IP.
+- Usuário.
+- Token.
+- Endpoint.
+- Tenant.
+- Janela de tempo.
+
+Exemplos conceituais:
+
+- 100 requisições por minuto.
+- 5 tentativas de login por minuto.
+- Limite menor em endpoints caros.
+- Bloqueio progressivo.
+
+Rate limit não é só performance. É segurança operacional.`
+},
+m6: {
+titulo: "06 - Validação de Payload",
+texto: `Validação de Payload
+
+Toda API precisa validar:
+
+- Campos obrigatórios.
+- Tipos.
+- Tamanho.
+- Formato.
+- Valores permitidos.
+- Campos extras.
+- Aninhamento.
+- Arquivos enviados.
+
+Respostas devem ser claras para o cliente, mas não revelar detalhes internos.
+
+Validação forte reduz falhas, abuso e inconsistência.`
+},
+m7: {
+titulo: "07 - OWASP API Top 10",
+texto: `OWASP API Top 10
+
+Temas importantes:
+
+- Broken Object Level Authorization.
+- Broken Authentication.
+- Broken Object Property Level Authorization.
+- Unrestricted Resource Consumption.
+- Broken Function Level Authorization.
+- Unrestricted Access to Sensitive Business Flows.
+- Server Side Request Forgery.
+- Security Misconfiguration.
+- Improper Inventory Management.
+- Unsafe Consumption of APIs.
+
+Use como checklist de revisão.`
+},
+m8: {
+titulo: "08 - Observabilidade",
+texto: `Observabilidade em APIs
+
+Registrar:
+
+- Endpoint.
+- Método.
+- Status.
+- Latência.
+- Usuário ou client id.
+- Falhas de autenticação.
+- Falhas de autorização.
+- Rate limit acionado.
+- Erros internos.
+
+Evitar:
+
+- Senhas.
+- Tokens.
+- Dados sensíveis.
+- Payload completo sem necessidade.
+
+Sem observabilidade, a equipe descobre o incidente tarde demais.`
+},
+m9: {
+titulo: "09 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- API como contrato.
+- Autenticação.
+- Autorização.
+- Rate limit.
+- Validação de payload.
+- OWASP API Top 10.
+- Observabilidade.
+
+Próximo artigo:
+HACK10 — Docker & Kubernetes Security
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

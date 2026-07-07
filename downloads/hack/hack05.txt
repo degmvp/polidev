@@ -1,0 +1,219 @@
+POLYDEV | Security Engineering
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+Objetivo:
+
+Dominar o Nmap além do básico, aprendendo técnicas profissionais de scanning, identificação de serviços e testes controlados de evasão em laboratório.
+
+A proposta é entender o impacto das flags, o comportamento do tráfego e a diferença entre velocidade, precisão e discrição.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Flags Essenciais
+============================================================
+Nmap Flags Essenciais para Profissionais
+
+Comando base:
+
+nmap -sS -sV -O -T4 --script vuln -p- target_ip
+
+Leitura:
+
+- -sS
+  SYN Scan.
+
+- -sV
+  Detecção de versão.
+
+- -O
+  Detecção de sistema operacional.
+
+- -T4
+  Timing agressivo para laboratório.
+
+- --script vuln
+  Scripts de vulnerabilidade.
+
+- -p-
+  Varre todas as portas TCP.
+
+Use com cuidado, porque varreduras completas geram muito tráfego.
+
+============================================================
+03 - Scanning Avançado
+============================================================
+Técnicas Avançadas de Scanning
+
+Opções úteis:
+
+-sS
+SYN Scan, comum para descoberta TCP.
+
+-sV
+Service Version Detection.
+
+--script vuln
+Execução de scripts relacionados a vulnerabilidades.
+
+-T4
+Timing agressivo.
+
+--min-rate 5000
+Acelera o envio de pacotes.
+
+Exemplo:
+
+nmap -sS -sV -T4 --min-rate 5000 -p- target_ip
+
+Em laboratório, teste diferentes velocidades e compare resultados.
+
+============================================================
+04 - Evasão de Detecção
+============================================================
+Evasão de Detecção
+
+Exemplos:
+
+# Decoys
+nmap -D RND:10 target
+
+# Fragmentação de pacotes
+nmap -f target
+
+# Source Port Manipulation
+nmap --source-port 53 target
+
+Essas técnicas devem ser estudadas apenas em laboratório para entender como firewalls, IDS e filtros reagem ao tráfego.
+
+Objetivo educacional:
+
+- Entender detecção.
+- Comparar logs.
+- Observar pacotes.
+- Melhorar defesa.
+
+============================================================
+05 - Scanner em Python
+============================================================
+Criando seu Próprio Scanner em Python
+
+Código:
+
+import nmap
+
+nm = nmap.PortScanner()
+
+nm.scan('192.168.1.0/24', '22-443')
+
+for host in nm.all_hosts():
+    print(f"Host: {host} - Status: {nm[host].state()}")
+
+Explicação:
+
+- nmap.PortScanner()
+  Cria o objeto de controle.
+
+- scan()
+  Executa a varredura.
+
+- all_hosts()
+  Lista os hosts encontrados.
+
+Esse modelo permite integrar Nmap com automações Python.
+
+============================================================
+06 - Comparando Resultados
+============================================================
+Comparando Resultados
+
+Em laboratório, execute o mesmo alvo com configurações diferentes:
+
+1. Scan simples:
+   nmap target_ip
+
+2. Scan de versão:
+   nmap -sV target_ip
+
+3. Scan completo:
+   nmap -p- target_ip
+
+4. Scan com scripts:
+   nmap -sC --script vuln target_ip
+
+5. Scan com timing agressivo:
+   nmap -T4 target_ip
+
+Documente:
+
+- Tempo.
+- Portas encontradas.
+- Serviços detectados.
+- Diferenças entre comandos.
+- Logs gerados no alvo.
+
+============================================================
+07 - Laboratório Recomendado
+============================================================
+Laboratório Recomendado
+
+Configure:
+
+- Uma VM Kali ou Linux.
+- Um alvo vulnerável de laboratório.
+- Wireshark para observar pacotes.
+- Logs no alvo.
+- Nmap instalado.
+- Python com python-nmap.
+
+Exercícios:
+
+1. Rodar scan padrão.
+2. Rodar scan completo de portas.
+3. Testar -sV.
+4. Testar NSE.
+5. Testar técnicas de evasão.
+6. Comparar resultados com e sem evasão.
+
+Tudo em rede isolada.
+
+============================================================
+08 - Boas Práticas
+============================================================
+Boas Práticas
+
+- Nunca execute scans em redes de terceiros.
+- Evite -p- e --min-rate alto fora de laboratório.
+- Salve outputs para análise posterior.
+- Comece com varreduras simples.
+- Separe descoberta, enumeração e validação.
+- Use Wireshark para entender o tráfego.
+- Documente comandos e resultados.
+
+Scanning profissional não é força bruta. É método, controle e evidência.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Flags essenciais do Nmap.
+- Técnicas avançadas de scanning.
+- Noções de evasão em laboratório.
+- Integração do Nmap com Python.
+- Comparação de resultados.
+- Boas práticas de uso.
+
+Próximo artigo:
+HACK06 — Web Application Hacking: Do Básico ao Avançado
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.
