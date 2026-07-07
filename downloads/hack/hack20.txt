@@ -1,0 +1,16 @@
+/* 
+HACK20 – HTTPS, TLS e Certificados Digitais
+
+Versão recomendada: TLS 1.3
+
+Comandos OpenSSL:
+openssl s_client -connect google.com:443 -tls1_3
+openssl req -new -newkey rsa:4096 -keyout key.pem -out req.csr
+openssl x509 -in cert.pem -text -noout
+
+Configuração segura (Nginx):
+ssl_protocols TLSv1.3;
+ssl_ciphers HIGH:!aNULL:!MD5;
+
+Recomendação: Use Let's Encrypt (certbot).
+*/

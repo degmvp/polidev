@@ -1,0 +1,14 @@
+/* 
+HACK23 – Descobrindo Vulnerabilidades com Nmap
+
+Comandos essenciais:
+
+nmap -sV -O alvo.com
+nmap -sC -sV --script vuln alvo.com
+nmap -p- -T4 -v alvo.com
+
+Scan completo recomendado:
+nmap -sS -sV -sC --min-rate 5000 --script vuln -oA scan alvo.com
+
+Scripts úteis: vulners, http-vuln*, ssl-heartbleed, http-sql-injection
+*/

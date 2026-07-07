@@ -1,0 +1,17 @@
+/* 
+HACK17 – Capturando Tráfego com Wireshark
+
+Objetivo: Analisar o tráfego de rede de forma prática.
+
+Comandos úteis:
+sudo tcpdump -i eth0 -w captura.pcap port 80 or port 443
+
+Filtros importantes no Wireshark:
+http
+dns
+tcp.port == 443
+http contains "password"
+tls.handshake.type == 1
+
+Dica avançada: Configure a variável SSLKEYLOGFILE para ver o conteúdo de conexões TLS.
+*/

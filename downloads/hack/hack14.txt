@@ -1,0 +1,36 @@
+/* 
+HACK14 – Análise de Binários e Engenharia Reversa Básica
+
+Objetivo: Entender o funcionamento interno de um programa compilado sem ter acesso ao código-fonte.
+
+Conceitos principais:
+- Diferença entre código-fonte e binário
+- Assembly (x86_64)
+- Análise estática e dinâmica
+
+Comandos práticos:
+
+# Informações básicas
+file crackme.elf
+strings crackme.elf | head -n 50
+strings crackme.elf | grep -E "password|senha|flag|key|secret|admin"
+
+# Desmontagem
+objdump -d -M intel crackme.elf > disassembly.txt
+objdump -h crackme.elf
+
+# Análise com radare2 (melhor para iniciantes)
+r2 -A crackme.elf
+# Dentro do r2:
+# aaa     → análise automática
+# afl     → listar funções
+# pdf @ main → ver função main
+# / senha → buscar strings
+# VV      → modo visual
+
+Ferramentas recomendadas: radare2 + Cutter, Ghidra
+
+Defesa: strip, ofuscação e packing.
+
+Exercício: Baixe um crackme iniciante do Crackmes.one e descubra a senha.
+*/

@@ -1,0 +1,27 @@
+/* 
+HACK15 – Introdução à Criptografia para Desenvolvedores
+
+Objetivo: Entender os conceitos básicos de criptografia aplicada no dia a dia.
+
+Conceitos principais:
+- Simétrica (AES) x Assimétrica (RSA/ECC)
+- Modos seguros (GCM)
+- Nunca crie sua própria criptografia
+
+Exemplo prático Python (AES-GCM):
+
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import os
+
+key = os.urandom(32)
+aesgcm = AESGCM(key)
+nonce = os.urandom(12)
+ct = aesgcm.encrypt(nonce, b"dados secretos", None)
+
+Comandos OpenSSL:
+openssl enc -aes-256-gcm -salt -in arquivo.txt -out arquivo.enc
+openssl dgst -sha256 arquivo.txt
+
+Regra de ouro: Sempre use bibliotecas testadas (cryptography, libsodium).
+*/
+

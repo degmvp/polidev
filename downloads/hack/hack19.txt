@@ -1,0 +1,19 @@
+/* 
+HACK19 – DNS: Ataques Comuns e Como se Defender
+
+Ataques mais comuns:
+- DNS Cache Poisoning
+- DNS Tunneling
+- Zone Transfer
+- Amplification Attack
+
+Comandos práticos:
+dig google.com ANY
+dig @dns.alvo zona.com AXFR
+nslookup
+
+Defesas recomendadas:
+- DNSSEC
+- DNS over HTTPS (DoH) / DNS over TLS (DoT)
+- Restringir recursão e zone transfers
+*/

@@ -1,0 +1,17 @@
+/* 
+HACK18 – TCP/IP na Prática para Pentesters
+
+Objetivo: Entender o funcionamento do TCP/IP na prática.
+
+Comandos úteis:
+ss -tuln
+traceroute -T -p 443 google.com
+mtr google.com
+
+Exemplo com Scapy (Python):
+from scapy.all import *
+syn = IP(dst="192.168.1.1")/TCP(dport=80, flags="S")
+sr1(syn)
+
+Ataques comuns: SYN Flood, Session Hijacking.
+*/

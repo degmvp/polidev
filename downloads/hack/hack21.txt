@@ -1,0 +1,17 @@
+/* 
+HACK21 – OAuth, JWT e Autenticação Moderna
+
+JWT = Header.Payload.Signature
+
+Exemplo de validação Python:
+import jwt
+payload = jwt.decode(token, key, algorithms=["RS256"])
+
+Melhores práticas:
+- Use PKCE no fluxo Authorization Code
+- Tokens com tempo curto de vida
+- Refresh Token Rotation
+- Valide sempre a assinatura
+
+Ferramentas populares: Keycloak, Ory, Auth0.
+*/

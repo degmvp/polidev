@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK14 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#4cc9f0;
+}
+
+header p{
+    color:yellowgreen;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛡️ POLYDEV | HACK14 - Security Engineering</h1>
+    <p>Reverse Engineering • Binários • Assembly • Ghidra • Lab</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK14</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Conceitos Principais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Ferramentas</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Comandos Básicos</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Radare2</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Defesa</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Exercício</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK14 - Análise de Binários e Engenharia Reversa Básica</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack14.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK14 — Análise de Binários e Engenharia Reversa Básica
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK14 — Análise de Binários e Engenharia Reversa Básica
+
+Objetivo:
+
+Entender como funciona um binário sem acesso ao código-fonte.
+
+A proposta é observar executáveis como artefatos técnicos: identificar metadados, extrair strings, visualizar seções, desmontar instruções e iniciar uma análise estática controlada.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Conceitos Principais",
+texto: `Conceitos principais:
+
+- Diferença entre código-fonte e binário.
+- Compilação em C, C++, Go, Rust e outras linguagens.
+- Assembly em arquitetura x86_64.
+- Análise estática: observar sem executar.
+- Análise dinâmica: observar durante a execução.
+- Funções, seções, strings e fluxo de execução.
+
+Engenharia reversa não é magia. É leitura disciplinada de evidências.`
+},
+m3: {
+titulo: "03 - Ferramentas",
+texto: `Ferramentas recomendadas:
+
+- file
+  Identifica o tipo do arquivo.
+
+- strings
+  Extrai textos visíveis de um binário.
+
+- objdump
+  Mostra seções e desmontagem.
+
+- gdb
+  Depuração e análise dinâmica.
+
+- radare2 / Cutter
+  Análise técnica em linha de comando ou GUI.
+
+- Ghidra
+  Suíte gratuita de engenharia reversa.
+
+- Binary Ninja
+  Ferramenta comercial para análise avançada.`
+},
+m4: {
+titulo: "04 - Comandos Básicos",
+texto: `Comandos práticos:
+
+# Informações básicas
+file programa.exe
+file programa.elf
+
+# Strings do binário
+strings programa.exe | head -n 50
+strings programa.exe | grep -E "password|key|flag|http|senha|secret"
+
+# Seções
+objdump -h programa.elf
+
+# Desmontagem
+objdump -d -M intel programa.elf > disassembly.txt
+
+Analise primeiro o tipo do arquivo, depois as strings, depois as seções e finalmente o fluxo.`
+},
+m5: {
+titulo: "05 - Radare2",
+texto: `Análise com radare2:
+
+# Abrir binário com análise automática
+r2 -A programa.elf
+
+# Dentro do r2:
+aaa          # análise automática
+afl          # listar funções
+pdf @ main   # ver função main
+/ senha      # buscar strings
+VV           # modo visual
+
+Use esse laboratório somente com binários próprios, crackmes educacionais ou artefatos autorizados.`
+},
+m6: {
+titulo: "06 - Defesa",
+texto: `Defesa:
+
+Para dificultar análise indevida em software real, considere:
+
+- Remover símbolos com strip.
+- Evitar strings sensíveis no binário.
+- Usar ofuscação quando fizer sentido.
+- Usar packing com cuidado.
+- Não embutir chaves, tokens ou senhas.
+- Monitorar distribuição de binários internos.
+
+Packing pode gerar falsos positivos em antivírus e dificultar suporte legítimo.`
+},
+m7: {
+titulo: "07 - Exercício",
+texto: `Exercício:
+
+1. Baixe um crackme iniciante em ambiente autorizado.
+2. Execute file para identificar o tipo.
+3. Use strings para procurar mensagens e possíveis senhas.
+4. Abra no radare2.
+5. Liste funções com afl.
+6. Veja a função main com pdf @ main.
+7. Documente o raciocínio.
+
+Objetivo: aprender leitura de binários, não atacar sistemas reais.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- O que é análise de binários.
+- Diferença entre análise estática e dinâmica.
+- Ferramentas básicas de engenharia reversa.
+- Comandos com file, strings, objdump e radare2.
+- Cuidados defensivos.
+- Exercício de laboratório.
+
+Próximo artigo:
+HACK15 — Introdução à Criptografia para Desenvolvedores
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>
