@@ -17,6 +17,7 @@ body{
 }
 
 header{
+    background:#000;
     text-align:center;
     padding:24px;
     border-bottom:3px solid #4cc9f0;
@@ -25,13 +26,16 @@ header{
 header h1{
     margin:0;
     font-size:34px;
-    color:#4cc9f0;
+    color:#CE422B;   /* tom Rust */
+    font-weight:bold;
 }
 
 header p{
-    color:yellowgreen;
+    color:#00d9ff;
     font-size:18px;
     font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
 }
 
 .banner{
@@ -135,7 +139,7 @@ footer{
     color:yellowgreen;
     font-weight:bold;
 }
-
+ 
 footer img{
     width:110px;
     height:110px;
@@ -164,7 +168,9 @@ footer img{
 
 <header>
     <h1>🛡️ POLYDEV | HACK14 - Security Engineering</h1>
-    <p>Reverse Engineering • Binários • Assembly • Ghidra • Lab</p>
+    <p class="subtitle">
+  Reverse Engineering • Binary Analysis • x86_64 • Ghidra • Hands-on Lab
+</p>
 </header>
 
 <img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
