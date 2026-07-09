@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK18 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">18</span>
+    <span class="hack-text">TCP/IP na Prática para Pentesters</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK18</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - TCP/IP na Prática</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Portas e Sockets</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Rota com traceroute</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Diagnóstico com mtr</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Scapy SYN Packet</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Ataques Comuns</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK18 - TCP/IP na Prática para Pentesters</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack18.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK18 — TCP/IP na Prática para Pentesters
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK18 — TCP/IP na Prática para Pentesters
+
+Objetivo:
+
+Entender o funcionamento do TCP/IP na prática, observando portas abertas, rotas, latência, pacotes TCP e testes controlados com Scapy.
+
+O foco deste artigo é transformar TCP/IP em visão operacional: enxergar conexão, porta, caminho, pacote e comportamento de rede.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - TCP/IP na Prática",
+texto: `TCP/IP na prática:
+
+TCP/IP é a base da comunicação entre máquinas em redes modernas.
+
+Para um pentester, entender TCP/IP significa saber observar:
+
+- Endereço de origem e destino.
+- Porta de origem e destino.
+- Estado da conexão.
+- Caminho até o alvo.
+- Resposta ou ausência de resposta.
+- Comportamento diante de SYN, ACK, RST e timeout.
+
+Em vez de decorar teoria, a prática começa verificando o que está ouvindo, qual rota o pacote percorre e como o alvo responde.`
+},
+m3: {
+titulo: "03 - Portas e Sockets",
+texto: `Comando útil:
+
+ss -tuln
+
+Interpretação:
+
+- ss
+  Ferramenta moderna para inspecionar sockets.
+
+- -t
+  Mostra conexões TCP.
+
+- -u
+  Mostra conexões UDP.
+
+- -l
+  Mostra portas em modo listening.
+
+- -n
+  Exibe números de portas e endereços sem resolver nomes.
+
+Uso prático:
+
+- Identificar serviços ativos.
+- Verificar portas abertas localmente.
+- Confirmar se uma aplicação está escutando.
+- Apoiar diagnóstico antes de testes de rede.
+
+Esse comando ajuda a entender o mapa local de exposição da máquina.`
+},
+m4: {
+titulo: "04 - Rota com traceroute",
+texto: `Comando útil:
+
+traceroute -T -p 443 google.com
+
+Interpretação:
+
+- traceroute
+  Mostra o caminho percorrido até o destino.
+
+- -T
+  Usa TCP no teste.
+
+- -p 443
+  Define a porta de destino como 443.
+
+- google.com
+  Host de destino usado no exemplo.
+
+Uso prático:
+
+- Identificar saltos entre origem e destino.
+- Verificar bloqueios por rota.
+- Testar caminho usando TCP.
+- Simular tráfego mais próximo de HTTPS.
+
+Para pentest e troubleshooting, traceroute ajuda a entender onde a comunicação para ou muda de comportamento.`
+},
+m5: {
+titulo: "05 - Diagnóstico com mtr",
+texto: `Comando útil:
+
+mtr google.com
+
+Interpretação:
+
+mtr combina comportamento de ping e traceroute em uma visão contínua.
+
+Uso prático:
+
+- Observar perda de pacotes.
+- Ver latência por salto.
+- Identificar instabilidade.
+- Acompanhar o caminho em tempo real.
+- Comparar resposta entre rotas.
+
+Esse tipo de leitura é útil antes de concluir que o problema está na aplicação. Muitas falhas aparecem primeiro na camada de rede.`
+},
+m6: {
+titulo: "06 - Scapy SYN Packet",
+texto: `Exemplo com Scapy em Python:
+
+from scapy.all import *
+syn = IP(dst="192.168.1.1")/TCP(dport=80, flags="S")
+sr1(syn)
+
+Interpretação:
+
+- IP(dst="192.168.1.1")
+  Define o destino do pacote IP.
+
+- TCP(dport=80, flags="S")
+  Cria um segmento TCP para a porta 80 com flag SYN.
+
+- sr1(syn)
+  Envia o pacote e aguarda uma resposta.
+
+Uso prático em laboratório:
+
+- Entender o início do handshake TCP.
+- Observar respostas SYN/ACK, RST ou timeout.
+- Testar comportamento de portas.
+- Aprender como ferramentas de scanning trabalham por baixo.
+
+Execute somente em laboratório próprio ou ambiente autorizado.`
+},
+m7: {
+titulo: "07 - Ataques Comuns",
+texto: `Ataques comuns citados:
+
+- SYN Flood
+  Abuso do início do handshake TCP para consumir recursos do alvo.
+
+- Session Hijacking
+  Tentativa de assumir ou manipular uma sessão ativa.
+
+Leitura defensiva:
+
+Esses termos são importantes para compreender riscos, logs, alertas e mecanismos de proteção.
+
+Defesas relacionadas:
+
+- Firewall.
+- Rate limit.
+- SYN cookies.
+- Monitoramento de conexões.
+- TLS bem configurado.
+- Sessões com expiração e proteção adequada.
+- Observabilidade de tráfego anômalo.
+
+POLYDEV trabalha com aprendizado técnico responsável e ambiente autorizado.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Como observar portas e sockets com ss.
+- Como testar rota TCP com traceroute.
+- Como acompanhar caminho e perda com mtr.
+- Como criar um pacote SYN simples com Scapy.
+- Como interpretar TCP/IP de forma prática.
+- Quais ataques comuns aparecem nesse contexto.
+- Como pensar em defesa e diagnóstico.
+
+Comandos centrais:
+
+ss -tuln
+traceroute -T -p 443 google.com
+mtr google.com
+
+Exemplo central:
+
+from scapy.all import *
+syn = IP(dst="192.168.1.1")/TCP(dport=80, flags="S")
+sr1(syn)
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

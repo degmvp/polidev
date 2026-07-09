@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK16 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">16</span>
+    <span class="hack-text">Hashes, Salt e Armazenamento Seguro de Senhas</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK16</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Conceitos Principais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Algoritmos Recomendados</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Argon2id em Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - htpasswd bcrypt</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - O que Nunca Usar</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Boas Práticas</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK16 - Hashes, Salt e Armazenamento Seguro de Senhas</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack16.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK16 — Hashes, Salt e Armazenamento Seguro de Senhas
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK16 — Hashes, Salt e Armazenamento Seguro de Senhas
+
+Objetivo:
+
+Aprender a armazenar senhas de forma segura.
+
+O ponto central deste artigo é entender que senha não deve ser tratada como texto comum, nem protegida apenas com hash rápido.
+
+Senha precisa de algoritmo próprio para password hashing, salt e custo computacional controlado.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Conceitos Principais",
+texto: `Conceitos principais:
+
+- Hash criptográfico
+  Gera um resumo de dados, mas nem todo hash serve para armazenar senhas.
+
+- Salt
+  Valor único associado à senha antes do processamento, evitando tabelas pré-computadas e hashes iguais para senhas iguais.
+
+- Password hashing
+  Técnica específica para proteger senhas usando algoritmos lentos e configuráveis.
+
+- Custo computacional
+  Parâmetro que torna ataques de força bruta mais caros.
+
+- Verificação
+  A senha digitada é comparada contra o hash armazenado usando a função correta do algoritmo.
+
+Regra central:
+Senha não se descriptografa. Senha se verifica.`
+},
+m3: {
+titulo: "03 - Algoritmos Recomendados",
+texto: `Melhores algoritmos para armazenamento seguro de senhas:
+
+- Argon2id
+  Recomendado para novas aplicações. Combina resistência contra ataques por CPU, GPU e hardware especializado.
+
+- bcrypt
+  Muito usado, maduro e confiável. Ainda é uma excelente escolha em muitos sistemas.
+
+- scrypt
+  Projetado para exigir memória, dificultando ataques em larga escala com hardware dedicado.
+
+Escolha prática:
+
+- Novo projeto: Argon2id.
+- Sistema legado confiável: bcrypt ainda é aceitável.
+- Ambiente que exige resistência forte por memória: scrypt pode ser boa opção.`
+},
+m4: {
+titulo: "04 - Argon2id em Python",
+texto: `Exemplo prático Python:
+
+import argon2
+
+ph = argon2.PasswordHasher()
+
+hash_senha = ph.hash("minhasenha123")
+
+# Verificar
+ph.verify(hash_senha, "minhasenha123")
+
+Observações:
+
+- O hash gerado inclui parâmetros do algoritmo.
+- O salt é tratado automaticamente pela biblioteca.
+- A verificação deve ser feita pela função verify.
+- Não compare strings manualmente.
+
+Em aplicação real, nunca registre a senha em log e nunca exponha o hash em resposta de API.`
+},
+m5: {
+titulo: "05 - htpasswd bcrypt",
+texto: `Comando exemplo:
+
+htpasswd -nB usuario
+
+Esse comando gera uma entrada usando bcrypt.
+
+Interpretação:
+
+- -n exibe o resultado na saída padrão.
+- -B força bcrypt.
+- usuario é o nome do usuário usado na entrada gerada.
+
+Uso típico:
+
+- Proteção simples via Apache/Nginx.
+- Laboratórios locais.
+- Ambientes internos controlados.
+
+Mesmo nesse cenário, mantenha cuidado com permissões do arquivo e exposição do hash.`
+},
+m6: {
+titulo: "06 - O que Nunca Usar",
+texto: `Nunca use para armazenar senhas:
+
+- MD5
+- SHA1
+- SHA256 puro
+- SHA512 puro
+- Hash rápido sem salt
+- Criptografia reversível para senha de usuário
+- Algoritmo caseiro
+
+MD5, SHA1 e SHA256 foram projetados para outras finalidades, como integridade e identificação de conteúdo.
+
+O problema não é apenas colisão. O problema principal em senhas é velocidade.
+
+Algoritmo rápido facilita força bruta em massa.`
+},
+m7: {
+titulo: "07 - Boas Práticas",
+texto: `Boas práticas:
+
+- Sempre use salt.
+- Prefira Argon2id, bcrypt ou scrypt.
+- Ajuste custo conforme o hardware disponível.
+- Nunca armazene senha em texto puro.
+- Nunca envie senha por e-mail.
+- Nunca coloque senha em log.
+- Nunca retorne senha ou hash em API.
+- Use HTTPS em todo fluxo de autenticação.
+- Aplique rate limit em login.
+- Proteja também reset de senha e troca de senha.
+
+Segurança de senha não é apenas algoritmo. É fluxo completo.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Por que senha não deve ser armazenada em texto puro.
+- Diferença entre hash comum e password hashing.
+- Importância do salt.
+- Uso de Argon2id, bcrypt e scrypt.
+- Exemplo prático com Python argon2.
+- Exemplo de bcrypt com htpasswd.
+- Por que MD5, SHA1 e SHA256 puro não servem para senhas.
+
+Regra final:
+Sempre use salt + algoritmo lento.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

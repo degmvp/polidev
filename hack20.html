@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HACK20 - HTTPS, TLS e Certificados Digitais</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">20</span>
+    <span class="hack-text">HTTPS, TLS e Certificados Digitais</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK20</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - HTTPS e TLS</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - TLS 1.3</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Teste com OpenSSL</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - CSR e Chave Privada</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Inspecionar Certificado</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Nginx Seguro</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Let's Encrypt</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK20 - HTTPS, TLS e Certificados Digitais</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack20.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK20 — HTTPS, TLS e Certificados Digitais
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK20 — HTTPS, TLS e Certificados Digitais
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - HTTPS e TLS",
+texto: `HTTPS e TLS:
+
+HTTPS é HTTP protegido por TLS.
+
+TLS protege a comunicação usando:
+
+- Criptografia
+- Integridade
+- Autenticação do servidor
+- Certificados digitais
+- Negociação segura de parâmetros
+
+Sem TLS, dados podem trafegar expostos em texto claro.
+
+Com TLS bem configurado, o cliente consegue validar o servidor e estabelecer um canal seguro de comunicação.`
+},
+m3: {
+titulo: "03 - TLS 1.3",
+texto: `Versão recomendada:
+
+TLS 1.3
+
+TLS 1.3 é a versão moderna recomendada por reduzir complexidade, remover algoritmos antigos e melhorar segurança e desempenho.
+
+Vantagens:
+
+- Handshake mais eficiente
+- Menos algoritmos inseguros
+- Melhor proteção por padrão
+- Redução de configurações legadas
+- Mais segurança contra ataques antigos
+
+Em ambientes novos, prefira TLS 1.3 sempre que possível.`
+},
+m4: {
+titulo: "04 - Teste com OpenSSL",
+texto: `Comando OpenSSL:
+
+openssl s_client -connect google.com:443 -tls1_3
+
+Objetivo:
+
+Testar uma conexão TLS 1.3 contra um servidor HTTPS.
+
+Esse comando permite observar:
+
+- Certificado apresentado
+- Cadeia de certificação
+- Versão TLS negociada
+- Cipher utilizado
+- Dados do handshake
+- Validade básica da conexão
+
+É uma ferramenta essencial para troubleshooting e auditoria de HTTPS.`
+},
+m5: {
+titulo: "05 - CSR e Chave Privada",
+texto: `Comando OpenSSL:
+
+openssl req -new -newkey rsa:4096 -keyout key.pem -out req.csr
+
+O que ele faz:
+
+- Cria uma nova chave privada
+- Usa RSA com 4096 bits
+- Gera uma CSR
+- Salva a chave em key.pem
+- Salva a requisição em req.csr
+
+CSR significa Certificate Signing Request.
+
+Ela é enviada para uma autoridade certificadora para emissão de certificado digital.
+
+A chave privada nunca deve ser compartilhada.`
+},
+m6: {
+titulo: "06 - Inspecionar Certificado",
+texto: `Comando OpenSSL:
+
+openssl x509 -in cert.pem -text -noout
+
+Objetivo:
+
+Inspecionar o conteúdo de um certificado digital.
+
+Com esse comando você pode verificar:
+
+- Emissor
+- Assunto
+- Validade
+- Algoritmo de assinatura
+- Chave pública
+- Extensões
+- SANs
+- Uso permitido do certificado
+
+Essa etapa é importante para validar certificados antes de colocar um serviço em produção.`
+},
+m7: {
+titulo: "07 - Nginx Seguro",
+texto: `Configuração segura no Nginx:
+
+ssl_protocols TLSv1.3;
+ssl_ciphers HIGH:!aNULL:!MD5;
+
+Interpretação:
+
+- ssl_protocols TLSv1.3;
+  Restringe o protocolo aceito para TLS 1.3.
+
+- ssl_ciphers HIGH:!aNULL:!MD5;
+  Evita cifras fracas, nulas ou baseadas em MD5.
+
+Observação:
+
+A configuração final pode variar conforme versão do Nginx, OpenSSL e política de compatibilidade exigida pelo ambiente.
+
+A ideia central é remover protocolos antigos e evitar algoritmos inseguros.`
+},
+m8: {
+titulo: "08 - Let's Encrypt",
+texto: `Recomendação:
+
+Use Let's Encrypt com certbot.
+
+Let's Encrypt permite emitir certificados digitais gratuitos e automatizar renovação.
+
+Pontos importantes:
+
+- Automatizar renovação
+- Testar HTTPS após emissão
+- Validar cadeia de certificados
+- Monitorar expiração
+- Evitar certificados vencidos
+- Manter configuração TLS atualizada
+
+Resumo:
+
+HTTPS não é apenas colocar certificado no servidor.
+
+É preciso configurar TLS corretamente, validar certificado, proteger a chave privada e acompanhar renovação.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

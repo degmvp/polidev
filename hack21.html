@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HACK21 - OAuth, JWT e Autenticação Moderna</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">21</span>
+    <span class="hack-text">OAuth, JWT e Autenticação Moderna</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK21</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - OAuth Moderno</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Estrutura JWT</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Validação Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - PKCE</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Tokens Curtos</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Refresh Rotation</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Ferramentas</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK21 - OAuth, JWT e Autenticação Moderna</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack21.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK21 — OAuth, JWT e Autenticação Moderna
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK21 — OAuth, JWT e Autenticação Moderna
+
+Objetivo:
+
+Entender os conceitos principais de OAuth, JWT e autenticação moderna.
+
+Neste artigo, o foco é compreender a estrutura de um JWT, validar token em Python, aplicar boas práticas como PKCE, tokens de vida curta, rotação de refresh tokens e validação obrigatória de assinatura.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - OAuth Moderno",
+texto: `OAuth moderno:
+
+OAuth é um padrão usado para autorização.
+
+Ele permite que uma aplicação acesse recursos em nome de um usuário sem precisar conhecer diretamente a senha desse usuário.
+
+Fluxos modernos priorizam:
+
+- Authorization Code Flow
+- PKCE
+- Tokens com escopo limitado
+- Expiração curta
+- Refresh Token Rotation
+- Validação rigorosa
+
+OAuth não deve ser tratado como simples login. Ele faz parte da arquitetura de autorização segura.`
+},
+m3: {
+titulo: "03 - Estrutura JWT",
+texto: `JWT:
+
+JWT = Header.Payload.Signature
+
+Estrutura:
+
+- Header
+  Informa tipo do token e algoritmo usado.
+
+- Payload
+  Contém claims, dados e informações como expiração, emissor e público.
+
+- Signature
+  Garante integridade e autenticidade do token.
+
+Ponto crítico:
+
+Nunca confie apenas no conteúdo decodificado do payload.
+
+O token precisa ter a assinatura validada antes de ser aceito.`
+},
+m4: {
+titulo: "04 - Validação Python",
+texto: `Exemplo de validação Python:
+
+import jwt
+payload = jwt.decode(token, key, algorithms=["RS256"])
+
+Interpretação:
+
+- token
+  Token JWT recebido.
+
+- key
+  Chave usada para validação.
+
+- algorithms=["RS256"]
+  Algoritmo esperado para assinatura.
+
+Boa prática:
+
+Defina explicitamente os algoritmos aceitos.
+
+Não aceite algoritmo vindo cegamente do token.
+
+Valide:
+
+- Assinatura
+- Expiração
+- Emissor
+- Público
+- Escopo
+- Claims obrigatórias`
+},
+m5: {
+titulo: "05 - PKCE",
+texto: `Melhor prática:
+
+Use PKCE no fluxo Authorization Code.
+
+PKCE significa Proof Key for Code Exchange.
+
+Ele protege o fluxo contra interceptação do authorization code.
+
+Importante para:
+
+- Aplicações mobile
+- SPAs
+- Clientes públicos
+- Ambientes onde não existe segredo de cliente confiável
+
+PKCE adiciona uma prova criptográfica entre a solicitação inicial e a troca do código por tokens.`
+},
+m6: {
+titulo: "06 - Tokens Curtos",
+texto: `Melhor prática:
+
+Tokens com tempo curto de vida.
+
+Motivo:
+
+Quanto maior a validade de um token, maior a janela de risco em caso de vazamento.
+
+Recomendações:
+
+- Access token curto
+- Escopos mínimos
+- Expiração bem definida
+- Revogação quando necessário
+- Logs de uso e falhas
+
+Tokens não devem ser tratados como credenciais permanentes.
+
+Eles são autorizações temporárias.`
+},
+m7: {
+titulo: "07 - Refresh Rotation",
+texto: `Melhor prática:
+
+Refresh Token Rotation.
+
+A cada uso do refresh token, um novo refresh token é emitido e o anterior deixa de ser válido.
+
+Benefícios:
+
+- Reduz impacto de vazamento
+- Ajuda a detectar reutilização indevida
+- Melhora controle de sessão
+- Permite revogação mais eficiente
+
+Se um refresh token antigo for reutilizado, isso pode indicar comprometimento.
+
+Esse mecanismo fortalece autenticação moderna em aplicações críticas.`
+},
+m8: {
+titulo: "08 - Ferramentas",
+texto: `Ferramentas populares:
+
+- Keycloak
+- Ory
+- Auth0
+
+Boas práticas finais:
+
+- Use PKCE no Authorization Code Flow
+- Use tokens com tempo curto de vida
+- Aplique Refresh Token Rotation
+- Valide sempre a assinatura
+- Valide emissor, público e expiração
+- Use algoritmos fortes como RS256
+- Não aceite token sem validação completa
+
+Resumo:
+
+Autenticação moderna exige arquitetura, validação e disciplina operacional.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

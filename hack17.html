@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK17 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">17</span>
+    <span class="hack-text">Capturando Tráfego com Wireshark</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK17</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Conceitos Principais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Captura com tcpdump</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Filtros HTTP e DNS</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Filtros TCP e TLS</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Buscando Credenciais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - SSLKEYLOGFILE</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK17 - Capturando Tráfego com Wireshark</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack17.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK17 — Capturando Tráfego com Wireshark
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK17 — Capturando Tráfego com Wireshark
+
+Objetivo:
+
+Analisar o tráfego de rede de forma prática usando captura de pacotes e filtros de investigação.
+
+O foco deste artigo é entender como observar o que está passando pela rede, salvar uma captura em arquivo PCAP e depois analisar esse material no Wireshark.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Conceitos Principais",
+texto: `Conceitos principais:
+
+- Captura de tráfego
+  Processo de observar pacotes que passam por uma interface de rede.
+
+- PCAP
+  Formato de arquivo usado para armazenar pacotes capturados.
+
+- Interface de rede
+  Placa ou adaptador por onde o tráfego passa, como eth0, wlan0 ou enp0s3.
+
+- Filtro de captura
+  Define o que será salvo durante a coleta.
+
+- Filtro de exibição
+  Define o que será visualizado depois dentro do Wireshark.
+
+Regra prática:
+Capture somente o necessário e analise com filtros objetivos.`
+},
+m3: {
+titulo: "03 - Captura com tcpdump",
+texto: `Comando útil:
+
+sudo tcpdump -i eth0 -w captura.pcap port 80 or port 443
+
+Interpretação:
+
+- sudo
+  Executa com permissão administrativa.
+
+- tcpdump
+  Ferramenta de linha de comando para captura de pacotes.
+
+- -i eth0
+  Define a interface de rede usada na captura.
+
+- -w captura.pcap
+  Salva o tráfego capturado em um arquivo PCAP.
+
+- port 80 or port 443
+  Limita a captura a tráfego HTTP e HTTPS.
+
+Esse arquivo pode ser aberto depois no Wireshark para análise visual.`
+},
+m4: {
+titulo: "04 - Filtros HTTP e DNS",
+texto: `Filtros importantes no Wireshark:
+
+http
+
+Mostra pacotes HTTP detectados.
+
+dns
+
+Mostra consultas e respostas DNS.
+
+Uso prático:
+
+- Investigar domínios acessados.
+- Verificar requisições HTTP.
+- Identificar endpoints chamados por uma aplicação.
+- Diagnosticar problemas de resolução de nomes.
+
+Observação:
+HTTP pode exibir conteúdo em texto claro. HTTPS normalmente exige chaves de sessão para inspeção do conteúdo.`
+},
+m5: {
+titulo: "05 - Filtros TCP e TLS",
+texto: `Filtros importantes:
+
+tcp.port == 443
+
+Mostra tráfego TCP na porta 443, normalmente usado por HTTPS.
+
+tls.handshake.type == 1
+
+Mostra mensagens Client Hello do TLS.
+
+Uso prático:
+
+- Identificar início de conexões TLS.
+- Verificar servidores acessados.
+- Analisar handshakes.
+- Observar SNI quando disponível.
+- Diagnosticar falhas de negociação TLS.
+
+Esse tipo de filtro ajuda a separar ruído de tráfego realmente relevante.`
+},
+m6: {
+titulo: "06 - Buscando Credenciais",
+texto: `Filtro de exemplo:
+
+http contains "password"
+
+Esse filtro procura a palavra "password" em tráfego HTTP.
+
+Uso em laboratório:
+
+- Verificar aplicações inseguras.
+- Demonstrar risco de HTTP sem criptografia.
+- Investigar formulários expostos.
+- Confirmar vazamento de dados sensíveis.
+
+Atenção:
+Esse tipo de análise deve ser feito somente em ambiente autorizado, laboratório próprio ou rede onde você tem permissão explícita.
+
+POLYDEV trabalha com aprendizado técnico responsável.`
+},
+m7: {
+titulo: "07 - SSLKEYLOGFILE",
+texto: `Dica avançada:
+
+Configure a variável SSLKEYLOGFILE para permitir análise do conteúdo de conexões TLS em laboratório.
+
+Ideia geral:
+
+- O navegador grava chaves de sessão em um arquivo.
+- O Wireshark usa esse arquivo para descriptografar conexões TLS capturadas.
+- A análise passa a mostrar conteúdo que normalmente estaria protegido.
+
+Uso típico:
+
+- Laboratório local.
+- Debug de aplicações próprias.
+- Estudo de TLS.
+- Diagnóstico de comunicação cliente-servidor.
+
+Nunca use essa técnica para interceptar tráfego de terceiros sem autorização.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Como capturar tráfego com tcpdump.
+- Como salvar a captura em arquivo PCAP.
+- Como abrir e analisar o material no Wireshark.
+- Filtros úteis para HTTP, DNS, TCP e TLS.
+- Como localizar tráfego na porta 443.
+- Como identificar handshakes TLS.
+- Como usar SSLKEYLOGFILE em laboratório.
+
+Comando central:
+
+sudo tcpdump -i eth0 -w captura.pcap port 80 or port 443
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

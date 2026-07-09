@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HACK23 - Descobrindo Vulnerabilidades com Nmap</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">23</span>
+    <span class="hack-text">Descobrindo Vulnerabilidades com Nmap</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK23</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Nmap na Prática</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Versão e SO</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - Scripts Padrão</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Todas as Portas</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Scan Completo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Scripts Úteis</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK23 - Descobrindo Vulnerabilidades com Nmap</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack23.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK23 — Descobrindo Vulnerabilidades com Nmap
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK23 — Descobrindo Vulnerabilidades com Nmap
+
+Objetivo:
+
+Usar Nmap para identificar serviços, versões, sistema operacional, portas abertas e possíveis vulnerabilidades.
+
+Este artigo fecha a série com uma ferramenta clássica e indispensável para reconhecimento técnico, auditoria e validação de superfície exposta.
+
+Use somente em ambiente próprio, laboratório ou alvo autorizado.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Nmap na Prática",
+texto: `Nmap na prática:
+
+Nmap é uma ferramenta usada para descoberta de hosts, portas, serviços e características de rede.
+
+Com ele é possível observar:
+
+- Portas abertas
+- Serviços expostos
+- Versões de serviços
+- Sistema operacional provável
+- Scripts de enumeração
+- Possíveis vulnerabilidades conhecidas
+
+Para segurança defensiva, Nmap ajuda a descobrir o que está visível antes que alguém de fora descubra.`
+},
+m3: {
+titulo: "03 - Versão e SO",
+texto: `Comando essencial:
+
+nmap -sV -O alvo.com
+
+Interpretação:
+
+- -sV
+  Detecta versões dos serviços expostos.
+
+- -O
+  Tenta identificar o sistema operacional.
+
+Uso prático:
+
+- Identificar software antigo
+- Mapear serviços públicos
+- Verificar exposição indevida
+- Apoiar correção de inventário
+- Encontrar pontos de atenção
+
+Esse scan é útil para uma primeira visão técnica do alvo.`
+},
+m4: {
+titulo: "04 - Scripts Padrão",
+texto: `Comando essencial:
+
+nmap -sC -sV --script vuln alvo.com
+
+Interpretação:
+
+- -sC
+  Executa scripts padrão do Nmap.
+
+- -sV
+  Detecta versões dos serviços.
+
+- --script vuln
+  Executa scripts voltados para identificação de vulnerabilidades conhecidas.
+
+Uso prático:
+
+- Validar riscos conhecidos
+- Encontrar serviços frágeis
+- Apoiar análise inicial
+- Levantar evidências para correção
+
+Scripts de vulnerabilidade devem ser usados com autorização e cuidado.`
+},
+m5: {
+titulo: "05 - Todas as Portas",
+texto: `Comando essencial:
+
+nmap -p- -T4 -v alvo.com
+
+Interpretação:
+
+- -p-
+  Varre todas as portas TCP.
+
+- -T4
+  Usa timing mais agressivo.
+
+- -v
+  Exibe saída detalhada.
+
+Uso prático:
+
+- Encontrar serviços fora das portas comuns
+- Descobrir portas administrativas esquecidas
+- Mapear superfície completa
+- Evitar falsa sensação de segurança
+
+Muitos serviços sensíveis aparecem fora das portas padrão.`
+},
+m6: {
+titulo: "06 - Scan Completo",
+texto: `Scan completo recomendado:
+
+nmap -sS -sV -sC --min-rate 5000 --script vuln -oA scan alvo.com
+
+Interpretação:
+
+- -sS
+  SYN scan.
+
+- -sV
+  Detecção de versão.
+
+- -sC
+  Scripts padrão.
+
+- --min-rate 5000
+  Define taxa mínima de envio de pacotes.
+
+- --script vuln
+  Executa scripts de vulnerabilidade.
+
+- -oA scan
+  Salva saída em múltiplos formatos com prefixo scan.
+
+Esse comando combina velocidade, enumeração e geração de evidência.`
+},
+m7: {
+titulo: "07 - Scripts Úteis",
+texto: `Scripts úteis:
+
+- vulners
+- http-vuln*
+- ssl-heartbleed
+- http-sql-injection
+
+Uso:
+
+Esses scripts ajudam a identificar vulnerabilidades conhecidas em serviços expostos.
+
+Atenção:
+
+Nem todo resultado é prova definitiva de exploração.
+
+Sempre valide:
+
+- Versão real do serviço
+- Configuração aplicada
+- Falso positivo
+- Contexto do ambiente
+- Evidência técnica
+
+Nmap aponta caminhos. A análise técnica confirma o risco.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Comandos essenciais:
+
+nmap -sV -O alvo.com
+nmap -sC -sV --script vuln alvo.com
+nmap -p- -T4 -v alvo.com
+
+Scan completo recomendado:
+
+nmap -sS -sV -sC --min-rate 5000 --script vuln -oA scan alvo.com
+
+Scripts úteis:
+
+vulners
+http-vuln*
+ssl-heartbleed
+http-sql-injection
+
+Conclusão:
+
+Nmap é uma ferramenta essencial para descobrir exposição, validar serviços e apoiar correções de segurança.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

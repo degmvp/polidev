@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HACK19 - DNS: Ataques Comuns e Como se Defender</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">19</span>
+    <span class="hack-text">DNS: Ataques Comuns e Como se Defender</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK19</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - DNS na Prática</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Cache Poisoning</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - DNS Tunneling</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Zone Transfer</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Amplification Attack</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Comandos Práticos</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Defesas Recomendadas</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK19 - DNS: Ataques Comuns e Como se Defender</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack19.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK19 — DNS: Ataques Comuns e Como se Defender
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK19 — DNS: Ataques Comuns e Como se Defender
+
+Objetivo:
+
+Entender ataques comuns contra DNS e como reduzir riscos usando boas práticas de defesa.
+
+Ataques abordados:
+
+- DNS Cache Poisoning
+- DNS Tunneling
+- Zone Transfer
+- Amplification Attack
+
+DNS é uma camada essencial da internet e também uma superfície crítica de ataque.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - DNS na Prática",
+texto: `DNS na prática:
+
+DNS traduz nomes em endereços IP.
+
+Exemplo:
+
+google.com
+
+Para segurança, DNS pode revelar:
+
+- Domínios
+- Subdomínios
+- Servidores autoritativos
+- Registros públicos
+- Configurações frágeis
+- Possíveis vazamentos de zona
+- Abuso de recursão
+
+Quando o DNS é mal configurado, ele pode expor informações importantes da infraestrutura.`
+},
+m3: {
+titulo: "03 - Cache Poisoning",
+texto: `DNS Cache Poisoning:
+
+Ocorre quando uma resposta DNS falsa é inserida no cache de um resolvedor.
+
+Riscos:
+
+- Redirecionar usuários para IPs falsos
+- Facilitar phishing
+- Simular serviços legítimos
+- Interceptar tráfego
+- Quebrar confiança na resolução de nomes
+
+Defesas:
+
+- DNSSEC
+- Resolvedores confiáveis
+- Servidores DNS atualizados
+- Validação correta das respostas
+- Redução da exposição de resolvedores recursivos`
+},
+m4: {
+titulo: "04 - DNS Tunneling",
+texto: `DNS Tunneling:
+
+DNS Tunneling usa consultas DNS para transportar dados de forma indevida.
+
+Riscos:
+
+- Exfiltração de dados
+- Comunicação com C2
+- Bypass de controles fracos
+- Tráfego malicioso parecendo consulta comum
+
+Sinais de alerta:
+
+- Alto volume de consultas DNS
+- Subdomínios muito longos
+- Nomes aleatórios
+- Padrões repetitivos
+- Domínios suspeitos
+
+Defesas:
+
+- Monitoramento de DNS
+- DNS firewall
+- Bloqueio de domínios suspeitos
+- Análise de logs
+- Detecção de padrões anormais`
+},
+m5: {
+titulo: "05 - Zone Transfer",
+texto: `Zone Transfer:
+
+Zone Transfer é a transferência de uma zona DNS entre servidores.
+
+Quando mal configurada, pode permitir que terceiros listem registros da zona.
+
+Comando prático:
+
+dig @dns.alvo zona.com AXFR
+
+Riscos:
+
+- Exposição de subdomínios
+- Mapeamento da infraestrutura
+- Vazamento de nomes internos
+- Apoio à fase de reconhecimento
+
+Defesas:
+
+- Restringir AXFR
+- Permitir transferência apenas entre servidores autorizados
+- Usar ACL
+- Revisar configuração do DNS autoritativo
+- Auditar zonas periodicamente`
+},
+m6: {
+titulo: "06 - Amplification Attack",
+texto: `Amplification Attack:
+
+Ataques de amplificação exploram servidores DNS para gerar grande volume de tráfego contra uma vítima.
+
+Ideia geral:
+
+Uma consulta pequena pode gerar uma resposta maior.
+
+Se houver spoofing de IP, a resposta ampliada pode ser enviada para a vítima.
+
+Impactos:
+
+- Negação de serviço
+- Consumo de banda
+- Saturação de infraestrutura
+- Instabilidade em serviços públicos
+
+Defesas:
+
+- Não manter resolvedor aberto na internet
+- Restringir recursão
+- Aplicar rate limit
+- Usar filtros anti-spoofing
+- Monitorar tráfego anômalo`
+},
+m7: {
+titulo: "07 - Comandos Práticos",
+texto: `Comandos práticos:
+
+dig google.com ANY
+
+Consulta registros disponíveis para um domínio.
+
+dig @dns.alvo zona.com AXFR
+
+Testa tentativa de transferência de zona em um servidor DNS específico.
+
+nslookup
+
+Ferramenta clássica para consultas DNS.
+
+Observação:
+
+Use testes de enumeração somente em ambiente próprio, laboratório ou alvo autorizado.`
+},
+m8: {
+titulo: "08 - Defesas Recomendadas",
+texto: `Defesas recomendadas:
+
+- DNSSEC
+  Ajuda a validar a autenticidade das respostas DNS.
+
+- DNS over HTTPS (DoH)
+  Protege consultas DNS usando HTTPS.
+
+- DNS over TLS (DoT)
+  Protege consultas DNS usando TLS.
+
+- Restringir recursão
+  Evita que qualquer origem use seu DNS como resolvedor aberto.
+
+- Restringir zone transfers
+  Permite AXFR apenas entre servidores autorizados.
+
+- Monitorar logs DNS
+  Ajuda a detectar tunneling, abuso, consultas anômalas e comportamento suspeito.
+
+Resumo:
+
+DNS é infraestrutura crítica, mas também é superfície de ataque.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

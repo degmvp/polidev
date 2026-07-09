@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | HACK15 - Security Engineering</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;   /* tom Rust */
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+ 
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK15 - Security Engineering">
+</header>
+<div class="hack-title">
+    <span class="hack-number">15</span>
+    <span class="hack-text">Como Polyhacker transforma falhas em alavancas</span>
+</div>
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK15</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Conceitos Principais</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Bibliotecas</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - AES-GCM em Python</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - OpenSSL</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - Regras de Segurança</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - Exercício</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Resumo Técnico</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK15 - Introdução à Criptografia para Desenvolvedores</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack15.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK15 — Introdução à Criptografia para Desenvolvedores
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK15 — Introdução à Criptografia para Desenvolvedores
+
+Objetivo:
+
+Entender os conceitos básicos de criptografia aplicada no dia a dia do desenvolvedor.
+
+A proposta é compreender quando usar criptografia simétrica, criptografia assimétrica, hash, nonce, chaves e modos autenticados como AES-GCM.
+
+Criptografia não deve ser improvisada. Em sistemas reais, use bibliotecas testadas e padrões consolidados.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Conceitos Principais",
+texto: `Conceitos principais:
+
+- Criptografia simétrica: mesma chave para cifrar e decifrar.
+- Criptografia assimétrica: par de chaves pública e privada.
+- AES: algoritmo simétrico moderno e amplamente usado.
+- RSA/ECC: famílias usadas em criptografia assimétrica.
+- GCM: modo autenticado que protege confidencialidade e integridade.
+- Hash: resumo criptográfico, como SHA-256.
+- Nonce: valor único usado uma vez em uma operação criptográfica.
+
+Regra central:
+Nunca crie sua própria criptografia.`
+},
+m3: {
+titulo: "03 - Bibliotecas",
+texto: `Bibliotecas recomendadas:
+
+- cryptography
+  Biblioteca Python madura para primitivas criptográficas.
+
+- libsodium
+  Biblioteca moderna, segura e focada em APIs difíceis de usar errado.
+
+- OpenSSL
+  Ferramenta e biblioteca clássica para TLS, certificados, hashes e criptografia.
+
+- hashlib
+  Módulo padrão do Python para hashes como SHA-256.
+
+Evite algoritmos antigos ou inseguros como MD5, SHA1, DES e RC4 em novos projetos.`
+},
+m4: {
+titulo: "04 - AES-GCM em Python",
+texto: `Exemplo prático Python com AES-GCM:
+
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import os
+
+key = os.urandom(32)
+aesgcm = AESGCM(key)
+
+nonce = os.urandom(12)
+ct = aesgcm.encrypt(nonce, b"dados secretos", None)
+
+print(ct)
+
+Observações:
+
+- A chave tem 32 bytes para AES-256.
+- O nonce tem 12 bytes, recomendado para GCM.
+- O texto cifrado inclui autenticação.
+- O nonce não deve ser reutilizado com a mesma chave.`
+},
+m5: {
+titulo: "05 - OpenSSL",
+texto: `Comandos OpenSSL:
+
+# Cifrar arquivo com AES-256-GCM
+openssl enc -aes-256-gcm -salt -in arquivo.txt -out arquivo.enc
+
+# Gerar hash SHA-256
+openssl dgst -sha256 arquivo.txt
+
+# Ver versão instalada
+openssl version
+
+OpenSSL é útil para laboratório, validação e automação, mas em aplicações prefira bibliotecas bem integradas à linguagem usada.`
+},
+m6: {
+titulo: "06 - Regras de Segurança",
+texto: `Regras de segurança:
+
+- Nunca invente algoritmo próprio.
+- Nunca salve senhas em texto puro.
+- Para senhas, use algoritmos próprios para password hashing.
+- Não embuta chaves no código-fonte.
+- Proteja chaves em variáveis de ambiente, vaults ou serviços seguros.
+- Não reutilize nonce com a mesma chave.
+- Use TLS corretamente para comunicação em rede.
+- Prefira bibliotecas maduras e bem documentadas.
+
+Criptografia falha mais por uso errado do que por quebra matemática do algoritmo.`
+},
+m7: {
+titulo: "07 - Exercício",
+texto: `Exercício:
+
+1. Crie um arquivo texto simples com uma mensagem.
+2. Gere o hash SHA-256 com OpenSSL.
+3. Crie um pequeno script Python usando AESGCM.
+4. Gere uma chave aleatória com os.urandom(32).
+5. Gere um nonce com os.urandom(12).
+6. Cifre a mensagem.
+7. Decifre e compare com o texto original.
+8. Documente o que é chave, nonce, ciphertext e autenticação.
+
+Objetivo: entender o fluxo correto de uso, não criar criptografia própria.`
+},
+m8: {
+titulo: "08 - Resumo Técnico",
+texto: `Resumo Técnico
+
+Neste artigo, você viu:
+
+- Diferença entre criptografia simétrica e assimétrica.
+- Uso de AES, RSA, ECC e SHA-256.
+- Importância do modo AES-GCM.
+- Exemplo prático com Python cryptography.
+- Comandos básicos com OpenSSL.
+- Regras de ouro para uso seguro.
+
+Próximo artigo:
+HACK16 — Segurança em APIs e Tokens JWT
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>

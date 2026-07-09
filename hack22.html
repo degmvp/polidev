@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HACK22 - Segurança em APIs REST</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#4cc9f0;
+}
+
+header{
+    background:#000;
+    text-align:center;
+    padding:24px;
+    border-bottom:3px solid #4cc9f0;
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:#CE422B;
+    font-weight:bold;
+}
+
+header p{
+    color:#00d9ff;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    text-shadow:0 0 12px rgba(0,217,255,0.45);
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 28px auto;
+    border:2px solid #4cc9f0;
+    border-radius:8px;
+}
+
+.hack-title{
+    max-width:700px;
+    margin:14px auto 28px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-family:"Segoe UI", Arial, sans-serif;
+}
+
+.hack-number{
+    font-size:38px;
+    font-weight:600;
+    color:#20C7F4;
+    line-height:1;
+    letter-spacing:1px;
+}
+
+.hack-text{
+    font-size:21px;
+    font-weight:400;
+    color:#F2FBFF;
+    line-height:1.2;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid #4cc9f0;
+    padding:15px;
+}
+
+.sidebar h2{
+    color:#4cc9f0;
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:#111;
+    color:#FFD700;
+    border:1px solid #4cc9f0;
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:#4cc9f0;
+    color:#000;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    color:#FFD700;
+    font-size:28px;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    margin-right:8px;
+    background:#4cc9f0;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    background:#00101f;
+    color:#fff;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid #4cc9f0;
+    color:yellowgreen;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #4cc9f0;
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #4cc9f0;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .hack-title{
+        width:90%;
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+    }
+
+    .hack-text{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="hack.jpg" class="banner" alt="HACK - Security Engineering">
+</header>
+
+<div class="hack-title">
+    <span class="hack-number">22</span>
+    <span class="hack-text">Segurança em APIs REST</span>
+</div>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu HACK22</h2>
+        <button class="menu-btn" onclick="abrirConteudo('m1')">01 - Objetivo</button>
+        <button class="menu-btn" onclick="abrirConteudo('m2')">02 - Checklist Essencial</button>
+        <button class="menu-btn" onclick="abrirConteudo('m3')">03 - Rate Limiting</button>
+        <button class="menu-btn" onclick="abrirConteudo('m4')">04 - OAuth2 + JWT</button>
+        <button class="menu-btn" onclick="abrirConteudo('m5')">05 - Validação de Inputs</button>
+        <button class="menu-btn" onclick="abrirConteudo('m6')">06 - BOLA / IDOR</button>
+        <button class="menu-btn" onclick="abrirConteudo('m7')">07 - CORS e Logs</button>
+        <button class="menu-btn" onclick="abrirConteudo('m8')">08 - Teste com curl</button>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloConteudo">HACK22 - Segurança em APIs REST</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn" href="hack22.html" download>Download</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Selecione um tópico no menu lateral.
+
+POLYDEV | Security Engineering
+HACK22 — Segurança em APIs REST
+
+Leia • Entenda • Execute seu código.</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+let conteudoAtual = "";
+
+const modulos = {
+m1: {
+titulo: "01 - Objetivo",
+texto: `POLYDEV | Security Engineering
+HACK22 — Segurança em APIs REST
+
+Objetivo:
+
+Aplicar um checklist essencial de segurança para APIs REST.
+
+APIs expõem regras de negócio, dados e operações críticas. Por isso, segurança em API não pode depender apenas de autenticação básica.
+
+Neste artigo, o foco é proteger endpoints REST com rate limiting, OAuth2 + JWT, validação rigorosa de inputs, defesa contra BOLA/IDOR, CORS bem configurado, logging e monitoramento.
+
+Leia • Entenda • Execute seu código.`
+},
+m2: {
+titulo: "02 - Checklist Essencial",
+texto: `Checklist de segurança essencial:
+
+- Rate Limiting forte
+- Autenticação com OAuth2 + JWT
+- Validação rigorosa de todos os inputs
+- Proteção contra BOLA/IDOR
+- CORS bem configurado
+- Logging e monitoramento
+
+Esse checklist cobre pontos básicos que precisam existir antes de uma API ser exposta publicamente.
+
+Uma API REST sem esses controles pode vazar dados, permitir abuso de endpoints ou expor operações sensíveis.`
+},
+m3: {
+titulo: "03 - Rate Limiting",
+texto: `Rate Limiting forte:
+
+Rate limiting controla a quantidade de requisições permitidas por usuário, IP, token ou aplicação.
+
+Objetivos:
+
+- Reduzir abuso
+- Diminuir força bruta
+- Proteger recursos internos
+- Evitar scraping agressivo
+- Reduzir impacto de ataques automatizados
+
+Boas práticas:
+
+- Limite por IP
+- Limite por usuário
+- Limite por token
+- Resposta adequada para excesso de requisições
+- Monitoramento de picos anormais
+
+Sem rate limiting, uma API pode ser consumida de forma abusiva até afetar o serviço.`
+},
+m4: {
+titulo: "04 - OAuth2 + JWT",
+texto: `Autenticação:
+
+Use OAuth2 + JWT.
+
+O token deve representar uma autorização válida, com escopo e tempo de vida definidos.
+
+Verifique sempre:
+
+- Assinatura do token
+- Expiração
+- Emissor
+- Público
+- Escopos
+- Claims obrigatórias
+
+Erros comuns:
+
+- Aceitar token sem validar assinatura
+- Ignorar expiração
+- Não validar escopo
+- Usar token longo demais
+- Confiar apenas no payload decodificado
+
+Autenticação forte é base, mas autorização correta endpoint por endpoint é o ponto crítico.`
+},
+m5: {
+titulo: "05 - Validação de Inputs",
+texto: `Validação rigorosa de todos os inputs:
+
+Toda entrada deve ser tratada como não confiável.
+
+Valide:
+
+- Parâmetros de URL
+- Query strings
+- Headers
+- Body JSON
+- Tipos de dados
+- Tamanho máximo
+- Formato esperado
+- Campos obrigatórios
+
+Riscos evitados:
+
+- Injection
+- Dados inválidos
+- Quebra de regra de negócio
+- Abuso de filtros
+- Falhas por payload malformado
+
+A validação deve acontecer antes de qualquer processamento sensível.`
+},
+m6: {
+titulo: "06 - BOLA / IDOR",
+texto: `Proteção contra BOLA/IDOR:
+
+BOLA significa Broken Object Level Authorization.
+
+IDOR significa Insecure Direct Object Reference.
+
+Exemplo conceitual:
+
+/users/123
+
+O problema ocorre quando o usuário autenticado consegue acessar o recurso de outro usuário apenas mudando o identificador.
+
+Defesa:
+
+- Validar propriedade do recurso
+- Validar autorização por objeto
+- Não confiar apenas no ID da URL
+- Verificar contexto do usuário
+- Aplicar controle no backend
+- Testar endpoints com IDs de outros usuários
+
+Autenticação responde quem é o usuário.
+
+Autorização responde o que ele pode acessar.`
+},
+m7: {
+titulo: "07 - CORS e Logs",
+texto: `CORS bem configurado:
+
+CORS define quais origens podem acessar a API pelo navegador.
+
+Boas práticas:
+
+- Evitar wildcard em produção
+- Permitir apenas origens confiáveis
+- Revisar métodos permitidos
+- Controlar headers permitidos
+- Separar ambientes dev/homolog/prod
+
+Logging e monitoramento:
+
+Registre eventos relevantes:
+
+- Falhas de autenticação
+- Erros de autorização
+- Picos de requisição
+- Acesso a objetos sensíveis
+- Erros 4xx e 5xx
+- Tentativas suspeitas
+
+Sem logs, não existe investigação confiável depois do incidente.`
+},
+m8: {
+titulo: "08 - Teste com curl",
+texto: `Teste rápido com curl:
+
+curl -H "Authorization: Bearer token" https://api.exemplo.com/users/123
+
+O que testar:
+
+- Token válido
+- Token expirado
+- Token ausente
+- Token de outro usuário
+- ID de outro usuário
+- Escopo insuficiente
+- Origem CORS não autorizada
+- Excesso de requisições
+
+Resumo:
+
+Segurança em API REST depende de camadas.
+
+Não basta autenticar.
+
+É preciso limitar, validar, autorizar, registrar e monitorar.
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.`
+}
+};
+
+function abrirConteudo(chave){
+    const item = modulos[chave];
+    document.getElementById("tituloConteudo").textContent = item.titulo;
+    document.getElementById("codigo").textContent = item.texto;
+    conteudoAtual = item.texto;
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        conteudoAtual = document.getElementById("codigo").textContent;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+</script>
+
+</body>
+</html>
