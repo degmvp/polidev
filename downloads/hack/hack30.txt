@@ -1,0 +1,147 @@
+# HACK30 — Cross-Site Scripting (XSS) na Prática
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é demonstrar como identificar vulnerabilidades de Cross-Site Scripting (XSS), compreender seus impactos e implementar mecanismos eficazes de prevenção.
+
+Todo o conteúdo deve ser estudado apenas em laboratórios autorizados, plataformas de treinamento ou aplicações para as quais exista autorização formal de teste. O uso dessas técnicas contra sistemas de terceiros sem permissão pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+**Cross-Site Scripting (XSS)** é uma das vulnerabilidades mais comuns em aplicações web. Ela ocorre quando uma aplicação permite que conteúdo controlado pelo usuário seja interpretado como código executável pelo navegador de outra pessoa.
+
+Ao contrário da SQL Injection, cujo alvo principal é o banco de dados, o XSS tem como principal objetivo comprometer os usuários da aplicação.
+
+Quando explorada em um ambiente vulnerável, essa falha pode permitir:
+
+* Roubo de sessões.
+* Exposição de dados sensíveis.
+* Execução de ações em nome da vítima.
+* Redirecionamento para páginas maliciosas.
+* Manipulação da interface da aplicação.
+
+Mesmo com frameworks modernos, vulnerabilidades de XSS continuam sendo encontradas devido à sanitização inadequada dos dados e à renderização insegura de conteúdo.
+
+---
+
+# 2. Principais Tipos de XSS
+
+| Tipo              | Descrição                                         | Risco      | Exemplo                                     |
+| ----------------- | ------------------------------------------------- | ---------- | ------------------------------------------- |
+| **Reflected XSS** | O conteúdo é refletido imediatamente na resposta  | Médio      | Parâmetros da URL                           |
+| **Stored XSS**    | O código é armazenado e executado posteriormente  | Alto       | Comentários, fóruns e perfis                |
+| **DOM-based XSS** | O problema ocorre durante a manipulação do DOM    | Médio/Alto | JavaScript manipulando dados da URL         |
+| **Blind XSS**     | A execução ocorre em outra interface da aplicação | Alto       | Painéis administrativos e sistemas internos |
+
+---
+
+# 3. Como Detectar XSS
+
+Durante uma avaliação de segurança, alguns indícios merecem atenção especial:
+
+* Campos que aceitam HTML sem tratamento adequado.
+* Parâmetros da URL refletidos diretamente na página.
+* Comentários ou perfis com suporte a HTML.
+* Uso de funções potencialmente inseguras como `innerHTML`, `document.write()` e `eval()`.
+
+Exemplos de cargas utilizadas em laboratórios para validação:
+
+```html id="g7kz31"
+<script>alert('XSS')</script>
+
+<img src=x onerror=alert('XSS')>
+
+<svg onload=alert('XSS')>
+```
+
+Esses exemplos destinam-se exclusivamente à validação de ambientes de treinamento ou auditorias autorizadas.
+
+---
+
+# 4. Exemplo Conceitual
+
+Um cenário clássico de **Reflected XSS** ocorre quando um parâmetro da URL é exibido diretamente na página sem tratamento adequado.
+
+Exemplo conceitual:
+
+```text id="n5yw80"
+https://site-vulneravel.com/search?q=<script>alert('XSS')</script>
+```
+
+Outro cenário frequente ocorre em campos de comentários, fóruns ou perfis de usuários, onde dados enviados são posteriormente exibidos para outros usuários sem sanitização.
+
+Esses exemplos ilustram apenas o conceito da vulnerabilidade e não devem ser utilizados fora de ambientes autorizados.
+
+---
+
+# 5. Ferramentas Utilizadas em Auditorias
+
+| Ferramenta     | Categoria             | Utilização                               | Nível         |
+| -------------- | --------------------- | ---------------------------------------- | ------------- |
+| **Burp Suite** | Proxy                 | Testes manuais e interceptação           | Essencial     |
+| **OWASP ZAP**  | Proxy e Scanner       | Auditorias automatizadas                 | Recomendado   |
+| **XSStrike**   | Scanner especializado | Detecção avançada de XSS                 | Avançado      |
+| **Dalfox**     | Scanner               | Identificação rápida de vulnerabilidades | Intermediário |
+| **XSS Hunter** | Blind XSS             | Monitoramento de execuções remotas       | Avançado      |
+| **BeEF**       | Framework             | Estudos sobre exploração em laboratório  | Avançado      |
+
+---
+
+# 6. Prevenção e Mitigação
+
+A melhor defesa contra XSS consiste na combinação de múltiplas camadas de proteção.
+
+| Técnica                        | Nível de Proteção | Recomendação                    |
+| ------------------------------ | ----------------- | ------------------------------- |
+| Content Security Policy (CSP)  | Muito Alta        | Fortemente recomendada          |
+| Output Encoding                | Muito Alta        | Obrigatória                     |
+| Sanitização de HTML            | Alta              | Utilizar bibliotecas confiáveis |
+| Cookies HttpOnly e Secure      | Alta              | Essencial                       |
+| Validação no servidor          | Média             | Camada complementar             |
+| Web Application Firewall (WAF) | Média             | Camada adicional                |
+
+Bibliotecas amplamente utilizadas para sanitização:
+
+* DOMPurify (JavaScript)
+* Bleach (Python)
+* sanitize-html (Node.js)
+* HtmlSanitizer (.NET)
+
+---
+
+# 7. Boas Práticas
+
+* Nunca confie em dados fornecidos pelo usuário.
+* Aplique Output Encoding antes da renderização.
+* Utilize Content Security Policy (CSP).
+* Marque cookies sensíveis com as flags **HttpOnly**, **Secure** e, quando aplicável, **SameSite**.
+* Evite funções como `innerHTML`, `document.write()` e `eval()`.
+* Utilize frameworks modernos que implementam escaping automático.
+* Execute testes manuais e automatizados regularmente.
+* Monitore logs em busca de tentativas de exploração.
+
+---
+
+# 8. O que observar durante uma auditoria
+
+Durante uma revisão de segurança, verifique principalmente:
+
+* Campos que aceitam HTML sem sanitização.
+* Uso inadequado de `innerHTML` ou APIs semelhantes.
+* Ausência de Content Security Policy.
+* Cookies de sessão sem proteção adequada.
+* Dados provenientes da URL sendo renderizados diretamente.
+* Aplicações legadas ou frameworks desatualizados.
+* Bibliotecas JavaScript conhecidas por vulnerabilidades de XSS.
+
+---
+
+# Conclusão
+
+Cross-Site Scripting permanece entre as vulnerabilidades mais relevantes do desenvolvimento web moderno. Embora existam mecanismos consolidados para sua prevenção, sua ocorrência ainda é frequente em aplicações que não adotam boas práticas de validação, sanitização e renderização segura.
+
+O conhecimento das técnicas de detecção auxilia profissionais de segurança durante auditorias autorizadas, mas o principal objetivo deve ser sempre a prevenção. A combinação de **Output Encoding**, **Content Security Policy**, sanitização adequada e desenvolvimento seguro reduz significativamente a superfície de ataque e protege tanto a aplicação quanto seus usuários.
+
+Nos próximos módulos da série HACK abordaremos outras vulnerabilidades importantes do **OWASP Top 10**, ampliando a visão sobre segurança ofensiva e defensiva em aplicações modernas.

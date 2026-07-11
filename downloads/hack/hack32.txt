@@ -1,0 +1,144 @@
+# HACK32 — Post-Exploitation e Persistência em Sistemas Comprometidos
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar os conceitos fundamentais relacionados à fase de **Post-Exploitation** em testes de intrusão autorizados, destacando seus impactos e as principais estratégias de detecção e mitigação.
+
+Todo o conteúdo deve ser aplicado apenas em laboratórios controlados, ambientes de treinamento ou durante avaliações de segurança formalmente autorizadas. O uso dessas técnicas contra sistemas de terceiros sem permissão pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+Após a obtenção de acesso inicial durante um **Penetration Test**, inicia-se uma etapa conhecida como **Post-Exploitation**.
+
+Nessa fase, o objetivo deixa de ser apenas comprovar a existência de uma vulnerabilidade e passa a ser avaliar, de forma controlada, quais impactos um invasor poderia causar caso obtivesse acesso ao ambiente.
+
+Entre os aspectos normalmente avaliados estão:
+
+* Nível de acesso obtido.
+* Possibilidade de elevação de privilégios.
+* Exposição de informações sensíveis.
+* Capacidade de movimentação entre sistemas.
+* Eficiência dos mecanismos de detecção e resposta.
+
+O propósito dessas atividades é produzir evidências que permitam fortalecer a segurança da organização.
+
+---
+
+# 2. O que é Post-Exploitation?
+
+**Post-Exploitation** corresponde ao conjunto de atividades realizadas após o comprometimento inicial de um sistema durante uma avaliação autorizada.
+
+Dependendo do escopo definido, essa fase pode envolver:
+
+* Avaliação de privilégios disponíveis.
+* Identificação de possíveis caminhos para movimentação lateral.
+* Verificação da exposição de credenciais.
+* Identificação de mecanismos de persistência existentes.
+* Validação dos controles de segurança implantados.
+
+O foco principal é compreender até onde um invasor poderia avançar e quais controles seriam capazes de detectar ou impedir essa evolução.
+
+---
+
+# 3. Objetivos da Fase de Post-Exploitation
+
+| Objetivo                         | Descrição                                                   | Impacto                           |
+| -------------------------------- | ----------------------------------------------------------- | --------------------------------- |
+| **Escalonamento de Privilégios** | Avaliar a possibilidade de obtenção de privilégios elevados | Controle ampliado do sistema      |
+| **Persistência**                 | Verificar mecanismos que permitam manutenção do acesso      | Permanência prolongada            |
+| **Movimentação Lateral**         | Avaliar a propagação para outros ativos                     | Expansão do comprometimento       |
+| **Coleta de Credenciais**        | Identificar credenciais expostas ou reutilizadas            | Comprometimento adicional         |
+| **Exfiltração de Dados**         | Avaliar riscos relacionados à saída de informações          | Impacto sobre confidencialidade   |
+| **Evasão de Detecção**           | Validar a eficiência dos mecanismos de monitoramento        | Avaliação da capacidade defensiva |
+
+---
+
+# 4. Mecanismos de Persistência
+
+Persistência representa a capacidade de um invasor manter acesso ao ambiente comprometido mesmo após reinicializações ou alterações operacionais.
+
+Durante avaliações autorizadas, os seguintes mecanismos costumam ser analisados:
+
+* Tarefas agendadas e Cron Jobs.
+* Serviços e Daemons.
+* Chaves de inicialização do Windows.
+* Configurações de inicialização de usuários.
+* Contas de serviço.
+* Tokens de autenticação comprometidos.
+* Componentes de inicialização do sistema.
+
+A identificação desses mecanismos permite que a equipe de defesa implemente controles preventivos e monitore alterações suspeitas.
+
+---
+
+# 5. Controles de Defesa
+
+Uma estratégia eficiente contra técnicas de Post-Exploitation deve combinar múltiplas camadas de proteção.
+
+| Controle                          | Objetivo                                | Efetividade |
+| --------------------------------- | --------------------------------------- | ----------- |
+| **Monitoramento de Processos**    | Detectar atividades incomuns            | Alta        |
+| **EDR / XDR**                     | Monitoramento contínuo dos endpoints    | Muito Alta  |
+| **Princípio do Menor Privilégio** | Reduzir impacto de contas comprometidas | Alta        |
+| **Hardening**                     | Redução da superfície de ataque         | Alta        |
+| **Centralização de Logs**         | Correlação de eventos                   | Alta        |
+| **Monitoramento de Persistência** | Identificar alterações suspeitas        | Alta        |
+| **Segmentação de Rede**           | Limitar movimentação lateral            | Alta        |
+| **Autenticação Multifator (MFA)** | Reduzir abuso de credenciais            | Alta        |
+
+Nenhum controle isolado é suficiente; a combinação dessas medidas constitui uma estratégia de **Defesa em Profundidade (Defense in Depth)**.
+
+---
+
+# 6. Boas Práticas para Equipes de Defesa
+
+* Implantar soluções modernas de **EDR** ou **XDR**.
+* Auditar regularmente tarefas agendadas, serviços e mecanismos de inicialização.
+* Monitorar eventos relacionados à criação de usuários e alterações de privilégios.
+* Implementar **Application Whitelisting** sempre que possível.
+* Manter sistemas e aplicações atualizados.
+* Executar programas contínuos de **Threat Hunting**.
+* Correlacionar eventos utilizando plataformas **SIEM**.
+* Revisar periodicamente permissões administrativas e contas de serviço.
+
+---
+
+# 7. Aspectos Éticos e Legais
+
+Toda atividade de Post-Exploitation deve respeitar rigorosamente o escopo aprovado.
+
+Essas técnicas destinam-se exclusivamente a:
+
+* Testes de intrusão autorizados.
+* Laboratórios de treinamento.
+* Ambientes de pesquisa.
+* Exercícios de Red Team previamente aprovados.
+
+A documentação das atividades realizadas é parte fundamental do processo e garante transparência durante toda a avaliação.
+
+---
+
+# 8. O que observar durante uma auditoria
+
+Durante uma revisão de segurança, recomenda-se verificar:
+
+* Contas com privilégios excessivos.
+* Serviços executando com permissões elevadas.
+* Tarefas agendadas incomuns.
+* Mecanismos persistentes de inicialização.
+* Credenciais armazenadas inadequadamente.
+* Ausência de monitoramento por EDR ou SIEM.
+* Segmentação insuficiente entre redes.
+* Eventos suspeitos de autenticação e movimentação lateral.
+
+---
+
+# Conclusão
+
+A fase de **Post-Exploitation** representa uma das etapas mais importantes de um Penetration Test, pois permite avaliar o impacto real de um comprometimento e medir a capacidade da organização em detectar, conter e responder a atividades maliciosas.
+
+Mais do que compreender técnicas ofensivas, profissionais de segurança devem utilizar esse conhecimento para fortalecer mecanismos de monitoramento, reduzir superfícies de ataque e aumentar a resiliência dos ambientes corporativos.
+
+Nos próximos módulos da série HACK serão abordados temas avançados relacionados à segurança ofensiva e defensiva, incluindo **Threat Hunting**, **Resposta a Incidentes**, **Segurança em Ambientes Cloud** e estratégias modernas de detecção de ameaças.

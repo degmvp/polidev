@@ -1,0 +1,148 @@
+# HACK36 — Segurança em Aplicações Mobile (Android e iOS)
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar conceitos, riscos e boas práticas de segurança no desenvolvimento e análise de aplicações móveis para Android e iOS.
+
+Todo o conteúdo deve ser aplicado apenas em contextos autorizados, como desenvolvimento de aplicações próprias, testes de segurança com permissão explícita do proprietário ou em ambientes de laboratório controlados. Testes não autorizados em aplicações de terceiros podem violar leis e termos de uso.
+
+---
+
+# 1. Introdução
+
+Com o crescimento massivo do uso de smartphones, as aplicações móveis tornaram-se um dos principais vetores de ataque e também um dos maiores alvos de criminosos cibernéticos.
+
+Diferente de aplicações web tradicionais, os aplicativos mobile rodam em dispositivos controlados pelo usuário, com acesso a dados sensíveis (contatos, localização, câmera, armazenamento, credenciais, etc.). Isso torna a segurança mobile um desafio específico e cada vez mais relevante.
+
+Este módulo aborda os principais riscos, diferenças entre Android e iOS, e as melhores práticas para desenvolver e testar aplicações móveis de forma segura.
+
+---
+
+# 2. Por que a Segurança Mobile é Importante?
+
+Aplicativos móveis frequentemente lidam com:
+
+- Dados pessoais e sensíveis
+- Autenticação e sessões de usuário
+- Integração com serviços financeiros e bancários
+- Acesso a hardware do dispositivo (câmera, microfone, GPS, biometria)
+- Armazenamento local de informações confidenciais
+
+Uma falha de segurança em um app mobile pode resultar em vazamento de dados em massa, fraudes financeiras, roubo de identidade e comprometimento da privacidade dos usuários.
+
+---
+
+# 3. Principais Ameaças em Aplicações Mobile
+
+| Ameaça                              | Descrição                                                        | Impacto Comum                     |
+|-------------------------------------|------------------------------------------------------------------|-----------------------------------|
+| **Reverse Engineering**             | Descompilação e análise do código do aplicativo                  | Roubo de lógica e segredos        |
+| **Injeção de Código / Runtime**     | Modificação do comportamento em tempo de execução                | Bypass de segurança               |
+| **Armazenamento Inseguro**          | Dados sensíveis salvos sem criptografia                          | Vazamento de informações          |
+| **Comunicação Insegura**            | Tráfego sem criptografia ou com certificados inválidos           | Interceptação de dados            |
+| **Autenticação Fraca**              | Falta de MFA, tokens fracos ou sessões longas                    | Roubo de conta                    |
+| **Exposição de APIs**               | Endpoints sem proteção adequada                                  | Abuso e vazamento de dados        |
+| **Malware e Apps Maliciosos**       | Aplicativos falsos ou modificados                                | Infecção do dispositivo           |
+| **Insecure Deep Links / URL Schemes** | Manipulação de links para executar ações não autorizadas       | Phishing e execução de ações      |
+
+---
+
+# 4. Segurança em Android
+
+O Android é um sistema mais aberto, o que traz tanto vantagens quanto desafios de segurança.
+
+**Principais pontos de atenção no Android:**
+
+- **Armazenamento de dados**: Uso incorreto de SharedPreferences, SQLite e armazenamento externo
+- **Permissões excessivas**: Solicitar mais permissões do que o necessário
+- **WebView inseguro**: Execução de JavaScript não confiável
+- **Broadcast Receivers e Intents**: Exposição de componentes sensíveis
+- **Root Detection**: Aplicativos devem detectar se o dispositivo está rooteado
+- **Obfuscação de código**: Dificultar engenharia reversa (ProGuard / R8)
+- **Segurança de rede**: Uso obrigatório de HTTPS e validação de certificados
+
+O Android oferece recursos como **Android Keystore**, **EncryptedSharedPreferences** e **App Bundles** que ajudam a aumentar a segurança.
+
+---
+
+# 5. Segurança em iOS
+
+O iOS é um sistema mais fechado e controlado pela Apple, o que oferece uma base de segurança mais robusta por padrão.
+
+**Principais pontos de atenção no iOS:**
+
+- **Keychain Services**: Armazenamento seguro de credenciais e tokens
+- **Data Protection API**: Criptografia automática de arquivos
+- **App Transport Security (ATS)**: Restrições de comunicação de rede
+- **Jailbreak Detection**: Identificar dispositivos comprometidos
+- **Code Signing e Provisioning**: Garantir integridade do aplicativo
+- **Secure Enclave**: Uso de hardware para operações criptográficas sensíveis
+- **App Extensions e Deep Links**: Controlar interações entre aplicativos
+
+O iOS tende a ser mais resistente a malware, mas ainda exige atenção em relação à engenharia reversa e ao armazenamento seguro de dados.
+
+---
+
+# 6. Boas Práticas de Desenvolvimento Seguro Mobile
+
+- Aplicar o **princípio do menor privilégio** nas permissões
+- Nunca armazenar dados sensíveis sem criptografia
+- Usar **HTTPS** em todas as comunicações e validar certificados
+- Implementar **autenticação forte** e gerenciamento seguro de sessões
+- Ofuscar o código e proteger contra engenharia reversa
+- Validar todas as entradas do usuário e de fontes externas
+- Implementar detecção de ambiente comprometido (root/jailbreak)
+- Usar bibliotecas e frameworks atualizados
+- Realizar revisões de código focadas em segurança
+- Seguir guias oficiais (Android Security Best Practices e Apple Secure Coding Guide)
+
+---
+
+# 7. Testes de Segurança em Aplicações Mobile
+
+Os testes de segurança mobile geralmente incluem:
+
+- Análise estática do código (SAST)
+- Análise dinâmica (DAST)
+- Engenharia reversa e descompilação
+- Testes de comunicação de rede (interceptação de tráfego)
+- Testes de armazenamento local
+- Análise de permissões e componentes expostos
+- Testes de autenticação e autorização
+- Verificação de proteção contra tampering
+
+---
+
+# 8. Ferramentas Recomendadas
+
+| Finalidade                     | Android                              | iOS                                  |
+|--------------------------------|--------------------------------------|--------------------------------------|
+| **Descompilação / RE**         | JADX, APKTool, Ghidra                | Hopper, Ghidra, class-dump           |
+| **Análise Dinâmica**           | Frida, Objection, Drozer             | Frida, Objection, Cycript            |
+| **Interceptação de Tráfego**   | Burp Suite, mitmproxy                | Burp Suite, mitmproxy                |
+| **Análise de APK/IPA**         | APK Analyzer, MobSF                  | MobSF, iOS Security Toolkit          |
+| **Automação de Testes**        | Mobile Security Framework (MobSF)    | Mobile Security Framework (MobSF)    |
+| **Root/Jailbreak Detection**   | RootBeer, SafetyNet                  | Frida scripts, Liberty Lite          |
+
+---
+
+# 9. Considerações Éticas e Legais
+
+Testes de segurança em aplicações móveis devem sempre ser realizados com autorização explícita do desenvolvedor ou da empresa responsável pelo aplicativo.
+
+É importante respeitar:
+
+- Termos de uso das lojas (Google Play e App Store)
+- Leis de proteção de dados (LGPD, GDPR)
+- Direitos autorais e propriedade intelectual
+- Limites éticos durante a análise
+
+---
+
+# Conclusão
+
+A segurança de aplicações móveis exige atenção tanto no desenvolvimento quanto nos testes. Android e iOS possuem características diferentes, mas ambos demandam boas práticas de codificação segura, proteção de dados e resistência a engenharia reversa.
+
+Profissionais que dominam segurança mobile são cada vez mais valorizados, especialmente com o crescimento de aplicações financeiras, de saúde e corporativas em dispositivos móveis.
+
+Nos próximos módulos da série HACK abordaremos **Threat Modeling** e técnicas avançadas de evasão.

@@ -1,0 +1,181 @@
+# HACK33 — Segurança em Ambientes Cloud (AWS, Azure e GCP)
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar conceitos, riscos e boas práticas relacionados à segurança em ambientes de computação em nuvem.
+
+Todo o conteúdo deve ser aplicado apenas em ambientes autorizados e com o devido consentimento do proprietário da infraestrutura. Testes ou avaliações de segurança sem autorização podem configurar atividade ilícita e violar os termos de uso dos provedores de serviços em nuvem.
+
+---
+
+# 1. Introdução
+
+A computação em nuvem tornou-se um dos pilares da infraestrutura moderna. Organizações de todos os portes utilizam plataformas como **Amazon Web Services (AWS)**, **Microsoft Azure** e **Google Cloud Platform (GCP)** para hospedar aplicações, armazenar dados e executar workloads críticos.
+
+Embora esses provedores ofereçam infraestrutura altamente segura, grande parte dos incidentes registrados em ambientes cloud decorre de configurações inadequadas realizadas pelos próprios clientes.
+
+Por esse motivo, compreender os princípios da segurança em nuvem tornou-se uma competência essencial para profissionais de infraestrutura, DevOps, Cloud Engineers e especialistas em cibersegurança.
+
+---
+
+# 2. Modelo de Responsabilidade Compartilhada
+
+Um dos conceitos fundamentais da segurança em nuvem é o **Shared Responsibility Model**.
+
+Nesse modelo, parte da segurança é responsabilidade do provedor, enquanto outra parte permanece sob responsabilidade do cliente.
+
+| Camada                         | Provedor                        | Cliente                                |
+| ------------------------------ | ------------------------------- | -------------------------------------- |
+| **Segurança Física**           | ✔                               | —                                      |
+| **Infraestrutura Física**      | ✔                               | —                                      |
+| **Virtualização**              | ✔                               | —                                      |
+| **Sistema Operacional**        | Parcial                         | Configuração e Hardening               |
+| **Aplicações**                 | —                               | Desenvolvimento seguro                 |
+| **Dados**                      | Infraestrutura de armazenamento | Classificação, criptografia e acesso   |
+| **Identidade e Acessos (IAM)** | Plataforma                      | Gerenciamento de usuários e permissões |
+| **Configuração dos Serviços**  | —                               | Configuração segura                    |
+
+Compreender esse modelo evita a falsa percepção de que toda a segurança é responsabilidade exclusiva do provedor.
+
+---
+
+# 3. Principais Riscos em Ambientes Cloud
+
+A maioria dos incidentes em nuvem está relacionada a configurações incorretas e falhas operacionais.
+
+Os riscos mais comuns incluem:
+
+* Credenciais expostas.
+* Permissões excessivas (Over-Privileged Identities).
+* Buckets de armazenamento públicos.
+* Ausência de criptografia.
+* Grupos de segurança excessivamente permissivos.
+* Falta de monitoramento.
+* APIs expostas indevidamente.
+* Vazamento de segredos em repositórios de código.
+* Recursos esquecidos e sem gerenciamento.
+
+---
+
+# 4. Segurança na AWS
+
+A AWS disponibiliza diversos serviços voltados à proteção dos ambientes.
+
+| Serviço                      | Finalidade                             | Categoria        |
+| ---------------------------- | -------------------------------------- | ---------------- |
+| **IAM**                      | Controle de identidades e permissões   | Identidade       |
+| **AWS Organizations + SCPs** | Governança                             | Gestão           |
+| **Security Hub**             | Centralização de eventos de segurança  | Monitoramento    |
+| **GuardDuty**                | Detecção de ameaças                    | Threat Detection |
+| **Inspector**                | Avaliação de vulnerabilidades          | Assessment       |
+| **AWS WAF + Shield**         | Proteção contra ataques Web e DDoS     | Aplicações       |
+| **KMS**                      | Gerenciamento de chaves criptográficas | Criptografia     |
+| **Secrets Manager**          | Armazenamento seguro de segredos       | Credenciais      |
+| **CloudTrail**               | Auditoria de eventos                   | Logging          |
+| **CloudWatch**               | Monitoramento operacional              | Observabilidade  |
+
+---
+
+# 5. Segurança no Microsoft Azure
+
+O Azure oferece um ecossistema integrado de proteção.
+
+| Serviço                           | Finalidade                | Categoria     |
+| --------------------------------- | ------------------------- | ------------- |
+| **Microsoft Entra ID**            | Identidade e autenticação | IAM           |
+| **Microsoft Defender for Cloud**  | Postura de segurança      | CSPM          |
+| **Microsoft Sentinel**            | SIEM / SOAR               | Monitoramento |
+| **Key Vault**                     | Gerenciamento de segredos | Criptografia  |
+| **Network Security Groups (NSG)** | Controle de tráfego       | Rede          |
+| **Web Application Firewall**      | Proteção de aplicações    | Web           |
+
+---
+
+# 6. Segurança no Google Cloud Platform (GCP)
+
+O Google Cloud incorpora diversos controles de segurança por padrão.
+
+| Serviço                     | Finalidade                         | Categoria     |
+| --------------------------- | ---------------------------------- | ------------- |
+| **Cloud IAM**               | Controle de acesso                 | Identidade    |
+| **Security Command Center** | Gestão centralizada de riscos      | Segurança     |
+| **Cloud Monitoring**        | Observabilidade                    | Monitoramento |
+| **Cloud Logging**           | Auditoria                          | Logs          |
+| **Secret Manager**          | Armazenamento de segredos          | Credenciais   |
+| **Cloud Armor**             | Proteção contra DDoS e ataques Web | Aplicações    |
+| **VPC Service Controls**    | Proteção contra exfiltração        | Rede          |
+
+---
+
+# 7. Boas Práticas Gerais
+
+Independentemente do provedor utilizado, recomenda-se:
+
+* Aplicar o princípio do menor privilégio (Least Privilege).
+* Utilizar MFA em todas as contas administrativas.
+* Preferir identidades temporárias em vez de credenciais permanentes.
+* Implementar Infrastructure as Code (IaC).
+* Automatizar verificações de segurança.
+* Habilitar logs de auditoria.
+* Criptografar dados em repouso e em trânsito.
+* Revisar permissões periodicamente.
+* Segmentar redes e workloads.
+* Proteger segredos utilizando serviços específicos do provedor.
+
+---
+
+# 8. Ferramentas Recomendadas
+
+| Finalidade                                   | Ferramentas                                            |
+| -------------------------------------------- | ------------------------------------------------------ |
+| **Análise de Configuração**                  | Prowler, ScoutSuite, Checkov, CloudSploit              |
+| **Cloud Security Posture Management (CSPM)** | Microsoft Defender for Cloud, Prisma Cloud, Wiz        |
+| **Detecção de Ameaças**                      | GuardDuty, Defender for Cloud, Security Command Center |
+| **Gerenciamento de Segredos**                | Secrets Manager, Key Vault, Secret Manager             |
+| **Infraestrutura como Código**               | Terraform + Checkov + tfsec                            |
+| **Laboratórios Cloud**                       | CloudGoat, Pacu, Stratus Red Team                      |
+
+---
+
+# 9. Boas Práticas de Auditoria
+
+Durante uma avaliação de segurança em ambientes Cloud, recomenda-se verificar:
+
+* Contas administrativas sem MFA.
+* Políticas IAM excessivamente permissivas.
+* Buckets públicos.
+* Máquinas virtuais expostas diretamente à Internet.
+* Security Groups e Firewalls muito permissivos.
+* Chaves e segredos armazenados em código-fonte.
+* Recursos sem monitoramento.
+* Logs desabilitados.
+* Ausência de criptografia.
+* Recursos abandonados ou sem proprietário definido.
+
+---
+
+# 10. Considerações sobre Conformidade
+
+Além dos aspectos técnicos, ambientes Cloud normalmente precisam atender requisitos regulatórios.
+
+Entre os principais frameworks destacam-se:
+
+* LGPD.
+* GDPR.
+* ISO/IEC 27001.
+* SOC 2.
+* PCI DSS.
+* HIPAA (quando aplicável).
+* CIS Benchmarks.
+
+A conformidade deve ser tratada como um processo contínuo e integrada às práticas de segurança da organização.
+
+---
+
+# Conclusão
+
+A segurança em ambientes Cloud vai muito além da proteção da infraestrutura. Ela depende da correta configuração dos serviços, do gerenciamento adequado de identidades, da proteção dos dados e da implementação de monitoramento contínuo.
+
+Profissionais que compreendem o Modelo de Responsabilidade Compartilhada, adotam práticas modernas de gestão de identidade, automatizam verificações de segurança e aplicam princípios como **Least Privilege**, **Defense in Depth** e **Zero Trust** estão mais preparados para proteger ambientes distribuídos e altamente escaláveis.
+
+Nos próximos módulos da série HACK avançaremos para temas como **Threat Modeling**, **Incident Response**, **Reverse Engineering** e outras áreas fundamentais da segurança ofensiva e defensiva moderna.

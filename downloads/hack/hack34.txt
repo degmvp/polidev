@@ -1,0 +1,123 @@
+# HACK34 — Reverse Engineering com Ghidra e IDA Free
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar conceitos e ferramentas de Reverse Engineering aplicados à análise de binários, malware e vulnerabilidades de software.
+
+Todo o conteúdo deve ser utilizado apenas em ambientes autorizados, laboratórios controlados, análise de malware com permissão ou durante avaliações de segurança formalmente aprovadas. O uso de técnicas de reverse engineering para fins maliciosos pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+**Reverse Engineering** (Engenharia Reversa) é o processo de analisar um software ou sistema para entender como ele funciona internamente, sem ter acesso ao código-fonte original.
+
+Na área de segurança da informação, o Reverse Engineering é amplamente utilizado para:
+
+- Análise de malware
+- Identificação de vulnerabilidades em binários
+- Compreensão de mecanismos de proteção de software
+- Pesquisa de exploits
+- Análise forense
+
+Ferramentas como **Ghidra** e **IDA Free** são duas das mais utilizadas por profissionais de segurança para realizar essa análise de forma estática e dinâmica.
+
+---
+
+# 2. Por que aprender Reverse Engineering?
+
+Com o aumento de malware sofisticado, técnicas de ofuscação e binários compilados, a capacidade de analisar código em baixo nível tornou-se uma habilidade valiosa para profissionais de segurança ofensiva e defensiva.
+
+Além disso, o Reverse Engineering ajuda a:
+
+- Entender como atacantes exploram vulnerabilidades
+- Desenvolver melhores mecanismos de detecção
+- Realizar análises de malware de forma mais profunda
+- Auditar a segurança de aplicações fechadas
+
+---
+
+# 3. Principais Ferramentas de Reverse Engineering
+
+| Ferramenta       | Tipo          | Licença              | Destaques                                      | Recomendada para          |
+|------------------|---------------|----------------------|------------------------------------------------|---------------------------|
+| **Ghidra**       | Descompilador | Open Source (NSA)    | Descompilação de alta qualidade, gratuita    | Análise de malware        |
+| **IDA Free**     | Descompilador | Gratuita (limitada)  | Interface poderosa, plugins                    | Análise estática          |
+| **Binary Ninja** | Descompilador | Paga                 | Excelente descompilador                        | Profissionais             |
+| **x64dbg**       | Debugger      | Open Source          | Depuração dinâmica no Windows                  | Análise dinâmica          |
+| **GDB**          | Debugger      | Open Source          | Depuração em Linux                             | Análise em Linux          |
+| **Radare2**      | Framework     | Open Source          | Leve e poderoso                                | Automação e scripts       |
+
+---
+
+# 4. Ghidra vs IDA Free
+
+| Critério                    | Ghidra                              | IDA Free                              |
+|----------------------------|-------------------------------------|---------------------------------------|
+| Preço                      | Gratuito                            | Gratuito (versão limitada)            |
+| Descompilador              | Excelente                           | Muito bom                             |
+| Suporte a arquiteturas     | Excelente                           | Excelente                             |
+| Plugins e extensibilidade  | Muito bom                           | Excelente                             |
+| Curva de aprendizado       | Média                               | Mais íngreme                          |
+| Recomendado para iniciantes| Sim                                 | Médio                                 |
+
+Atualmente, muitos profissionais utilizam **Ghidra** como ferramenta principal por ser gratuita e ter um descompilador muito poderoso.
+
+---
+
+# 5. Conceitos Fundamentais
+
+Antes de iniciar a análise, é importante entender alguns conceitos básicos:
+
+- **Assembly**: Linguagem de baixo nível que o processador executa
+- **Descompilação**: Processo de transformar Assembly em código de alto nível (C-like)
+- **Funções e Fluxo de Controle**: Identificar como o programa toma decisões
+- **Strings e Constantes**: Informações que podem revelar funcionalidades
+- **Importações e Exportações**: Bibliotecas e funções utilizadas pelo binário
+- **Ofuscação**: Técnicas usadas para dificultar a análise
+
+---
+
+# 6. Fluxo Básico de Análise com Ghidra
+
+1. Carregar o binário no Ghidra
+2. Analisar automaticamente (Auto Analyze)
+3. Explorar a visualização de Assembly e Descompilado
+4. Renomear funções e variáveis para facilitar o entendimento
+5. Identificar pontos de entrada e fluxos principais
+6. Procurar por strings suspeitas ou comportamentos maliciosos
+7. Documentar achados
+
+---
+
+# 7. Boas Práticas de Análise
+
+- Sempre trabalhe em um ambiente isolado (máquina virtual ou sandbox)
+- Comece pela análise estática antes de executar o binário
+- Documente tudo o que encontrar
+- Use renomeação de funções para melhorar a legibilidade
+- Compare comportamentos entre versões diferentes do mesmo binário
+- Combine análise estática com análise dinâmica quando necessário
+
+---
+
+# 8. Considerações Éticas e Legais
+
+O Reverse Engineering deve ser realizado apenas quando:
+
+- Você tem autorização do proprietário do software
+- Está analisando malware em ambientes controlados
+- Realiza pesquisa de segurança com responsabilidade
+- Segue as leis de direitos autorais e termos de uso do software
+
+No Brasil e na maioria dos países, engenharia reversa para fins de interoperabilidade ou pesquisa de segurança possui algumas proteções legais, mas sempre deve ser feita com responsabilidade.
+
+---
+
+# Conclusão
+
+O **Reverse Engineering** é uma habilidade poderosa e cada vez mais necessária na área de cibersegurança. Ferramentas como Ghidra democratizaram o acesso a essa capacidade, permitindo que mais profissionais possam analisar binários de forma profunda.
+
+Dominar técnicas de engenharia reversa ajuda tanto na análise de malware quanto na identificação de vulnerabilidades em aplicações compiladas.
+
+Nos próximos módulos da série HACK exploraremos temas como **Incident Response**, **Forense Digital** e **Threat Modeling**.

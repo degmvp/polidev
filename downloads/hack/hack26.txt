@@ -1,0 +1,177 @@
+# HACK26 — Análise de Malware com Sandbox e Ferramentas Estáticas
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Todo o conteúdo foi desenvolvido para profissionais de segurança, analistas de SOC, pesquisadores e estudantes que desejam compreender o funcionamento de malwares para fortalecer capacidades de detecção, resposta e investigação.
+
+Toda análise deve ser realizada exclusivamente em laboratórios isolados, máquinas virtuais, sandboxes ou ambientes previamente autorizados. O uso inadequado dessas técnicas pode configurar atividade ilícita.
+
+---
+
+# 1. Introdução
+
+A análise de malware é uma das competências mais importantes dentro da cibersegurança. Seu objetivo é compreender como um software malicioso funciona, identificar indicadores de comprometimento (IOCs), entender as técnicas utilizadas pelo atacante e produzir informações que auxiliem na prevenção e resposta a incidentes.
+
+Existem duas abordagens principais:
+
+* **Análise Estática** — Examina o arquivo sem executá-lo.
+* **Análise Dinâmica** — Observa seu comportamento durante a execução em ambiente controlado.
+
+Na prática, ambas são complementares e fazem parte do fluxo profissional de análise.
+
+---
+
+# 2. Análise Estática
+
+Na análise estática buscamos extrair o máximo de informações sem executar a amostra.
+
+Os principais elementos analisados incluem:
+
+* Tipo de arquivo.
+* Arquitetura.
+* Strings legíveis.
+* Funções importadas e exportadas.
+* Estrutura PE ou ELF.
+* Packers e técnicas de ofuscação.
+* Indicadores conhecidos de malware.
+
+## Ferramentas recomendadas
+
+| Ferramenta           | Plataforma      | Finalidade                              | Nível         |
+| -------------------- | --------------- | --------------------------------------- | ------------- |
+| Detect It Easy (DIE) | Windows / Linux | Identificar packers e protetores        | Iniciante     |
+| PEStudio             | Windows         | Inspeção detalhada de executáveis       | Intermediário |
+| CFF Explorer         | Windows         | Estrutura de arquivos PE                | Intermediário |
+| file + strings       | Linux           | Identificação e extração de informações | Básico        |
+| Ghidra               | Windows / Linux | Engenharia reversa e descompilação      | Avançado      |
+| VirusTotal           | Web             | Consulta em múltiplos mecanismos        | Todos         |
+| Hybrid Analysis      | Web             | Análise estática e dinâmica             | Todos         |
+
+---
+
+# 3. Análise Dinâmica com Sandboxes
+
+Sandboxes são ambientes isolados destinados à execução segura de amostras suspeitas.
+
+Durante a execução podem ser observados:
+
+* Criação e modificação de arquivos.
+* Alterações no Registro do Windows.
+* Comunicação com servidores C2.
+* Criação de processos.
+* Injeção de código.
+* Tentativas de evasão de análise.
+* Persistência.
+* Atividades de rede.
+
+## Sandboxes recomendadas
+
+| Sandbox         | Tipo        | Destaque                           | Indicação           |
+| --------------- | ----------- | ---------------------------------- | ------------------- |
+| Hybrid Analysis | Online      | Integração com MITRE ATT&CK        | Análises rápidas    |
+| Any.Run         | Online      | Interface interativa               | Investigação visual |
+| Joe Sandbox     | Online      | Relatórios detalhados              | Análises profundas  |
+| CAPE Sandbox    | Self-hosted | Open Source altamente configurável | Uso profissional    |
+| Cuckoo Sandbox  | Self-hosted | Plataforma clássica de análise     | Laboratórios        |
+
+---
+
+# 4. Fluxo Profissional de Análise
+
+Uma metodologia amplamente utilizada segue as seguintes etapas:
+
+1. Calcular hashes da amostra.
+2. Consultar reputação em serviços especializados.
+3. Executar análise estática inicial.
+4. Observar o comportamento em sandbox.
+5. Realizar engenharia reversa quando necessário.
+6. Extrair indicadores de comprometimento (IOCs).
+7. Mapear técnicas no MITRE ATT&CK.
+8. Documentar os resultados.
+
+---
+
+# 5. Comandos Úteis para Análise Estática (Linux)
+
+Verificar o tipo do arquivo:
+
+```bash id="s4q1nh"
+file amostra_suspeita.exe
+```
+
+Extrair strings legíveis:
+
+```bash id="eix8zm"
+strings -n 8 amostra_suspeita.exe | head -100
+```
+
+Calcular hash SHA-256:
+
+```bash id="fhto28"
+sha256sum amostra_suspeita.exe
+```
+
+Visualizar seções do executável:
+
+```bash id="qjd30x"
+readelf -S amostra_suspeita.exe
+```
+
+---
+
+# 6. O que observar durante a análise
+
+Durante uma investigação, os seguintes comportamentos merecem atenção especial:
+
+* Persistência por serviços, tarefas agendadas ou Registro.
+* Comunicação com servidores de Comando e Controle (C2).
+* Técnicas de evasão contra sandbox e máquinas virtuais.
+* Tentativas de acesso a credenciais.
+* Execução de comandos administrativos.
+* Uso de LOLBins (Living Off the Land Binaries).
+* Exfiltração de dados.
+* Criptografia ou destruição de arquivos.
+* Movimentação lateral.
+
+---
+
+# 7. Boas Práticas
+
+* Nunca execute malware diretamente na máquina de trabalho.
+* Utilize máquinas virtuais com snapshots limpos.
+* Comece sempre pela análise estática.
+* Preserve a cadeia de evidências.
+* Documente hashes, IOCs e comportamentos observados.
+* Relacione as técnicas ao framework MITRE ATT&CK.
+* Sempre que possível, produza regras de detecção (YARA, Sigma, Snort ou Suricata).
+* Utilize múltiplas fontes de análise para validar resultados.
+* Mantenha ferramentas e sandboxes constantemente atualizadas.
+
+---
+
+# 8. Indicadores de Comprometimento (IOCs)
+
+Os principais IOCs extraídos durante uma análise incluem:
+
+* Hashes (MD5, SHA1 e SHA256).
+* Endereços IP.
+* Domínios.
+* URLs.
+* Chaves de Registro.
+* Arquivos criados.
+* Processos iniciados.
+* Mutexes.
+* Serviços.
+* Artefatos de persistência.
+
+Esses indicadores são fundamentais para fortalecer mecanismos de detecção e resposta em ambientes corporativos.
+
+---
+
+# Conclusão
+
+A análise de malware exige método, disciplina e conhecimento técnico. Nenhuma ferramenta substitui a capacidade do analista em correlacionar informações obtidas durante as análises estática e dinâmica.
+
+Dominar esse processo permite compreender o funcionamento das ameaças, produzir indicadores de comprometimento de alta qualidade e desenvolver mecanismos de defesa mais eficazes para proteger organizações contra ataques modernos.
+
+Nos próximos módulos da série HACK aprofundaremos técnicas de engenharia reversa, análise comportamental e investigação de ameaças avançadas utilizadas no cenário atual da cibersegurança.

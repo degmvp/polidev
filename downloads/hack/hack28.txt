@@ -1,0 +1,154 @@
+# HACK28 — Buffer Overflow e Exploração de Memória
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. O objetivo é apresentar os conceitos fundamentais de segurança de memória para que desenvolvedores possam produzir software mais seguro e profissionais de segurança consigam identificar, compreender e mitigar vulnerabilidades.
+
+Todo o conteúdo deve ser estudado **apenas em ambientes controlados**, como máquinas virtuais isoladas, laboratórios próprios, CTFs ou aplicações intencionalmente vulneráveis.
+
+**Nunca** utilize essas técnicas contra sistemas sem autorização explícita. O uso indevido pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+**Buffer Overflow** é uma das vulnerabilidades mais clássicas e importantes da história da segurança da informação. Ela ocorre quando um programa grava mais dados em um buffer (área de memória) do que ele foi projetado para armazenar, sobrescrevendo regiões adjacentes da memória.
+
+Embora seja conhecida há décadas, variantes modernas dessa vulnerabilidade ainda aparecem em aplicações legadas, firmware, drivers e softwares desenvolvidos em linguagens de baixo nível, como **C** e **C++**.
+
+Compreender Buffer Overflow é fundamental para:
+
+* Desenvolvimento seguro.
+* Auditoria de aplicações.
+* Pesquisa de vulnerabilidades.
+* Ambientes CTF e Red Team autorizados.
+* Entendimento das proteções modernas dos sistemas operacionais.
+
+---
+
+# 2. Conceitos Básicos de Memória
+
+Antes de estudar Buffer Overflow, é importante compreender alguns conceitos fundamentais.
+
+| Conceito         | Descrição                                                                       | Relevância                                |
+| ---------------- | ------------------------------------------------------------------------------- | ----------------------------------------- |
+| **Stack**        | Área utilizada para chamadas de função, variáveis locais e endereços de retorno | Principal alvo dos ataques clássicos      |
+| **Heap**         | Memória alocada dinamicamente                                                   | Alvo de ataques mais avançados            |
+| **Buffer**       | Espaço reservado para armazenamento de dados                                    | Local onde ocorre o overflow              |
+| **EIP / RIP**    | Registrador que indica a próxima instrução a ser executada                      | Pode ser alterado em cenários vulneráveis |
+| **Stack Canary** | Valor inserido para detectar corrupção da pilha                                 | Proteção moderna                          |
+| **ASLR**         | Randomização do layout de memória                                               | Dificulta a exploração                    |
+| **DEP / NX**     | Impede execução de código em regiões não executáveis                            | Proteção importante                       |
+
+---
+
+# 3. Principais Tipos de Buffer Overflow
+
+| Tipo                 | Local                       | Dificuldade | Exemplo                                |
+| -------------------- | --------------------------- | ----------- | -------------------------------------- |
+| **Stack-based**      | Stack                       | Média       | Variáveis locais e endereço de retorno |
+| **Heap-based**       | Heap                        | Alta        | Estruturas alocadas dinamicamente      |
+| **Integer Overflow** | Operações aritméticas       | Média       | Cálculo incorreto do tamanho do buffer |
+| **Format String**    | Funções da família `printf` | Média       | Uso inadequado de `%s`, `%x` e `%n`    |
+| **Off-by-One**       | Limites do buffer           | Baixa/Média | Escrita de um byte além do limite      |
+
+O tipo mais estudado em cursos introdutórios é o **Stack-based Buffer Overflow**.
+
+---
+
+# 4. Exemplo Clássico de Vulnerabilidade
+
+Considere o código abaixo, criado apenas para fins didáticos:
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+void vulnerable_function(char *input) {
+    char buffer[64];
+    strcpy(buffer, input);
+    printf("Buffer: %s\n", buffer);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc > 1) {
+        vulnerable_function(argv[1]);
+    }
+    return 0;
+}
+```
+
+Nesse exemplo, `strcpy()` copia os dados sem verificar se o conteúdo cabe no buffer de destino.
+
+Caso a entrada ultrapasse o tamanho disponível, ocorrerá um **Buffer Overflow**, comprometendo a integridade da memória.
+
+---
+
+# 5. Etapas de Análise em Laboratório
+
+Durante estudos realizados em ambientes controlados, uma análise normalmente envolve:
+
+1. Identificação da vulnerabilidade.
+2. Determinação do ponto de sobrescrita (offset).
+3. Análise do fluxo de execução.
+4. Estudo das proteções presentes no binário.
+5. Avaliação das técnicas modernas de mitigação.
+
+Ferramentas frequentemente utilizadas em laboratório:
+
+* GDB + pwndbg ou GEF.
+* Radare2.
+* Cutter.
+* Ghidra.
+* Python + pwntools.
+* Metasploit (em cenários específicos).
+
+---
+
+# 6. Proteções Modernas
+
+| Proteção           | Nome                               | Objetivo                             | Situação Atual              |
+| ------------------ | ---------------------------------- | ------------------------------------ | --------------------------- |
+| **Stack Canaries** | Stack Smashing Protector           | Detectar corrupção da pilha          | Amplamente utilizada        |
+| **ASLR**           | Address Space Layout Randomization | Randomizar endereços de memória      | Habilitada por padrão       |
+| **DEP / NX**       | Data Execution Prevention          | Impedir execução em regiões de dados | Amplamente utilizada        |
+| **PIE**            | Position Independent Executable    | Randomizar a base do executável      | Padrão em sistemas modernos |
+| **RELRO**          | Relocation Read-Only               | Proteger a Global Offset Table       | Muito comum                 |
+
+Atualmente, explorar um Buffer Overflow em aplicações modernas tornou-se significativamente mais complexo devido à combinação dessas proteções, exigindo profundo conhecimento da arquitetura do sistema e das técnicas de mitigação.
+
+---
+
+# 7. Boas Práticas de Desenvolvimento Seguro
+
+* Evite funções inseguras como `gets()`, `strcpy()`, `strcat()` e `sprintf()`.
+* Prefira alternativas mais seguras como `snprintf()`, `strncpy()` e funções equivalentes.
+* Valide sempre o tamanho dos dados recebidos.
+* Ative proteções de compilação (`-fstack-protector-strong`, `-D_FORTIFY_SOURCE=2`, `-pie`, entre outras).
+* Utilize ferramentas de análise estática, como SonarQube, Coverity e CodeQL.
+* Realize testes de fuzzing com ferramentas como AFL++, libFuzzer e Honggfuzz.
+* Sempre que possível, considere linguagens com maior segurança de memória, como **Rust**.
+
+---
+
+# 8. O que observar durante uma auditoria
+
+Durante uma avaliação de segurança, verifique principalmente:
+
+* Uso de funções inseguras para manipulação de memória.
+* Ausência de validação da entrada de dados.
+* Binários compilados sem proteções modernas.
+* Softwares legados sem manutenção.
+* Possíveis vazamentos de endereços de memória.
+* Ausência de Stack Canaries, ASLR, DEP ou PIE.
+* Manipulação inadequada de buffers provenientes da rede ou de arquivos.
+
+---
+
+# Conclusão
+
+Buffer Overflow permanece como um dos temas fundamentais da segurança de aplicações. Embora as proteções modernas tenham elevado significativamente o nível de dificuldade para exploração dessas vulnerabilidades, compreender seu funcionamento continua sendo essencial para desenvolvedores, analistas de segurança e pesquisadores.
+
+O conhecimento dos mecanismos de proteção, aliado à adoção de práticas de desenvolvimento seguro, permite reduzir significativamente a superfície de ataque e produzir aplicações mais resilientes.
+
+Nos próximos módulos da série HACK avançaremos para tópicos como **Return Oriented Programming (ROP)**, **Heap Exploitation** e outras técnicas modernas relacionadas à segurança de memória.

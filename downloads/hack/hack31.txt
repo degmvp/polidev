@@ -1,0 +1,152 @@
+# HACK31 — Introdução ao Penetration Testing (Metodologia e Relatórios)
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar os conceitos fundamentais, metodologias e boas práticas utilizadas em Penetration Testing (Pentest).
+
+Todo o conteúdo deve ser aplicado apenas em ambientes autorizados, laboratórios controlados ou durante avaliações formalmente aprovadas pelo proprietário dos sistemas. A realização de testes de intrusão sem autorização pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+**Penetration Testing (Pentest)** é um processo controlado de simulação de ataques contra sistemas, redes, aplicações ou infraestruturas com o objetivo de identificar vulnerabilidades antes que possam ser exploradas por agentes maliciosos.
+
+Diferentemente de uma simples varredura de vulnerabilidades, um Pentest procura validar o impacto real das falhas identificadas, sempre respeitando o escopo previamente definido e as regras estabelecidas entre cliente e equipe de segurança.
+
+O objetivo principal não é "invadir" sistemas, mas avaliar o nível real de exposição ao risco e fornecer recomendações técnicas que permitam fortalecer a postura de segurança da organização.
+
+---
+
+# 2. Tipos de Penetration Testing
+
+| Tipo            | Conhecimento Inicial | Realismo   | Aplicação                         |
+| --------------- | -------------------- | ---------- | --------------------------------- |
+| **Black Box**   | Nenhum               | Alto       | Simulação de atacante externo     |
+| **White Box**   | Completo             | Médio      | Auditorias técnicas aprofundadas  |
+| **Gray Box**    | Parcial              | Alto       | Cenário mais comum em empresas    |
+| **Red Team**    | Mínimo               | Muito Alto | Simulações avançadas de ataques   |
+| **Purple Team** | Compartilhado        | Variável   | Colaboração entre ataque e defesa |
+
+Cada modalidade atende a objetivos diferentes e deve ser escolhida conforme o escopo da avaliação.
+
+---
+
+# 3. Principais Metodologias
+
+Diversas metodologias auxiliam na padronização dos testes.
+
+| Metodologia             | Foco                           | Aplicação                        |
+| ----------------------- | ------------------------------ | -------------------------------- |
+| **PTES**                | Processo completo de Pentest   | Avaliações gerais                |
+| **OSSTMM**              | Segurança operacional          | Auditorias formais               |
+| **NIST SP 800-115**     | Guias técnicos                 | Órgãos governamentais e empresas |
+| **OWASP Testing Guide** | Aplicações Web                 | Pentests Web                     |
+| **MITRE ATT&CK**        | Técnicas e táticas adversárias | Red Team e Threat Hunting        |
+
+Na prática, profissionais experientes costumam combinar mais de uma metodologia durante o mesmo projeto.
+
+---
+
+# 4. Fases de um Penetration Test
+
+Um Pentest profissional normalmente segue um fluxo estruturado.
+
+| Fase                      | Objetivo                                        | Entregável                    |
+| ------------------------- | ----------------------------------------------- | ----------------------------- |
+| **Reconhecimento**        | Identificar ativos e coletar informações        | Inventário inicial            |
+| **Varredura**             | Descobrir serviços e possíveis vulnerabilidades | Lista de serviços             |
+| **Validação**             | Confirmar vulnerabilidades identificadas        | Evidências                    |
+| **Exploração Controlada** | Avaliar impacto dentro do escopo autorizado     | Demonstração controlada       |
+| **Pós-Análise**           | Avaliar riscos e possíveis impactos             | Evidências adicionais         |
+| **Relatório Final**       | Consolidar resultados e recomendações           | Documento executivo e técnico |
+
+Cada etapa deve ser cuidadosamente documentada para garantir rastreabilidade e repetibilidade.
+
+---
+
+# 5. A Importância do Relatório
+
+O relatório é o principal produto entregue ao cliente.
+
+Uma vulnerabilidade encontrada perde grande parte de seu valor se não for comunicada de forma clara e objetiva.
+
+Um bom relatório deve:
+
+* Ser compreensível para gestores e técnicos.
+* Demonstrar evidências suficientes.
+* Priorizar riscos.
+* Explicar impactos.
+* Apresentar recomendações viáveis.
+* Servir como base para futuras auditorias.
+
+---
+
+# 6. Estrutura Recomendada
+
+Um relatório profissional normalmente contém:
+
+1. Sumário Executivo.
+2. Escopo da avaliação.
+3. Metodologia utilizada.
+4. Resumo dos achados.
+5. Descrição técnica das vulnerabilidades.
+6. Evidências.
+7. Classificação de risco (CVSS e impacto no negócio).
+8. Recomendações de correção.
+9. Conclusão.
+10. Anexos e referências.
+
+Essa estrutura facilita tanto a tomada de decisão pela gestão quanto o trabalho das equipes técnicas responsáveis pelas correções.
+
+---
+
+# 7. Ferramentas Utilizadas
+
+| Categoria          | Ferramentas                            | Finalidade                              |
+| ------------------ | -------------------------------------- | --------------------------------------- |
+| **Reconhecimento** | theHarvester, Maltego, Recon-ng, Amass | Coleta de informações                   |
+| **Varredura**      | Nmap, Masscan, RustScan                | Descoberta de ativos                    |
+| **Validação**      | Nuclei, Nessus, OpenVAS                | Verificação de vulnerabilidades         |
+| **Aplicações Web** | Burp Suite, OWASP ZAP                  | Testes em aplicações                    |
+| **Pesquisa**       | Searchsploit, Exploit Database         | Consulta de vulnerabilidades conhecidas |
+| **Documentação**   | Dradis, Faraday, Serpico               | Organização das evidências              |
+
+As ferramentas representam apenas apoio ao trabalho do profissional. A qualidade da análise depende principalmente da metodologia adotada e da experiência da equipe.
+
+---
+
+# 8. Boas Práticas e Ética Profissional
+
+* Obtenha autorização formal antes do início dos testes.
+* Defina claramente o escopo da avaliação.
+* Minimize impactos sobre o ambiente avaliado.
+* Documente todas as atividades executadas.
+* Preserve a confidencialidade das informações.
+* Entregue recomendações objetivas e priorizadas.
+* Apoie a equipe durante o processo de correção.
+* Atue sempre em conformidade com princípios éticos e legais.
+
+---
+
+# 9. O que observar durante uma auditoria
+
+Durante a revisão de um Pentest, verifique principalmente:
+
+* Ausência de metodologia estruturada.
+* Escopo mal definido.
+* Relatórios sem evidências.
+* Classificação de risco inconsistente.
+* Recomendações genéricas.
+* Falta de priorização das vulnerabilidades.
+* Comunicação insuficiente entre equipes ofensivas e defensivas.
+
+---
+
+# Conclusão
+
+Penetration Testing é muito mais do que a execução de ferramentas automatizadas. Trata-se de um processo estruturado que combina metodologia, conhecimento técnico, análise crítica e comunicação eficiente.
+
+O verdadeiro valor de um Pentest está na capacidade de identificar riscos reais, demonstrar seus impactos de forma responsável e fornecer recomendações que auxiliem a organização a fortalecer sua postura de segurança.
+
+Nos próximos módulos da série HACK aprofundaremos temas como **Reconhecimento Avançado**, **Pós-Exploração**, **Red Team Operations** e metodologias modernas utilizadas por equipes de segurança ofensiva.

@@ -1,0 +1,160 @@
+# HACK29 — SQL Injection: Detecção, Exploração e Prevenção
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é demonstrar como identificar vulnerabilidades de SQL Injection, compreender seus impactos e aplicar medidas eficazes de prevenção.
+
+Todo o conteúdo deve ser utilizado apenas em laboratórios, ambientes controlados ou sistemas para os quais exista autorização formal de teste. O uso dessas técnicas contra sistemas de terceiros sem permissão pode configurar atividade criminosa.
+
+---
+
+# 1. Introdução
+
+**SQL Injection (SQLi)** é uma das vulnerabilidades mais conhecidas e perigosas em aplicações web. Ela ocorre quando entradas fornecidas pelo usuário são incorporadas diretamente em consultas SQL sem validação ou parametrização adequada.
+
+Quando explorada em um ambiente vulnerável, uma SQL Injection pode permitir:
+
+* Leitura de dados sensíveis.
+* Alteração ou exclusão de registros.
+* Contorno de mecanismos de autenticação.
+* Comprometimento da integridade do banco de dados.
+* Em alguns cenários específicos, execução indireta de comandos no sistema operacional.
+
+Mesmo em 2026, SQL Injection continua presente principalmente em aplicações legadas, APIs mal implementadas e sistemas que não seguem práticas modernas de desenvolvimento seguro.
+
+---
+
+# 2. Principais Tipos de SQL Injection
+
+| Tipo                    | Descrição                                       | Dificuldade | Impacto                            |
+| ----------------------- | ----------------------------------------------- | ----------- | ---------------------------------- |
+| **In-band (Clássica)**  | O resultado da consulta é retornado diretamente | Baixa       | Vazamento de dados                 |
+| **Blind Boolean-based** | Baseia-se em respostas verdadeiras ou falsas    | Média       | Extração gradual de informações    |
+| **Blind Time-based**    | Utiliza diferenças no tempo de resposta         | Média       | Extração sem retorno visual        |
+| **Out-of-band**         | Utiliza canais alternativos como DNS ou HTTP    | Alta        | Exfiltração em ambientes restritos |
+| **Second Order**        | A carga é armazenada e executada posteriormente | Média/Alta  | Difícil de identificar             |
+
+---
+
+# 3. Como Detectar SQL Injection
+
+Durante uma avaliação de segurança autorizada, alguns sinais podem indicar a existência da vulnerabilidade:
+
+* Mensagens de erro do banco de dados.
+* Alterações inesperadas no comportamento da aplicação.
+* Diferenças de resposta entre condições verdadeiras e falsas.
+* Respostas com atraso provocado por funções específicas do banco.
+* Exposição de informações sobre tabelas ou estrutura do banco de dados.
+
+Exemplos de entradas utilizadas em laboratórios para validar a presença da vulnerabilidade:
+
+```sql id="t5x7mn"
+' OR '1'='1
+' OR 1=1 --
+admin' --
+' UNION SELECT NULL, username, password FROM users --
+```
+
+Esses exemplos devem ser utilizados exclusivamente em aplicações de treinamento ou durante auditorias previamente autorizadas.
+
+---
+
+# 4. Exemplo Conceitual de Código Vulnerável
+
+Considere o seguinte exemplo em PHP:
+
+```php id="g4pbx2"
+$query = "SELECT * FROM users WHERE username = '" . $_GET['user'] . "'";
+```
+
+Nesse caso, a entrada fornecida pelo usuário é concatenada diretamente na consulta SQL, permitindo que dados maliciosos alterem sua lógica.
+
+Esse padrão deve ser evitado em qualquer aplicação moderna.
+
+---
+
+# 5. Ferramentas Utilizadas em Auditorias
+
+| Ferramenta        | Categoria                | Utilização                                 | Nível        |
+| ----------------- | ------------------------ | ------------------------------------------ | ------------ |
+| **sqlmap**        | Automação                | Identificação e validação de SQL Injection | Essencial    |
+| **Burp Suite**    | Proxy de testes          | Auditorias manuais e interceptação         | Essencial    |
+| **OWASP ZAP**     | Proxy e Scanner          | Testes automatizados e manuais             | Recomendado  |
+| **NoSQLMap**      | Automação                | Avaliação de bancos NoSQL                  | Específico   |
+| **Arjun**         | Descoberta de parâmetros | APIs e aplicações web                      | Complementar |
+| **SQLMap Tamper** | Evasão                   | Estudos sobre filtros e WAFs               | Avançado     |
+| **BBQSQL**        | Blind SQL Injection      | Estudos avançados                          | Avançado     |
+
+Exemplo de utilização do sqlmap em ambiente de laboratório:
+
+```bash id="b8yr9f"
+sqlmap -u "http://localhost/vulnerable.php?id=1" --dbs
+```
+
+---
+
+# 6. Como Prevenir SQL Injection
+
+A prevenção continua sendo a medida mais eficaz contra SQL Injection.
+
+| Técnica                   | Proteção   | Recomendação                |
+| ------------------------- | ---------- | --------------------------- |
+| Prepared Statements       | Muito Alta | Obrigatória                 |
+| Consultas Parametrizadas  | Muito Alta | Obrigatória                 |
+| ORMs modernos             | Alta       | Fortemente recomendados     |
+| Validação de entrada      | Média      | Camada complementar         |
+| Menor privilégio no banco | Alta       | Essencial                   |
+| WAF                       | Média      | Camada adicional            |
+| Escapamento de caracteres | Baixa      | Nunca utilizar isoladamente |
+
+Exemplo seguro utilizando **PHP + PDO**:
+
+```php id="rk7vfd"
+$stmt = $pdo->prepare(
+    "SELECT * FROM users WHERE username = :username"
+);
+
+$stmt->execute([
+    'username' => $username
+]);
+```
+
+A utilização de **Prepared Statements** elimina a possibilidade de alteração da estrutura da consulta por meio da entrada do usuário.
+
+---
+
+# 7. Boas Práticas
+
+* Nunca concatene parâmetros diretamente em consultas SQL.
+* Utilize sempre Prepared Statements ou consultas parametrizadas.
+* Prefira ORMs consolidados quando apropriado.
+* Aplique o princípio do menor privilégio às contas utilizadas pela aplicação.
+* Mantenha banco de dados, drivers e frameworks atualizados.
+* Implemente uma camada adicional de proteção com WAF.
+* Execute regularmente testes SAST e DAST.
+* Monitore logs em busca de tentativas de exploração.
+* Nunca exponha mensagens detalhadas de erro em ambientes de produção.
+
+---
+
+# 8. O que observar durante uma auditoria
+
+Durante uma revisão de segurança, procure identificar:
+
+* Consultas construídas por concatenação de strings.
+* Ausência de consultas parametrizadas.
+* Uso inadequado de ORMs.
+* Contas de banco com privilégios excessivos.
+* Mensagens detalhadas de erro retornadas ao usuário.
+* Falta de validação em parâmetros de URL, formulários e APIs.
+* Aplicações legadas sem manutenção.
+
+---
+
+# Conclusão
+
+SQL Injection permanece como uma das vulnerabilidades mais relevantes da segurança de aplicações, apesar de existirem mecanismos maduros e amplamente disponíveis para sua prevenção.
+
+O conhecimento das técnicas de detecção auxilia profissionais de segurança a identificar aplicações vulneráveis durante auditorias autorizadas. Entretanto, o principal objetivo deve ser sempre a implementação de práticas de desenvolvimento seguro, reduzindo a superfície de ataque e protegendo os dados da organização.
+
+Ao combinar consultas parametrizadas, validação adequada de entrada, princípio do menor privilégio e monitoramento contínuo, é possível eliminar praticamente todos os vetores clássicos de SQL Injection em aplicações modernas.
