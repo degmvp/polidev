@@ -1,0 +1,105 @@
+# HACK62 — Cheatsheets para Analistas de Segurança
+
+## Resumo
+
+**Cheatsheets** (ou folhas de cola) são materiais de referência rápida que reúnem comandos, técnicas, checklists e boas práticas de forma organizada e de fácil consulta. Para analistas de segurança, elas são ferramentas valiosas que ajudam a agilizar o trabalho diário, especialmente durante investigações, testes de segurança e resposta a incidentes. Este artigo discute a importância das cheatsheets, sugere categorias úteis e apresenta recomendações para sua criação e uso.
+
+**Palavras-chave:** Cheatsheet, Folha de cola, Analista de segurança, Comandos de segurança, Referência rápida, Threat Hunting, Pentest.
+
+## 1. Introdução
+
+No dia a dia de um analista de segurança, é comum precisar consultar rapidamente comandos, sintaxes, técnicas ou procedimentos. Memorizar tudo é praticamente impossível, especialmente considerando a variedade de ferramentas, sistemas operacionais e cenários que surgem no trabalho.
+
+As **cheatsheets** surgem como uma solução prática: documentos concisos que permitem acessar informações importantes de forma rápida, sem precisar buscar na internet ou em documentações extensas durante momentos críticos.
+
+## 2. Por que Cheatsheets são Úteis para Analistas de Segurança?
+
+- Aceleram a execução de tarefas repetitivas
+- Reduzem erros durante investigações ou testes
+- Servem como base para padronização de procedimentos
+- Facilitam o onboarding de novos analistas
+- Ajudam em momentos de pressão (ex: durante incidentes)
+- Funcionam como material de estudo e revisão
+
+## 3. Categorias Recomendadas de Cheatsheets
+
+A seguir, algumas categorias de cheatsheets que costumam ser muito úteis para analistas de segurança:
+
+### 3.1 Sistemas Operacionais
+- Comandos Linux para investigação e análise forense
+- Comandos Windows (PowerShell e CMD) para análise de incidentes
+- Comandos úteis para extração de logs e informações do sistema
+
+### 3.2 Análise de Rede
+- Comandos de rede (tcpdump, Wireshark, nmap, netstat, ss)
+- Análise de tráfego e filtros úteis
+- Comandos para investigação de conexões suspeitas
+
+### 3.3 Análise de Malware e Forense
+- Comandos para análise estática e dinâmica básica
+- Ferramentas de extração de strings, hashes e metadados
+- Checklists de análise inicial de artefatos
+
+### 3.4 Pentest e Red Team
+- Comandos e técnicas de reconhecimento
+- Exploração e pós-exploração
+- Comandos úteis em diferentes fases de um teste de intrusão
+
+### 3.5 Threat Hunting e Detecção
+- Queries úteis em SIEM (Elastic, Splunk, Microsoft Sentinel, etc.)
+- Indicadores de comprometimento (IOCs) comuns
+- Técnicas de busca por comportamentos anormais
+
+### 3.6 Resposta a Incidentes
+- Playbooks simplificados (checklists de contenção, erradicação e recuperação)
+- Comandos para isolamento de hosts e coleta de evidências
+- Procedimentos de escalonamento
+
+### 3.7 Cloud Security
+- Comandos e consultas úteis em AWS, Azure e Google Cloud
+- Verificação de configurações de segurança
+- Investigação de incidentes em ambientes de nuvem
+
+## 4. Características de uma Boa Cheatsheet
+
+Uma cheatsheet eficaz geralmente possui as seguintes características:
+
+- **Objetividade**: Informações diretas e sem explicações longas
+- **Organização**: Categorias e seções bem definidas
+- **Atualização**: Mantida atualizada conforme ferramentas e técnicas evoluem
+- **Praticidade**: Foco no que realmente é usado no dia a dia
+- **Formato acessível**: Pode ser um arquivo Markdown, PDF, nota digital ou até mesmo impressa
+
+## 5. Dicas para Criar e Manter Cheatsheets
+
+- Comece criando suas próprias cheatsheets com base no que você mais usa
+- Mantenha uma estrutura consistente (ex: sempre usar o mesmo formato)
+- Revise e atualize periodicamente
+- Compartilhe com a equipe (quando apropriado) para padronizar conhecimentos
+- Use ferramentas como Notion, Obsidian, GitHub ou até mesmo arquivos Markdown simples
+- Evite copiar cheatsheets inteiras sem revisar — o processo de criar as suas ajuda na fixação do conteúdo
+
+## 6. Fontes de Cheatsheets Recomendadas
+
+Existem várias cheatsheets públicas de boa qualidade disponíveis, tais como:
+
+- **GTFOBins** e **LOLBAS** (Living Off The Land Binaries and Scripts)
+- Cheatsheets do **PayloadsAllTheThings**
+- Repositórios no GitHub com cheatsheets de Linux, Windows, Nmap, etc.
+- Documentação oficial de ferramentas (Wireshark, Volatility, etc.)
+- Cheatsheets da comunidade SANS e outras organizações
+
+## 7. Considerações Finais
+
+Cheatsheets são ferramentas simples, porém extremamente úteis no cotidiano de analistas de segurança. Elas não substituem o conhecimento profundo, mas servem como um apoio valioso para aumentar a eficiência e reduzir erros durante o trabalho.
+
+Profissionais que desenvolvem o hábito de criar e manter suas próprias cheatsheets geralmente conseguem trabalhar de forma mais rápida e organizada, especialmente em ambientes de alta demanda como SOCs, times de Threat Hunting e equipes de resposta a incidentes.
+
+## Referências e Leituras Recomendadas
+
+- GTFOBins.io
+- LOLBAS Project
+- PayloadsAllTheThings (GitHub)
+- SANS Cheatsheets
+- Documentação oficial de ferramentas de segurança
+

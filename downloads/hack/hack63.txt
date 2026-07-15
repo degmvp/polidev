@@ -1,0 +1,114 @@
+
+# HACK63 — Como Elaborar um Plano Diretor de Segurança da Informação (PDSI)
+
+## Resumo
+
+O **Plano Diretor de Segurança da Informação (PDSI)** é um documento estratégico que define a visão, os objetivos, as diretrizes e as ações necessárias para proteger os ativos de informação de uma organização ao longo do tempo. Este artigo apresenta os conceitos fundamentais, a estrutura recomendada e as etapas para elaborar um PDSI eficaz e alinhado às necessidades do negócio.
+
+**Palavras-chave:** Plano Diretor de Segurança da Informação, PDSI, Governança de segurança, Estratégia de segurança, Segurança da informação.
+
+## 1. Introdução
+
+Muitas organizações implementam controles de segurança de forma reativa e fragmentada, sem uma visão clara de longo prazo. Isso resulta em esforços descoordenados, investimentos mal direcionados e lacunas de proteção significativas.
+
+O **Plano Diretor de Segurança da Informação (PDSI)** surge como uma ferramenta de gestão estratégica que permite alinhar as iniciativas de segurança aos objetivos do negócio, definir prioridades e estabelecer um caminho claro para a maturidade da segurança ao longo dos anos.
+
+## 2. O que é um Plano Diretor de Segurança da Informação?
+
+O PDSI é um documento de alto nível que descreve:
+
+- A visão e os objetivos de segurança da organização
+- O estado atual da segurança (diagnóstico)
+- O estado desejado (meta)
+- As estratégias, iniciativas e projetos necessários para atingir os objetivos
+- Os recursos, prazos e responsabilidades envolvidos
+- Os indicadores de acompanhamento
+
+Diferente de políticas e procedimentos (que são mais operacionais), o PDSI tem caráter **estratégico** e geralmente abrange um horizonte de 3 a 5 anos.
+
+## 3. Importância do PDSI
+
+Um Plano Diretor bem elaborado traz diversos benefícios:
+
+- Alinha a segurança da informação com a estratégia do negócio
+- Facilita a priorização de investimentos e projetos
+- Proporciona uma visão integrada das iniciativas de segurança
+- Serve como base para comunicação com a alta gestão
+- Ajuda a demonstrar maturidade e governança para auditorias e stakeholders
+- Reduz a abordagem reativa e fragmentada de segurança
+
+## 4. Estrutura Recomendada de um PDSI
+
+Embora a estrutura possa variar conforme o tamanho e o setor da organização, um PDSI geralmente contempla as seguintes seções:
+
+### 4.1 Introdução e Contexto
+- Objetivo do documento
+- Escopo
+- Alinhamento com a estratégia corporativa
+- Definições e abreviaturas
+
+### 4.2 Diagnóstico da Situação Atual
+- Avaliação do estado atual de segurança (usando frameworks como ISO 27001, NIST CSF ou CMM)
+- Principais riscos identificados
+- Lacunas e pontos de melhoria
+- Inventário de ativos críticos
+
+### 4.3 Visão e Objetivos Estratégicos
+- Visão de segurança desejada
+- Objetivos de curto, médio e longo prazo
+- Princípios orientadores
+
+### 4.4 Estratégias e Iniciativas
+- Pilares estratégicos (ex: governança, proteção, detecção, resposta, recuperação)
+- Principais projetos e iniciativas
+- Priorização das ações
+
+### 4.5 Roadmap e Cronograma
+- Plano de implementação ao longo dos anos
+- Fases e marcos principais
+- Dependências entre iniciativas
+
+### 4.6 Recursos e Governança
+- Orçamento estimado
+- Estrutura de governança e responsabilidades
+- Papéis e comitês envolvidos
+
+### 4.7 Indicadores e Acompanhamento
+- KPIs e métricas de segurança
+- Processo de revisão e atualização do plano
+- Mecanismos de reporte à alta gestão
+
+## 5. Etapas para Elaborar um PDSI
+
+1. **Obter apoio da alta gestão** — O PDSI precisa de patrocínio executivo para ser efetivo.
+2. **Realizar diagnóstico** — Avaliar o estado atual de segurança (gap analysis).
+3. **Definir visão e objetivos** — Estabelecer onde a organização quer chegar.
+4. **Identificar iniciativas** — Mapear projetos e ações necessárias.
+5. **Priorizar e planejar** — Definir o que será feito primeiro e em qual ordem.
+6. **Elaborar o documento** — Redigir o PDSI de forma clara e objetiva.
+7. **Validar e aprovar** — Obter aprovação formal da alta gestão.
+8. **Comunicar e executar** — Divulgar o plano e iniciar a implementação.
+9. **Acompanhar e revisar** — Monitorar o avanço e atualizar o plano periodicamente.
+
+## 6. Boas Práticas
+
+- Manter o documento claro, objetivo e acessível a diferentes públicos
+- Alinhar o PDSI com frameworks reconhecidos (ISO 27001, NIST CSF, COBIT)
+- Envolver áreas-chave da organização durante a elaboração
+- Evitar planos excessivamente ambiciosos ou genéricos
+- Revisar o PDSI anualmente ou sempre que houver mudanças significativas no negócio ou no cenário de ameaças
+- Usar o PDSI como ferramenta de comunicação, e não apenas como documento burocrático
+
+## 7. Considerações Finais
+
+O Plano Diretor de Segurança da Informação é uma ferramenta estratégica fundamental para organizações que desejam evoluir sua postura de segurança de forma estruturada e alinhada ao negócio. Ele transforma iniciativas isoladas em um programa coerente e de longo prazo.
+
+Elaborar um PDSI exige visão estratégica, conhecimento técnico e capacidade de comunicação com diferentes níveis da organização. Quando bem feito, ele serve como um guia confiável para investimentos, projetos e decisões relacionadas à segurança da informação.
+
+## Referências e Leituras Recomendadas
+
+- ISO/IEC 27001 — Sistemas de Gestão de Segurança da Informação
+- NIST Cybersecurity Framework
+- ABNT NBR ISO/IEC 27002 — Controles de segurança da informação
+- COBIT Framework
+

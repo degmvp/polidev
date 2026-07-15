@@ -1,0 +1,89 @@
+# HACK58 — Inteligência Artificial aplicada à Cibersegurança
+
+## Resumo
+
+A **Inteligência Artificial (IA)** tem transformado diversas áreas da cibersegurança, tanto no lado defensivo quanto no ofensivo. Este artigo apresenta as principais aplicações da IA em segurança da informação, seus benefícios, limitações e os desafios que surgem com o uso crescente dessa tecnologia.
+
+**Palavras-chave:** Inteligência Artificial, Machine Learning, Cibersegurança, Detecção de ameaças, IA defensiva, Adversarial Machine Learning.
+
+## 1. Introdução
+
+Com o volume crescente de dados e a sofisticação das ameaças, as abordagens tradicionais de segurança baseadas apenas em regras e assinaturas tornaram-se insuficientes. A **Inteligência Artificial**, especialmente o **Machine Learning**, passou a ser amplamente adotada para melhorar a detecção de ameaças, automatizar respostas e identificar padrões que seriam difíceis de detectar manualmente.
+
+No entanto, o uso de IA em segurança também traz novos riscos, como ataques adversarial e dependência excessiva de modelos automatizados.
+
+## 2. Aplicações da IA na Cibersegurança Defensiva
+
+### 2.1 Detecção de Ameaças e Anomalias
+Modelos de machine learning são usados para analisar grandes volumes de logs, tráfego de rede e comportamento de usuários, identificando atividades suspeitas que fogem do padrão normal (baseline).
+
+Exemplos:
+- Detecção de anomalias em tráfego de rede
+- Identificação de comportamentos anormais de usuários (UEBA)
+- Detecção de malware baseado em comportamento
+
+### 2.2 Análise de Malware
+Ferramentas baseadas em IA conseguem classificar arquivos como maliciosos ou benignos com alta precisão, analisando características estáticas e dinâmicas de forma automatizada.
+
+### 2.3 Resposta Automatizada (SOAR + IA)
+Sistemas de SOAR integrados com IA podem analisar alertas, correlacionar eventos e executar respostas automáticas, reduzindo o tempo de reação a incidentes.
+
+### 2.4 Threat Intelligence
+A IA é utilizada para processar grandes volumes de dados de fontes abertas, fóruns underground e relatórios de segurança, identificando novas ameaças e tendências de ataque.
+
+### 2.5 Detecção de Phishing e Fraudes
+Modelos de IA analisam e-mails, sites e comportamentos para identificar tentativas de phishing e fraudes com maior precisão que filtros tradicionais.
+
+## 3. Aplicações Ofensivas da IA
+
+A IA também é utilizada por atacantes para:
+
+- Gerar e-mails de phishing mais convincentes e personalizados
+- Automatizar a descoberta de vulnerabilidades
+- Criar malware polimórfico e evasivo
+- Realizar ataques adversarial contra sistemas de IA defensivos
+- Automatizar ataques de força bruta e credential stuffing
+
+Essa dualidade torna o cenário de ameaças mais complexo.
+
+## 4. Desafios e Riscos do Uso de IA em Segurança
+
+### 4.1 Ataques Adversariais
+Atacantes podem manipular dados de entrada para enganar modelos de IA, fazendo com que classifiquem malware como benigno ou ignorem comportamentos maliciosos.
+
+### 4.2 Falsos Positivos e Negativos
+Modelos mal treinados ou com dados ruins podem gerar muitos falsos positivos (desperdiçando tempo da equipe) ou falsos negativos (deixando ameaças passarem).
+
+### 4.3 Falta de Explicabilidade
+Muitos modelos de IA funcionam como “caixa preta”, dificultando a compreensão de por que uma determinada decisão foi tomada. Isso complica investigações e auditorias.
+
+### 4.4 Dependência Excessiva
+Confiar cegamente em sistemas automatizados pode reduzir a capacidade humana de análise crítica e detecção de ameaças sofisticadas.
+
+### 4.5 Viés nos Dados
+Se os dados de treinamento forem enviesados, o modelo pode apresentar desempenho ruim em cenários específicos.
+
+## 5. Boas Práticas para o Uso de IA em Segurança
+
+- Combinar IA com abordagem humana (Human-in-the-Loop)
+- Manter diversidade e qualidade nos dados de treinamento
+- Realizar testes de robustez contra ataques adversarial
+- Garantir explicabilidade dos modelos quando possível
+- Monitorar continuamente o desempenho dos modelos
+- Usar IA como ferramenta de apoio, e não como substituto completo da análise humana
+
+## 6. Considerações Finais
+
+A Inteligência Artificial representa um avanço significativo na capacidade de detectar e responder a ameaças cibernéticas. Quando bem implementada, ela permite que equipes de segurança atuem de forma mais proativa e eficiente.
+
+No entanto, a IA não é uma solução infalível. Ela introduz novos riscos e exige que profissionais de segurança desenvolvam novas competências, tanto técnicas quanto críticas. O futuro da cibersegurança provavelmente será uma combinação entre automação inteligente e expertise humana.
+
+Organizações que conseguem equilibrar o uso de IA com processos sólidos e capacitação de equipes tendem a obter os melhores resultados na proteção contra ameaças modernas.
+
+## Referências e Leituras Recomendadas
+
+- NIST AI Risk Management Framework
+- MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems)
+- ENISA — Artificial Intelligence Cybersecurity Challenges
+- Artigos acadêmicos sobre Adversarial Machine Learning
+

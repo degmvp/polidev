@@ -1,0 +1,96 @@
+# HACK60 — Projeto Integrador de Segurança
+
+## Resumo
+
+Um **Projeto Integrador de Segurança** tem como objetivo aplicar, de forma prática e integrada, os conceitos de segurança da informação em um sistema, aplicação ou ambiente real (ou simulado). Este artigo apresenta a estrutura, as etapas principais e as melhores práticas para planejar e executar um projeto integrador de segurança, especialmente útil em contextos acadêmicos, de capacitação ou de implementação em organizações.
+
+**Palavras-chave:** Projeto integrador, Segurança da informação, Threat Modeling, Desenvolvimento seguro, Testes de segurança, Segurança por design.
+
+## 1. Introdução
+
+Estudar conceitos isolados de segurança da informação é importante, mas a verdadeira compreensão acontece quando esses conceitos são aplicados de forma integrada em um projeto real. Um **Projeto Integrador de Segurança** permite que profissionais e estudantes unam conhecimentos de governança, desenvolvimento seguro, testes, resposta a incidentes e operação em um único esforço prático.
+
+Esse tipo de projeto é especialmente valioso para demonstrar competências e preparar profissionais para os desafios reais do mercado.
+
+## 2. Objetivos de um Projeto Integrador de Segurança
+
+Os principais objetivos de um projeto integrador costumam incluir:
+
+- Aplicar o conceito de **Security by Design** desde o início do projeto
+- Realizar **Threat Modeling** de forma estruturada
+- Implementar controles de segurança durante o desenvolvimento
+- Realizar testes de segurança (pentest, análise de vulnerabilidades)
+- Elaborar documentação técnica e gerencial
+- Simular resposta a incidentes
+- Avaliar a postura de segurança do projeto como um todo
+
+## 3. Estrutura Recomendada de um Projeto Integrador
+
+Um projeto integrador de segurança geralmente passa pelas seguintes fases:
+
+### 3.1 Fase 1: Planejamento e Definição de Escopo
+- Definir o sistema ou aplicação que será trabalhado (pode ser um projeto fictício ou real)
+- Estabelecer objetivos de segurança
+- Definir o escopo do projeto (o que será e o que não será abordado)
+- Identificar stakeholders e responsabilidades
+
+### 3.2 Fase 2: Análise de Riscos e Threat Modeling
+- Identificar ativos críticos
+- Realizar Threat Modeling (usando STRIDE, PASTA ou metodologia similar)
+- Mapear ameaças, vulnerabilidades e impactos
+- Priorizar riscos
+
+### 3.3 Fase 3: Implementação de Controles de Segurança
+- Aplicar princípios de desenvolvimento seguro
+- Implementar controles de autenticação, autorização e criptografia
+- Configurar logging e monitoramento
+- Aplicar o princípio do menor privilégio
+- Proteger a infraestrutura e os dados
+
+### 3.4 Fase 4: Testes de Segurança
+- Realizar análise estática e dinâmica de código
+- Executar testes de vulnerabilidades automatizados
+- Realizar testes manuais ou pentest (quando aplicável)
+- Validar os controles implementados
+
+### 3.5 Fase 5: Documentação e Entregáveis
+- Elaborar relatório técnico de segurança
+- Documentar decisões de arquitetura e controles
+- Criar plano de resposta a incidentes (simplificado)
+- Apresentar resultados e recomendações
+
+### 3.6 Fase 6: Lições Aprendidas e Melhoria Contínua
+- Avaliar o que funcionou e o que pode ser melhorado
+- Documentar lições aprendidas
+- Sugerir melhorias para projetos futuros
+
+## 4. Boas Práticas
+
+- Começar a pensar em segurança desde a fase de requisitos (Shift Left Security)
+- Documentar decisões de segurança e seus trade-offs
+- Envolver diferentes perfis (desenvolvedores, infraestrutura, segurança)
+- Usar ferramentas adequadas em cada etapa (ferramentas de modelagem de ameaças, SAST/DAST, etc.)
+- Manter o foco no risco de negócio, e não apenas em vulnerabilidades técnicas
+- Simular cenários reais sempre que possível
+
+## 5. Benefícios de Realizar um Projeto Integrador
+
+- Consolida o conhecimento teórico em prática
+- Desenvolve visão holística de segurança
+- Melhora a capacidade de comunicação entre áreas técnicas e de negócio
+- Serve como portfólio para profissionais em início de carreira
+- Prepara para desafios reais de implementação de segurança
+
+## 6. Considerações Finais
+
+Um Projeto Integrador de Segurança é uma das melhores formas de desenvolver competências práticas em cibersegurança. Ele permite que o profissional vivencie o ciclo completo de segurança — desde a concepção até a operação e resposta — em um ambiente controlado.
+
+Seja em um contexto acadêmico, de capacitação corporativa ou como projeto pessoal, esse tipo de iniciativa contribui significativamente para a formação de profissionais mais completos e preparados para atuar no mercado de segurança da informação.
+
+## Referências e Leituras Recomendadas
+
+- OWASP SAMM (Software Assurance Maturity Model)
+- Microsoft SDL (Security Development Lifecycle)
+- NIST SP 800-64 — Security Considerations in the System Development Life Cycle
+- Threat Modeling methodologies (STRIDE, PASTA, Attack Trees)
+

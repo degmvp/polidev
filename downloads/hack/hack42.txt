@@ -1,0 +1,109 @@
+# HACK42 — Telemetria, SIEM, SOAR e Automação de Segurança
+
+## Resumo
+
+A capacidade de detectar, investigar e responder a incidentes de segurança depende diretamente da qualidade dos dados coletados e da eficiência dos processos de análise e resposta. Este artigo apresenta os conceitos de **Telemetria**, **SIEM** (Security Information and Event Management), **SOAR** (Security Orchestration, Automation and Response) e automação de segurança, destacando sua importância e aplicação prática em ambientes modernos de desenvolvimento e operação de sistemas.
+
+**Palavras-chave:** Telemetria, SIEM, SOAR, Automação de segurança, Logs, Detecção de ameaças, Resposta a incidentes.
+
+## 1. Introdução
+
+Em ambientes digitais complexos, onde aplicações, bancos de dados, infraestrutura e usuários geram grandes volumes de eventos constantemente, é impossível depender exclusivamente de análise manual para identificar comportamentos maliciosos ou falhas de segurança.
+
+A coleta estruturada de dados (telemetria), a centralização e correlação inteligente desses dados (SIEM), e a automação de respostas (SOAR) formam uma base essencial para operações de segurança modernas, permitindo que equipes detectem ameaças mais rapidamente e reduzam o tempo de resposta a incidentes.
+
+## 2. Telemetria em Segurança
+
+**Telemetria** é o processo de coleta, transmissão e armazenamento de dados gerados por sistemas, aplicações, redes e dispositivos. Na área de segurança, isso inclui:
+
+- Logs de aplicação e de bancos de dados
+- Eventos de autenticação e autorização
+- Logs de sistema operacional
+- Métricas de performance e comportamento
+- Traces de requisições distribuídas
+- Alertas gerados por ferramentas de segurança
+
+Quanto melhor a qualidade e a granularidade da telemetria, maior é a capacidade de detectar comportamentos anormais.
+
+**Exemplo prático:**  
+Em uma aplicação que utiliza Node.js ou Python conectada a um banco de dados PostgreSQL ou SQL Server, é importante registrar não apenas erros, mas também eventos de login, tentativas de acesso negado, consultas suspeitas e alterações em dados sensíveis. Esses logs são fundamentais para investigações posteriores.
+
+## 3. SIEM: Security Information and Event Management
+
+O **SIEM** é uma solução que centraliza logs e eventos de múltiplas fontes, correlaciona essas informações em tempo real e gera alertas quando detecta padrões suspeitos ou violações de políticas.
+
+Principais funcionalidades de um SIEM:
+- Coleta e normalização de logs de diferentes fontes
+- Correlação de eventos
+- Detecção de ameaças baseada em regras e machine learning
+- Geração de alertas e dashboards
+- Capacidade de investigação e busca histórica (forense)
+
+Ferramentas populares incluem Microsoft Sentinel, Splunk, Elastic SIEM (ELK Stack), QRadar e Graylog.
+
+**Exemplo prático:**  
+Um SIEM pode correlacionar um login bem-sucedido de um usuário em um horário incomum + acesso a um banco de dados sensível + exportação de grande volume de dados em um curto período. Mesmo que cada evento isolado não seja alarmante, a correlação pode indicar uma possível exfiltração de dados.
+
+## 4. SOAR e Automação de Segurança
+
+**SOAR** (Security Orchestration, Automation and Response) vai além da detecção. Ele permite automatizar respostas a incidentes e orquestrar ações entre diferentes ferramentas de segurança.
+
+Com SOAR é possível, por exemplo:
+- Bloquear automaticamente um IP malicioso após detecção de ataque
+- Isolar uma máquina comprometida da rede
+- Resetar senhas ou revogar sessões de usuários suspeitos
+- Abrir tickets automaticamente em sistemas de chamados
+- Executar playbooks de resposta padronizados
+
+A automação reduz o tempo de resposta e libera analistas para investigações mais complexas.
+
+**Exemplo prático:**  
+Quando um SIEM detecta múltiplas tentativas de login falhas seguidas de um sucesso em uma conta de banco de dados, um playbook de SOAR pode automaticamente:
+1. Desativar temporariamente a conta
+2. Notificar o time de segurança
+3. Registrar o incidente em uma ferramenta de tickets
+4. Iniciar uma investigação preliminar coletando logs relacionados
+
+## 5. Exemplos Práticos de Aplicação
+
+### 5.1 Em Aplicações e Microsserviços
+- Implementar logging estruturado (JSON) com campos padronizados
+- Enviar logs para uma plataforma centralizada (ex: Loki, Elasticsearch, Azure Monitor)
+- Instrumentar aplicações com OpenTelemetry para obter traces e métricas
+
+### 5.2 Em Bancos de Dados
+- Ativar logs de auditoria (ex: `pgAudit` no PostgreSQL, SQL Audit no SQL Server)
+- Monitorar consultas lentas, acessos fora do padrão e comandos administrativos
+- Integrar esses logs ao SIEM da organização
+
+### 5.3 Em Pipelines de CI/CD
+- Registrar todas as ações realizadas nos pipelines
+- Monitorar alterações em variáveis de ambiente e secrets
+- Detectar deploys não autorizados ou feitos fora do horário comercial
+
+## 6. Benefícios e Desafios
+
+**Principais benefícios:**
+- Redução do tempo de detecção e resposta a incidentes (MTTD e MTTR)
+- Maior visibilidade sobre o ambiente
+- Capacidade de atender requisitos de conformidade e auditoria
+- Otimização do trabalho das equipes de segurança
+
+**Desafios comuns:**
+- Volume excessivo de logs (ruído)
+- Falta de padronização nos logs gerados pelas aplicações
+- Custo de armazenamento e processamento de grandes volumes de dados
+- Necessidade de conhecimento especializado para criar boas regras de correlação
+
+## 7. Considerações Finais
+
+Telemetria de qualidade, SIEM bem configurado e automação inteligente são componentes essenciais de uma estratégia moderna de segurança. Não basta coletar dados — é necessário coletar os dados certos, correlacioná-los de forma inteligente e agir rapidamente quando necessário.
+
+Para equipes de desenvolvimento e profissionais que trabalham com bancos de dados, participar ativamente da definição do que deve ser logado e como esses dados serão utilizados é fundamental. A segurança não é responsabilidade exclusiva de um time isolado; ela depende da colaboração entre desenvolvimento, operações e segurança.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-92 — Guide to Computer Security Log Management
+- MITRE ATT&CK — Detection and Response frameworks
+- Documentação do Elastic SIEM, Microsoft Sentinel e Splunk
+- Livro: *Security Operations Center* – Joseph Muniz, Gary McIntyre

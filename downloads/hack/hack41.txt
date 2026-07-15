@@ -1,0 +1,101 @@
+# HACK41 — Identity and Access Management: IAM, MFA e Menor Privilégio
+
+## Resumo
+
+O controle de identidade e acesso é uma das camadas mais críticas da segurança da informação. Este artigo apresenta os fundamentos de **Identity and Access Management (IAM)**, com foco no **Princípio do Menor Privilégio** e na **Autenticação Multifator (MFA)**. São discutidos os conceitos de autenticação e autorização, além de exemplos práticos de aplicação em sistemas desenvolvidos com diversas linguagens e bancos de dados.
+
+**Palavras-chave:** Identity and Access Management, IAM, Menor Privilégio, MFA, Autenticação, Autorização, Segurança da informação.
+
+## 1. Introdução
+
+A maioria dos incidentes de segurança em aplicações e sistemas corporativos tem como vetor inicial o comprometimento de credenciais ou o uso indevido de permissões. Por esse motivo, o gerenciamento de identidades e acessos tornou-se uma das disciplinas mais importantes da cibersegurança.
+
+**Identity and Access Management (IAM)** é o conjunto de processos, tecnologias e políticas que garantem que as pessoas certas tenham acesso aos recursos certos, no momento certo e pelas razões certas. Dentro desse contexto, dois conceitos se destacam: o **Princípio do Menor Privilégio** e a **Autenticação Multifator (MFA)**.
+
+## 2. Conceitos Fundamentais de IAM
+
+O IAM envolve dois processos principais:
+
+- **Autenticação**: Verificar se o usuário é realmente quem diz ser (ex: login + senha, biometria, token).
+- **Autorização**: Determinar o que o usuário autenticado pode fazer dentro do sistema (ex: visualizar, editar, excluir, acessar determinados módulos).
+
+Uma boa solução de IAM deve responder a três perguntas básicas:
+1. Quem está acessando? (Identidade)
+2. Como está provando que é ele? (Autenticação)
+3. O que ele pode fazer? (Autorização)
+
+## 3. Princípio do Menor Privilégio
+
+O **Princípio do Menor Privilégio** (Least Privilege) estabelece que todo usuário, serviço ou processo deve operar com o mínimo de permissões necessárias para realizar suas tarefas.
+
+Esse princípio reduz significativamente a superfície de ataque. Caso uma conta seja comprometida, o dano potencial fica limitado ao que aquela conta tinha permissão de fazer.
+
+**Exemplo prático em banco de dados:**  
+Em vez de criar um usuário de aplicação com privilégios de `superuser` ou `db_owner`, é recomendável criar um usuário específico com permissões apenas de `SELECT`, `INSERT` e `UPDATE` nas tabelas necessárias. Se esse usuário for comprometido, o atacante não conseguirá, por exemplo, dropar tabelas ou acessar schemas que não fazem parte da aplicação.
+
+**Exemplo prático em código:**  
+Em aplicações backend, é comum ver serviços rodando com credenciais de administrador do cloud provider. Aplicar o menor privilégio significa criar roles específicas com apenas as permissões necessárias (ex: apenas `s3:GetObject` em um bucket específico, em vez de acesso total).
+
+## 4. Autenticação Multifator (MFA)
+
+A **Autenticação Multifator (MFA)** adiciona uma ou mais camadas de verificação além da senha tradicional. Ela combina algo que o usuário **sabe** (senha), algo que o usuário **tem** (celular, token, chave de hardware) e/ou algo que o usuário **é** (biometria).
+
+Mesmo que a senha seja vazada ou adivinhada, o atacante ainda precisa do segundo fator para conseguir acesso.
+
+**Exemplos comuns de MFA:**
+- Aplicativos autenticadores (Google Authenticator, Microsoft Authenticator, Authy)
+- Chaves de hardware (YubiKey)
+- SMS ou e-mail com código (menos recomendado)
+- Biometria (impressão digital, reconhecimento facial)
+
+**Exemplo prático:**  
+Em uma aplicação web que acessa um banco de dados, é recomendável que o acesso administrativo ao banco (via interface ou ferramenta de administração) exija MFA. Da mesma forma, o acesso ao painel de controle da nuvem ou ao repositório de código deve exigir autenticação multifator.
+
+## 5. Exemplos Práticos de Aplicação
+
+### 5.1 Em Aplicações Web e APIs
+
+- Implementar autenticação com JWT + refresh token
+- Exigir MFA para operações sensíveis (alteração de senha, transferência de valores, exportação de dados)
+- Usar bibliotecas maduras de autenticação em vez de implementar do zero
+
+### 5.2 Em Bancos de Dados
+
+- Criar usuários específicos por aplicação ou microsserviço
+- Evitar o uso de usuários compartilhados entre equipes
+- Utilizar roles e schemas para segmentar o acesso
+- Ativar logs de auditoria para rastrear quem acessou quais dados
+
+### 5.3 Em Ambientes de Desenvolvimento e CI/CD
+
+- Usar contas de serviço com escopo limitado nos pipelines
+- Proteger repositórios de código com MFA e revisão obrigatória de código
+- Evitar credenciais hardcoded no código-fonte (usar variáveis de ambiente ou vaults)
+
+## 6. Desafios Comuns e Boas Práticas
+
+Alguns desafios frequentes na implementação de IAM incluem:
+
+- Resistência dos usuários à adoção de MFA
+- Dificuldade de gerenciar permissões em ambientes complexos com muitos microsserviços
+- Uso de credenciais legadas e contas com privilégios excessivos
+
+**Boas práticas recomendadas:**
+- Revisar periodicamente as permissões concedidas (access reviews)
+- Implementar **Just-In-Time (JIT)** access sempre que possível
+- Centralizar o gerenciamento de identidade (ex: Azure AD, Okta, Keycloak)
+- Registrar e monitorar eventos de autenticação e autorização
+- Educar os times de desenvolvimento sobre os riscos de permissões excessivas
+
+## 7. Considerações Finais
+
+Identity and Access Management não é apenas uma preocupação da área de segurança. Desenvolvedores e profissionais que trabalham com bancos de dados têm papel fundamental na correta implementação desses controles.
+
+Aplicar o **Princípio do Menor Privilégio** e adotar **MFA** de forma consistente reduz drasticamente o risco de comprometimento de contas e limita o impacto de eventuais incidentes. Em um cenário onde credenciais vazadas são cada vez mais comuns, essas práticas deixaram de ser opcionais e passaram a ser requisitos básicos de segurança.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-63 — Digital Identity Guidelines
+- ISO/IEC 27001 — Controles relacionados a controle de acesso
+- OWASP — Authentication Cheat Sheet
+- Documentação oficial de provedores de identidade (Keycloak, Auth0, Azure AD, Okta)

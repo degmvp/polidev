@@ -1,0 +1,99 @@
+# HACK52 — Gestão de Vulnerabilidades e Patch Management
+
+## Resumo
+
+A identificação e correção de vulnerabilidades são atividades fundamentais para manter a segurança de sistemas e aplicações. Este artigo aborda os conceitos de **Gestão de Vulnerabilidades** e **Patch Management**, explicando o ciclo de vida da gestão de vulnerabilidades, a importância da aplicação de patches e as melhores práticas para implementar esses processos de forma eficaz em ambientes corporativos.
+
+**Palavras-chave:** Gestão de vulnerabilidades, Patch Management, Correção de vulnerabilidades, Segurança defensiva, Ciclo de vida de vulnerabilidades.
+
+## 1. Introdução
+
+Novas vulnerabilidades são descobertas diariamente em softwares, sistemas operacionais, bibliotecas e aplicações. Manter todos os sistemas atualizados e livres de vulnerabilidades conhecidas é um dos desafios mais constantes das equipes de segurança e infraestrutura.
+
+A **Gestão de Vulnerabilidades** e o **Patch Management** são processos complementares que, quando bem executados, reduzem significativamente a superfície de ataque de uma organização.
+
+## 2. O que é Gestão de Vulnerabilidades?
+
+**Gestão de Vulnerabilidades** é o processo contínuo de identificar, classificar, priorizar, remediar e mitigar vulnerabilidades em sistemas, aplicações e infraestrutura.
+
+Ela não se limita apenas à aplicação de patches. Envolve também a avaliação de riscos, a priorização baseada em contexto e a implementação de medidas compensatórias quando a correção imediata não é possível.
+
+### Ciclo de Vida da Gestão de Vulnerabilidades
+
+O processo geralmente segue estas etapas:
+
+1. **Descoberta** — Identificar ativos e realizar varreduras de vulnerabilidades
+2. **Avaliação e Classificação** — Analisar a severidade (usando CVSS, por exemplo)
+3. **Priorização** — Considerar criticidade do ativo, exposição e contexto de negócio
+4. **Remediação** — Aplicar patches, correções ou mitigações
+5. **Verificação** — Confirmar que a vulnerabilidade foi realmente corrigida
+6. **Monitoramento Contínuo** — Acompanhar novos ativos e novas vulnerabilidades
+
+## 3. O que é Patch Management?
+
+**Patch Management** é o processo de identificar, testar, aprovar e aplicar atualizações (patches) em sistemas e softwares. Seu objetivo é corrigir vulnerabilidades, falhas de segurança e bugs.
+
+Embora o Patch Management faça parte da Gestão de Vulnerabilidades, ele tem um escopo mais focado na aplicação de atualizações fornecidas pelos fabricantes.
+
+### Desafios comuns no Patch Management:
+- Janelas de manutenção limitadas
+- Risco de quebra de funcionalidades após a aplicação do patch
+- Ambientes legados que não suportam atualizações
+- Grande quantidade de sistemas e aplicações para gerenciar
+- Dependência de testes extensivos antes da aplicação em produção
+
+## 4. Relação entre Gestão de Vulnerabilidades e Patch Management
+
+Os dois processos estão diretamente relacionados:
+
+- A **Gestão de Vulnerabilidades** identifica o problema e define a prioridade.
+- O **Patch Management** é uma das principais formas de resolver o problema (junto com outras mitigações).
+
+Em organizações maduras, esses processos são integrados em um fluxo único de trabalho.
+
+## 5. Boas Práticas Recomendadas
+
+### 5.1 Inventário de Ativos
+Manter um inventário atualizado de todos os ativos (servidores, aplicações, bancos de dados, dispositivos de rede, etc.) é o primeiro passo para uma gestão eficaz.
+
+### 5.2 Priorização Inteligente
+Nem todas as vulnerabilidades precisam ser corrigidas com a mesma urgência. A priorização deve considerar:
+- Severidade da vulnerabilidade (CVSS)
+- Exposição do ativo (internet-facing ou interno)
+- Criticidade do sistema para o negócio
+- Existência de exploit público
+
+### 5.3 Testes e Homologação
+Patches devem ser testados em ambientes de homologação antes de serem aplicados em produção, especialmente em sistemas críticos.
+
+### 5.4 Automação
+Sempre que possível, utilizar ferramentas de automação para varredura, priorização e aplicação de patches reduz erros manuais e aumenta a eficiência.
+
+### 5.5 Medição e Métricas
+Acompanhar indicadores como:
+- Tempo médio para correção de vulnerabilidades críticas
+- Percentual de ativos com vulnerabilidades conhecidas
+- Cobertura de varredura de vulnerabilidades
+
+## 6. Papel de Desenvolvedores e DBAs
+
+Profissionais que desenvolvem aplicações e administram bancos de dados têm papel importante na gestão de vulnerabilidades:
+
+- Manter dependências e bibliotecas atualizadas
+- Aplicar patches de segurança em bancos de dados e sistemas operacionais
+- Configurar corretamente aplicações para reduzir a superfície de ataque
+- Participar da priorização quando o sistema é crítico para o negócio
+- Reportar e documentar vulnerabilidades encontradas durante o desenvolvimento
+
+## 7. Considerações Finais
+
+A Gestão de Vulnerabilidades e o Patch Management são processos contínuos e essenciais para qualquer organização que deseja manter uma postura de segurança adequada. Não basta descobrir vulnerabilidades — é necessário corrigi-las de forma priorizada, controlada e verificada.
+
+Organizações que tratam esses processos de forma madura reduzem significativamente sua exposição a ataques que exploram falhas conhecidas. Em um cenário onde a maioria dos ataques utiliza vulnerabilidades já conhecidas e com patches disponíveis, investir em gestão de vulnerabilidades é uma das ações com melhor custo-benefício em segurança da informação.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-40 Rev. 4 — Guide to Enterprise Patch Management Technologies
+- NIST SP 800-53 — Security and Privacy Controls
+- CIS Controls (Center for Internet Security)
+- ISO/IEC 27001 — Controles relacionados a gestão de vulnerabilidades

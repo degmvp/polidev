@@ -1,0 +1,84 @@
+# HACK43 — MITRE ATT&CK na Prática
+
+## Resumo
+
+O **MITRE ATT&CK** é um dos frameworks mais utilizados mundialmente para descrever o comportamento de adversários em cibersegurança. Este artigo apresenta os conceitos fundamentais do framework, sua estrutura e, principalmente, como ele pode ser aplicado de forma prática por equipes de desenvolvimento, operações e segurança para melhorar a detecção, a defesa e a priorização de controles.
+
+**Palavras-chave:** MITRE ATT&CK, Threat Modeling, Detecção de ameaças, Purple Team, Segurança defensiva, Threat Hunting.
+
+## 1. Introdução
+
+Entender como atacantes operam é essencial para construir defesas mais eficazes. O MITRE ATT&CK (Adversarial Tactics, Techniques, and Common Knowledge) é uma base de conhecimento globalmente acessível que descreve as táticas e técnicas utilizadas por adversários em diferentes fases de um ataque.
+
+Diferente de listas de vulnerabilidades ou ferramentas, o ATT&CK foca no **comportamento** dos atacantes. Isso permite que profissionais de segurança pensem de forma mais estruturada sobre detecção e mitigação.
+
+## 2. O que é o MITRE ATT&CK?
+
+O MITRE ATT&CK é mantido pela MITRE Corporation e está organizado em **matrizes** que representam diferentes ambientes:
+
+- **Enterprise** (mais utilizada): foca em sistemas Windows, Linux, macOS, nuvem, containers, etc.
+- **Mobile**
+- **ICS** (Industrial Control Systems)
+
+Cada matriz é dividida em **Táticas** (o “porquê” do ataque) e **Técnicas** (o “como” o ataque é executado).
+
+### Estrutura básica:
+- **Táticas**: Objetivos do atacante (ex: Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, Impact).
+- **Técnicas**: Métodos específicos usados para alcançar cada tática.
+- **Sub-técnicas**: Detalhamento adicional de algumas técnicas.
+- **Mitigações e Detecções**: Recomendações defensivas associadas a cada técnica.
+
+## 3. Aplicação Prática do MITRE ATT&CK
+
+O verdadeiro valor do framework não está apenas em conhecer as técnicas, mas em utilizá-las de forma defensiva. Abaixo estão as principais formas de aplicação prática:
+
+### 3.1 Threat Modeling e Análise de Riscos
+
+Durante o desenvolvimento de uma aplicação ou arquitetura de sistema, equipes podem usar o ATT&CK para responder perguntas como:
+- Quais táticas um atacante provavelmente usaria contra esse tipo de sistema?
+- Quais técnicas são mais relevantes para aplicações web, APIs ou bancos de dados?
+
+**Exemplo prático:**  
+Ao desenvolver uma aplicação web que expõe APIs e armazena dados sensíveis em um banco de dados, a equipe pode mapear técnicas comuns de *Initial Access* (como phishing ou exploração de vulnerabilidades públicas) e *Credential Access* (como roubo de credenciais de banco de dados). Isso ajuda a priorizar controles de autenticação forte e proteção de credenciais.
+
+### 3.2 Melhoria de Detecção (Detection Engineering)
+
+O ATT&CK é amplamente utilizado para desenvolver e avaliar regras de detecção. Em vez de criar alertas genéricos, as equipes podem mapear quais técnicas querem detectar e construir regras específicas para elas.
+
+**Exemplo prático:**  
+Uma equipe de segurança pode usar o ATT&CK para identificar que técnicas de *Persistence* (como criação de tarefas agendadas ou modificação de chaves de registro) são relevantes para o ambiente Windows da organização e, em seguida, implementar regras de detecção no SIEM focadas nessas técnicas.
+
+### 3.3 Purple Team e Exercícios de Simulação
+
+O framework é muito útil em exercícios de **Purple Team**, onde times de ataque (Red Team) e defesa (Blue Team) trabalham juntos. O ATT&CK permite documentar de forma estruturada quais técnicas foram testadas e quais controles de detecção/mitigação funcionaram ou falharam.
+
+### 3.4 Avaliação de Maturidade de Segurança
+
+Organizações podem realizar *gap analysis* usando o ATT&CK para identificar:
+- Quais técnicas os controles atuais conseguem detectar ou mitigar?
+- Quais áreas possuem baixa cobertura de detecção?
+- Onde vale a pena investir mais recursos?
+
+## 4. Uso por Desenvolvedores e Profissionais de Banco de Dados
+
+Embora o MITRE ATT&CK seja frequentemente associado a times de segurança, desenvolvedores e DBAs também podem se beneficiar dele:
+
+- Entender quais técnicas de *Initial Access* e *Execution* são comuns em aplicações web e APIs
+- Avaliar se o logging atual da aplicação e do banco de dados é suficiente para detectar comportamentos anormais
+- Priorizar implementações de segurança (ex: proteção contra injeção, controle de acesso, proteção de credenciais)
+- Colaborar melhor com times de segurança ao discutir riscos de forma estruturada
+
+## 5. Considerações Finais
+
+O MITRE ATT&CK não substitui frameworks de gestão de riscos ou normas como a ISO 27001, mas complementa esses modelos ao fornecer uma linguagem comum e detalhada sobre o comportamento de adversários.
+
+Quando utilizado de forma prática — especialmente em threat modeling, detecção e exercícios de Purple Team —, o framework ajuda organizações a passarem de uma postura reativa para uma postura mais proativa e baseada em ameaças reais.
+
+Para profissionais que desenvolvem sistemas e gerenciam dados, familiarizar-se com o ATT&CK permite tomar decisões técnicas mais alinhadas com ameaças reais do mundo atual.
+
+## Referências e Leituras Recomendadas
+
+- MITRE ATT&CK Official Website: [attack.mitre.org](https://attack.mitre.org)
+- MITRE ATT&CK for Enterprise
+- Livro: *ATT&CKing the Cloud* e documentação oficial da MITRE
+- NIST SP 800-53 (mapeamentos com ATT&CK)

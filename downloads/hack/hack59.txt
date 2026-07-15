@@ -1,0 +1,96 @@
+# HACK59 — Certificações em Segurança da Informação
+
+## Resumo
+
+As certificações em segurança da informação são uma forma importante de validar conhecimentos, demonstrar competência profissional e impulsionar a carreira na área de cibersegurança. Este artigo apresenta as principais certificações do mercado, organizadas por nível de experiência e foco, além de orientações para escolher a mais adequada de acordo com os objetivos profissionais.
+
+**Palavras-chave:** Certificações em segurança, Cibersegurança, Carreira em segurança da informação, CompTIA, CISSP, OSCP, CEH.
+
+## 1. Introdução
+
+Com o crescimento da demanda por profissionais de cibersegurança, as certificações tornaram-se um diferencial importante no mercado de trabalho. Elas ajudam a comprovar conhecimentos técnicos e conceituais, além de serem frequentemente exigidas ou valorizadas em processos seletivos.
+
+No entanto, existem dezenas de certificações disponíveis, com diferentes níveis de dificuldade, custos e foco. Escolher a certificação certa depende do estágio da carreira, da área de interesse (defensiva, ofensiva, governança, cloud, etc.) e dos objetivos profissionais.
+
+## 2. Por que obter certificações em segurança?
+
+- Validar e atualizar conhecimentos técnicos
+- Aumentar a empregabilidade e as chances de promoção
+- Demonstrar comprometimento com o desenvolvimento profissional
+- Atender requisitos de empresas e clientes
+- Ter uma base estruturada de estudos
+
+## 3. Principais Certificações por Nível
+
+### 3.1 Nível Iniciante / Entry-Level
+
+| Certificação              | Foco Principal                     | Dificuldade | Recomendada para          |
+|---------------------------|------------------------------------|-------------|---------------------------|
+| **CompTIA Security+**     | Fundamentos de segurança           | Média       | Iniciantes                |
+| **Google Cybersecurity**  | Fundamentos e operações básicas   | Baixa/Média | Quem está começando       |
+| **Microsoft SC-900**      | Segurança, conformidade e identidade (Microsoft) | Baixa | Profissionais Microsoft   |
+
+### 3.2 Nível Intermediário
+
+| Certificação                  | Foco Principal                          | Dificuldade | Recomendada para               |
+|-------------------------------|-----------------------------------------|-------------|--------------------------------|
+| **CompTIA CySA+**             | Análise de segurança e detecção         | Média       | Analistas de segurança         |
+| **CompTIA PenTest+**          | Testes de intrusão                      | Média       | Pentesters iniciantes          |
+| **CompTIA CASP+**             | Arquitetura e segurança avançada        | Alta        | Arquitetos e seniores          |
+| **eJPT (eLearnSecurity)**     | Pentest prático                         | Média       | Quem busca prática             |
+| **CCNA Cyber Ops**            | Operações de segurança (Cisco)          | Média       | Profissionais de rede          |
+
+### 3.3 Nível Avançado / Especialista
+
+| Certificação              | Foco Principal                          | Dificuldade | Recomendada para                  |
+|---------------------------|-----------------------------------------|-------------|-----------------------------------|
+| **OSCP**                  | Pentest prático e hands-on              | Alta        | Pentesters                        |
+| **OSWE**                  | Web Application Pentesting              | Muito Alta  | Especialistas em aplicações web   |
+| **OSEP**                  | Post-exploitation e evasão              | Alta        | Pentesters avançados              |
+| **CISSP**                 | Segurança da informação (geral)         | Alta        | Profissionais experientes         |
+| **CISM**                  | Gestão de segurança e governança        | Alta        | Gestores e CISOs                  |
+| **CRISC**                 | Gestão de riscos de TI                  | Alta        | Gestão de riscos                  |
+| **CISA**                  | Auditoria de sistemas de informação     | Alta        | Auditores de TI                   |
+
+### 3.4 Certificações de Nicho
+
+- **CEH** (Certified Ethical Hacker) — Mais teórica e reconhecida por empresas tradicionais.
+- **Cloud Security** — AWS Security Specialty, Azure Security Engineer, Google Professional Cloud Security Engineer.
+- **Threat Hunting** — Certifications como CTIA ou programas específicos.
+- **Forense Digital** — GCFE, GREM, EnCE.
+
+## 4. Como Escolher a Certificação Certa?
+
+Considere os seguintes fatores:
+
+- **Seu nível atual de experiência**: Iniciantes devem começar com Security+ ou Google Cybersecurity.
+- **Área de interesse**: 
+  - Defensiva → CySA+, CISSP, CISM
+  - Ofensiva (Pentest) → PenTest+, OSCP, eJPT
+  - Governança e Gestão → CISM, CISSP, CRISC
+  - Cloud → Certificações específicas das plataformas
+- **Objetivo de carreira**: Algumas certificações são mais valorizadas em consultorias, outras em empresas de produto ou órgãos públicos.
+- **Custo e tempo de estudo**: OSCP, por exemplo, exige muita prática e dedicação.
+
+## 5. Dicas para se Preparar
+
+- Escolha materiais oficiais ou de boa reputação
+- Pratique em laboratórios (TryHackMe, Hack The Box, Proving Grounds)
+- Faça simulados e provas práticas quando possível
+- Mantenha as certificações atualizadas (a maioria exige créditos de educação continuada)
+- Foque em aprender, não apenas em passar na prova
+
+## 6. Considerações Finais
+
+As certificações são ferramentas valiosas para o desenvolvimento profissional em segurança da informação, mas não substituem a experiência prática. O ideal é combinar certificações com projetos reais, laboratórios e experiência no dia a dia.
+
+Profissionais que conseguem alinhar suas certificações com seus objetivos de carreira e área de atuação tendem a ter melhores resultados no mercado. Antes de investir tempo e dinheiro em uma certificação, é importante pesquisar qual delas faz mais sentido para o seu momento profissional.
+
+## Referências
+
+- CompTIA Certification Roadmap
+- (ISC)² — CISSP, CISM, CRISC
+- Offensive Security (OSCP, OSWE, OSEP)
+- EC-Council (CEH)
+- Cloud Security Alliance e certificações de nuvem
+

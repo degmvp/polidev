@@ -1,0 +1,108 @@
+# HACK47 — Como Elaborar Relatórios Profissionais de Pentest
+
+## Resumo
+
+O relatório de pentest é o principal entregável de um teste de intrusão. Um bom relatório não apenas documenta as vulnerabilidades encontradas, mas também comunica riscos de forma clara, prioriza ações e oferece recomendações práticas. Este artigo apresenta os elementos essenciais de um relatório profissional de pentest, boas práticas de estruturação e recomendações para torná-lo útil tanto para a alta gestão quanto para as equipes técnicas.
+
+**Palavras-chave:** Relatório de pentest, Teste de intrusão, Comunicação de riscos, Segurança ofensiva, Gestão de vulnerabilidades.
+
+## 1. Introdução
+
+Realizar um teste de intrusão de qualidade é apenas metade do trabalho. A outra metade — e muitas vezes a mais importante — está em como os resultados são comunicados. Um relatório mal estruturado pode fazer com que achados críticos sejam ignorados ou mal compreendidos, enquanto um relatório bem elaborado facilita a tomada de decisão e acelera a remediação.
+
+O objetivo de um relatório de pentest não é apenas listar vulnerabilidades, mas **traduzir achados técnicos em riscos de negócio** e fornecer um caminho claro para correção.
+
+## 2. Objetivos de um Bom Relatório de Pentest
+
+Um relatório profissional deve atender aos seguintes objetivos:
+
+- Comunicar os riscos de forma clara para diferentes públicos (gestão e técnico)
+- Priorizar os achados de acordo com o impacto real
+- Fornecer evidências suficientes para reprodução e correção
+- Oferecer recomendações práticas e viáveis
+- Servir como base para planos de remediação e acompanhamento
+- Demonstrar o valor do trabalho realizado
+
+## 3. Estrutura Recomendada de um Relatório de Pentest
+
+Embora a estrutura possa variar conforme a metodologia ou o cliente, um relatório profissional geralmente contém as seguintes seções:
+
+### 3.1 Sumário Executivo
+Resumo de alto nível destinado à gestão. Deve conter:
+- Visão geral do escopo
+- Principais riscos identificados
+- Classificação geral da postura de segurança
+- Recomendações estratégicas de alto nível
+- Número de achados por severidade
+
+### 3.2 Escopo e Metodologia
+Descreve claramente:
+- Sistemas, aplicações e ambientes testados
+- Tipos de teste realizados (black box, gray box, white box)
+- Período do teste
+- Metodologia utilizada (ex: OSSTMM, PTES, OWASP, NIST)
+- Limitações do teste
+
+### 3.3 Achados e Vulnerabilidades
+Esta é a seção mais importante. Cada vulnerabilidade deve conter:
+- **Título claro** da vulnerabilidade
+- **Severidade** (Critical, High, Medium, Low)
+- **Descrição** técnica
+- **Impacto** no negócio
+- **Evidências** (screenshots, comandos, respostas do sistema)
+- **Recomendação** de correção
+- **Referências** (CVSS, CWE, OWASP, etc.)
+
+### 3.4 Classificação de Riscos
+Apresenta um resumo consolidado dos achados, geralmente em forma de tabela ou gráfico, facilitando a visualização da distribuição de severidades.
+
+### 3.5 Recomendações Gerais e Roadmap
+Além das recomendações específicas por vulnerabilidade, é recomendável incluir:
+- Recomendações estratégicas de melhoria
+- Sugestão de priorização (curto, médio e longo prazo)
+- Sugestões de controles preventivos e detectivos
+
+### 3.6 Apêndices
+- Detalhamento técnico adicional
+- Logs e outputs completos
+- Referências técnicas
+- Glossário (quando necessário)
+
+## 4. Boas Práticas na Elaboração do Relatório
+
+### 4.1 Clareza e Objetividade
+- Evite linguagem excessivamente técnica no sumário executivo
+- Seja direto e objetivo nas descrições
+- Use termos consistentes ao longo do documento
+
+### 4.2 Foco no Risco de Negócio
+Em vez de apenas descrever a vulnerabilidade tecnicamente, explique **por que ela importa** para a organização. Por exemplo:
+- Em vez de apenas dizer “SQL Injection encontrado”, explique o tipo de dados que podem ser expostos e o impacto regulatório ou financeiro.
+
+### 4.3 Evidências de Qualidade
+- Inclua evidências suficientes para que a equipe técnica consiga reproduzir o problema
+- Evite expor informações sensíveis desnecessariamente
+- Mantenha as evidências organizadas e legíveis
+
+### 4.4 Recomendações Realistas
+- Considere o contexto da organização (tamanho, maturidade, recursos)
+- Prefira recomendações práticas em vez de soluções genéricas ou impossíveis de implementar
+
+### 4.5 Revisão e Qualidade
+- Revise o relatório antes da entrega (ortografia, consistência e clareza)
+- Peça revisão de um colega quando possível
+- Garanta que o tom seja profissional e construtivo
+
+## 5. Considerações Finais
+
+Um relatório de pentest de qualidade é aquele que consegue ser compreendido tanto pela alta gestão quanto pelas equipes técnicas, e que efetivamente contribui para a redução de riscos. Mais do que um documento técnico, ele é uma ferramenta de comunicação e tomada de decisão.
+
+Profissionais que realizam ou contratam testes de intrusão devem valorizar tanto a qualidade técnica do teste quanto a qualidade da comunicação dos resultados. Um bom relatório transforma achados técnicos em ações concretas de melhoria da segurança.
+
+## Referências e Leituras Recomendadas
+
+- PTES (Penetration Testing Execution Standard)
+- OSSTMM (Open Source Security Testing Methodology Manual)
+- OWASP Testing Guide
+- NIST SP 800-115 — Technical Guide to Information Security Testing and Assessment
+

@@ -1,0 +1,86 @@
+# HACK54 — Conformidade em Segurança: LGPD, GDPR e PCI-DSS
+
+## Resumo
+
+A conformidade regulatória tornou-se um dos pilares da segurança da informação nas organizações. Leis e normas como a **LGPD** (Lei Geral de Proteção de Dados), o **GDPR** (General Data Protection Regulation) e o **PCI-DSS** (Payment Card Industry Data Security Standard) estabelecem requisitos obrigatórios para a proteção de dados e transações. Este artigo apresenta os principais aspectos desses três marcos regulatórios e sua relação com a segurança da informação.
+
+**Palavras-chave:** LGPD, GDPR, PCI-DSS, Conformidade, Proteção de dados, Segurança da informação, Regulamentação.
+
+## 1. Introdução
+
+A proteção de dados pessoais e de informações sensíveis deixou de ser apenas uma boa prática para se tornar uma obrigação legal em diversos países. Organizações que coletam, processam ou armazenam dados de clientes, usuários ou transações financeiras precisam atender a requisitos específicos de segurança e privacidade.
+
+Nesse contexto, três regulamentações se destacam pela sua relevância e impacto: a **LGPD** no Brasil, o **GDPR** na União Europeia e o **PCI-DSS** para organizações que lidam com cartões de pagamento.
+
+## 2. LGPD – Lei Geral de Proteção de Dados (Brasil)
+
+A **LGPD** (Lei nº 13.709/2018) é a lei brasileira de proteção de dados pessoais. Ela estabelece regras para o tratamento de dados pessoais e define direitos dos titulares, além de criar a Autoridade Nacional de Proteção de Dados (ANPD).
+
+### Principais pontos da LGPD:
+- **Base legal** para tratamento de dados (consentimento, legítimo interesse, cumprimento de obrigação legal, etc.)
+- Direitos dos titulares (acesso, correção, exclusão, portabilidade, etc.)
+- Responsabilidades do Controlador e do Encarregado (DPO)
+- Notificação de incidentes de segurança à ANPD e aos titulares
+- Sanções administrativas (multas de até 2% do faturamento da empresa no Brasil)
+
+A LGPD impacta diretamente a forma como empresas desenvolvem sistemas, armazenam dados em bancos de dados e gerenciam acessos.
+
+## 3. GDPR – General Data Protection Regulation (União Europeia)
+
+O **GDPR** é considerado uma das legislações de proteção de dados mais rigorosas do mundo. Ele se aplica não apenas a empresas europeias, mas também a qualquer organização que processe dados de cidadãos da União Europeia.
+
+### Principais pontos do GDPR:
+- Princípios de proteção de dados (minimização, limitação de finalidade, integridade, confidencialidade, etc.)
+- Direitos dos titulares (incluindo o “direito a ser esquecido”)
+- Obrigatoriedade de nomear um Data Protection Officer (DPO) em alguns casos
+- Notificação de violações de dados em até 72 horas
+- Multas que podem chegar a 4% do faturamento global anual da empresa
+
+Muitas empresas brasileiras que atuam com clientes europeus ou possuem operações na Europa precisam estar em conformidade com o GDPR.
+
+## 4. PCI-DSS – Payment Card Industry Data Security Standard
+
+O **PCI-DSS** é um padrão de segurança criado pelas principais bandeiras de cartões de crédito (Visa, Mastercard, American Express, Discover e JCB). Diferente da LGPD e do GDPR, ele não é uma lei, mas uma exigência contratual para qualquer organização que armazene, processe ou transmita dados de cartões de pagamento.
+
+### Principais requisitos do PCI-DSS:
+- Proteger os dados do titular do cartão
+- Criptografar dados sensíveis em trânsito e em repouso
+- Controlar acessos e implementar autenticação forte
+- Monitorar e testar redes regularmente
+- Manter uma política de segurança da informação
+- Realizar testes de vulnerabilidade e pentests periódicos
+
+O PCI-DSS é especialmente relevante para empresas de e-commerce, gateways de pagamento e qualquer sistema que lide com dados de cartões.
+
+## 5. Comparação entre LGPD, GDPR e PCI-DSS
+
+| Aspecto                    | LGPD                          | GDPR                              | PCI-DSS                          |
+|---------------------------|-------------------------------|-----------------------------------|----------------------------------|
+| Tipo                      | Lei                           | Regulamento                       | Padrão de segurança              |
+| Foco principal            | Proteção de dados pessoais    | Proteção de dados pessoais        | Segurança de dados de pagamento  |
+| Multa máxima              | Até 2% do faturamento         | Até 4% do faturamento global      | Perda de capacidade de processar cartões |
+| Aplicabilidade            | Brasil                        | União Europeia + extraterritorial | Organizações que lidam com cartões |
+| Exige DPO                 | Em alguns casos               | Em muitos casos                   | Não obrigatoriamente             |
+
+## 6. Importância para Profissionais de Tecnologia
+
+Desenvolvedores, DBAs e profissionais de infraestrutura precisam entender esses requisitos porque impactam diretamente decisões técnicas, tais como:
+
+- Como armazenar e criptografar dados pessoais
+- Quais logs podem ser mantidos e por quanto tempo
+- Como implementar controle de acesso e auditoria
+- Como projetar sistemas que facilitem o exercício de direitos dos titulares
+- Como responder a incidentes envolvendo dados pessoais ou de pagamento
+
+## 7. Considerações Finais
+
+A conformidade com LGPD, GDPR e PCI-DSS não deve ser vista apenas como uma obrigação burocrática, mas como uma oportunidade de fortalecer a segurança e a confiança dos clientes. Organizações que tratam a conformidade de forma madura geralmente possuem melhor governança de dados e processos mais seguros.
+
+Profissionais de tecnologia que compreendem esses marcos regulatórios estão mais preparados para desenvolver sistemas responsáveis e alinhados com as exigências legais e de mercado atuais.
+
+## Referências
+
+- Lei nº 13.709/2018 (LGPD)
+- Regulamento (UE) 2016/679 (GDPR)
+- PCI Security Standards Council – PCI DSS
+- ANPD – Autoridade Nacional de Proteção de Dados

@@ -1,0 +1,114 @@
+# HACK64 — Laboratório Integrador: Avaliação de Segurança de uma Empresa Fictícia
+
+## Resumo
+
+Este artigo propõe um **laboratório integrador** prático, no qual o leitor é convidado a realizar uma avaliação de segurança completa em uma **empresa fictícia**. O objetivo é aplicar, de forma integrada, os conceitos de threat modeling, análise de riscos, testes de segurança, resposta a incidentes e elaboração de relatórios, simulando um cenário realista de avaliação de segurança.
+
+**Palavras-chave:** Laboratório de segurança, Avaliação de segurança, Pentest simulado, Threat Modeling, Empresa fictícia, Segurança da informação.
+
+## 1. Introdução
+
+A teoria é fundamental, mas a real compreensão de segurança da informação acontece quando os conceitos são aplicados na prática. Este laboratório integrador foi desenvolvido para que o leitor possa simular uma avaliação de segurança completa em uma empresa fictícia, exercitando diferentes competências de forma integrada.
+
+O cenário proposto é fictício, mas reflete desafios comuns encontrados em organizações de médio porte.
+
+## 2. Cenário: Empresa Fictícia “TechNova Solutions”
+
+**Nome da empresa:** TechNova Solutions  
+**Setor:** Desenvolvimento de software e serviços de TI  
+**Tamanho:** Aproximadamente 250 colaboradores  
+**Infraestrutura principal:**
+- Aplicação web principal (ERP SaaS) hospedada em nuvem (AWS)
+- Aplicação mobile (Android e iOS)
+- Banco de dados PostgreSQL na nuvem
+- Ambiente de desenvolvimento e homologação
+- Escritório físico com rede corporativa
+- Uso de ferramentas colaborativas (Microsoft 365, Slack, etc.)
+
+**Informações sensíveis tratadas:**
+- Dados pessoais de clientes (LGPD)
+- Dados financeiros e de pagamento (PCI-DSS aplicável em alguns módulos)
+- Código-fonte e propriedade intelectual
+
+## 3. Objetivo do Laboratório
+
+Realizar uma avaliação de segurança abrangente na TechNova Solutions, contemplando:
+
+1. Identificação de ativos críticos
+2. Threat Modeling
+3. Análise de riscos
+4. Avaliação de vulnerabilidades (simulada)
+5. Recomendações de segurança
+6. Elaboração de um relatório simplificado
+
+## 4. Etapas do Laboratório
+
+### Etapa 1: Mapeamento de Ativos e Fluxos de Dados
+- Identificar os principais sistemas, aplicações e dados sensíveis
+- Mapear como os dados circulam entre sistemas, usuários e terceiros
+- Classificar os ativos quanto à criticidade
+
+### Etapa 2: Threat Modeling
+Utilize uma metodologia de sua preferência (STRIDE, PASTA ou Attack Trees) para responder:
+- Quais são as principais ameaças contra a aplicação web e os dados dos clientes?
+- Quais são os pontos de entrada mais prováveis para um atacante?
+- Quais seriam as consequências de um comprometimento?
+
+### Etapa 3: Identificação de Vulnerabilidades (Simulada)
+Com base no cenário, identifique possíveis vulnerabilidades em:
+- Aplicação web (ex: autenticação, autorização, injeção, exposição de dados)
+- Infraestrutura em nuvem
+- Processo de desenvolvimento (ex: secrets no código, falta de revisão)
+- Ambiente corporativo (ex: controle de acesso, segmentação)
+
+### Etapa 4: Análise de Riscos
+Para cada vulnerabilidade identificada, avalie:
+- Probabilidade de exploração
+- Impacto no negócio
+- Classificação de risco (Alta, Média, Baixa)
+
+### Etapa 5: Recomendações de Segurança
+Elabore recomendações práticas e priorizadas, contemplando:
+- Controles preventivos
+- Controles detectivos
+- Controles de resposta
+- Melhorias de processo
+
+### Etapa 6: Elaboração de Relatório Simplificado
+Produza um relatório contendo:
+- Resumo executivo
+- Principais achados
+- Riscos identificados
+- Recomendações
+- Priorização sugerida
+
+## 5. Dicas para Realizar o Laboratório
+
+- Tente ser o mais realista possível no cenário fictício
+- Documente suas hipóteses e decisões
+- Considere tanto aspectos técnicos quanto de processo e governança
+- Pense como um atacante (para identificar riscos) e como um defensor (para propor soluções)
+- Se possível, compare suas conclusões com as de colegas ou em fóruns de estudo
+
+## 6. Benefícios deste Tipo de Exercício
+
+- Integra múltiplos conhecimentos de segurança em um único projeto
+- Desenvolve raciocínio crítico e visão holística
+- Simula o trabalho real de profissionais de segurança
+- Serve como excelente material para portfólio
+- Ajuda a identificar áreas que precisam de maior aprofundamento
+
+## 7. Considerações Finais
+
+Laboratórios integradores como este são uma das formas mais eficazes de consolidar o aprendizado em segurança da informação. Eles permitem que o profissional vivencie o ciclo completo de avaliação de segurança — desde a compreensão do negócio até a entrega de recomendações acionáveis.
+
+Recomenda-se realizar este tipo de exercício periodicamente, aumentando o nível de complexidade do cenário fictício conforme o conhecimento avança. Dessa forma, é possível desenvolver competências cada vez mais próximas da realidade do mercado de trabalho.
+
+## Sugestão de Próximos Passos
+
+Após concluir este laboratório, você pode:
+- Aprofundar o Threat Modeling da aplicação
+- Simular um pentest mais detalhado em um dos sistemas
+- Elaborar um plano de resposta a incidentes para o cenário
+- Criar um roadmap de melhorias de segurança para a TechNova Solutions
+

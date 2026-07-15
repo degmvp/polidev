@@ -1,0 +1,89 @@
+# HACK45 — Engenharia Social e o Fator Humano
+
+## Resumo
+
+Apesar dos avanços tecnológicos em segurança, o ser humano continua sendo um dos elos mais vulneráveis da cadeia de proteção. Este artigo aborda o conceito de **Engenharia Social**, o papel do fator humano na cibersegurança e as principais estratégias defensivas que organizações e profissionais podem adotar para reduzir riscos associados a manipulação psicológica e erros humanos.
+
+**Palavras-chave:** Engenharia social, Fator humano, Conscientização em segurança, Phishing, Segurança comportamental, Cultura de segurança.
+
+## 1. Introdução
+
+A maioria dos incidentes de segurança bem-sucedidos não começa com uma exploração técnica complexa, mas com a manipulação de pessoas. Técnicas de **engenharia social** exploram características humanas como confiança, medo, urgência, curiosidade e desejo de ajudar para obter acesso não autorizado a sistemas, informações ou recursos.
+
+Mesmo organizações com boas ferramentas técnicas de segurança podem ser comprometidas se o fator humano não for adequadamente considerado. Por isso, compreender como o ser humano interage com a segurança é fundamental para construir defesas mais eficazes.
+
+## 2. O que é Engenharia Social?
+
+Engenharia social é o uso de técnicas de manipulação psicológica para induzir pessoas a realizarem ações ou revelarem informações confidenciais. Diferente de ataques puramente técnicos, ela explora vulnerabilidades humanas em vez de vulnerabilidades de software ou hardware.
+
+O objetivo principal costuma ser obter credenciais, acesso a sistemas, informações sensíveis ou induzir a execução de ações prejudiciais (como realizar transferências ou instalar arquivos maliciosos).
+
+## 3. Por que o Fator Humano é tão explorado?
+
+Diversos fatores psicológicos e organizacionais contribuem para o sucesso de ataques que exploram pessoas:
+
+- **Confiança excessiva** em comunicações que parecem legítimas
+- **Pressão por urgência** ou autoridade
+- **Falta de conhecimento** sobre riscos
+- **Fadiga de alertas** e excesso de notificações de segurança
+- **Cultura organizacional** que não prioriza a segurança
+- **Erros operacionais** causados por pressa ou falta de processos claros
+
+Pesquisas consistentemente mostram que uma parcela significativa dos incidentes de segurança tem como vetor inicial o erro ou a manipulação de pessoas.
+
+## 4. Impacto nas Organizações
+
+Quando o fator humano é explorado com sucesso, as consequências podem ser graves:
+
+- Comprometimento de credenciais de acesso
+- Instalação de malware ou ransomware
+- Vazamento de dados sensíveis
+- Prejuízos financeiros diretos
+- Danos à reputação e perda de confiança de clientes
+- Violações de conformidade (LGPD, GDPR, entre outras)
+
+Diferente de vulnerabilidades técnicas, que podem ser corrigidas com patches, o fator humano exige uma abordagem contínua de conscientização e mudança de comportamento.
+
+## 5. Estratégias de Defesa e Conscientização
+
+Reduzir os riscos relacionados ao fator humano exige uma combinação de tecnologia, processos e educação:
+
+### 5.1 Programas de Conscientização
+- Treinamentos regulares e atualizados (não apenas uma vez por ano)
+- Simulações controladas de ataques (com feedback educativo, nunca punitivo)
+- Campanhas internas de comunicação sobre ameaças atuais
+
+### 5.2 Controles Técnicos de Apoio
+- Implementação de **MFA** (Autenticação Multifator) em todos os acessos críticos
+- Filtros avançados de e-mail e proteção contra phishing
+- Monitoramento de comportamentos anormais
+- Restrição de privilégios (menor privilégio)
+
+### 5.3 Processos e Cultura Organizacional
+- Criação de canais claros para reportar suspeitas sem medo de punição
+- Verificação de identidade em solicitações sensíveis (especialmente por e-mail ou telefone)
+- Política clara de tratamento de informações confidenciais
+- Liderança visível apoiando a cultura de segurança
+
+## 6. O Papel de Desenvolvedores e Profissionais de TI
+
+Pessoas que desenvolvem sistemas e administram bancos de dados também estão sujeitas a técnicas de engenharia social, tanto no ambiente profissional quanto pessoal. Algumas recomendações específicas:
+
+- Nunca compartilhar credenciais ou informações sensíveis, mesmo quando solicitadas por alguém que “parece” ser da empresa
+- Validar pedidos incomuns de acesso ou alterações em sistemas
+- Reportar rapidamente tentativas suspeitas de contato
+- Manter uma postura de questionamento saudável (“por que essa pessoa está pedindo isso?”)
+
+## 7. Considerações Finais
+
+A tecnologia sozinha não resolve o problema do fator humano. Por mais avançadas que sejam as ferramentas de segurança, elas podem ser contornadas se as pessoas forem induzidas a cometer erros ou entregar acesso.
+
+Investir em conscientização, cultura de segurança e controles que reduzam a dependência exclusiva do julgamento humano é uma das melhores formas de fortalecer a postura de segurança de uma organização. O fator humano deve ser tratado como parte integrante da estratégia de defesa, e não como um problema secundário.
+
+## Referências e Leituras Recomendadas
+
+- ENISA — *Cybersecurity Culture Guidelines*
+- NIST SP 800-50 — Building an Information Technology Security Awareness and Training Program
+- Verizon DBIR (Data Breach Investigations Report) — edições recentes
+- Livro: *The Art of Deception* – Kevin Mitnick (visão histórica)
+

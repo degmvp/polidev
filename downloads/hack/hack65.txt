@@ -1,0 +1,107 @@
+# HACK65 — Como Elaborar um Relatório de Incidente de Segurança
+
+## Resumo
+
+Um **relatório de incidente de segurança** bem elaborado é fundamental para documentar o que ocorreu, as ações tomadas, o impacto causado e as lições aprendidas. Este artigo apresenta a estrutura recomendada, os elementos essenciais e as melhores práticas para elaborar relatórios claros, objetivos e úteis para diferentes públicos dentro de uma organização.
+
+**Palavras-chave:** Relatório de incidente, Resposta a incidentes, Documentação de incidentes, Segurança da informação, Pós-incidente.
+
+## 1. Introdução
+
+Durante ou após um incidente de segurança, a documentação adequada é tão importante quanto a resposta técnica. Um bom relatório de incidente serve para:
+
+- Registrar os fatos de forma clara e cronológica
+- Apoiar investigações futuras ou ações legais
+- Comunicar o impacto para diferentes níveis da organização
+- Registrar lições aprendidas e melhorias
+- Cumprir requisitos de conformidade e auditoria
+
+Relatórios mal estruturados ou incompletos podem gerar confusão, dificultar análises posteriores e até gerar problemas de responsabilidade.
+
+## 2. Objetivos de um Relatório de Incidente
+
+Um relatório de incidente bem feito deve atender aos seguintes objetivos:
+
+- Descrever o que aconteceu de forma objetiva
+- Registrar o que foi feito para conter e remediar o incidente
+- Avaliar o impacto técnico e de negócio
+- Identificar causas raiz (quando possível)
+- Propor ações de melhoria para evitar recorrência
+- Servir como registro oficial para a organização
+
+## 3. Estrutura Recomendada de um Relatório de Incidente
+
+Embora a estrutura possa variar conforme a política da organização, um relatório de incidente geralmente contém as seguintes seções:
+
+### 3.1 Informações Gerais
+- Título do incidente
+- Data e hora da detecção
+- Data e hora do início estimado do incidente
+- Status atual (Aberto / Em andamento / Fechado)
+- Classificação de severidade
+- Responsável pela investigação
+
+### 3.2 Resumo Executivo
+Breve descrição do incidente, impacto principal e status atual. Esta seção é especialmente importante para a alta gestão.
+
+### 3.3 Descrição do Incidente
+Narração clara e cronológica do que foi identificado, incluindo:
+- Como o incidente foi detectado
+- Sintomas observados
+- Sistemas e ativos afetados
+- Comportamento do atacante (se identificado)
+
+### 3.4 Linha do Tempo (Timeline)
+Registro cronológico dos principais eventos, com data e hora. É uma das partes mais importantes do relatório.
+
+### 3.5 Impacto
+Avaliação do impacto causado, contemplando:
+- Impacto técnico (sistemas comprometidos, dados acessados, etc.)
+- Impacto operacional
+- Impacto financeiro (quando possível estimar)
+- Impacto regulatório e de imagem
+
+### 3.6 Ações Tomadas
+Descrição das medidas de contenção, erradicação e recuperação realizadas, incluindo:
+- Ações imediatas de contenção
+- Medidas de remediação
+- Restauração de sistemas e dados
+
+### 3.7 Análise de Causa Raiz (Root Cause Analysis)
+Quando possível, incluir a análise que levou à identificação da causa raiz do incidente.
+
+### 3.8 Lições Aprendidas e Recomendações
+- O que funcionou bem durante a resposta
+- O que pode ser melhorado
+- Recomendações técnicas e de processo
+- Ações preventivas sugeridas
+
+### 3.9 Evidências e Anexos
+- Logs relevantes
+- Screenshots
+- Hashes de arquivos
+- Registros de comunicação
+- Outros artefatos importantes
+
+## 4. Boas Práticas na Elaboração do Relatório
+
+- **Seja objetivo e factual**: Evite especulações e opiniões pessoais.
+- **Use linguagem clara**: Adapte o nível técnico conforme o público-alvo.
+- **Mantenha a cronologia**: A linha do tempo é uma das partes mais valiosas do relatório.
+- **Registre tudo o que for relevante**: Mesmo detalhes que pareçam pequenos podem ser importantes depois.
+- **Proteja informações sensíveis**: Cuidado com dados que não devem ser amplamente divulgados.
+- **Revise antes de finalizar**: Erros ortográficos ou inconsistências prejudicam a credibilidade do relatório.
+- **Atualize conforme novas informações surgirem**: Incidentes podem ter novas descobertas durante a investigação.
+
+## 5. Considerações Finais
+
+Elaborar um bom relatório de incidente é uma competência essencial para profissionais de segurança. Um relatório bem feito não apenas documenta o ocorrido, mas também contribui para a melhoria contínua da segurança da organização.
+
+Além disso, relatórios de qualidade são fundamentais em casos que envolvam auditorias, processos legais ou comunicação com órgãos reguladores. Investir tempo na estruturação e redação clara dos relatórios é uma prática que traz benefícios tanto no curto quanto no longo prazo.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide
+- SANS Incident Handler’s Handbook
+- ISO/IEC 27035 — Information security incident management
+
