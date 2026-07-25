@@ -6,7 +6,7 @@
 
 <title>POLYDEV | SQL Server 2025 AI Engineering</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 
 <style>
@@ -307,7 +307,7 @@ async function carregarSQL25(){
 
         if(conteudos.length === 0){
             menu.innerHTML = "Nenhum módulo SQL encontrado.";
-            codigo.textContent = "Categoria 'hack' com programa '" + modulo + "' não encontrada no banco.";
+            codigo.textContent = "Categoria 'sql25' com programa '" + modulo + "' não encontrada no banco.";
             return;
         }
 
