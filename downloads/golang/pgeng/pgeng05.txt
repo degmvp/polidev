@@ -1,0 +1,205 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG05
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng05.txt
+Theme: Query Planner and Optimizer
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O Query Planner (ou Query Optimizer) do PostgreSQL é o componente responsável por transformar uma consulta SQL em um plano de execução eficiente. Diferentemente de interpretadores simples que executam a consulta da forma como foi escrita, o PostgreSQL analisa múltiplas estratégias possíveis e escolhe aquela que estima ter o menor custo.
+
+O processo de planejamento passa por várias etapas. Primeiro, o parser transforma o texto SQL em uma árvore de parse. Em seguida, o analisador semântico (analyzer/rewriter) resolve nomes, aplica regras e expande views. Depois, o planner propriamente dito gera caminhos alternativos (paths) para executar a consulta e seleciona o de menor custo estimado. Por fim, o executor recebe o plano escolhido e o executa.
+
+O planner do PostgreSQL é baseado em custo (cost-based optimizer). Ele não usa regras fixas do tipo “sempre use índice”. Em vez disso, calcula um custo estimado para cada operação com base em estatísticas coletadas sobre as tabelas e índices. Essas estatísticas incluem número de linhas (reltuples), número de páginas (relpages), distribuição de valores (histogramas e Most Common Values), correlação entre colunas e a ordenação física dos dados.
+
+As operações fundamentais que o planner considera incluem:
+
+- Sequential Scan
+- Index Scan, Index Only Scan e Bitmap Index Scan
+- Nested Loop Join, Hash Join e Merge Join
+- Agregações, ordenações, limites e materializações
+
+Cada uma dessas operações possui uma fórmula de custo que leva em conta I/O sequencial, I/O aleatório, processamento de CPU e, em alguns casos, o custo de construção de estruturas em memória (como hash tables).
+
+O resultado do planejamento pode ser inspecionado com o comando EXPLAIN. Quando usado com a opção ANALYZE, o PostgreSQL executa a consulta e mostra tanto as estimativas do planner quanto os números reais obtidos durante a execução. Essa comparação é a principal ferramenta de diagnóstico de performance de consultas.
+
+2. 🧠 UNDERSTAND
+
+O planner do PostgreSQL trabalha com a premissa de que o custo de uma consulta é predominantemente determinado por I/O e, em segundo lugar, por CPU. Os parâmetros seq_page_cost, random_page_cost, cpu_tuple_cost e cpu_index_tuple_cost formam a base do modelo de custo. Em discos tradicionais (HDD), random_page_cost é significativamente maior que seq_page_cost. Em SSDs modernos, a diferença diminui e muitos administradores reduzem random_page_cost para valores entre 1.0 e 1.5.
+
+As estatísticas são coletadas pelo comando ANALYZE (e automaticamente pelo autovacuum). O planner depende fortemente da qualidade dessas estatísticas. Se o número de linhas estimadas estiver muito diferente do número real, o plano escolhido tende a ser inadequado. Isso é especialmente crítico em joins e em condições com alta seletividade.
+
+O planner gera caminhos de acesso para cada tabela da consulta e depois combina esses caminhos por meio de estratégias de join. A ordem dos joins é um dos pontos mais complexos: o número de ordens possíveis cresce fatorialmente com o número de tabelas. Por isso, o PostgreSQL usa heurísticas e limites (geqo_threshold) para consultas com muitas tabelas, ativando o Genetic Query Optimizer (GEQO) quando necessário.
+
+Index Only Scan é uma otimização importante. Quando um índice cobre todas as colunas necessárias e o visibility map indica que a página está totalmente visível, o PostgreSQL pode evitar o acesso à tabela heap. Isso reduz drasticamente o I/O em consultas analíticas e de contagem.
+
+Bitmap scans são outra estratégia intermediária. Em vez de fazer um Index Scan tradicional (que pode gerar I/O aleatório intenso), o PostgreSQL pode construir um bitmap dos blocos relevantes e depois ler a tabela de forma mais sequencial. Isso é especialmente útil quando a seletividade não é extremamente alta.
+
+Comparando com o SQL Server:
+
+- Ambos usam otimizadores baseados em custo.
+- O SQL Server mantém estatísticas de forma semelhante (histogramas), mas o modelo de custo e os operadores diferem.
+- O SQL Server possui um mecanismo de “parameter sniffing” mais agressivo e planos em cache mais complexos (com possíveis problemas de parameter-sensitive plans).
+- O PostgreSQL, por padrão, gera um novo plano a cada consulta (salvo exceções com prepared statements), o que evita alguns problemas de planos ruins cacheados, mas também impede reutilização agressiva de planos.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Mantenha as estatísticas atualizadas. Em tabelas com grande volume de mudanças, reduza o autovacuum_analyze_scale_factor.
+- Use EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) como ferramenta principal de diagnóstico.
+- Evite funções em colunas indexadas em cláusulas WHERE; isso impede o uso do índice.
+- Entenda que o planner escolhe planos com base em estimativas. Quando as estimativas estão erradas, o plano estará errado.
+- Em consultas complexas, a ordem das tabelas no SQL não determina a ordem de execução; o planner decide.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos examinar o planner na prática com PostgreSQL 17+.
+
+Crie tabelas de demonstração e popule-as:
+
+CREATE TABLE clientes (
+    id          bigserial PRIMARY KEY,
+    nome        text not null,
+    cidade      text,
+    criado_em   timestamptz DEFAULT now()
+);
+
+CREATE TABLE pedidos (
+    id          bigserial PRIMARY KEY,
+    cliente_id  bigint REFERENCES clientes(id),
+    valor       numeric(12,2),
+    status      text,
+    criado_em   timestamptz DEFAULT now()
+);
+
+INSERT INTO clientes (nome, cidade)
+SELECT 
+    'Cliente ' || g,
+    (ARRAY['São Paulo','Rio de Janeiro','Belo Horizonte','Curitiba','Porto Alegre'])[1 + (g % 5)]
+FROM generate_series(1, 10000) g;
+
+INSERT INTO pedidos (cliente_id, valor, status)
+SELECT 
+    1 + (random() * 9999)::int,
+    (random() * 1000)::numeric(12,2),
+    (ARRAY['pendente','pago','cancelado','enviado'])[1 + (g % 4)]
+FROM generate_series(1, 50000) g;
+
+Crie índices úteis:
+
+CREATE INDEX idx_pedidos_cliente_id ON pedidos (cliente_id);
+CREATE INDEX idx_pedidos_status ON pedidos (status);
+CREATE INDEX idx_clientes_cidade ON clientes (cidade);
+
+Atualize as estatísticas:
+
+ANALYZE clientes;
+ANALYZE pedidos;
+
+Agora examine planos simples:
+
+EXPLAIN SELECT * FROM clientes WHERE id = 42;
+
+EXPLAIN SELECT * FROM clientes WHERE cidade = 'São Paulo';
+
+EXPLAIN SELECT * FROM pedidos WHERE status = 'pago';
+
+Use ANALYZE e BUFFERS para ver números reais:
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT c.nome, p.valor, p.status
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.cidade = 'Curitiba'
+  AND p.status = 'pago';
+
+Observe a diferença entre estimativa e realidade. Force um Nested Loop propositalmente (apenas para estudo):
+
+SET enable_hashjoin = off;
+SET enable_mergejoin = off;
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT c.nome, count(*)
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.cidade = 'São Paulo'
+GROUP BY c.nome;
+
+RESET enable_hashjoin;
+RESET enable_mergejoin;
+
+Verifique estatísticas de uma tabela:
+
+SELECT 
+    relname,
+    relpages,
+    reltuples,
+    last_analyze,
+    last_autoanalyze
+FROM pg_stat_user_tables
+WHERE relname IN ('clientes', 'pedidos');
+
+Consulte o histograma de uma coluna (via pg_stats):
+
+SELECT 
+    attname,
+    null_frac,
+    n_distinct,
+    most_common_vals,
+    most_common_freqs,
+    histogram_bounds
+FROM pg_stats
+WHERE tablename = 'pedidos' AND attname = 'status';
+
+Teste o efeito de estatísticas desatualizadas (apenas em ambiente de teste):
+
+-- simule estatísticas ruins
+UPDATE pg_class SET reltuples = 100 WHERE relname = 'pedidos';
+
+EXPLAIN SELECT * FROM pedidos WHERE status = 'pago';
+
+-- restaure
+ANALYZE pedidos;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. EXPLAIN (ANALYZE, BUFFERS) deve ser a primeira ferramenta usada ao investigar uma consulta lenta. Compare sempre as linhas estimadas com as linhas reais.
+
+2. Estatísticas desatualizadas são uma das causas mais comuns de planos ruins. Em tabelas que sofrem grandes cargas em batch, execute ANALYZE manualmente após a carga.
+
+3. O parâmetro random_page_cost deve ser ajustado de acordo com o armazenamento. Em SSDs, valores entre 1.1 e 1.5 costumam produzir planos melhores do que o padrão 4.0.
+
+4. Evite a tentação de usar SET enable_* = off em produção como solução permanente. Esses parâmetros são excelentes para diagnóstico, mas mascaram o problema real.
+
+5. Prepared statements podem causar planos genéricos (quando o planner não conhece os parâmetros). Em casos de parameter-sensitive queries, avalie o uso de plan_cache_mode ou a reescrita da consulta.
+
+Erros comuns:
+
+- Confiar apenas no tempo total da consulta sem olhar o plano.
+- Criar índices em todas as colunas “por precaução”, aumentando o custo de escrita e o tamanho do banco.
+- Esquecer de ANALYZE após grandes operações de carga ou exclusão.
+- Interpretar “Seq Scan” como necessariamente ruim. Em tabelas pequenas ou quando a seletividade é baixa, Sequential Scan é frequentemente a melhor escolha.
+- Usar funções em colunas indexadas (WHERE upper(nome) = 'JOÃO') sem criar índice funcional correspondente.
+
+Considerações de produção:
+
+- Monitore pg_stat_statements para identificar as consultas que mais consomem tempo e recursos.
+- Mantenha track_io_timing = on em ambientes onde seja seguro (tem custo baixo na maioria dos casos modernos) para obter informações precisas de I/O no EXPLAIN.
+- Em consultas analíticas complexas, considere increasing work_mem de forma controlada (por sessão ou por usuário) para permitir Hash Aggregates e Sort em memória.
+- O Genetic Query Optimizer (GEQO) entra em ação quando o número de tabelas no join ultrapassa geqo_threshold (padrão 12). Em consultas com muitas tabelas, valide se o plano gerado é aceitável.
+- Documente os índices existentes e o motivo de cada um. Índices não utilizados ainda geram custo de manutenção.
+
+5. 🎯 CONCLUSION
+
+Neste quinto artigo da série PostgreSQL Engineering, examinamos o Query Planner e o otimizador baseado em custo. Vimos como o PostgreSQL transforma uma consulta SQL em um plano de execução, a importância das estatísticas, o modelo de custo, os principais tipos de scan e join, e como usar o EXPLAIN como ferramenta de diagnóstico.
+
+O planner é poderoso, mas depende de informações corretas. Estatísticas atualizadas, índices bem escolhidos e compreensão do modelo de custo são os elementos que separam consultas lentas de consultas eficientes.
+
+No próximo artigo (PGENG06) entraremos em Indexes em profundidade — tipos de índices, B-tree, GIN, GiST, BRIN, estratégias de criação e manutenção, e quando cada tipo é a escolha correta.
+
+Continue a série. Domine o planner. Execute o código.

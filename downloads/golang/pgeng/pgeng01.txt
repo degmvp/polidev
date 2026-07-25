@@ -1,0 +1,212 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+
+File: PGENG01
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng01.txt
+Theme: PostgreSQL Architecture Fundamentals
+
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+1. 📖 READ
+
+O PostgreSQL é um sistema de gerenciamento de banco de dados relacional (RDBMS) de código aberto, conhecido por sua robustez, conformidade com o padrão SQL e capacidade de lidar com cargas de trabalho complexas. Diferentemente de sistemas mais simples, o PostgreSQL foi projetado desde o início como um sistema multi-processo com forte isolamento entre sessões de clientes e o núcleo do banco de dados.
+
+A arquitetura fundamental do PostgreSQL pode ser dividida em quatro grandes camadas:
+
+- Processos do sistema (postmaster e processos auxiliares)
+- Processos de backend (um por conexão de cliente)
+- Memória compartilhada (shared memory)
+- Armazenamento em disco (arquivos de dados, WAL e catálogos)
+
+Quando o PostgreSQL é iniciado, o processo principal — chamado de postmaster (ou postgres em versões mais recentes) — é responsável por ouvir conexões na porta configurada (padrão 5432), gerenciar a memória compartilhada e iniciar os processos auxiliares. Cada nova conexão de cliente gera um processo backend dedicado. Esse modelo de processo-por-conexão é uma das decisões de design mais importantes do PostgreSQL e diferencia significativamente sua arquitetura da de outros bancos de dados, como o SQL Server, que utiliza threads dentro de um único processo.
+
+A memória compartilhada é o coração da comunicação entre processos. Nela residem estruturas críticas como:
+
+- Buffer Pool (shared_buffers)
+- WAL buffers
+- Lock tables
+- Commit log (clog)
+- Catalog caches
+
+No disco, o PostgreSQL organiza os dados em tablespaces. Dentro de um tablespace, cada banco de dados possui seu próprio diretório, e cada relação (tabela ou índice) é armazenada em um ou mais arquivos de 1 GB (segmentos). O Write-Ahead Logging (WAL) garante a durabilidade: todas as modificações são primeiro gravadas no WAL antes de serem aplicadas aos arquivos de dados.
+
+O PostgreSQL também mantém catálogos do sistema (pg_catalog) que armazenam metadados sobre objetos do banco. Esses catálogos são tabelas comuns, o que permite que o próprio PostgreSQL seja consultado e gerenciado usando SQL padrão.
+
+Essa arquitetura multi-processo com memória compartilhada e WAL oferece isolamento forte entre sessões, recuperação confiável após falhas e a base para recursos avançados como MVCC (Multi-Version Concurrency Control), replicação e extensibilidade.
+
+2. 🧠 UNDERSTAND
+
+A decisão de usar um processo separado para cada conexão de cliente não foi acidental. Ela traz benefícios claros de isolamento: se um backend falhar (por exemplo, por um bug em uma extensão ou estouro de memória), apenas aquela sessão é afetada. Os demais backends e o postmaster continuam operando normalmente. Em contraste, no SQL Server (que utiliza um modelo baseado em threads dentro de um único processo), uma falha grave em uma thread pode, em teoria, comprometer todo o processo do servidor.
+
+O custo desse modelo é o overhead de memória e de troca de contexto. Cada backend carrega sua própria área de memória privada (incluindo caches de catálogo, planos de consulta e áreas de trabalho). Por isso, em ambientes com milhares de conexões concorrentes, é comum utilizar um connection pooler (como PgBouncer ou Odyssey) à frente do PostgreSQL. O pooler mantém um número menor de conexões reais com o banco e reutiliza-as entre os clientes da aplicação.
+
+A memória compartilhada é gerenciada principalmente pela área shared_buffers. Essa área funciona como um cache de páginas de dados (blocos de 8 KB por padrão). Quando uma consulta precisa de uma página, o PostgreSQL primeiro verifica se ela já está em shared_buffers. Se não estiver, a página é lida do disco (ou do cache do sistema operacional) e colocada no buffer pool. O algoritmo de substituição de páginas é uma variação do clock-sweep, mais simples que o LRU clássico, mas eficiente na prática.
+
+O WAL é o mecanismo que garante a propriedade de durabilidade (a letra "D" do ACID). Antes de qualquer alteração ser escrita nos arquivos de dados, a descrição da mudança é gravada no WAL. Em caso de crash, o processo de recovery lê o WAL a partir do último checkpoint e reaplica as mudanças que ainda não estavam nos arquivos de dados. Esse design também permite a replicação física: os registros de WAL podem ser enviados para réplicas standby, que os aplicam para manter uma cópia idêntica do banco.
+
+O controle de concorrência no PostgreSQL é baseado em MVCC. Em vez de bloquear leitores quando um escritor modifica uma linha (como ocorria em sistemas mais antigos ou em alguns modos do SQL Server), o PostgreSQL mantém múltiplas versões da mesma linha. Cada transação enxerga um snapshot consistente do banco no momento em que iniciou. Versões antigas de linhas são eventualmente removidas pelo processo de vacuum (autovacuum). Essa abordagem elimina a maior parte dos conflitos entre leitores e escritores, mas introduz a necessidade de manutenção periódica (vacuum) e o conceito de "bloat".
+
+Comparando com o SQL Server:
+
+- SQL Server usa um modelo de threads e um buffer pool gerenciado de forma diferente.
+- O SQL Server possui um mecanismo de tempdb mais centralizado e intensamente utilizado.
+- O controle de concorrência padrão do SQL Server (quando usando locking) é diferente do MVCC do PostgreSQL, embora o SQL Server também ofereça snapshot isolation.
+- O PostgreSQL trata catálogos como tabelas comuns, o que facilita a introspecção; o SQL Server usa system views e DMVs.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Dimensionar shared_buffers entre 25% e 40% da RAM disponível (em servidores dedicados).
+- Monitorar o uso de conexões e implementar connection pooling cedo.
+- Configurar checkpoint_timeout e max_wal_size de forma a evitar picos de I/O.
+- Entender que vacuum não é opcional — é parte essencial do funcionamento do MVCC.
+- Evitar criar milhares de bancos de dados ou schemas desnecessários, pois isso aumenta a pressão sobre os catálogos compartilhados.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos explorar a arquitetura na prática usando comandos do PostgreSQL 17+.
+
+Primeiro, verifique a versão e alguns parâmetros fundamentais:
+
+-- Verificar a versão do PostgreSQL
+SELECT version();
+
+-- Verificar o diretório de dados (data directory)
+SHOW data_directory;
+
+-- Verificar o tamanho da shared_buffers
+SHOW shared_buffers;
+
+-- Verificar o tamanho máximo de WAL entre checkpoints
+SHOW max_wal_size;
+
+-- Verificar o número máximo de conexões
+SHOW max_connections;
+
+Agora, observe os processos em execução (em um terminal do sistema operacional, não dentro do psql):
+
+# Listar processos do PostgreSQL
+ps aux | grep postgres
+
+Você verá o postmaster e vários processos auxiliares, como:
+
+- checkpointer
+- background writer
+- walwriter
+- autovacuum launcher
+- logical replication launcher (se habilitado)
+
+Dentro do psql, você pode consultar informações sobre backends ativos:
+
+-- Ver sessões ativas
+SELECT 
+    pid,
+    usename,
+    application_name,
+    client_addr,
+    state,
+    query_start,
+    left(query, 60) AS query_preview
+FROM pg_stat_activity
+WHERE backend_type = 'client backend'
+ORDER BY query_start;
+
+Para entender o buffer pool:
+
+-- Estatísticas do buffer pool (requer extensão pg_buffercache em alguns casos)
+-- Alternativa nativa:
+SELECT 
+    name,
+    setting,
+    unit,
+    short_desc
+FROM pg_settings
+WHERE name IN (
+    'shared_buffers',
+    'effective_cache_size',
+    'work_mem',
+    'maintenance_work_mem'
+);
+
+Vamos criar um exemplo simples que demonstra o uso de WAL e o comportamento de uma transação:
+
+-- Criar uma tabela de teste
+CREATE TABLE arquitetura_demo (
+    id          bigserial PRIMARY KEY,
+    payload     text,
+    criado_em   timestamptz DEFAULT now()
+);
+
+-- Inserir dados em uma transação explícita
+BEGIN;
+
+INSERT INTO arquitetura_demo (payload)
+VALUES 
+    ('Registro de demonstração 1'),
+    ('Registro de demonstração 2'),
+    ('Registro de demonstração 3');
+
+-- Nesse ponto os dados estão no WAL e na memória,
+-- mas ainda não foram checkpointados necessariamente.
+
+COMMIT;
+
+Para observar o progresso do WAL:
+
+-- Verificar a posição atual do WAL
+SELECT pg_current_wal_lsn();
+
+-- Verificar estatísticas de WAL (PostgreSQL 14+)
+SELECT * FROM pg_stat_wal;
+
+Por fim, examine a estrutura física de uma relação:
+
+-- Descobrir o OID da tabela
+SELECT oid, relname, relkind
+FROM pg_class
+WHERE relname = 'arquitetura_demo';
+
+-- Ver os arquivos físicos associados (requer privilégios)
+SELECT 
+    pg_relation_filepath('arquitetura_demo') AS caminho_arquivo;
+
+Esses comandos permitem correlacionar o que você vê no sistema de arquivos com o que o PostgreSQL gerencia internamente.
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Nunca subestime o impacto de max_connections. Cada conexão consome memória. Em produção, prefira connection pooling e mantenha max_connections entre 100 e 400 na maioria dos casos, a menos que você tenha hardware e workload muito específicos.
+
+2. shared_buffers não deve ser configurado como 100% da RAM. O sistema operacional também precisa de cache. Valores entre 25% e 40% da RAM total são um bom ponto de partida em servidores dedicados.
+
+3. Monitore o checkpoint. Checkpoints muito frequentes geram I/O excessivo; checkpoints muito esparsos aumentam o tempo de recovery. Ajuste checkpoint_timeout e max_wal_size de forma equilibrada.
+
+4. O autovacuum é crítico. Desabilitá-lo ou configurá-lo de forma agressiva demais são erros comuns. Monitore pg_stat_user_tables para identificar tabelas com alto n_dead_tup.
+
+5. Entenda a diferença entre work_mem e shared_buffers. work_mem é memória por operação (sort, hash join, etc.) e é privada ao backend. Valores altos de work_mem combinados com muitas conexões concorrentes podem esgotar a RAM rapidamente.
+
+Erros comuns:
+
+- Tratar o PostgreSQL como se fosse um banco "in-memory" e negligenciar o dimensionamento de disco e IOPS.
+- Ignorar o bloat causado por atualizações e exclusões frequentes.
+- Usar muitos índices sem necessidade (cada índice aumenta o custo de escrita e o espaço em disco).
+- Não monitorar a replicação e o lag de WAL em ambientes com standby.
+
+Considerações de produção:
+
+- Sempre use um sistema de arquivos robusto (XFS ou ext4 com opções adequadas).
+- Configure fsync = on (padrão) e synchronous_commit de acordo com os requisitos de durabilidade da aplicação.
+- Implemente monitoramento de pg_stat_activity, pg_stat_bgwriter, pg_stat_wal e pg_stat_database.
+- Planeje a estratégia de backup (pg_basebackup + WAL archiving ou ferramentas como pgBackRest/Barman) desde o início.
+
+5. 🎯 CONCLUSION
+
+Neste primeiro artigo da série PostgreSQL Engineering, exploramos os fundamentos da arquitetura do PostgreSQL: o modelo multi-processo, a memória compartilhada, o Write-Ahead Logging e o controle de concorrência baseado em MVCC. Compreender essas peças é pré-requisito para qualquer trabalho sério de performance, alta disponibilidade ou troubleshooting.
+
+Você agora sabe por que o PostgreSQL se comporta da forma que se comporta e como inspecionar os componentes principais com comandos práticos.
+
+No próximo artigo (PGENG02) entraremos em detalhes sobre o sistema de armazenamento, tablespaces, TOAST e a organização física dos dados em disco — a base para entender fragmentação, bloat e estratégias de particionamento.
+
+Continue a série. Domine a arquitetura. Execute o código.

@@ -1,0 +1,198 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG07
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng07.txt
+Theme: Partitioning and Table Inheritance
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O particionamento de tabelas é a técnica de dividir uma tabela logicamente grande em partes físicas menores, chamadas partições. Cada partição armazena um subconjunto dos dados com base em uma regra de particionamento. Para a aplicação, a tabela continua sendo uma única entidade; o PostgreSQL se encarrega de direcionar as operações para as partições corretas.
+
+O PostgreSQL oferece duas abordagens históricas:
+
+- Table Inheritance (herança de tabelas): mecanismo antigo e genérico, existente desde versões muito anteriores. Permite que uma tabela filha herde a estrutura de uma tabela pai. Foi amplamente usado para implementar particionamento antes do PostgreSQL 10.
+- Declarative Partitioning: introduzido no PostgreSQL 10 e aprimorado nas versões seguintes. É a forma oficial, mais simples e mais poderosa de particionar tabelas. O banco gerencia automaticamente a criação de restrições, o roteamento de dados e a eliminação de partições (partition pruning).
+
+No particionamento declarativo existem três estratégias principais:
+
+- RANGE: os dados são distribuídos por faixas de valores (datas, numéricos, etc.). É a estratégia mais comum para dados temporais.
+- LIST: os dados são distribuídos por listas de valores discretos (regiões, status, tipos).
+- HASH: os dados são distribuídos por hash de uma ou mais colunas, útil quando não há um critério natural de intervalo ou lista e se deseja distribuição uniforme.
+
+A grande vantagem do particionamento é a capacidade de eliminar partições inteiras durante o planejamento da consulta (partition pruning). Se a cláusula WHERE restringe o valor da chave de particionamento, o planner simplesmente não acessa as partições que não podem conter dados relevantes. Isso reduz drasticamente o volume de I/O e o tempo de execução em tabelas muito grandes.
+
+Além disso, o particionamento facilita a manutenção: é possível fazer DETACH de partições antigas, arquivá-las ou removê-las sem afetar o restante dos dados. Operações de vacuum, reindex e backup também se tornam mais granulares.
+
+2. 🧠 UNDERSTAND
+
+A herança de tabelas (table inheritance) foi o método clássico de particionamento no PostgreSQL por muitos anos. Nela, cria-se uma tabela pai e tabelas filhas que herdam suas colunas. Triggers ou regras eram usados para redirecionar os INSERTs para a filha correta, e constraints CHECK eram adicionadas manualmente para permitir o constraint exclusion (o predecessor do partition pruning).
+
+Esse modelo funciona, mas possui limitações importantes: índices não são herdados de forma automática e global, chaves primárias e constraints de unicidade não se aplicam globalmente, e o planejamento de consultas é menos eficiente. Por isso, a partir do PostgreSQL 10, o caminho recomendado é o particionamento declarativo.
+
+No particionamento declarativo, a tabela pai é apenas uma definição (não armazena dados). As partições são tabelas reais ligadas à pai por meio da cláusula PARTITION OF. O PostgreSQL garante que cada linha inserida vá para a partição correta e rejeita valores que não se encaixem em nenhuma partição (a menos que exista uma partição DEFAULT).
+
+O partition pruning ocorre em duas fases:
+
+- Em tempo de planejamento (static pruning): quando os valores da chave de particionamento são conhecidos no momento do parse/plan.
+- Em tempo de execução (runtime pruning): quando os valores só são conhecidos durante a execução (por exemplo, em joins ou parâmetros).
+
+O runtime pruning foi significativamente melhorado nas versões recentes e é essencial para consultas preparadas e para planos genéricos.
+
+Índices em tabelas particionadas podem ser criados na tabela pai (e são propagados automaticamente para as partições existentes e futuras) ou individualmente em cada partição. A partir do PostgreSQL 11, índices locais e constraints locais são bem suportados, e a partir de versões posteriores há melhorias contínuas em unique constraints e foreign keys envolvendo tabelas particionadas.
+
+Comparando com o SQL Server:
+
+- O SQL Server possui particionamento declarativo baseado em partition functions e partition schemes, tipicamente alinhado a filegroups.
+- Ambos os sistemas suportam partition elimination (equivalente ao pruning).
+- O SQL Server exige mais configuração prévia (partition function + scheme); o PostgreSQL é mais direto na sintaxe.
+- A herança de tabelas é um conceito nativo e antigo do PostgreSQL que não possui equivalente direto no SQL Server.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Prefira sempre declarative partitioning em novos projetos.
+- Escolha a chave de particionamento com base nos filtros mais comuns das consultas (quase sempre uma coluna de data).
+- Evite criar demasiadas partições. Centenas de partições ainda são gerenciáveis; milhares começam a impactar o tempo de planejamento e a memória do backend.
+- Use DETACH PARTITION + DROP TABLE (ou arquivamento) para remover dados antigos de forma rápida e com pouco impacto de WAL.
+- Mantenha estatísticas atualizadas em cada partição (o ANALYZE na tabela pai não é suficiente em todos os casos).
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos implementar e observar o particionamento declarativo com PostgreSQL 17+.
+
+Crie a tabela particionada por RANGE (mensal):
+
+CREATE TABLE eventos (
+    id          bigserial,
+    tipo        text not null,
+    payload     jsonb,
+    criado_em   timestamptz not null,
+    PRIMARY KEY (id, criado_em)
+) PARTITION BY RANGE (criado_em);
+
+Crie partições para alguns meses:
+
+CREATE TABLE eventos_2026_01 PARTITION OF eventos
+    FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+
+CREATE TABLE eventos_2026_02 PARTITION OF eventos
+    FOR VALUES FROM ('2026-02-01') TO ('2026-03-01');
+
+CREATE TABLE eventos_2026_03 PARTITION OF eventos
+    FOR VALUES FROM ('2026-03-01') TO ('2026-04-01');
+
+CREATE TABLE eventos_default PARTITION OF eventos DEFAULT;
+
+Insira dados de teste:
+
+INSERT INTO eventos (tipo, payload, criado_em)
+SELECT 
+    (ARRAY['login','compra','erro','view'])[1 + (g % 4)],
+    jsonb_build_object('user_id', g),
+    '2026-01-15'::timestamptz + (g || ' hours')::interval
+FROM generate_series(0, 2000) g;
+
+Verifique para quais partições os dados foram:
+
+SELECT 
+    tableoid::regclass AS particao,
+    count(*) 
+FROM eventos
+GROUP BY tableoid
+ORDER BY 1;
+
+Observe o partition pruning em ação:
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos
+WHERE criado_em >= '2026-02-01' AND criado_em < '2026-03-01';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos
+WHERE criado_em >= '2026-02-15' AND tipo = 'compra';
+
+Crie um índice na tabela pai (propagado automaticamente):
+
+CREATE INDEX idx_eventos_tipo ON eventos (tipo);
+
+Verifique que o índice existe nas partições:
+
+SELECT 
+    c.relname AS particao,
+    i.relname AS indice
+FROM pg_class c
+JOIN pg_index x ON x.indrelid = c.oid
+JOIN pg_class i ON i.oid = x.indexrelid
+WHERE c.relname LIKE 'eventos_%'
+ORDER BY 1, 2;
+
+Demonstre DETACH e ATTACH:
+
+ALTER TABLE eventos DETACH PARTITION eventos_2026_01;
+
+-- a partição agora é uma tabela comum
+SELECT count(*) FROM eventos_2026_01;
+
+-- reanexe se desejar
+ALTER TABLE eventos ATTACH PARTITION eventos_2026_01
+    FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+
+Exemplo de particionamento por LIST:
+
+CREATE TABLE clientes (
+    id          bigserial,
+    nome        text,
+    regiao      text not null,
+    PRIMARY KEY (id, regiao)
+) PARTITION BY LIST (regiao);
+
+CREATE TABLE clientes_sudeste PARTITION OF clientes
+    FOR VALUES IN ('SP', 'RJ', 'MG', 'ES');
+
+CREATE TABLE clientes_sul PARTITION OF clientes
+    FOR VALUES IN ('PR', 'SC', 'RS');
+
+CREATE TABLE clientes_outros PARTITION OF clientes DEFAULT;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. A chave de particionamento deve aparecer com frequência nos filtros WHERE das consultas críticas. Caso contrário, o pruning não ocorre e o benefício desaparece.
+
+2. Prefira RANGE para dados temporais. É a estratégia mais previsível para retenção e arquivamento de dados antigos.
+
+3. Evite criar partições futuras em excesso. Crie-as sob demanda (ou com um job que cria as próximas 2–3 partições) para não poluir o catálogo.
+
+4. Use DETACH PARTITION CONCURRENTLY (quando disponível e aplicável) ou DETACH + reindexação em janelas de manutenção para remover dados antigos com mínimo impacto.
+
+5. Índices e constraints devem ser pensados desde o início. Unique constraints e primary keys em tabelas particionadas precisam incluir a chave de particionamento.
+
+Erros comuns:
+
+- Continuar usando table inheritance em projetos novos quando declarative partitioning resolve melhor.
+- Escolher uma chave de particionamento que raramente aparece nas cláusulas WHERE.
+- Criar milhares de partições (por dia, por exemplo) sem necessidade, degradando o tempo de planejamento.
+- Esquecer de criar partições para novos períodos e receber erros de “no partition found”.
+- Achar que ANALYZE na tabela pai atualiza estatísticas de todas as partições de forma ideal (em muitos casos é necessário analisar partições individualmente).
+
+Considerações de produção:
+
+- Monitore o número de partições e o tempo de planejamento de consultas complexas.
+- Em ambientes com alta taxa de criação e remoção de partições, o catálogo (pg_class, pg_inherits, etc.) pode se tornar um ponto de contenção.
+- Scripts de manutenção devem ser idempotentes e capazes de criar partições futuras automaticamente.
+- O particionamento não substitui índices. Ele complementa. Uma partição grande ainda se beneficia de índices adequados.
+- Teste o comportamento do partition pruning com EXPLAIN em consultas reais da aplicação, incluindo consultas com parâmetros.
+
+5. 🎯 CONCLUSION
+
+Neste sétimo artigo da série PostgreSQL Engineering, examinamos o particionamento de tabelas: a diferença entre table inheritance e declarative partitioning, as estratégias RANGE, LIST e HASH, o funcionamento do partition pruning, a manutenção com ATTACH/DETACH e as implicações práticas para índices e estatísticas.
+
+O particionamento é uma das ferramentas mais eficazes para lidar com tabelas que crescem sem limites, especialmente quando combinado com uma política clara de retenção de dados. Quando bem projetado, reduz o tempo de consultas, simplifica a manutenção e torna o vacuum e o reindex mais gerenciáveis.
+
+No próximo artigo (PGENG08) entraremos em Replication — replicação física, streaming replication, slots de replicação, lag, configuração de standbys e fundamentos de alta disponibilidade.
+
+Continue a série. Domine o particionamento. Execute o código.

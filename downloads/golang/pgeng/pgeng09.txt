@@ -1,0 +1,191 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG09
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng09.txt
+Theme: Performance Tuning and Query Optimization
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+Performance Tuning no PostgreSQL é o processo sistemático de identificar, diagnosticar e eliminar gargalos que fazem o banco responder mais devagar do que o esperado. Não se trata de aplicar uma lista mágica de parâmetros, mas de compreender o comportamento do sistema sob a carga real da aplicação e atuar nos pontos corretos.
+
+Os gargalos mais comuns se concentram em quatro áreas:
+
+- Consultas mal planejadas ou com estatísticas desatualizadas
+- Índices inadequados ou ausentes
+- Configuração de memória e I/O desalinhada com o hardware
+- Contenção causada por locks, vacuum deficiente ou conexões excessivas
+
+O processo de otimização começa quase sempre pelo lado da consulta. O comando EXPLAIN (ANALYZE, BUFFERS) é a ferramenta principal. Ele revela o plano escolhido pelo planner, o número real de linhas processadas, o tempo gasto em cada nó e a quantidade de buffers lidos ou escritos. Comparar as estimativas do planner com os números reais é o caminho mais rápido para encontrar o problema.
+
+Depois de identificar consultas lentas, a análise se expande para o ambiente: shared_buffers, work_mem, effective_cache_size, random_page_cost, configuração de autovacuum, uso de conexão pooling e características do armazenamento. Cada um desses elementos influencia o comportamento do planner e do executor.
+
+Performance Tuning eficaz no PostgreSQL é iterativo. Mede-se, altera-se uma variável, mede-se novamente. Mudanças simultâneas em vários parâmetros dificultam a compreensão do que realmente fez diferença.
+
+2. 🧠 UNDERSTAND
+
+O PostgreSQL é um sistema orientado a custo. O planner escolhe planos com base em estimativas de custo que dependem fortemente de estatísticas e de parâmetros de custo (seq_page_cost, random_page_cost, cpu_tuple_cost, etc.). Quando as estatísticas estão corretas e os parâmetros refletem o hardware, o planner geralmente toma boas decisões. Quando um dos dois está errado, o plano tende a ser ruim.
+
+A memória é dividida em várias áreas com papéis distintos:
+
+- shared_buffers: cache compartilhado de páginas. Valores entre 25% e 40% da RAM são comuns em servidores dedicados.
+- work_mem: memória disponível para operações de sort, hash e materialize por nó de execução. Valores altos demais em ambientes com muitas conexões concorrentes podem esgotar a RAM.
+- maintenance_work_mem: usada por operações de manutenção (VACUUM, CREATE INDEX, etc.).
+- effective_cache_size: não é uma alocação real, mas uma dica para o planner sobre quanto cache o sistema operacional + shared_buffers provavelmente têm.
+
+O I/O é frequentemente o fator limitante. Sequential scans em tabelas grandes, Bitmap Heap Scans com recheck e ordenações que derramam para disco (external sort) são sinais clássicos de pressão de I/O ou de work_mem insuficiente.
+
+A contenção também degrada performance. Transações longas impedem o vacuum, gerando bloat. Bloat aumenta o número de páginas a serem lidas. Mais páginas lidas aumentam o tempo de consulta e a pressão sobre o cache. O ciclo se retroalimenta.
+
+Comparando com o SQL Server:
+
+- Ambos possuem otimizadores baseados em custo e ferramentas de análise de plano (EXPLAIN vs. actual execution plan).
+- O SQL Server tem um foco maior em planos em cache e parameter sniffing; o PostgreSQL, por padrão, planeja com mais frequência.
+- Ajustes de memória no SQL Server giram em torno de max server memory e buffer pool; no PostgreSQL a divisão é mais explícita (shared_buffers + work_mem + OS cache).
+- O PostgreSQL exige atenção mais constante ao vacuum e ao bloat como parte do tuning.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Comece sempre pelas consultas mais custosas (pg_stat_statements).
+- Mantenha estatísticas atualizadas, especialmente após cargas em massa.
+- Ajuste random_page_cost de acordo com o tipo de armazenamento (valores mais baixos para SSD).
+- Use connection pooling (PgBouncer ou equivalente) para controlar o número de backends.
+- Trate o autovacuum como componente crítico de performance, não apenas de manutenção.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos aplicar um fluxo prático de diagnóstico e otimização com PostgreSQL 17+.
+
+Habilite e consulte a extensão pg_stat_statements (essencial para tuning):
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+
+SELECT 
+    calls,
+    round(total_exec_time::numeric, 2) AS total_time_ms,
+    round(mean_exec_time::numeric, 2) AS mean_time_ms,
+    rows,
+    left(query, 80) AS query_preview
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 10;
+
+Analise uma consulta específica com EXPLAIN completo:
+
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT c.nome, count(*) AS total_pedidos, sum(p.valor) AS valor_total
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.cidade = 'São Paulo'
+  AND p.criado_em >= now() - interval '30 days'
+GROUP BY c.nome
+ORDER BY valor_total DESC
+LIMIT 20;
+
+Verifique parâmetros de memória e custo:
+
+SHOW shared_buffers;
+SHOW work_mem;
+SHOW maintenance_work_mem;
+SHOW effective_cache_size;
+SHOW random_page_cost;
+SHOW seq_page_cost;
+SHOW effective_io_concurrency;
+
+Observe o uso de buffers e cache hit ratio:
+
+SELECT 
+    sum(heap_blks_read) AS heap_read,
+    sum(heap_blks_hit)  AS heap_hit,
+    round(100.0 * sum(heap_blks_hit) / nullif(sum(heap_blks_hit) + sum(heap_blks_read), 0), 2) AS cache_hit_ratio
+FROM pg_statio_user_tables;
+
+Verifique atividade de vacuum e bloat potencial:
+
+SELECT 
+    relname,
+    n_live_tup,
+    n_dead_tup,
+    round(100.0 * n_dead_tup / nullif(n_live_tup + n_dead_tup, 0), 2) AS dead_ratio,
+    last_autovacuum,
+    last_autoanalyze
+FROM pg_stat_user_tables
+WHERE n_dead_tup > 1000
+ORDER BY n_dead_tup DESC
+LIMIT 15;
+
+Ajuste temporário de work_mem para uma sessão (teste):
+
+SET work_mem = '64MB';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM pedidos
+WHERE status = 'pago'
+ORDER BY criado_em DESC
+LIMIT 1000;
+
+RESET work_mem;
+
+Verifique conexões e possível contenção:
+
+SELECT 
+    state,
+    count(*) 
+FROM pg_stat_activity
+WHERE backend_type = 'client backend'
+GROUP BY state;
+
+SELECT 
+    pid,
+    now() - xact_start AS duracao_transacao,
+    state,
+    left(query, 60) AS query_preview
+FROM pg_stat_activity
+WHERE state != 'idle'
+  AND xact_start IS NOT NULL
+ORDER BY duracao_transacao DESC
+LIMIT 10;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. pg_stat_statements deve estar habilitado em todo ambiente de produção. Sem ele, o tuning é feito no escuro.
+
+2. Nunca altere shared_buffers, work_mem ou random_page_cost sem medir o impacto com EXPLAIN (ANALYZE, BUFFERS) e com métricas de sistema.
+
+3. work_mem alto resolve muitos sorts e hash joins, mas multiplica o consumo de memória pelo número de conexões e de nós de execução concorrentes. Use com cautela.
+
+4. O cache hit ratio acima de 99% é desejável na maioria dos workloads OLTP. Valores consistentemente abaixo de 95% merecem investigação de shared_buffers, tamanho do working set ou queries que fazem sequential scans desnecessários.
+
+5. Transações longas e idle in transaction são inimigos silenciosos de performance. Elas bloqueiam vacuum e geram bloat.
+
+Erros comuns:
+
+- Aumentar shared_buffers para valores próximos de 100% da RAM, deixando o sistema operacional sem memória para cache de arquivos e para os próprios processos.
+- Aplicar SET enable_seqscan = off ou enable_nestloop = off como solução permanente.
+- Criar índices sem verificar se o planner realmente os utiliza.
+- Ignorar o autovacuum e depois reclamar de performance degradada ao longo do tempo.
+- Fazer tuning apenas em homologação com volume de dados muito menor que o de produção.
+
+Considerações de produção:
+
+- Estabeleça uma linha de base (baseline) de performance antes de qualquer mudança significativa.
+- Altere um parâmetro de cada vez e meça.
+- Monitore I/O, CPU, memória e lag de replicação junto com as métricas do PostgreSQL.
+- Em ambientes com SSD, reduza random_page_cost e aumente effective_io_concurrency.
+- Documente todas as alterações de configuração e o motivo de cada uma.
+- Performance Tuning é um processo contínuo, não um projeto único. Workloads mudam, dados crescem e novos padrões de acesso aparecem.
+
+5. 🎯 CONCLUSION
+
+Neste nono artigo da série PostgreSQL Engineering, abordamos Performance Tuning e Query Optimization de forma prática: identificação de consultas custosas, interpretação de planos de execução, ajuste de parâmetros de memória e custo, monitoramento de cache, vacuum e contenção.
+
+O PostgreSQL oferece as ferramentas necessárias para alcançar excelente performance, mas exige método. Medir antes de alterar, entender o plano de execução e tratar o banco como um sistema vivo são os princípios que separam ajustes eficazes de mudanças aleatórias.
+
+No próximo e último artigo da série (PGENG10) consolidaremos as melhores práticas de engenharia PostgreSQL em produção — checklist de configuração, monitoramento, manutenção preventiva e lições aprendidas ao longo de toda a série.
+
+Continue a série. Domine a performance. Execute o código.

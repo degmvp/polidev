@@ -1,0 +1,187 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG02
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng02.txt
+Theme: PostgreSQL Storage Engine, Tablespaces and TOAST
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O motor de armazenamento do PostgreSQL é responsável por persistir dados de forma durável, eficiente e recuperável. Diferente de sistemas que tratam o armazenamento como uma caixa preta, o PostgreSQL expõe e documenta claramente como os dados são organizados em disco. Compreender essa organização é fundamental para diagnosticar problemas de performance, planejar crescimento e evitar surpresas em produção.
+
+No nível mais baixo, o PostgreSQL trabalha com páginas (pages) de tamanho fixo, normalmente 8 KB. Cada página contém um cabeçalho, uma área de ponteiros para itens (item pointers) e o espaço onde as tuplas (linhas) são armazenadas. As tuplas crescem de trás para frente na página, enquanto os ponteiros crescem de frente para trás. Quando não há mais espaço suficiente para uma nova tupla, o PostgreSQL precisa encontrar outra página ou expandir o arquivo.
+
+Os arquivos de dados de uma relação (tabela ou índice) são organizados em segmentos de 1 GB. Quando uma tabela ultrapassa esse tamanho, o PostgreSQL cria automaticamente novos arquivos com sufixo numérico (.1, .2, etc.). Essa decisão evita limitações de sistemas de arquivos antigos e facilita o gerenciamento de arquivos muito grandes.
+
+Tablespaces permitem que o administrador controle fisicamente onde os arquivos de dados são armazenados. Um tablespace é, na prática, um diretório no sistema de arquivos que o PostgreSQL passa a utilizar para criar novos objetos. Isso possibilita separar dados quentes de dados frios, colocar índices em discos mais rápidos ou isolar bancos de dados específicos em volumes distintos.
+
+O mecanismo TOAST (The Oversized-Attribute Storage Technique) resolve o problema de valores muito grandes que não cabem em uma única página. Quando uma coluna de tipo variável (como text, bytea ou jsonb) ultrapassa um limite interno (aproximadamente 2 KB por padrão, controlado por toast_tuple_target), o PostgreSQL move o valor para uma tabela TOAST auxiliar. O valor original na tupla principal é substituído por um ponteiro. O TOAST pode ainda comprimir os dados antes de armazená-los e decide automaticamente se deve armazenar o valor completo na tabela principal (PLAIN), de forma compacta (MAIN), de forma externa (EXTERNAL) ou externa com compressão (EXTENDED).
+
+Essa combinação de páginas de tamanho fixo, segmentos de 1 GB, tablespaces e TOAST forma a base do motor de armazenamento do PostgreSQL. Entender cada uma dessas peças permite prever o comportamento do banco sob carga, dimensionar discos corretamente e diagnosticar problemas de bloat, fragmentação e I/O.
+
+2. 🧠 UNDERSTAND
+
+A escolha de páginas de 8 KB não é arbitrária. Esse tamanho oferece um bom equilíbrio entre eficiência de I/O e granularidade de locking e caching. Páginas menores aumentariam o overhead de metadados; páginas maiores aumentariam a contenção e o desperdício de espaço em atualizações parciais. O PostgreSQL permite compilar com tamanhos diferentes (1 KB a 32 KB), mas 8 KB é o padrão praticamente universal em produção.
+
+O modelo de segmentos de 1 GB existe por razões históricas e práticas. Sistemas de arquivos antigos tinham limitações de tamanho de arquivo. Mesmo hoje, arquivos muito grandes dificultam operações de backup incremental, cópia e reorganização. Ao quebrar relações grandes em segmentos, o PostgreSQL mantém os arquivos gerenciáveis.
+
+Tablespaces são a forma oficial de controlar a localização física dos dados. Internamente, o PostgreSQL registra o caminho do tablespace no catálogo pg_tablespace e cria um link simbólico (ou diretório) dentro de PGDATA/pg_tblspc. Quando um objeto é criado em um tablespace específico, seus arquivos são colocados nesse local. Vale notar que tablespaces não são uma solução de particionamento lógico; eles são uma decisão de armazenamento físico. O particionamento de tabelas (declarative partitioning) é um recurso separado e de nível lógico.
+
+O TOAST é um dos mecanismos mais elegantes do PostgreSQL. Em vez de forçar o administrador a escolher entre tipos de tamanho fixo e tipos grandes, o sistema decide automaticamente. A estratégia padrão (EXTENDED) tenta comprimir o valor e, se ainda assim for grande demais, move-o para a tabela TOAST. A tabela TOAST é uma relação comum, com seu próprio OID, e também está sujeita a vacuum e a bloat. Por isso, tabelas com muitas colunas TOASTed podem gerar pressão significativa de I/O e de vacuum se houver atualizações frequentes nessas colunas.
+
+Comparando com o SQL Server:
+
+- O SQL Server também usa páginas de 8 KB, mas organiza os dados em extents de 64 KB e utiliza uma estrutura de allocation maps (GAM, SGAM, IAM) diferente.
+- O SQL Server não possui um equivalente direto e transparente ao TOAST; valores grandes (varchar(max), varbinary(max)) são armazenados em estruturas de LOB (Large Object) com gerenciamento mais complexo.
+- Tablespaces no PostgreSQL são conceitualmente semelhantes a filegroups no SQL Server, embora a implementação e a flexibilidade diferem.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Separe dados e índices em tablespaces diferentes apenas quando houver benefício real de performance ou de gerenciamento de disco.
+- Monitore o tamanho das tabelas TOAST (reltoastrelid) em tabelas com colunas text/jsonb grandes e atualizadas com frequência.
+- Evite atualizar colunas TOASTed desnecessariamente; cada atualização pode gerar novas versões na tabela TOAST.
+- Entenda que o fillfactor afeta diretamente o espaço livre nas páginas e, portanto, a taxa de criação de novas páginas e o bloat.
+- Planeje o crescimento de disco considerando não apenas o tamanho das tabelas principais, mas também índices, TOAST e WAL.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos inspecionar e experimentar o motor de armazenamento na prática com PostgreSQL 17+.
+
+Primeiro, verifique o tamanho de página e a localização dos dados:
+
+SHOW block_size;
+SHOW data_directory;
+
+Crie um tablespace de teste (ajuste o caminho conforme seu ambiente):
+
+CREATE TABLESPACE ts_demo LOCATION '/tmp/pg_tablespace_demo';
+
+Crie uma tabela no tablespace padrão e outra no tablespace novo:
+
+CREATE TABLE storage_demo_padrao (
+    id          bigserial PRIMARY KEY,
+    descricao   text,
+    dados       jsonb
+);
+
+CREATE TABLE storage_demo_ts (
+    id          bigserial PRIMARY KEY,
+    descricao   text,
+    dados       jsonb
+) TABLESPACE ts_demo;
+
+Verifique onde os arquivos físicos foram criados:
+
+SELECT 
+    c.relname,
+    pg_relation_filepath(c.oid) AS caminho,
+    t.spcname AS tablespace
+FROM pg_class c
+LEFT JOIN pg_tablespace t ON c.reltablespace = t.oid
+WHERE c.relname IN ('storage_demo_padrao', 'storage_demo_ts');
+
+Insira dados que forcem o uso de TOAST:
+
+INSERT INTO storage_demo_padrao (descricao, dados)
+SELECT 
+    repeat('texto longo para forçar toast ', 200),
+    jsonb_build_object(
+        'conteudo', repeat('json grande ', 300),
+        'id', g
+    )
+FROM generate_series(1, 100) g;
+
+Verifique se a tabela TOAST foi criada e qual o seu tamanho:
+
+SELECT 
+    c.relname AS tabela,
+    pg_size_pretty(pg_relation_size(c.oid)) AS tamanho_principal,
+    pg_size_pretty(pg_relation_size(c.reltoastrelid)) AS tamanho_toast,
+    c.reltoastrelid
+FROM pg_class c
+WHERE c.relname = 'storage_demo_padrao';
+
+Consulte a estratégia de armazenamento das colunas:
+
+SELECT 
+    a.attname,
+    a.attstorage,
+    CASE a.attstorage
+        WHEN 'p' THEN 'PLAIN'
+        WHEN 'm' THEN 'MAIN'
+        WHEN 'e' THEN 'EXTERNAL'
+        WHEN 'x' THEN 'EXTENDED'
+    END AS estrategia
+FROM pg_attribute a
+JOIN pg_class c ON a.attrelid = c.oid
+WHERE c.relname = 'storage_demo_padrao'
+  AND a.attnum > 0
+  AND NOT a.attisdropped;
+
+Altere a estratégia de armazenamento de uma coluna (exemplo):
+
+ALTER TABLE storage_demo_padrao 
+    ALTER COLUMN dados SET STORAGE EXTERNAL;
+
+Verifique o tamanho total da relação incluindo índices e TOAST:
+
+SELECT 
+    pg_size_pretty(pg_total_relation_size('storage_demo_padrao')) AS tamanho_total,
+    pg_size_pretty(pg_relation_size('storage_demo_padrao')) AS tamanho_tabela,
+    pg_size_pretty(pg_indexes_size('storage_demo_padrao')) AS tamanho_indices,
+    pg_size_pretty(pg_relation_size((SELECT reltoastrelid FROM pg_class WHERE relname = 'storage_demo_padrao'))) AS tamanho_toast;
+
+Liste todos os tablespaces e seus caminhos:
+
+SELECT 
+    oid,
+    spcname,
+    pg_tablespace_location(oid) AS localizacao
+FROM pg_tablespace;
+
+Por fim, limpe o ambiente de teste se desejar:
+
+DROP TABLE storage_demo_padrao;
+DROP TABLE storage_demo_ts;
+DROP TABLESPACE ts_demo;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Tablespaces são úteis, mas não devem ser usados como substituto de particionamento lógico. Use-os para separar cargas de I/O, isolar dados sensíveis ou aproveitar discos de características diferentes (SSD vs HDD, por exemplo).
+
+2. O TOAST é transparente na maior parte do tempo, mas deixa de ser transparente quando há atualizações frequentes em colunas grandes. Nesses casos, o bloat da tabela TOAST pode se tornar um problema sério de performance e de espaço.
+
+3. Monitore regularmente o tamanho das relações TOAST em tabelas críticas. A consulta usando reltoastrelid é simples e deve fazer parte de qualquer rotina de health check.
+
+4. O parâmetro toast_tuple_target (padrão 2040 bytes) controla o limite a partir do qual o valor é candidato a TOAST. Em workloads muito específicos é possível ajustá-lo, mas a alteração deve ser feita com conhecimento do impacto.
+
+5. Fillfactor baixo demais gera mais páginas e mais I/O de leitura; fillfactor alto demais aumenta o bloat em tabelas com muitas atualizações. O valor padrão (100 para heaps, 90 para índices) é adequado na maioria dos casos, mas tabelas de alta taxa de update se beneficiam de fillfactor menor (70-80).
+
+Erros comuns:
+
+- Criar tablespaces em pontos de montagem que não estão no fstab ou que podem ser desmontados acidentalmente.
+- Esquecer que índices também ocupam espaço e geram I/O; muitas vezes o tamanho dos índices supera o da tabela principal.
+- Atualizar colunas jsonb ou text grandes em loops sem necessidade, gerando explosão de TOAST.
+- Não considerar o espaço ocupado por TOAST ao dimensionar discos.
+
+Considerações de produção:
+
+- Sempre documente os tablespaces criados e seus propósitos.
+- Inclua o tamanho das tabelas TOAST nos relatórios de crescimento de banco.
+- Em ambientes com replicação, lembre-se de que tablespaces precisam existir no mesmo caminho (ou ser devidamente mapeados) nos standbys.
+- Use pg_repack ou VACUUM FULL com cautela em tabelas com TOAST grande; a operação pode ser longa e exigir espaço temporário significativo.
+
+5. 🎯 CONCLUSION
+
+Neste segundo artigo da série PostgreSQL Engineering, examinamos o motor de armazenamento: páginas de tamanho fixo, segmentos de 1 GB, tablespaces e o mecanismo TOAST. Esses componentes formam a base física sobre a qual todo o restante do sistema opera.
+
+Compreender como o PostgreSQL organiza dados em disco permite diagnosticar problemas de espaço, planejar crescimento e tomar decisões informadas sobre localização física de objetos e estratégias de armazenamento de valores grandes.
+
+No próximo artigo (PGENG03) entraremos no controle de concorrência e no MVCC em profundidade — como as versões de tuplas são gerenciadas, o papel do xmin/xmax, o funcionamento do vacuum e as implicações práticas de bloat e autovacuum.
+
+Continue a série. Domine o armazenamento. Execute o código.

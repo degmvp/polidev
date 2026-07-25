@@ -1,0 +1,193 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG03
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng03.txt
+Theme: MVCC (Multi-Version Concurrency Control)
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O Multi-Version Concurrency Control (MVCC) é o mecanismo central de controle de concorrência do PostgreSQL. Ele permite que leitores e escritores operem simultaneamente sobre os mesmos dados sem se bloquearem mutuamente na maior parte dos casos. Em vez de travar uma linha quando ela é modificada, o PostgreSQL cria uma nova versão da linha e mantém a versão antiga visível para transações que iniciaram antes da modificação.
+
+Cada tupla no PostgreSQL carrega informações de visibilidade em seu cabeçalho. Os campos mais importantes são:
+
+- xmin: identificador da transação que criou a versão da tupla
+- xmax: identificador da transação que excluiu ou atualizou a versão da tupla (ou zero se ainda estiver viva)
+- Campos adicionais de hint bits e CID (Command ID) que ajudam a resolver visibilidade dentro da mesma transação
+
+Quando uma transação inicia, o PostgreSQL captura um snapshot. Esse snapshot define quais transações estavam commitadas, em andamento ou ainda não iniciadas naquele momento. A partir desse ponto, a transação enxerga um conjunto consistente de versões de tuplas. Qualquer alteração feita por outras transações após a captura do snapshot permanece invisível para ela, mesmo que já tenha sido commitada.
+
+Uma operação de UPDATE no PostgreSQL não sobrescreve a linha existente. Ela marca a versão antiga com o xmax da transação atual e insere uma nova versão com o xmin da mesma transação. Um DELETE apenas preenche o xmax. Um INSERT cria uma nova tupla com xmin preenchido e xmax zerado.
+
+Essa abordagem elimina a maior parte dos bloqueios entre leitores e escritores. Um SELECT nunca bloqueia um UPDATE e um UPDATE raramente bloqueia um SELECT (exceto em casos de conflitos de serialização ou quando se usa SELECT FOR UPDATE). O preço dessa liberdade é a existência de versões mortas (dead tuples) que ocupam espaço até serem removidas pelo processo de vacuum.
+
+O MVCC do PostgreSQL é a base de vários recursos importantes: isolamento de transações (Read Committed, Repeatable Read e Serializable), index-only scans, hot standby e a capacidade de realizar backups lógicos e físicos de forma consistente.
+
+2. 🧠 UNDERSTAND
+
+O design do MVCC no PostgreSQL prioriza a concorrência de leitura e escrita em detrimento do espaço em disco e da necessidade de manutenção periódica. Essa escolha é coerente com o perfil de workloads típicos de aplicações web e de sistemas OLTP modernos, onde a proporção de leituras em relação a escritas costuma ser alta.
+
+O snapshot é a peça-chave. Existem dois tipos principais de snapshot:
+
+- Snapshot de momento (usado em Read Committed): a cada comando SQL dentro da transação um novo snapshot pode ser obtido.
+- Snapshot de transação (usado em Repeatable Read e Serializable): o snapshot é fixado no início da transação e permanece o mesmo até o commit ou rollback.
+
+No nível de isolamento Read Committed (padrão), cada statement enxerga as alterações commitadas por outras transações até o início daquele statement. Isso evita dirty reads, mas permite non-repeatable reads e phantom reads. No Repeatable Read, a transação enxerga o mesmo conjunto de dados do início ao fim, eliminando non-repeatable reads. O nível Serializable adiciona detecção de anomalias de serialização e pode abortar transações que entrariam em conflito lógico.
+
+Os hint bits são uma otimização importante. Depois que uma transação termina, o PostgreSQL precisa saber se o xmin ou xmax daquela transação foi commitado ou abortado. Em vez de consultar o clog (commit log) a cada acesso, o sistema grava a informação diretamente no cabeçalho da tupla na primeira vez que ela é visitada após o término da transação. Isso reduz drasticamente a contencão no clog.
+
+O vacuum é parte integrante do MVCC, não um recurso opcional. Ele realiza três tarefas principais:
+
+1. Remove versões de tuplas que não são mais visíveis para nenhuma transação em andamento.
+2. Atualiza o mapa de visibilidade (visibility map), permitindo index-only scans.
+3. Congela (freezes) tuplas antigas para evitar o wraparound de transaction IDs (XID wraparound).
+
+O XID wraparound é um limite hard do PostgreSQL. Os identificadores de transação são números de 32 bits. Quando o contador se aproxima do limite, o banco precisa ter congelado as tuplas antigas, caso contrário ele para de aceitar novas escritas para evitar corrupção de visibilidade. O autovacuum é o principal responsável por evitar esse cenário.
+
+Comparando com o SQL Server:
+
+- O SQL Server tradicionalmente usa locking pessimista (embora ofereça snapshot isolation e read committed snapshot).
+- No modo de locking clássico, leitores e escritores se bloqueiam com mais frequência.
+- O SQL Server também possui version store (em tempdb) quando snapshot isolation está habilitado, conceito semelhante ao MVCC, porém com localização e gerenciamento diferentes.
+- O PostgreSQL mantém as versões antigas na própria tabela heap; o SQL Server usa uma área separada (version store).
+
+Boas práticas derivadas do MVCC:
+
+- Mantenha transações o mais curtas possível. Transações longas impedem a remoção de dead tuples e aumentam o bloat.
+- Monitore regularmente a idade do XID (pg_stat_database e pg_class.relfrozenxid).
+- Configure autovacuum de forma agressiva o suficiente para tabelas de alta taxa de atualização.
+- Evite SELECT * desnecessários em tabelas largas; cada versão de tupla carrega todos os atributos.
+- Use FILLFACTOR menor que 100 em tabelas com muitas atualizações para reduzir a criação de novas páginas.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos observar o MVCC em ação com PostgreSQL 17+.
+
+Crie uma tabela de demonstração:
+
+CREATE TABLE mvcc_demo (
+    id          integer PRIMARY KEY,
+    valor       text,
+    atualizado  timestamptz DEFAULT now()
+);
+
+INSERT INTO mvcc_demo (id, valor) VALUES (1, 'versão original');
+
+Em uma sessão (Sessão A), inicie uma transação e leia o valor:
+
+BEGIN;
+SELECT * FROM mvcc_demo WHERE id = 1;
+
+Em outra sessão (Sessão B), atualize a linha:
+
+UPDATE mvcc_demo SET valor = 'versão nova', atualizado = now() WHERE id = 1;
+
+Volte para a Sessão A e execute novamente o SELECT (ainda dentro da mesma transação):
+
+SELECT * FROM mvcc_demo WHERE id = 1;
+
+Você continuará vendo o valor original, porque o snapshot da Sessão A foi capturado antes do UPDATE da Sessão B.
+
+Agora faça o COMMIT na Sessão A e execute o SELECT novamente. O valor novo aparecerá.
+
+Para inspecionar as informações de visibilidade das tuplas, use a extensão pageinspect (já disponível na maioria das instalações):
+
+CREATE EXTENSION IF NOT EXISTS pageinspect;
+
+SELECT 
+    lp,
+    t_xmin,
+    t_xmax,
+    t_ctid,
+    t_infos
+FROM heap_page_items(get_raw_page('mvcc_demo', 0));
+
+Observe que após um UPDATE existem duas versões da tupla na mesma página (ou em páginas diferentes se não houver espaço).
+
+Verifique dead tuples e estatísticas de vacuum:
+
+SELECT 
+    relname,
+    n_live_tup,
+    n_dead_tup,
+    last_vacuum,
+    last_autovacuum,
+    vacuum_count,
+    autovacuum_count
+FROM pg_stat_user_tables
+WHERE relname = 'mvcc_demo';
+
+Force a criação de dead tuples e observe o efeito:
+
+UPDATE mvcc_demo SET valor = 'atualização ' || g
+FROM generate_series(1, 50) g
+WHERE id = 1;
+
+SELECT n_live_tup, n_dead_tup 
+FROM pg_stat_user_tables 
+WHERE relname = 'mvcc_demo';
+
+Execute um vacuum e veja a limpeza:
+
+VACUUM VERBOSE mvcc_demo;
+
+Consulte a idade do XID da tabela:
+
+SELECT 
+    relname,
+    age(relfrozenxid) AS xid_age,
+    pg_size_pretty(pg_relation_size(oid)) AS tamanho
+FROM pg_class
+WHERE relname = 'mvcc_demo';
+
+Verifique o nível de isolamento atual e altere-o:
+
+SHOW transaction_isolation;
+
+BEGIN ISOLATION LEVEL REPEATABLE READ;
+SELECT * FROM mvcc_demo;
+-- em outra sessão faça um UPDATE
+SELECT * FROM mvcc_demo;  -- continua vendo o valor antigo
+COMMIT;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Transações longas são o principal inimigo do MVCC. Elas impedem a remoção de dead tuples e podem causar bloat severo. Monitore pg_stat_activity em busca de transações abertas há muito tempo.
+
+2. O autovacuum deve ser tratado como componente crítico de produção. Ajuste autovacuum_vacuum_scale_factor e autovacuum_analyze_scale_factor para tabelas grandes e de alta taxa de escrita. Valores menores fazem o vacuum disparar mais cedo.
+
+3. O parâmetro vacuum_freeze_min_age e vacuum_freeze_table_age controlam quando o freeze ocorre. Em bancos com alto volume de transações, monitore de perto a aproximação do wraparound (quando age(datfrozenxid) se aproxima de 2 bilhões).
+
+4. Index-only scans dependem do visibility map estar atualizado. Vacuum é o responsável por manter esse mapa. Tabelas que sofrem vacuum insuficiente perdem a capacidade de realizar index-only scans de forma eficiente.
+
+5. Em workloads com muitas atualizações de poucas linhas (hot spots), considere usar FILLFACTOR 70 ou 80 para deixar espaço na página e reduzir a criação de novas versões em páginas diferentes.
+
+Erros comuns:
+
+- Desabilitar o autovacuum achando que ele “atrapalha” a performance.
+- Deixar transações abertas em ferramentas de administração ou em connection pools mal configurados.
+- Ignorar o crescimento de n_dead_tup em tabelas críticas.
+- Usar REPEATABLE READ ou SERIALIZABLE sem necessidade, aumentando a chance de serialização failures.
+
+Considerações de produção:
+
+- Monitore age(datfrozenxid) em todos os bancos. Valores acima de 1 bilhão merecem atenção.
+- Configure alertas para n_dead_tup alto em relação a n_live_tup.
+- Em tabelas de auditoria ou de log append-only, o vacuum ainda é necessário por causa do freeze, mesmo que haja poucas atualizações ou exclusões.
+- O comando VACUUM (VERBOSE, ANALYZE) é útil em manutenção manual, mas o autovacuum deve ser a linha principal de defesa.
+- Lembre-se de que o REINDEX e o VACUUM FULL reescrevem a tabela e eliminam bloat, mas exigem locks mais fortes e espaço temporário.
+
+5. 🎯 CONCLUSION
+
+Neste terceiro artigo da série PostgreSQL Engineering, examinamos o Multi-Version Concurrency Control em profundidade: como as versões de tuplas são criadas, como os snapshots definem a visibilidade, o papel dos hint bits, a importância do vacuum e o risco de XID wraparound.
+
+O MVCC é um dos pilares que permitem ao PostgreSQL oferecer alta concorrência com isolamento forte. Ao mesmo tempo, ele exige disciplina operacional: transações curtas, autovacuum bem configurado e monitoramento constante de dead tuples e idade de transaction IDs.
+
+No próximo artigo (PGENG04) vamos aprofundar o funcionamento do Vacuum e do Autovacuum — estratégias de configuração, monitoramento, freeze e técnicas para combater bloat em produção.
+
+Continue a série. Domine o MVCC. Execute o código.

@@ -1,0 +1,184 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG04
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng04.txt
+Theme: Write-Ahead Logging (WAL) and Crash Recovery
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O Write-Ahead Logging (WAL) é o mecanismo que garante a durabilidade e a recuperabilidade do PostgreSQL. A regra fundamental é simples e rigorosa: nenhuma alteração de dados pode ser escrita nos arquivos de dados (heap, índices, etc.) antes de ter sido registrada no WAL. Essa regra é conhecida como Write-Ahead Logging Principle.
+
+O WAL é uma sequência ordenada de registros que descrevem mudanças. Cada registro contém informações suficientes para refazer (redo) a operação em caso de falha. Os registros são primeiro escritos em buffers de memória (WAL buffers) e depois descarregados para arquivos de segmento no disco (normalmente em pg_wal).
+
+Os arquivos de WAL são segmentos de tamanho fixo (16 MB por padrão nas versões recentes). Quando um segmento é preenchido, o PostgreSQL inicia o próximo. O sistema mantém o controle da posição atual por meio do LSN (Log Sequence Number), um identificador de 64 bits que representa o deslocamento byte a byte dentro da sequência de WAL.
+
+O processo de checkpoint é o responsável por garantir que, até um determinado LSN, todas as páginas sujas (dirty pages) tenham sido escritas nos arquivos de dados. Após um checkpoint bem-sucedido, os segmentos de WAL anteriores a esse ponto podem ser reciclados ou arquivados, porque a recuperação a partir daquele checkpoint não precisará mais deles.
+
+Em caso de crash, o PostgreSQL inicia o processo de recovery. Ele localiza o último checkpoint registrado, lê os registros de WAL a partir daquele ponto e reaplica (redo) todas as mudanças que ainda não estavam refletidas nos arquivos de dados. Esse processo traz o banco de volta a um estado consistente sem necessidade de undo de transações, graças ao fato de que o MVCC e o WAL trabalham juntos: as alterações de transações não commitadas simplesmente não se tornam visíveis.
+
+O WAL também é a base da replicação física (streaming replication) e de soluções de alta disponibilidade. Os mesmos registros usados para recovery local podem ser enviados para réplicas standby, que os aplicam para manter uma cópia idêntica do banco.
+
+2. 🧠 UNDERSTAND
+
+A decisão de usar Write-Ahead Logging em vez de outros métodos de logging (como shadow paging puro ou journaling de sistemas de arquivos) traz vantagens claras de desempenho e simplicidade de recovery. O PostgreSQL não precisa reescrever páginas inteiras a cada alteração; ele registra apenas a descrição da mudança. Isso reduz o volume de escrita em disco em comparação com abordagens de full-page write contínuo (embora o PostgreSQL ainda faça full-page writes no primeiro uso de uma página após um checkpoint, controlado pelo parâmetro full_page_writes).
+
+O full_page_writes existe para proteger contra partial page writes. Em caso de falha de energia no meio da escrita de uma página de 8 KB, o sistema de arquivos pode deixar a página em estado inconsistente. Ao gravar a página inteira no WAL na primeira modificação após o checkpoint, o PostgreSQL garante que, durante o recovery, ele possa restaurar uma versão completa e válida da página antes de aplicar registros posteriores.
+
+Os processos envolvidos no WAL são:
+
+- O backend que gera os registros de WAL durante a execução de comandos.
+- O WAL writer, que periodicamente descarrega os WAL buffers para disco.
+- O checkpointer, que executa os checkpoints e escreve as páginas sujas.
+- O background writer, que ajuda a escrever páginas sujas de forma gradual, reduzindo o pico de I/O no momento do checkpoint.
+
+O parâmetro synchronous_commit controla se o COMMIT espera ou não a gravação do WAL no disco. Com o valor on (padrão), o COMMIT só retorna depois que o registro de commit está durável. Com off, o COMMIT retorna mais rápido, mas há risco de perda de transações recentes em caso de crash. O parâmetro fsync controla se o PostgreSQL realmente força a escrita no armazenamento estável (fsync ou equivalente). Desabilitá-lo é extremamente perigoso em produção.
+
+O processo de recovery é projetado para ser automático e seguro. O PostgreSQL grava informações de checkpoint no arquivo pg_control. Na inicialização, se detectar que o banco não foi desligado de forma limpa, ele entra em modo de recovery, aplica o WAL necessário e só então abre o banco para conexões.
+
+Comparando com o SQL Server:
+
+- O SQL Server também usa um log de transações write-ahead.
+- O modelo de recovery do SQL Server é baseado em ARIES (Algorithm for Recovery and Isolation Exploiting Semantics), com fases de analysis, redo e undo.
+- O PostgreSQL, graças ao MVCC, simplifica a fase de undo: ele não precisa desfazer fisicamente as alterações de transações abortadas; basta não torná-las visíveis.
+- Ambos os sistemas usam full-page writes ou mecanismos equivalentes para proteção contra partial writes.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Mantenha fsync = on e synchronous_commit = on em ambientes de produção que não toleram perda de dados.
+- Ajuste max_wal_size e checkpoint_timeout para equilibrar o volume de WAL gerado e a frequência de checkpoints.
+- Monitore o diretório pg_wal. Crescimento excessivo geralmente indica que o archiving está falhando ou que os checkpoints estão muito espaçados.
+- Use replicação física e/ou archiving contínuo (archive_mode) como base de qualquer estratégia séria de backup e recuperação.
+- Entenda que o WAL é sequencial e, portanto, se beneficia fortemente de discos com boa performance de escrita sequencial.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos inspecionar e experimentar o WAL com PostgreSQL 17+.
+
+Verifique os principais parâmetros relacionados ao WAL:
+
+SHOW wal_level;
+SHOW fsync;
+SHOW synchronous_commit;
+SHOW full_page_writes;
+SHOW max_wal_size;
+SHOW checkpoint_timeout;
+SHOW checkpoint_completion_target;
+SHOW archive_mode;
+SHOW archive_command;
+
+Consulte a posição atual do WAL e estatísticas:
+
+SELECT pg_current_wal_lsn();
+SELECT pg_walfile_name(pg_current_wal_lsn());
+SELECT * FROM pg_stat_wal;
+
+Verifique informações do último checkpoint:
+
+SELECT 
+    checkpoint_lsn,
+    redo_lsn,
+    checkpoint_time,
+    redo_wal_file
+FROM pg_control_checkpoint();
+
+Crie uma tabela e gere atividade de WAL:
+
+CREATE TABLE wal_demo (
+    id          bigserial PRIMARY KEY,
+    payload     text,
+    criado_em   timestamptz DEFAULT now()
+);
+
+INSERT INTO wal_demo (payload)
+SELECT repeat('dados de teste para gerar wal ', 20)
+FROM generate_series(1, 5000);
+
+Verifique novamente a posição do WAL e o quanto foi gerado:
+
+SELECT pg_current_wal_lsn();
+SELECT * FROM pg_stat_wal;
+
+Force um checkpoint e observe o efeito:
+
+CHECKPOINT;
+
+SELECT 
+    checkpoint_lsn,
+    redo_lsn,
+    checkpoint_time
+FROM pg_control_checkpoint();
+
+Consulte o tamanho atual do diretório de WAL (execute no sistema operacional ou via query):
+
+SELECT pg_size_pretty(sum(size)) AS tamanho_pg_wal
+FROM pg_ls_waldir();
+
+Veja os arquivos de WAL presentes:
+
+SELECT * FROM pg_ls_waldir() ORDER BY name;
+
+Para entender o impacto de synchronous_commit, você pode (em ambiente de teste) alterar o parâmetro na sessão:
+
+SET synchronous_commit = off;
+
+-- execute vários INSERTs e observe a diferença de latência
+INSERT INTO wal_demo (payload) VALUES ('teste com synchronous_commit off');
+
+SET synchronous_commit = on;
+
+Verifique se o archiving está ativo e o status:
+
+SELECT 
+    archived_count,
+    last_archived_wal,
+    last_archived_time,
+    failed_count,
+    last_failed_wal,
+    last_failed_time
+FROM pg_stat_archiver;
+
+Em ambiente de teste é possível simular a observação do recovery, mas nunca force um crash em produção. Em laboratório, um kill -9 do processo postmaster seguido de restart permite observar as mensagens de recovery no log.
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Nunca desabilite fsync em produção. A perda de dados em caso de crash é quase certa e a corrupção pode ser silenciosa.
+
+2. Ajuste max_wal_size de acordo com o volume de escrita. Valores muito baixos geram checkpoints frequentes e picos de I/O. Valores muito altos aumentam o tempo de recovery e o espaço consumido por pg_wal.
+
+3. O parâmetro checkpoint_completion_target (padrão 0.9) espalha a escrita de páginas sujas ao longo do intervalo entre checkpoints, reduzindo picos. Mantenha-o próximo de 0.9 na maioria dos casos.
+
+4. Monitore de perto o pg_stat_archiver. Falhas contínuas de archive_command fazem o pg_wal crescer sem limites e podem levar o disco a encher.
+
+5. Em ambientes com replicação, o wal_level deve ser pelo menos replica (padrão desde versões recentes). Para logical decoding ou logical replication, use logical.
+
+Erros comuns:
+
+- Configurar archive_command incorretamente e não perceber que o archiving está falhando.
+- Deixar max_wal_size muito baixo em sistemas de alta escrita, gerando checkpoints excessivos.
+- Usar synchronous_commit = off sem entender o risco de perda de transações recentes.
+- Não monitorar o crescimento de pg_wal e ser surpreendido por disco cheio.
+- Achar que CHECKPOINT manual frequente melhora performance (geralmente piora).
+
+Considerações de produção:
+
+- Planeje o dimensionamento de disco de pg_wal separadamente se o volume de escrita for alto. Em alguns casos, colocar pg_wal em um volume de baixa latência traz benefício.
+- Use ferramentas como pgBackRest, Barman ou pg_basebackup + continuous archiving para backups confiáveis.
+- Teste periodicamente o processo de recovery em ambiente de homologação. Backup que nunca foi restaurado não é backup.
+- Em configurações de alta disponibilidade, monitore o lag de replicação (pg_stat_replication) e o LSN das réplicas.
+- O parâmetro wal_compression (quando disponível e habilitado) pode reduzir o volume de WAL gerado, com custo de CPU.
+
+5. 🎯 CONCLUSION
+
+Neste quarto artigo da série PostgreSQL Engineering, examinamos o Write-Ahead Logging e o processo de crash recovery. O WAL é o fundamento da durabilidade, da recuperabilidade e da replicação física no PostgreSQL.
+
+Compreender como os registros de WAL são gerados, como os checkpoints limitam o volume necessário para recovery e como o sistema reaplica as mudanças após uma falha é essencial para qualquer engenheiro que opere bancos de dados em produção.
+
+No próximo artigo (PGENG05) entraremos em Vacuum e Autovacuum em profundidade — configuração, monitoramento, freeze, bloat e estratégias práticas para manter o banco saudável sob carga.
+
+Continue a série. Domine o WAL. Execute o código.

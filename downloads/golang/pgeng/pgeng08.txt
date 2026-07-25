@@ -1,0 +1,176 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG08
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng08.txt
+Theme: High Availability and Streaming Replication
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+Alta disponibilidade (High Availability) no PostgreSQL tem como objetivo manter o banco de dados acessível e consistente mesmo na ocorrência de falhas de hardware, software ou rede. A principal tecnologia nativa para alcançar esse objetivo é a Streaming Replication, uma forma de replicação física baseada no Write-Ahead Log.
+
+Na Streaming Replication, um servidor primário (primary) envia continuamente os registros de WAL para um ou mais servidores secundários (standbys). Os standbys aplicam esses registros e mantêm uma cópia quase idêntica do banco. Em caso de falha do primário, um standby pode ser promovido a novo primário, minimizando o tempo de indisponibilidade.
+
+Existem dois modos principais de sincronismo:
+
+- Assíncrono (padrão): o primário não espera a confirmação dos standbys para considerar uma transação commitada. Oferece menor latência de escrita, mas permite alguma perda de dados em caso de falha grave do primário.
+- Síncrono: o primário só confirma o COMMIT depois que pelo menos um (ou mais) standby(s) reconheceu(aram) o recebimento do registro de WAL. Reduz ou elimina a perda de dados, porém aumenta a latência de escrita e cria dependência de disponibilidade dos standbys.
+
+A Streaming Replication é física: ela replica o nível de página e de WAL, não o nível de instrução SQL. Isso garante que o standby seja uma cópia binária fiel do primário, incluindo índices, TOAST, catálogos e todos os objetos internos.
+
+Componentes essenciais da arquitetura:
+
+- wal_level = replica (ou logical)
+- processos walsender no primário
+- processo walreceiver no standby
+- replication slots (recomendados)
+- arquivo recovery.signal ou standby.signal (em versões recentes)
+- parâmetros primary_conninfo e primary_slot_name no standby
+
+A replicação pode ser usada apenas para alta disponibilidade (failover) ou também para escalar leituras (hot standby), permitindo que consultas somente leitura sejam executadas nos standbys enquanto eles aplicam o WAL.
+
+2. 🧠 UNDERSTAND
+
+A Streaming Replication foi projetada para ser simples e robusta. O primário trata os standbys como consumidores de WAL. Cada conexão de replicação é gerenciada por um processo walsender. O standby, por sua vez, possui um walreceiver que recebe os registros e os entrega ao processo de startup (ou recovery) para aplicação.
+
+Os replication slots resolvem um problema clássico: o primário não deve reciclar segmentos de WAL que ainda não foram consumidos por um standby. Um slot mantém a posição de LSN até a qual o standby já recebeu os dados e impede que o primário remova arquivos de WAL necessários. Sem slots, um standby que fique offline por muito tempo pode fazer o primário acumular WAL indefinidamente ou, pior, o primário pode reciclar o WAL e tornar o standby irrecuperável sem um novo base backup.
+
+O modo síncrono é controlado principalmente por synchronous_commit e synchronous_standby_names. É possível configurar um ou mais standbys síncronos e definir políticas (ANY, FIRST, etc.). A escolha entre síncrono e assíncrono é sempre um trade-off entre durabilidade e latência/disponibilidade.
+
+O hot standby permite consultas de leitura no standby enquanto ele aplica o WAL. No entanto, consultas longas no standby podem entrar em conflito com a aplicação de mudanças (conflict). O parâmetro max_standby_streaming_delay controla quanto tempo o standby espera antes de cancelar uma consulta conflitante.
+
+A promoção de um standby a primário é feita com o comando pg_ctl promote ou pela criação do arquivo promote signal. Após a promoção, os demais standbys precisam ser reconfigurados para apontar para o novo primário (ou usar ferramentas de orquestração como Patroni, repmgr ou pg_auto_failover).
+
+Comparando com o SQL Server:
+
+- O SQL Server oferece Always On Availability Groups, que trabalham no nível de banco de dados e suportam múltiplas réplicas com diferentes modos de sincronismo.
+- A Streaming Replication do PostgreSQL é mais próxima conceitualmente do Database Mirroring antigo ou da parte de log shipping + recovery do SQL Server, porém de forma nativa e contínua.
+- Ambos os sistemas permitem réplicas de leitura, mas a implementação de roteamento e failover automático costuma depender de ferramentas externas no ecossistema PostgreSQL.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Use sempre replication slots em produção.
+- Monitore o lag de replicação (pg_stat_replication e pg_stat_wal_receiver).
+- Prefira modo assíncrono com slots + backups contínuos quando a perda de poucos segundos de dados for aceitável.
+- Use modo síncrono quando a perda de dados for inaceitável e a latência adicional for tolerável.
+- Teste o processo de failover regularmente em ambiente de homologação.
+
+3. 💻 EXECUTE YOUR CODE
+
+Os comandos abaixo são de inspeção e monitoramento. A configuração completa de um standby exige ajustes em postgresql.conf e pg_hba.conf, além de um base backup inicial (pg_basebackup).
+
+No primário, verifique os parâmetros essenciais:
+
+SHOW wal_level;
+SHOW max_wal_senders;
+SHOW max_replication_slots;
+SHOW synchronous_commit;
+SHOW hot_standby;
+
+Consulte as conexões de replicação ativas:
+
+SELECT 
+    pid,
+    usename,
+    application_name,
+    client_addr,
+    state,
+    sync_state,
+    sent_lsn,
+    write_lsn,
+    flush_lsn,
+    replay_lsn,
+    pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes
+FROM pg_stat_replication;
+
+Verifique os replication slots:
+
+SELECT 
+    slot_name,
+    slot_type,
+    active,
+    restart_lsn,
+    confirmed_flush_lsn,
+    pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) AS retained_wal_bytes
+FROM pg_replication_slots;
+
+Crie um replication slot físico (exemplo):
+
+SELECT pg_create_physical_replication_slot('standby_slot_1');
+
+No standby (quando configurado e em execução), verifique o status do receiver:
+
+SELECT 
+    pid,
+    status,
+    receive_start_lsn,
+    received_lsn,
+    latest_end_lsn,
+    last_msg_receipt_time
+FROM pg_stat_wal_receiver;
+
+Consulte informações de lag do ponto de vista do standby:
+
+SELECT 
+    now() - pg_last_xact_replay_timestamp() AS replication_lag;
+
+Verifique se o servidor está em modo recovery (standby):
+
+SELECT pg_is_in_recovery();
+
+Comandos úteis de promoção (executar no standby quando necessário):
+
+-- via SQL (PostgreSQL 12+)
+SELECT pg_promote();
+
+-- ou via sinal
+-- pg_ctl promote -D /caminho/do/data
+
+Monitore o progresso da aplicação de WAL no standby:
+
+SELECT 
+    pg_wal_lsn_diff(pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn()) AS apply_lag_bytes;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Replication slots são obrigatórios em qualquer ambiente sério. Sem eles, o risco de o standby ficar para trás e precisar de um novo base backup é alto.
+
+2. Monitore o lag de forma contínua. Lag crescente pode indicar problemas de rede, I/O no standby ou consultas longas gerando conflitos.
+
+3. O modo síncrono deve ser usado com cuidado. Se o standby síncrono ficar indisponível, o primário pode parar de aceitar escritas (dependendo da configuração). Tenha sempre um plano de fallback.
+
+4. Prefira ferramentas de orquestração (Patroni, repmgr, pg_auto_failover, etc.) para gerenciar failover automático e reconfiguração de standbys. Fazer failover manual em produção é propenso a erros.
+
+5. O base backup inicial deve ser feito com pg_basebackup usando -R (ou configuração equivalente) para gerar automaticamente as configurações de standby.
+
+Erros comuns:
+
+- Esquecer de criar o slot e deixar o primário reciclar WAL necessário ao standby.
+- Configurar synchronous_standby_names incorretamente e causar bloqueio de escritas.
+- Não monitorar o espaço em disco do pg_wal no primário quando há slots inativos.
+- Executar consultas pesadas de leitura no standby sem ajustar max_standby_streaming_delay.
+- Promover um standby sem garantir que os demais nós saibam quem é o novo primário.
+
+Considerações de produção:
+
+- Separe, sempre que possível, o tráfego de replicação em uma rede dedicada.
+- Dimensione o storage do standby com a mesma capacidade (ou maior) do primário.
+- Inclua testes de failover no pipeline de validação da infraestrutura.
+- Mantenha backup contínuo (WAL archiving) mesmo com replicação. Replicação não substitui backup.
+- Documente claramente o procedimento de failover e de failback (quando aplicável).
+- Em arquiteturas com múltiplos standbys, defina prioridades e políticas de sincronismo de forma explícita.
+
+5. 🎯 CONCLUSION
+
+Neste oitavo artigo da série PostgreSQL Engineering, examinamos os fundamentos de High Availability e Streaming Replication: o fluxo de WAL entre primário e standbys, replication slots, modos síncrono e assíncrono, hot standby, monitoramento de lag e o processo de promoção.
+
+A Streaming Replication é a base nativa de qualquer estratégia séria de alta disponibilidade no PostgreSQL. Quando bem configurada e monitorada, oferece recuperação rápida de falhas e a possibilidade de escalar leituras. Quando mal configurada, pode gerar perda de dados, acúmulo de WAL ou indisponibilidade inesperada.
+
+No próximo artigo (PGENG09) entraremos em Backup and Recovery Strategies — pg_basebackup, WAL archiving, pgBackRest, Point-in-Time Recovery (PITR) e práticas recomendadas de proteção de dados.
+
+Continue a série. Domine a replicação. Execute o código.

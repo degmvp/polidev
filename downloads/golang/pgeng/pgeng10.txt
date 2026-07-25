@@ -1,0 +1,180 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG10
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng10.txt
+Theme: JSONB, Full Text Search and pgvector for AI Applications
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+O PostgreSQL evoluiu de um banco relacional clássico para uma plataforma capaz de armazenar e consultar dados semiestruturados, texto não estruturado e vetores de alta dimensionalidade. Três recursos são centrais nessa evolução: JSONB, Full Text Search e a extensão pgvector.
+
+JSONB é o tipo binário de JSON do PostgreSQL. Diferentemente do tipo JSON (que armazena o texto exatamente como foi inserido), o JSONB decompõe o documento em uma estrutura binária, elimina espaços em branco e permite indexação eficiente. Operadores como ->, ->>, @>, ?, ?& e ?| permitem navegar e filtrar documentos com alta performance quando combinados com índices GIN.
+
+Full Text Search (FTS) nativo do PostgreSQL transforma texto livre em vetores lexicográficos (tsvector) e permite buscas por relevância com tsquery. O sistema suporta stemming, stop words, ranking (ts_rank e ts_rank_cd) e índices GIN ou GiST sobre colunas tsvector. É uma solução robusta para busca textual sem a necessidade imediata de motores externos.
+
+pgvector é uma extensão que adiciona o tipo vector e operadores de similaridade (distância de cosseno, produto interno, distância L2). Ela permite armazenar embeddings gerados por modelos de linguagem e realizar buscas de similaridade diretamente no banco. Com isso, o PostgreSQL passa a ser capaz de atender casos de uso de Retrieval-Augmented Generation (RAG), sistemas de recomendação e busca semântica sem sair do ambiente transacional.
+
+Juntos, JSONB, Full Text Search e pgvector transformam o PostgreSQL em uma plataforma adequada para aplicações modernas de IA que precisam de consistência transacional, filtros estruturados, busca textual e busca vetorial no mesmo motor.
+
+2. 🧠 UNDERSTAND
+
+JSONB foi projetado para ser o melhor dos dois mundos: flexibilidade de schema e performance de consulta. Ao armazenar o documento em formato binário, o PostgreSQL consegue indexar chaves e valores de forma eficiente. O índice GIN em uma coluna JSONB permite responder rapidamente a consultas de contenção (@>) e existência de chaves. Para workloads analíticos sobre JSONB, o operador jsonb_path_ops oferece índices ainda mais compactos e rápidos, embora com algumas restrições de operadores.
+
+Full Text Search no PostgreSQL funciona em duas etapas principais. Na indexação, o texto é convertido em tsvector (lista de lexemas com posições). Na consulta, a expressão de busca é convertida em tsquery. O ranking mede a relevância do documento em relação à consulta. O dicionário de configuração (por exemplo, portuguese) controla stemming e stop words. Embora não substitua motores especializados em todos os cenários de busca textual avançada, o FTS nativo é extremamente capaz para a maioria das aplicações e mantém os dados dentro do mesmo sistema transacional.
+
+pgvector adiciona o tipo vector(n) e operadores de distância. A busca de similaridade pode ser feita por Sequential Scan ou por índices aproximados (IVFFlat e HNSW). O HNSW (Hierarchical Navigable Small World) oferece melhor qualidade de recall na maioria dos casos e é o índice recomendado para a maior parte das aplicações de IA. A escolha da função de distância (cosine, L2 ou inner product) deve corresponder à forma como os embeddings foram treinados ou normalizados.
+
+A combinação dos três recursos é especialmente poderosa. É comum armazenar metadados em JSONB, texto descritivo com suporte a FTS e o embedding correspondente em uma coluna vector. Uma única consulta pode filtrar por atributos JSONB, aplicar condições de texto e ordenar por similaridade vetorial, tudo dentro do PostgreSQL.
+
+Comparando com outras abordagens:
+
+- Bancos documentais puros oferecem JSON flexível, mas geralmente abrem mão de joins complexos e de garantias ACID fortes.
+- Motores de busca especializados (Elasticsearch, OpenSearch) são superiores em busca textual avançada e facetas, porém adicionam complexidade operacional e consistência eventual.
+- Bancos vetoriais dedicados são otimizados para similaridade, mas raramente oferecem o mesmo nível de filtros estruturados, transações e maturidade operacional do PostgreSQL.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Use JSONB para dados semiestruturados que realmente variam. Não transforme tudo em JSONB por comodidade.
+- Crie índices GIN apenas nas colunas JSONB e tsvector que são realmente filtradas.
+- Normalize embeddings antes de armazenar quando usar distância de cosseno.
+- Escolha HNSW como índice padrão para pgvector na maioria dos casos de uso de IA.
+- Mantenha a dimensionalidade dos vetores sob controle (768, 1024, 1536 são comuns; valores muito altos aumentam custo de armazenamento e de índice).
+
+3. 💻 EXECUTE YOUR CODE
+
+Exemplos práticos com PostgreSQL 17+ e a extensão pgvector.
+
+Instale a extensão (se ainda não estiver disponível):
+
+CREATE EXTENSION IF NOT EXISTS vector;
+
+Crie uma tabela que combina os três recursos:
+
+CREATE TABLE documentos (
+    id              bigserial PRIMARY KEY,
+    titulo          text not null,
+    conteudo        text,
+    metadados       jsonb,
+    busca           tsvector generated always as (
+                        setweight(to_tsvector('portuguese', coalesce(titulo, '')), 'A') ||
+                        setweight(to_tsvector('portuguese', coalesce(conteudo, '')), 'B')
+                    ) stored,
+    embedding       vector(1536),
+    criado_em       timestamptz default now()
+);
+
+Crie os índices adequados:
+
+CREATE INDEX idx_documentos_metadados ON documentos USING gin (metadados jsonb_path_ops);
+CREATE INDEX idx_documentos_busca ON documentos USING gin (busca);
+CREATE INDEX idx_documentos_embedding ON documentos USING hnsw (embedding vector_cosine_ops);
+
+Insira dados de exemplo (embeddings fictícios para demonstração):
+
+INSERT INTO documentos (titulo, conteudo, metadados, embedding)
+VALUES (
+    'Introdução ao PostgreSQL',
+    'O PostgreSQL é um banco de dados relacional avançado com suporte a JSONB e busca vetorial.',
+    '{"categoria": "banco de dados", "nivel": "intermediario", "tags": ["sql", "jsonb"]}',
+    (SELECT array_agg(random())::vector FROM generate_series(1, 1536))
+);
+
+INSERT INTO documentos (titulo, conteudo, metadados, embedding)
+VALUES (
+    'Busca Semântica com pgvector',
+    'A extensão pgvector permite armazenar embeddings e realizar nearest neighbor search diretamente no PostgreSQL.',
+    '{"categoria": "inteligencia artificial", "nivel": "avancado", "tags": ["ia", "vetores"]}',
+    (SELECT array_agg(random())::vector FROM generate_series(1, 1536))
+);
+
+Consultas JSONB:
+
+SELECT id, titulo, metadados->>'categoria' AS categoria
+FROM documentos
+WHERE metadados @> '{"nivel": "avancado"}';
+
+SELECT id, titulo
+FROM documentos
+WHERE metadados -> 'tags' ? 'ia';
+
+Consulta Full Text Search com ranking:
+
+SELECT 
+    id,
+    titulo,
+    ts_rank(busca, query) AS ranking
+FROM documentos,
+     to_tsquery('portuguese', 'postgresql | vetorial') query
+WHERE busca @@ query
+ORDER BY ranking DESC;
+
+Consulta de similaridade vetorial (exemplo com vetor aleatório de busca):
+
+SELECT 
+    id,
+    titulo,
+    1 - (embedding <=> (SELECT array_agg(random())::vector FROM generate_series(1, 1536))) AS similaridade
+FROM documentos
+ORDER BY embedding <=> (SELECT array_agg(random())::vector FROM generate_series(1, 1536))
+LIMIT 5;
+
+Consulta combinada (filtro JSONB + FTS + ordenação vetorial):
+
+SELECT 
+    id,
+    titulo,
+    metadados->>'categoria' AS categoria,
+    ts_rank(busca, to_tsquery('portuguese', 'busca | semantica')) AS rank_texto,
+    1 - (embedding <=> (SELECT embedding FROM documentos WHERE id = 2)) AS similaridade
+FROM documentos
+WHERE metadados @> '{"categoria": "inteligencia artificial"}'
+  AND busca @@ to_tsquery('portuguese', 'busca | semantica')
+ORDER BY embedding <=> (SELECT embedding FROM documentos WHERE id = 2)
+LIMIT 10;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. JSONB não é substituto de modelo relacional. Use-o para atributos verdadeiramente variáveis ou documentos que chegam de sistemas externos. Dados estáveis e consultados por joins devem permanecer em colunas relacionais.
+
+2. Índices GIN em JSONB e tsvector têm custo de manutenção. Em tabelas de alta taxa de escrita, monitore o impacto e considere índices parciais quando possível.
+
+3. Para pgvector, o índice HNSW oferece melhor recall na maioria dos cenários. IVFFlat pode ser mais rápido para construir e consumir menos memória em alguns casos, mas exige ajuste de listas e treinamento.
+
+4. Sempre alinhe a métrica de distância do índice com a forma como o modelo de embedding foi treinado (cosine é a mais comum em modelos de texto atuais).
+
+5. Em aplicações RAG, combine filtros estruturados (JSONB), busca textual (FTS) e similaridade vetorial na mesma consulta para reduzir o conjunto candidato antes da ordenação por similaridade. Isso melhora tanto a performance quanto a qualidade do contexto recuperado.
+
+Erros comuns:
+
+- Armazenar JSON como texto (tipo json ou text) e perder a capacidade de indexação eficiente.
+- Criar índices GIN em colunas JSONB que raramente são filtradas.
+- Usar Sequential Scan em buscas vetoriais de tabelas grandes por esquecer de criar o índice HNSW ou IVFFlat.
+- Misturar distâncias (cosine vs L2) entre o índice e a consulta.
+- Ignorar o crescimento de armazenamento causado por vetores de alta dimensionalidade e seus índices.
+
+Considerações de produção:
+
+- Dimensione armazenamento considerando o tamanho dos vetores (4 bytes por dimensão + overhead) e o tamanho dos índices HNSW.
+- Monitore o tempo de construção de índices vetoriais; em tabelas muito grandes a operação pode ser longa e gerar bastante WAL.
+- Em ambientes de alta concorrência de escrita, avalie o impacto de índices GIN e HNSW na latência de INSERT/UPDATE.
+- Mantenha a extensão pgvector atualizada; melhorias de performance e novos tipos de índice aparecem com frequência.
+- Teste o recall dos índices aproximados com conjuntos de dados reais antes de ir para produção. Índices aproximados trocam exatidão por velocidade.
+
+5. 🎯 CONCLUSION
+
+Neste décimo e último artigo da série PostgreSQL Engineering, exploramos JSONB, Full Text Search e pgvector — os três pilares que permitem ao PostgreSQL atender aplicações modernas de inteligência artificial e dados semiestruturados sem abrir mão de consistência transacional e maturidade operacional.
+
+Ao longo da série percorremos desde a arquitetura fundamental, armazenamento, MVCC, WAL, planner, índices, particionamento, replicação e performance tuning até os recursos avançados que colocam o PostgreSQL no centro de sistemas de IA.
+
+O PostgreSQL não é apenas um banco relacional. É uma plataforma de dados capaz de unir o mundo estruturado, o semiestruturado, o textual e o vetorial sob o mesmo teto transacional. Dominar esses recursos é o diferencial de um engenheiro de banco de dados moderno.
+
+Continue praticando. Meça. Questione os planos de execução. Monitore. E nunca pare de entender o que acontece por baixo da superfície.
+
+Fim da série PostgreSQL Engineering.
+Execute o código. Domine o banco.

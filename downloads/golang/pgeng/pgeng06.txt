@@ -1,0 +1,188 @@
+===========================================================
+# 🚀 POSTGRESQL ENGINEERING
+File: PGENG06
+Repository: Polydev Open Source Ecosystem
+Category: pgeng
+File Name: downloads/pgeng/pgeng06.txt
+Theme: Indexing Strategies
+> "READ • UNDERSTAND • EXECUTE YOUR CODE"
+===========================================================
+
+1. 📖 READ
+
+Índices são estruturas auxiliares que permitem ao PostgreSQL localizar linhas de forma eficiente sem percorrer a tabela inteira. Eles não alteram o resultado de uma consulta, apenas a velocidade com que o resultado é encontrado. Um índice bem projetado pode reduzir o tempo de uma consulta de minutos para milissegundos. Um índice mal projetado, por outro lado, consome espaço, retarda escritas e pode nunca ser utilizado pelo planner.
+
+O PostgreSQL oferece vários tipos de índices, cada um otimizado para padrões de acesso diferentes:
+
+- B-tree: o padrão e o mais versátil. Adequado para comparações de igualdade e intervalos ( <, <=, =, >=, >, BETWEEN, IN, IS NULL ).
+- Hash: otimizado apenas para igualdade. Mais compacto que B-tree em alguns cenários, mas com limitações históricas de WAL e replicação (resolvidas em versões recentes).
+- GIN (Generalized Inverted Index): ideal para valores compostos e buscas de pertinência (arrays, jsonb, full-text search).
+- GiST (Generalized Search Tree): estrutura extensível usada para dados geométricos, full-text, ranges e outros tipos complexos.
+- BRIN (Block Range Index): extremamente leve, armazena resumos de intervalos de páginas. Excelente para colunas que possuem correlação natural com a ordem física (datas de criação, IDs sequenciais).
+- SP-GiST: adequado para estruturas não balanceadas (quadtrees, tries, etc.).
+
+Além dos tipos, o PostgreSQL suporta índices parciais (com cláusula WHERE), índices por expressão (functional indexes) e índices de cobertura (covering indexes com a cláusula INCLUDE). Esses recursos permitem criar índices menores e mais precisos, reduzindo o custo de manutenção e aumentando a chance de Index Only Scan.
+
+Um índice não é gratuito. Cada INSERT, UPDATE ou DELETE que afeta colunas indexadas precisa atualizar as estruturas de índice correspondentes. Além disso, índices sofrem de bloat da mesma forma que tabelas, especialmente sob alta taxa de atualização. Por isso, a estratégia de indexação deve equilibrar benefício de leitura com custo de escrita e de espaço.
+
+2. 🧠 UNDERSTAND
+
+O B-tree é a estrutura padrão porque resolve a maioria dos casos de uso de forma eficiente e previsível. Ele mantém os dados ordenados e permite tanto buscas pontuais quanto varreduras de intervalo. O planner utiliza estatísticas de seletividade para decidir se um Index Scan, Bitmap Index Scan ou Sequential Scan é mais vantajoso.
+
+Índices parciais são uma das ferramentas mais poderosas e subutilizadas. Ao indexar apenas um subconjunto das linhas (por exemplo, WHERE status = 'ativo'), o índice fica significativamente menor e mais eficiente. O planner só o utiliza quando a consulta contém a mesma condição (ou uma condição mais restritiva).
+
+Índices por expressão permitem indexar o resultado de uma função ou expressão. O exemplo clássico é o índice em lower(email) para buscas case-insensitive. Sem esse índice, a cláusula WHERE lower(email) = '...' força um Sequential Scan.
+
+A cláusula INCLUDE (disponível desde o PostgreSQL 11) permite adicionar colunas ao índice sem que elas façam parte da chave de ordenação. Isso cria covering indexes: o planner pode satisfazer a consulta inteiramente a partir do índice, sem acessar a tabela heap (Index Only Scan), desde que o visibility map esteja atualizado.
+
+GIN é fundamental para jsonb e full-text search. Internamente ele mantém uma lista invertida de elementos. Consultas com o operador @> (contém) ou @@ (full-text) se beneficiam enormemente de um índice GIN. O custo de manutenção de um GIN é mais alto que o de um B-tree, especialmente em atualizações frequentes.
+
+BRIN é radicalmente diferente. Em vez de apontar para cada linha, ele armazena o valor mínimo e máximo de um intervalo de páginas. Quando a coluna possui forte correlação com a ordem física dos dados (como uma coluna created_at em uma tabela append-only), um índice BRIN ocupa megabytes onde um B-tree ocuparia gigabytes, e ainda entrega excelente performance para filtros de intervalo.
+
+Comparando com o SQL Server:
+
+- O SQL Server usa principalmente índices clustered e nonclustered baseados em B-tree.
+- Não possui equivalentes nativos diretos a GIN, GiST ou BRIN com a mesma flexibilidade.
+- Índices filtrados (filtered indexes) no SQL Server são conceitualmente semelhantes aos índices parciais do PostgreSQL.
+- Covering indexes no SQL Server são obtidos incluindo colunas no índice; o PostgreSQL formalizou isso com a cláusula INCLUDE.
+
+Boas práticas derivadas dessa arquitetura:
+
+- Crie índices a partir de consultas reais e de planos de execução, não por suposição.
+- Prefira índices parciais sempre que fizer sentido.
+- Use INCLUDE para criar covering indexes em consultas críticas de leitura.
+- Avalie BRIN em tabelas grandes e ordenadas cronologicamente antes de criar B-trees pesados.
+- Monitore o uso de índices com pg_stat_user_indexes. Índices nunca utilizados devem ser removidos.
+
+3. 💻 EXECUTE YOUR CODE
+
+Vamos criar e analisar diferentes estratégias de indexação com PostgreSQL 17+.
+
+Crie a tabela de demonstração:
+
+CREATE TABLE eventos (
+    id              bigserial PRIMARY KEY,
+    tipo            text not null,
+    status          text not null,
+    payload         jsonb,
+    criado_em       timestamptz not null DEFAULT now(),
+    processado_em   timestamptz
+);
+
+Insira dados de teste:
+
+INSERT INTO eventos (tipo, status, payload, criado_em)
+SELECT 
+    (ARRAY['login','compra','logout','erro','view'])[1 + (g % 5)],
+    (ARRAY['pendente','processado','falha','ignorado'])[1 + (g % 4)],
+    jsonb_build_object('user_id', g, 'valor', (random()*100)::int),
+    now() - (g || ' minutes')::interval
+FROM generate_series(1, 100000) g;
+
+Atualize estatísticas:
+
+ANALYZE eventos;
+
+Crie diferentes tipos de índices:
+
+-- B-tree clássico
+CREATE INDEX idx_eventos_tipo ON eventos (tipo);
+
+-- Índice parcial
+CREATE INDEX idx_eventos_pendentes ON eventos (criado_em) 
+WHERE status = 'pendente';
+
+-- Índice por expressão
+CREATE INDEX idx_eventos_tipo_lower ON eventos (lower(tipo));
+
+-- Covering index com INCLUDE
+CREATE INDEX idx_eventos_status_include ON eventos (status) 
+INCLUDE (tipo, criado_em);
+
+-- GIN para jsonb
+CREATE INDEX idx_eventos_payload ON eventos USING gin (payload);
+
+-- BRIN para coluna temporal
+CREATE INDEX idx_eventos_criado_brin ON eventos USING brin (criado_em);
+
+Compare os planos:
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos WHERE status = 'pendente' AND criado_em > now() - interval '1 day';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos WHERE lower(tipo) = 'login';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT tipo, criado_em FROM eventos WHERE status = 'processado';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos WHERE payload @> '{"user_id": 12345}';
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM eventos 
+WHERE criado_em BETWEEN now() - interval '2 hours' AND now() - interval '1 hour';
+
+Verifique o tamanho dos índices:
+
+SELECT 
+    indexrelname AS indice,
+    pg_size_pretty(pg_relation_size(indexrelid)) AS tamanho,
+    idx_scan AS vezes_usado,
+    idx_tup_read AS tuplas_lidas
+FROM pg_stat_user_indexes
+WHERE relname = 'eventos'
+ORDER BY pg_relation_size(indexrelid) DESC;
+
+Consulte índices não utilizados (em ambiente real, após um período de observação):
+
+SELECT 
+    schemaname,
+    relname AS tabela,
+    indexrelname AS indice,
+    idx_scan,
+    pg_size_pretty(pg_relation_size(indexrelid)) AS tamanho
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0
+  AND indexrelname NOT LIKE 'pg_%'
+ORDER BY pg_relation_size(indexrelid) DESC;
+
+4. ⭐ ENGINEERING NOTES
+
+Recomendações profissionais:
+
+1. Todo índice deve justificar sua existência com base em consultas reais. Use pg_stat_statements + EXPLAIN para identificar oportunidades e índices inúteis.
+
+2. Índices parciais são subutilizados. Em tabelas com status, flags de exclusão lógica ou partições naturais, eles reduzem drasticamente tamanho e custo de manutenção.
+
+3. A cláusula INCLUDE deve ser considerada em qualquer índice que alimente consultas de alta frequência. O ganho de Index Only Scan é significativo.
+
+4. BRIN deve ser a primeira opção avaliada em tabelas de log, eventos e séries temporais grandes. O custo de espaço é mínimo e a performance para filtros de intervalo é excelente quando há correlação física.
+
+5. Monitore bloat de índices. Índices B-tree sofrem com atualizações e exclusões frequentes. pg_repack ou REINDEX CONCURRENTLY são ferramentas importantes em produção.
+
+Erros comuns:
+
+- Criar índices em todas as colunas de uma tabela “por precaução”.
+- Esquecer de analisar o impacto de escrita (INSERT/UPDATE/DELETE) ao adicionar índices.
+- Usar B-tree em colunas jsonb ou arrays quando GIN seria a escolha correta.
+- Não remover índices que deixaram de ser utilizados após mudanças na aplicação.
+- Criar índices em colunas de baixa seletividade (ex.: boolean ou status com poucos valores) sem cláusula parcial.
+
+Considerações de produção:
+
+- Prefira CREATE INDEX CONCURRENTLY em tabelas grandes e sob carga para evitar locks de escrita.
+- REINDEX CONCURRENTLY (desde PostgreSQL 12) permite reconstruir índices sem bloquear leituras e escritas.
+- Inclua a análise de índices no processo de code review de mudanças de schema.
+- Em ambientes com replicação, lembre-se de que a criação de índices gera WAL significativo e pode causar lag.
+- Documente o propósito de cada índice. Índices sem dono e sem justificativa tendem a se acumular.
+
+5. 🎯 CONCLUSION
+
+Neste sexto artigo da série PostgreSQL Engineering, examinamos estratégias de indexação: os diferentes tipos de índices, índices parciais, índices por expressão, covering indexes com INCLUDE, GIN para dados semiestruturados e BRIN para grandes volumes ordenados.
+
+Índices são uma das ferramentas de maior impacto em performance, mas também uma das mais sujeitas a abuso. A estratégia correta equilibra velocidade de leitura, custo de escrita, consumo de espaço e manutenibilidade.
+
+No próximo artigo (PGENG07) entraremos em Partitioning — particionamento declarativo, estratégias de partição por range, list e hash, manutenção de partições e impacto no planner e no vacuum.
+
+Continue a série. Domine os índices. Execute o código.
