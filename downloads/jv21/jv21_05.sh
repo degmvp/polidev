@@ -20,4 +20,4 @@ public class SequencedCollectionsExample {
         SequencedCollection<String> reversed = languages.reversed();
         System.out.println("Invertido: " + reversed);           // [C++, Python, Java]
     }
-}
+}proceso judicial eletronico 1032212-66.2026.4.01.3400

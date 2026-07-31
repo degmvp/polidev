@@ -1,6 +1,6 @@
 # ==========================================================
 # POLYDEV | Ubuntu Engineering
-# UBU10 - Gerenciamento Avançado de Disco e LVM
+# UBU10 - Docker on Ubuntu
 # ==========================================================
 #
 # TECNOLOGIA:
@@ -10,85 +10,116 @@
 # Bash
 #
 # OBJETIVO:
-# Este documento apresenta os comandos essenciais para
-# gerenciamento de discos utilizando LVM (Logical Volume Manager),
-# permitindo a criação e o redimensionamento de partições
-# lógicas em tempo real sem reinicialização do servidor.
+# Este documento apresenta a instalação e utilização
+# básica do Docker no Ubuntu Linux.
 #
 # ATENÇÃO:
-# Operações de disco são irreversíveis. Aplique estes
-# comandos apenas em ambientes de teste ou com backup
-# garantido em produção.
+# O Docker é uma das principais plataformas de
+# conteinerização utilizadas em ambientes corporativos,
+# DevOps, Cloud Computing e Data Engineering.
 #
 # Leia • Entenda • Execute seu código
 # ==========================================================
 
 # ==========================================================
-# ETAPA 01. Identificar discos físicos disponíveis
+# ETAPA 01. Atualizar repositórios
 # ==========================================================
-lsblk
+sudo apt update
 
 # ==========================================================
-# ETAPA 02. Verificar instalação do LVM
+# ETAPA 02. Instalar dependências
 # ==========================================================
-sudo apt install -y lvm2
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
 # ==========================================================
-# ETAPA 03. Criar Partição Física (Physical Volume - PV)
+# ETAPA 03. Adicionar chave oficial do Docker
 # ==========================================================
-sudo pvcreate /dev/sdb
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg
+sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
 
 # ==========================================================
-# ETAPA 04. Criar Grupo de Volume (Volume Group - VG)
+# ETAPA 04. Adicionar repositório Docker
 # ==========================================================
-sudo vgcreate vg_polydev /dev/sdb
-
-# Verificar o Volume Group criado
-sudo vgdisplay
-
-# ==========================================================
-# ETAPA 05. Criar Volume Lógico (Logical Volume - LV)
-# ==========================================================
-sudo lvcreate -L 50G -n lv_dados vg_polydev
-
-# Verificar o Logical Volume criado
-sudo lvdisplay
+dpkg --print-architecture
+lsb_release -cs
+sudo tee /etc/apt/sources.list.d/docker.list
 
 # ==========================================================
-# ETAPA 06. Formatar o Volume Lógico com sistema de arquivos
+# ETAPA 05. Atualizar catálogo de pacotes
 # ==========================================================
-sudo mkfs.ext4 /dev/vg_polydev/lv_dados
+sudo apt update
 
 # ==========================================================
-# ETAPA 07. Montar o volume de forma persistente via fstab
+# ETAPA 06. Instalar Docker Engine
 # ==========================================================
-sudo mkdir -p /mnt/dados
-
-blkid /dev/vg_polydev/lv_dados
-
-# Copie o UUID retornado e substitua no comando abaixo
-echo 'SEU_UUID_AQUI /mnt/dados ext4 defaults 0 2' | sudo tee -a /etc/fstab
-
-sudo mount -a
+sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 # ==========================================================
-# ETAPA 08. Confirmar montagem do volume
+# ETAPA 07. Verificar versão instalada
 # ==========================================================
-df -h
-mount | grep /mnt/dados
+docker --version
 
 # ==========================================================
-# ETAPA 09. Redimensionar volume em tempo real (Expansão)
+# ETAPA 08. Verificar status do serviço Docker
 # ==========================================================
-
-# Adiciona 20G ao volume lógico
-sudo lvextend -L +20G /dev/vg_polydev/lv_dados
-
-# Expande o sistema de arquivos para ocupar o novo espaço
-sudo resize2fs /dev/vg_polydev/lv_dados
+sudo systemctl status docker
 
 # ==========================================================
-# ETAPA 10. Confirmar expansão do volume
+# ETAPA 09. Habilitar Docker no boot
 # ==========================================================
-df -h
-sudo lvdisplay
+sudo systemctl enable docker
+
+# ==========================================================
+# ETAPA 10. Executar container de teste
+# ==========================================================
+sudo docker run hello-world
+
+# ==========================================================
+# ETAPA 11. Listar containers em execução
+# ==========================================================
+sudo docker ps
+
+# ==========================================================
+# ETAPA 12. Listar todos os containers
+# ==========================================================
+sudo docker ps -a
+
+# ==========================================================
+# ETAPA 13. Listar imagens instaladas
+# ==========================================================
+sudo docker images
+
+# ==========================================================
+# ETAPA 14. Baixar imagem Ubuntu
+# ==========================================================
+sudo docker pull ubuntu
+
+# ==========================================================
+# ETAPA 15. Executar container Ubuntu
+# ==========================================================
+sudo docker run -it ubuntu bash
+
+# ==========================================================
+# ETAPA 16. Parar container
+# ==========================================================
+sudo docker stop CONTAINER_ID
+
+# ==========================================================
+# ETAPA 17. Remover container
+# ==========================================================
+sudo docker rm CONTAINER_ID
+
+# ==========================================================
+# ETAPA 18. Remover imagem
+# ==========================================================
+sudo docker rmi IMAGE_ID
+
+# ==========================================================
+# ETAPA 19. Verificar consumo de recursos
+# ==========================================================
+sudo docker stats
+
+# ==========================================================
+# ETAPA 20. Exibir informações do ambiente Docker
+# ==========================================================
+sudo docker info
