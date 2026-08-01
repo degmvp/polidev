@@ -1222,7 +1222,13 @@
       .reader-frame{height:72vh;min-height:520px}
     }
 
-  </style></head>
+  
+    /* Correção: o atributo hidden deve prevalecer sobre display:block */
+    .reader-frame[hidden] {
+      display: none !important;
+    }
+
+</style></head>
 <body id="top"><a class="skip-link" href="#main-content">Ir para o conteúdo</a><div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 <header class="mobile-header"><div class="mobile-brand">POLYDEV ECOSYSTEM</div><button class="menu-button" id="menuButton" type="button" aria-label="Abrir navegação" aria-expanded="false" aria-controls="sidebar">☰</button></header>
 <div class="page-shell"><aside class="sidebar" id="sidebar" aria-label="Navegação da página"><div class="brand"><div class="brand-mark">PD</div><div><div class="brand-name">POLYDEV</div><div class="brand-subtitle">Open Source Ecosystem<br>Knowledge in Motion</div></div></div><div class="nav-label">Ecossistema</div><nav class="sidebar-nav"><a href="#welcome"><span class="number">00</span><span>Apresentação</span></a><a href="#radiography"><span class="number">01</span><span>Radiografia</span></a><a href="#mission"><span class="number">02</span><span>Missão</span></a><a href="#free"><span class="number">03</span><span>Conhecimento aberto</span></a><a href="#support"><span class="number">04</span><span>Colaboração</span></a><a href="#transparency"><span class="number">05</span><span>Transparência</span></a></nav><div class="sidebar-actions"><a class="sidebar-button" href="home.html">Voltar à Home</a><a class="sidebar-button" href="qrycat.html">Abrir QRYCAT</a><button class="sidebar-button" type="button" onclick="window.print()">Imprimir / Salvar PDF</button></div></aside>
