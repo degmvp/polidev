@@ -1278,20 +1278,6 @@
   </div>
   <iframe class="reader-frame" id="readerFrame" title="Leitor da documentação POLYDEV" hidden></iframe>
   <div class="reader-progress" id="readerProgress" aria-label="Progresso da documentação"></div>
-
-  <div class="reader-toolbar bottom">
-    <div class="reader-controls">
-      <button class="reader-button primary" type="button" data-reader-action="home">⌂ Retornar ao início</button>
-      <button class="reader-button" type="button" data-reader-action="previous">← Artigo anterior</button>
-    </div>
-    <div class="reader-title">
-      <span class="reader-kicker">Sequência de leitura</span>
-      <span class="reader-name" id="readerPosition">Nenhum artigo aberto</span>
-    </div>
-    <div class="reader-controls">
-      <button class="reader-button" type="button" data-reader-action="next">Próximo artigo →</button>
-    </div>
-  </div>
 </div>
 </section>
 <section class="doc-section" id="mission"><span class="section-number">Capítulo 02</span><h2>Missão</h2><p class="lead">Transformar experiência técnica em conhecimento aberto, organizado e executável.</p><div class="grid grid-3"><article class="card"><div class="card-icon">R</div><h3>Leia</h3><p>Apresente contexto, finalidade e terminologia com clareza.</p></article><article class="card green"><div class="card-icon">E</div><h3>Entenda</h3><p>Explique a lógica interna e as decisões de engenharia.</p></article><article class="card red"><div class="card-icon">X</div><h3>Execute</h3><p>Entregue código que possa ser testado, estudado e evoluído.</p></article></div></section>
@@ -1317,7 +1303,6 @@ const sections=document.querySelectorAll('section[id]');const links=[...document
   const frame = document.getElementById("readerFrame");
   const placeholder = document.getElementById("readerPlaceholder");
   const readerName = document.getElementById("readerName");
-  const readerPosition = document.getElementById("readerPosition");
   const progress = document.getElementById("readerProgress");
 
   function renderProgress(){
@@ -1349,8 +1334,7 @@ const sections=document.querySelectorAll('section[id]');const links=[...document
     }
     frame.hidden = false;
     placeholder.hidden = true;
-    readerName.textContent = article.name;
-    readerPosition.textContent = 'Artigo ' + (index + 1) + ' de ' + articles.length;
+    readerName.textContent = article.name + ' — ' + (index + 1) + ' de ' + articles.length;
     renderProgress();
     updateButtons();
     document.getElementById('articleReader').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1362,7 +1346,6 @@ const sections=document.querySelectorAll('section[id]');const links=[...document
     frame.hidden = true;
     placeholder.hidden = false;
     readerName.textContent = 'Escolha um dos quatro artigos';
-    readerPosition.textContent = 'Nenhum artigo aberto';
     renderProgress();
     updateButtons();
     document.getElementById('radiography').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1379,6 +1362,28 @@ const sections=document.querySelectorAll('section[id]');const links=[...document
       if(action === 'previous' && currentIndex > 0) openArticle(currentIndex - 1);
       if(action === 'next' && currentIndex < articles.length - 1) openArticle(currentIndex + 1);
     });
+  });
+
+  frame.addEventListener("load", function(){
+    try {
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      if (!doc) return;
+
+      doc.querySelectorAll(".chapter-navigation").forEach(function(nav){
+        nav.style.display = "none";
+      });
+
+      doc.querySelectorAll("a").forEach(function(link){
+        const text = (link.textContent || "").toLowerCase();
+        if (text.includes("previous") || text.includes("next") ||
+            text.includes("anterior") || text.includes("próximo")) {
+          const parent = link.closest(".chapter-navigation");
+          if (parent) parent.style.display = "none";
+        }
+      });
+    } catch (error) {
+      console.warn("Não foi possível ocultar a navegação interna do artigo.", error);
+    }
   });
 
   window.polydevOpenArticle = openArticle;
