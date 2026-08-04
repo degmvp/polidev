@@ -188,6 +188,41 @@ footer img{
         width:90%;
     }
 }
+
+.recall-panel{
+    width:96%;
+    margin:0 auto 22px auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+.recall-card{
+    background:#00101f;
+    border:2px solid #4cc9f0;
+    border-radius:10px;
+    padding:16px;
+    text-align:center;
+}
+.recall-card h3{
+    margin:0 0 8px 0;
+    color:#FFD700;
+}
+.recall-card p{
+    margin:6px 0;
+    color:#fff;
+}
+.recall-card a{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 16px;
+    background:#4cc9f0;
+    color:#000;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:bold;
+}
+.recall-card a:hover{background:#FFD700;}
+
 </style>
 </head>
 
@@ -199,6 +234,24 @@ footer img{
 </header>
 
 <img src="hack.jpg" class="banner" alt="Hack Series Engineering Banner">
+
+
+<section class="recall-panel">
+    <div class="recall-card">
+        <h3>◀ LEFT SIDE — RECALL</h3>
+        <p><strong>HACK01 → HACK23</strong></p>
+        <p>Missed the beginning?<br>Review the complete foundation.</p>
+        <a href="hack.html">Open Recall</a>
+    </div>
+
+    <div class="recall-card">
+        <h3>▶ RIGHT SIDE — CONTINUE</h3>
+        <p><strong>HACK24 → HACK38</strong></p>
+        <p>Continue the journey with the advanced modules.</p>
+        <a href="hack.html#programa">Continue Series</a>
+    </div>
+</section>
+
 
 <section class="modulo-box">
     <label for="programa">Selecione o módulo Hack Series Engineering</label>
