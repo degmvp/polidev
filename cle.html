@@ -510,7 +510,7 @@ async function carregarCLE(){
 
         const { data, error } = await db
             .from("conteudos")
-            .select("id,titulo,descricao,categoria,arquivo_url,downloads,ativo,programa")
+            .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
             .eq("categoria", "cle")
             .limit(100);
 
