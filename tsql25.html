@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | T-SQL 2025 Engineering</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+    --cyan:#4cc9f0;
+    --gold:#FFD700;
+    --green:yellowgreen;
+    --bg:#000;
+    --panel:#00101f;
+    --soft:#111;
+    --text:#fff;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--bg);
+    color:var(--cyan);
+}
+
+header{
+    text-align:center;
+    padding:24px 18px 18px;
+    border-bottom:3px solid var(--cyan);
+}
+
+header h1{
+    margin:0;
+    font-size:34px;
+    color:var(--cyan);
+}
+
+header .edition{
+    margin:10px 0 4px;
+    color:var(--gold);
+    font-size:24px;
+    font-weight:bold;
+}
+
+header .tagline{
+    margin:6px 0 0;
+    color:var(--green);
+    font-size:18px;
+    font-weight:bold;
+}
+
+header .count{
+    margin:7px 0 0;
+    color:#fff;
+    font-size:15px;
+}
+
+.banner{
+    width:55%;
+    max-width:700px;
+    display:block;
+    margin:18px auto 22px;
+    border:2px solid var(--cyan);
+    border-radius:8px;
+}
+
+.challenge-bar{
+    width:96%;
+    max-width:1500px;
+    margin:0 auto 22px;
+    padding:14px 16px;
+    background:var(--panel);
+    border:2px solid var(--cyan);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.challenge-bar label{
+    color:var(--gold);
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.challenge-bar select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--cyan);
+    border-radius:7px;
+    background:#111;
+    color:#fff;
+    font-weight:bold;
+    font-size:15px;
+    outline:none;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    width:96%;
+    max-width:1500px;
+    margin:auto;
+}
+
+.sidebar{
+    border-right:3px solid var(--cyan);
+    padding:15px 18px 15px 0;
+}
+
+.sidebar h2{
+    color:var(--cyan);
+    margin-top:0;
+}
+
+.menu-btn{
+    width:100%;
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    background:var(--soft);
+    color:var(--gold);
+    border:1px solid var(--cyan);
+    border-radius:8px;
+    text-align:left;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.15s ease;
+}
+
+.menu-btn:hover,
+.menu-btn.active{
+    background:var(--cyan);
+    color:#000;
+}
+
+.content{
+    padding:15px;
+    min-width:0;
+}
+
+.content h2{
+    color:var(--gold);
+    font-size:28px;
+    margin-top:0;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#fff;
+    margin:0 0 16px;
+    font-size:15px;
+}
+
+.meta{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin:0 0 15px;
+    color:#fff;
+    font-size:14px;
+}
+
+.meta span{
+    background:#101820;
+    border:1px solid #2b6f86;
+    border-radius:6px;
+    padding:8px 10px;
+}
+
+.meta strong{
+    color:var(--green);
+}
+
+.toolbar{
+    margin-bottom:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.tool-btn{
+    padding:10px 14px;
+    background:var(--cyan);
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.tool-btn:hover{
+    background:var(--gold);
+}
+
+.tool-btn.disabled{
+    opacity:.45;
+    pointer-events:none;
+}
+
+.viewer{
+    background:var(--panel);
+    color:#fff;
+    border:2px solid var(--cyan);
+    border-radius:10px;
+    padding:20px;
+    min-height:620px;
+    overflow:auto;
+}
+
+pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    overflow-wrap:anywhere;
+    font-size:15px;
+    line-height:1.45;
+    margin:0;
+    tab-size:4;
+}
+
+footer{
+    text-align:center;
+    margin-top:40px;
+    padding:28px;
+    border-top:3px solid var(--cyan);
+    color:var(--green);
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid var(--cyan);
+}
+
+footer h2{
+    color:var(--cyan);
+    margin-bottom:8px;
+}
+
+@media(max-width:850px){
+    header h1{font-size:27px}
+    header .edition{font-size:21px}
+    .layout{grid-template-columns:1fr}
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid var(--cyan);
+        padding-right:0;
+    }
+    .banner{width:90%}
+    .challenge-bar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | T-SQL 2025 ENGINEERING</h1>
+    <div class="edition">STORED PROCEDURES ENGINEERING</div>
+    <p class="tagline">Design • Performance • Automation • Security • Production T-SQL</p>
+    <p class="count">10 Engineering Modules • SQL Server 2025</p>
+</header>
+
+<img src="banpol.jpg" class="banner" alt="POLYDEV Banner">
+
+<div class="challenge-bar">
+    <label for="programaSelect">Engineering Module:</label>
+    <select id="programaSelect" onchange="selecionarPrograma(this.value)">
+        <option value="TSQL25_01">TSQL25_01 - Paginação Dinâmica</option>
+        <option value="TSQL25_02">TSQL25_02 - Auditoria Automática</option>
+        <option value="TSQL25_03">TSQL25_03 - Queue Manager</option>
+        <option value="TSQL25_04">TSQL25_04 - CRUD Dinâmico com JSON</option>
+        <option value="TSQL25_05">TSQL25_05 - Locks Distribuídos</option>
+        <option value="TSQL25_06">TSQL25_06 - Relatórios Dinâmicos com PIVOT</option>
+        <option value="TSQL25_07">TSQL25_07 - Cache com Expiração</option>
+        <option value="TSQL25_08">TSQL25_08 - Diagnóstico de Performance</option>
+        <option value="TSQL25_09">TSQL25_09 - Configuration Manager</option>
+        <option value="TSQL25_10">TSQL25_10 - RBAC Security</option>
+    </select>
+</div>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu T-SQL 2025</h2>
+        <div id="menuTSQL"></div>
+    </aside>
+
+    <main class="content">
+        <h2 id="tituloModulo">TSQL25_01 - Paginação Dinâmica</h2>
+        <p id="subtituloModulo" class="subtitle">
+            SQL Server 2025 • Stored Procedures • Engineering in Practice
+        </p>
+
+        <div class="meta">
+            <span>Category: <strong>tsql25</strong></span>
+            <span>Program: <strong id="metaProgram">TSQL25_01</strong></span>
+            <span>Type: <strong>SQL</strong></span>
+        </div>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
+            <a id="downloadBtn" class="tool-btn disabled" href="#" download>Download .SQL</a>
+            <button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Carregando T-SQL 2025 Engineering...</pre>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV</h2>
+    <p>Leia • Entenda • Execute seu código</p>
+</footer>
+
+<script>
+const modulos = [
+    {id:"TSQL25_01", menu:"01 - Paginação Dinâmica", title:"TSQL25_01 - Paginação Dinâmica com Ordenação e Filtro", subtitle:"Pagination • Dynamic SQL • Filtering • Performance"},
+    {id:"TSQL25_02", menu:"02 - Auditoria Automática", title:"TSQL25_02 - Auditoria Automática de Alterações", subtitle:"Audit • Change Log • JSON • Data Governance"},
+    {id:"TSQL25_03", menu:"03 - Queue Manager", title:"TSQL25_03 - Gerenciador de Filas", subtitle:"Queues • Retry • Dead-Letter • Concurrency"},
+    {id:"TSQL25_04", menu:"04 - CRUD + JSON", title:"TSQL25_04 - CRUD Dinâmico Universal com JSON", subtitle:"JSON • Dynamic CRUD • APIs • Microservices"},
+    {id:"TSQL25_05", menu:"05 - Distributed Locks", title:"TSQL25_05 - Controle de Concorrência com Locks Distribuídos", subtitle:"Concurrency • App Locks • Transactions • Protection"},
+    {id:"TSQL25_06", menu:"06 - Dynamic PIVOT", title:"TSQL25_06 - Gerador de Relatórios Dinâmicos com PIVOT", subtitle:"Reporting • PIVOT • Aggregation • Analytics"},
+    {id:"TSQL25_07", menu:"07 - Table Cache", title:"TSQL25_07 - Sistema de Cache em Tabela com Expiração", subtitle:"Cache • TTL • Invalidation • Performance"},
+    {id:"TSQL25_08", menu:"08 - Performance Diagnostics", title:"TSQL25_08 - Diagnóstico de Performance do Banco", subtitle:"DBA • Queries • Indexes • Health Check"},
+    {id:"TSQL25_09", menu:"09 - Configuration Manager", title:"TSQL25_09 - Gerenciador de Configurações", subtitle:"Key-Value • Versioning • JSON • Configuration"},
+    {id:"TSQL25_10", menu:"10 - RBAC Security", title:"TSQL25_10 - Sistema de Permissões e Controle de Acesso", subtitle:"RBAC • Roles • Permissions • Security"}
+];
+
+let registros = new Map();
+let programaAtual = "TSQL25_01";
+let conteudoAtual = "";
+
+function normalizarUrl(url){
+    if(!url) return "";
+    return String(url).trim().replace(/^\/+/, "");
+}
+
+function montarUrlLeitura(url){
+    const limpo = normalizarUrl(url);
+    if(!limpo) return "";
+
+    if(window.location.protocol === "file:"){
+        return "https://degmvp.github.io/polidev/" + limpo;
+    }
+
+    return limpo;
+}
+
+function montarMenu(){
+    const menu = document.getElementById("menuTSQL");
+    menu.innerHTML = "";
+
+    modulos.forEach(modulo => {
+        const btn = document.createElement("button");
+        btn.className = "menu-btn";
+        btn.dataset.programa = modulo.id;
+        btn.textContent = modulo.menu;
+        btn.onclick = () => selecionarPrograma(modulo.id);
+        menu.appendChild(btn);
+    });
+
+    atualizarMenuAtivo();
+}
+
+function atualizarMenuAtivo(){
+    document.querySelectorAll(".menu-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.programa === programaAtual);
+    });
+}
+
+function atualizarCabecalho(){
+    const modulo = modulos.find(m => m.id === programaAtual);
+    if(!modulo) return;
+
+    document.getElementById("programaSelect").value = programaAtual;
+    document.getElementById("tituloModulo").textContent = modulo.title;
+    document.getElementById("subtituloModulo").textContent = modulo.subtitle;
+    document.getElementById("metaProgram").textContent = programaAtual;
+
+    atualizarMenuAtivo();
+}
+
+function desabilitarDownload(){
+    const btn = document.getElementById("downloadBtn");
+    btn.href = "#";
+    btn.classList.add("disabled");
+    btn.removeAttribute("download");
+}
+
+async function carregarTSQL25(){
+    const codigo = document.getElementById("codigo");
+
+    try{
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const { data, error } = await db
+            .from("conteudos")
+            .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
+            .limit(3000);
+
+        if(error) throw error;
+
+        const lista = (data || []).filter(item =>
+            String(item.categoria || "").trim().toLowerCase() === "tsql25" &&
+            item.ativo !== false
+        );
+
+        registros.clear();
+
+        lista.forEach(item => {
+            const chave = String(item.programa || "").trim().toUpperCase();
+            if(chave) registros.set(chave, item);
+        });
+
+        if(registros.size === 0){
+            throw new Error("Nenhum registro da categoria 'tsql25' encontrado no banco.");
+        }
+
+        await abrirPrograma();
+
+    }catch(e){
+        conteudoAtual = "";
+        codigo.textContent = "Erro ao carregar T-SQL 2025:\n" + e.message;
+        desabilitarDownload();
+    }
+}
+
+async function selecionarPrograma(id){
+    programaAtual = id;
+    atualizarCabecalho();
+    await abrirPrograma();
+}
+
+async function abrirPrograma(){
+    atualizarCabecalho();
+
+    const codigo = document.getElementById("codigo");
+    const item = registros.get(programaAtual);
+
+    conteudoAtual = "";
+    desabilitarDownload();
+
+    if(!item){
+        codigo.textContent =
+            "Registro não encontrado no banco: " + programaAtual + "\n\n" +
+            "Verifique categoria='tsql25' e programa='" + programaAtual + "'.";
+        return;
+    }
+
+    const url = normalizarUrl(item.arquivo_url);
+    const urlLeitura = montarUrlLeitura(item.arquivo_url);
+
+    try{
+        codigo.textContent = "Carregando " + programaAtual + "...";
+
+        const resp = await fetch(urlLeitura, {cache:"no-store"});
+        if(!resp.ok){
+            throw new Error("Arquivo não encontrado (" + resp.status + "): " + urlLeitura);
+        }
+
+        conteudoAtual = await resp.text();
+        codigo.textContent = conteudoAtual;
+
+        const downloadBtn = document.getElementById("downloadBtn");
+        downloadBtn.href = url;
+        downloadBtn.setAttribute("download", "");
+        downloadBtn.classList.remove("disabled");
+
+    }catch(e){
+        conteudoAtual = "";
+        codigo.textContent =
+            "Erro ao abrir " + programaAtual + ":\n" + e.message +
+            "\n\narquivo_url: " + url;
+        desabilitarDownload();
+    }
+}
+
+function copiarConteudo(){
+    if(!conteudoAtual){
+        alert("Nenhum conteúdo carregado.");
+        return;
+    }
+
+    navigator.clipboard.writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
+}
+
+montarMenu();
+atualizarCabecalho();
+carregarTSQL25();
+</script>
+
+</body>
+</html>
