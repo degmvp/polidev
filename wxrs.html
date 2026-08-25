@@ -3,226 +3,585 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>POLYDEV | WXRS — Rust Engineering</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#000;color:#4cc9f0}
-header{text-align:center;padding:24px;border-bottom:3px solid #4cc9f0}header h1{margin:0;font-size:34px;color:#4cc9f0}
-header p{color:yellowgreen;font-size:18px;font-weight:bold}
-.banner{width:55%;max-width:900px;display:block;margin:18px auto 28px;border:2px solid #4cc9f0;border-radius:8px}
-.modulo-box{width:96%;margin:0 auto 24px;padding:16px;border:2px solid #4cc9f0;border-radius:10px;background:#00101f;text-align:center}
-.modulo-box label{display:block;color:#FFD700;font-weight:bold;margin-bottom:10px}
-.modulo-box select{min-width:330px;max-width:95%;padding:11px;background:#111;color:#FFD700;border:1px solid #4cc9f0;border-radius:8px;font-weight:bold}
-.layout{display:grid;grid-template-columns:320px 1fr;gap:25px;width:96%;margin:auto}
-.sidebar{border-right:3px solid #4cc9f0;padding:15px}.sidebar h2{color:#4cc9f0;margin-top:0}
-.menu-btn{width:100%;display:block;margin:10px 0;padding:14px;background:#111;color:#FFD700;border:1px solid #4cc9f0;border-radius:8px;text-align:left;font-weight:bold;cursor:pointer}
-.menu-btn:hover{background:#4cc9f0;color:#000}.content{padding:15px}.content h2{color:#FFD700;font-size:28px}
-.toolbar{margin-bottom:15px}.tool-btn{padding:10px 14px;margin-right:8px;background:#4cc9f0;color:#000;border:none;border-radius:6px;font-weight:bold;cursor:pointer;text-decoration:none}
-.tool-btn:hover{background:#FFD700}.viewer{background:#00101f;color:#fff;border:2px solid #4cc9f0;border-radius:10px;padding:20px;min-height:620px;overflow:auto}
-pre{white-space:pre-wrap;word-wrap:break-word;font-size:15px;line-height:1.45;margin:0}
-.status{width:96%;margin:0 auto 20px;color:#fff;text-align:center;font-size:14px}
-footer{text-align:center;margin-top:40px;padding:28px;border-top:3px solid #4cc9f0;color:yellowgreen;font-weight:bold}
-footer img{width:110px;height:110px;border-radius:50%;border:4px solid #4cc9f0}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{border-right:none;border-bottom:3px solid #4cc9f0}.banner{width:90%}}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #000;
+    color: #4cc9f0;
+}
+
+header {
+    text-align: center;
+    padding: 24px;
+    border-bottom: 3px solid #4cc9f0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 34px;
+    color: #4cc9f0;
+}
+
+header p {
+    color: yellowgreen;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.banner {
+    width: 55%;
+    max-width: 900px;
+    display: block;
+    margin: 18px auto 28px;
+    border: 2px solid #4cc9f0;
+    border-radius: 8px;
+}
+
+.modulo-box {
+    width: 96%;
+    margin: 0 auto 24px;
+    padding: 16px;
+    border: 2px solid #4cc9f0;
+    border-radius: 10px;
+    background: #00101f;
+    text-align: center;
+}
+
+.modulo-box label {
+    display: block;
+    color: #FFD700;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.modulo-box select {
+    min-width: 330px;
+    max-width: 95%;
+    padding: 11px;
+    background: #111;
+    color: #FFD700;
+    border: 1px solid #4cc9f0;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 25px;
+    width: 96%;
+    margin: auto;
+}
+
+.sidebar {
+    border-right: 3px solid #4cc9f0;
+    padding: 15px;
+}
+
+.sidebar h2 {
+    color: #4cc9f0;
+    margin-top: 0;
+}
+
+.menu-btn {
+    width: 100%;
+    display: block;
+    margin: 10px 0;
+    padding: 14px;
+    background: #111;
+    color: #FFD700;
+    border: 1px solid #4cc9f0;
+    border-radius: 8px;
+    text-align: left;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu-btn:hover {
+    background: #4cc9f0;
+    color: #000;
+}
+
+.content {
+    padding: 15px;
+}
+
+.content h2 {
+    color: #FFD700;
+    font-size: 28px;
+}
+
+.toolbar {
+    margin-bottom: 15px;
+}
+
+.tool-btn {
+    padding: 10px 14px;
+    margin-right: 8px;
+    background: #4cc9f0;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tool-btn:hover {
+    background: #FFD700;
+}
+
+.viewer {
+    background: #00101f;
+    color: #fff;
+    border: 2px solid #4cc9f0;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 620px;
+    overflow: auto;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.status {
+    width: 96%;
+    margin: 0 auto 20px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 28px;
+    border-top: 3px solid #4cc9f0;
+    color: yellowgreen;
+    font-weight: bold;
+}
+
+footer img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #4cc9f0;
+}
+
+@media (max-width: 850px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        border-right: none;
+        border-bottom: 3px solid #4cc9f0;
+    }
+
+    .banner {
+        width: 90%;
+    }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>POLYDEV | WXRS — Rust Engineering</h1>
-<p>Uma casa • Todas as linguagens • Mesma regra • Mesmo propósito</p>
+    <h1>POLYDEV | WXRS — Rust Engineering</h1>
+    <p>Uma casa • Todas as linguagens • Mesma regra • Mesmo propósito</p>
 </header>
 
 <img src="wx.jpg" class="banner" alt="POLYDEV WXRS">
 
 <section class="modulo-box">
-<label for="faixa">Selecione o bloco de conteúdos WXRS</label>
-<select id="faixa" onchange="carregarFaixa()">
-<option value="">-- carregando blocos --</option>
-</select>
+    <label for="faixa">Selecione o bloco de conteúdos WXRS</label>
+
+    <select id="faixa" onchange="carregarFaixa()">
+        <option value="">-- carregando blocos --</option>
+    </select>
 </section>
 
-<div id="status" class="status">Consultando conteúdos WXRS...</div>
+<div id="status" class="status">
+    Consultando conteúdos WXRS...
+</div>
 
 <div class="layout">
-<aside class="sidebar">
-<h2>Menu WXRS</h2>
-<div id="menuWX">Selecione um bloco acima.</div>
-</aside>
 
-<main class="content">
-<h2 id="tituloConteudo">Selecione um conteúdo WXRS</h2>
-<div class="toolbar">
-<button class="tool-btn" onclick="copiarConteudo()">Copiar Conteúdo</button>
-<a id="downloadBtn" class="tool-btn" href="#" download>Download</a>
-<button class="tool-btn" onclick="location.href='home.html'">Voltar Home</button>
-</div>
-<div class="viewer"><pre id="codigo">Aguardando seleção.</pre></div>
-</main>
+    <aside class="sidebar">
+        <h2>Menu WXRS</h2>
+        <div id="menuWX">Selecione um bloco acima.</div>
+    </aside>
+
+    <main class="content">
+
+        <h2 id="tituloConteudo">Selecione um conteúdo WXRS</h2>
+
+        <div class="toolbar">
+            <button class="tool-btn" onclick="copiarConteudo()">
+                Copiar Conteúdo
+            </button>
+
+            <a id="downloadBtn" class="tool-btn" href="#" download>
+                Download
+            </a>
+
+            <button class="tool-btn" onclick="location.href='home.html'">
+                Voltar Home
+            </button>
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Aguardando seleção.</pre>
+        </div>
+
+    </main>
+
 </div>
 
 <footer>
-<img src="poly.jpg" alt="POLYDEV">
-<h2>POLYDEV WXRS</h2>
-<p>Leia • Entenda • Execute seu código</p>
+    <img src="poly.jpg" alt="POLYDEV">
+    <h2>POLYDEV WXRS</h2>
+    <p>Leia • Entenda • Execute seu código</p>
 </footer>
 
 <script>
-const CATEGORIA_WX="wxrs";
-const TAMANHO_BLOCO=20;
-let conteudosWX=[];
-let conteudoAtual="";
+const TABELA_WX = "conteudos";
+const PREFIXO_CATEGORIA = "wxrs";
 
-function normalizarUrl(url){
- if(!url)return "";
- return String(url).trim().replace(/^\/+/, "");
-}
-function montarUrlLeitura(url){
- const limpo=normalizarUrl(url);
- if(!limpo)return "";
- if(window.location.protocol==="file:"){
-   return "https://degmvp.github.io/polidev/"+limpo;
- }
- return limpo;
-}
-function extrairSequencial(programa){
- const texto=String(programa||"").trim().toLowerCase();
- const match=texto.match(/^wx-[a-z0-9]+-(\d{3})-/);
- return match?Number(match[1]):Number.MAX_SAFE_INTEGER;
-}
-function formatarNumero(numero){
- return String(numero).padStart(3,"0");
+let conteudosWX = [];
+let conteudoAtual = "";
+
+function normalizarUrl(url) {
+    if (!url) return "";
+    return String(url).trim().replace(/^\/+/, "");
 }
 
-async function carregarWX(){
- const faixa=document.getElementById("faixa");
- const menu=document.getElementById("menuWX");
- const codigo=document.getElementById("codigo");
- const status=document.getElementById("status");
+function montarUrlLeitura(url) {
+    const limpo = normalizarUrl(url);
 
- faixa.innerHTML='<option value="">-- carregando blocos --</option>';
- menu.innerHTML="Consultando banco...";
- codigo.textContent="Consultando conteúdos WXRS...";
- status.textContent="Consultando categoria '"+CATEGORIA_WX+"'...";
- document.getElementById("downloadBtn").href="#";
- conteudoAtual="";
+    if (!limpo) return "";
 
- try{
-   const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-   const {data,error}=await db
-      .from("conteudos")
-      .select("id,titulo,categoria,arquivo_url,downloads,ativo,programa")
-      .eq("categoria",CATEGORIA_WX)
-      .eq("ativo",true)
-      .limit(5000);
+    if (window.location.protocol === "file:") {
+        return "https://degmvp.github.io/polidev/" + limpo;
+    }
 
-   if(error){
-     menu.innerHTML="Erro Supabase";
-     codigo.textContent=error.message;
-     status.textContent="Falha ao consultar o banco.";
-     return;
-   }
-
-   conteudosWX=(data||[]).slice();
-   conteudosWX.sort((a,b)=>{
-      const sa=extrairSequencial(a.programa), sb=extrairSequencial(b.programa);
-      if(sa!==sb)return sa-sb;
-      return String(a.programa||"").localeCompare(String(b.programa||""));
-   });
-
-   if(conteudosWX.length===0){
-     faixa.innerHTML='<option value="">-- nenhum conteúdo --</option>';
-     menu.innerHTML="Nenhum conteúdo WXRS encontrado.";
-     codigo.textContent="Categoria '"+CATEGORIA_WX+"' não encontrada no banco.";
-     status.textContent="0 conteúdos encontrados.";
-     return;
-   }
-
-   montarFaixas();
-   status.textContent=conteudosWX.length+" conteúdo(s) encontrado(s) em '"+CATEGORIA_WX+"'.";
- }catch(e){
-   menu.innerHTML="Erro geral";
-   codigo.textContent=e.message;
-   status.textContent="Erro ao carregar WXRS.";
- }
+    return limpo;
 }
 
-function montarFaixas(){
- const faixa=document.getElementById("faixa");
- faixa.innerHTML='<option value="">-- escolha um bloco --</option>';
- const total=conteudosWX.length;
+function extrairSequencial(programa) {
+    const texto = String(programa || "").trim().toLowerCase();
+    const match = texto.match(/^wx-[a-z0-9]+-(\d{3})-/);
 
- for(let inicio=0;inicio<total;inicio+=TAMANHO_BLOCO){
-   const fim=Math.min(inicio+TAMANHO_BLOCO,total);
-   const primeiro=conteudosWX[inicio];
-   const ultimo=conteudosWX[fim-1];
-   const option=document.createElement("option");
-   option.value=inicio+":"+fim;
-   option.textContent=formatarNumero(extrairSequencial(primeiro.programa))+"–"+formatarNumero(extrairSequencial(ultimo.programa));
-   faixa.appendChild(option);
- }
-
- if(total<=TAMANHO_BLOCO){
-   faixa.value="0:"+total;
-   carregarFaixa();
- }
+    return match
+        ? Number(match[1])
+        : Number.MAX_SAFE_INTEGER;
 }
 
-function carregarFaixa(){
- const menu=document.getElementById("menuWX");
- const valor=document.getElementById("faixa").value;
- menu.innerHTML="";
- if(!valor){
-   menu.innerHTML="Selecione um bloco acima.";
-   return;
- }
- const [inicio,fim]=valor.split(":").map(Number);
- const bloco=conteudosWX.slice(inicio,fim);
-
- bloco.forEach(item=>{
-   const btn=document.createElement("button");
-   btn.className="menu-btn";
-   const programa=String(item.programa||"").trim();
-   btn.textContent=programa+" — "+(item.titulo||programa);
-   btn.onclick=()=>abrirConteudo(item);
-   menu.appendChild(btn);
- });
-
- document.getElementById("tituloConteudo").textContent=
-   "Bloco WXRS "+formatarNumero(extrairSequencial(bloco[0].programa))+"–"+
-   formatarNumero(extrairSequencial(bloco[bloco.length-1].programa));
- document.getElementById("codigo").textContent="Selecione um programa no menu lateral.";
+function formatarNumero(numero) {
+    return String(numero).padStart(3, "0");
 }
 
-async function abrirConteudo(item){
- const url=normalizarUrl(item.arquivo_url);
- const urlLeitura=montarUrlLeitura(item.arquivo_url);
- document.getElementById("tituloConteudo").textContent=(item.programa?item.programa+" — ":"")+item.titulo;
- document.getElementById("downloadBtn").href=url;
- try{
-   const resp=await fetch(urlLeitura);
-   if(!resp.ok)throw new Error("Arquivo não encontrado: "+urlLeitura);
-   conteudoAtual=await resp.text();
-   document.getElementById("codigo").textContent=conteudoAtual;
- }catch(e){
-   conteudoAtual="";
-   document.getElementById("codigo").textContent=
-     "Falha ao carregar o arquivo.\n\nURL no banco: "+url+
-     "\nURL tentada: "+urlLeitura+"\n\nErro: "+e.message;
- }
+function extrairNumeroBloco(categoria) {
+    const texto = String(categoria || "").trim().toLowerCase();
+
+    const regex = new RegExp(
+        "^" + PREFIXO_CATEGORIA + "(\\d+)$"
+    );
+
+    const match = texto.match(regex);
+
+    return match
+        ? Number(match[1])
+        : Number.MAX_SAFE_INTEGER;
 }
 
-function copiarConteudo(){
- if(!conteudoAtual){
-   alert("Nenhum conteúdo carregado.");
-   return;
- }
- navigator.clipboard.writeText(conteudoAtual)
-   .then(()=>alert("Conteúdo copiado."))
-   .catch(()=>alert("Não foi possível copiar."));
+async function carregarWX() {
+    const faixa = document.getElementById("faixa");
+    const menu = document.getElementById("menuWX");
+    const codigo = document.getElementById("codigo");
+    const status = document.getElementById("status");
+
+    faixa.innerHTML =
+        '<option value="">-- carregando blocos --</option>';
+
+    menu.innerHTML = "Consultando banco...";
+    codigo.textContent = "Consultando conteúdos WXRS...";
+    status.textContent = "Consultando conteúdos WXRS...";
+
+    document.getElementById("downloadBtn").href = "#";
+    conteudoAtual = "";
+
+    try {
+        const db = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        const { data, error } = await db
+            .from(TABELA_WX)
+            .select(
+                "id,titulo,categoria,arquivo_url,downloads,ativo,programa"
+            )
+            .like("categoria", PREFIXO_CATEGORIA + "%")
+            .eq("ativo", true)
+            .limit(5000);
+
+        if (error) {
+            menu.innerHTML = "Erro Supabase";
+            codigo.textContent = error.message;
+            status.textContent = "Falha ao consultar o banco.";
+            return;
+        }
+
+        conteudosWX = (data || []).filter(item =>
+            extrairNumeroBloco(item.categoria) !==
+            Number.MAX_SAFE_INTEGER
+        );
+
+        conteudosWX.sort((a, b) => {
+            const blocoA = extrairNumeroBloco(a.categoria);
+            const blocoB = extrairNumeroBloco(b.categoria);
+
+            if (blocoA !== blocoB) {
+                return blocoA - blocoB;
+            }
+
+            const seqA = extrairSequencial(a.programa);
+            const seqB = extrairSequencial(b.programa);
+
+            if (seqA !== seqB) {
+                return seqA - seqB;
+            }
+
+            return String(a.programa || "")
+                .localeCompare(String(b.programa || ""));
+        });
+
+        if (conteudosWX.length === 0) {
+            faixa.innerHTML =
+                '<option value="">-- nenhum conteúdo --</option>';
+
+            menu.innerHTML =
+                "Nenhum conteúdo WXRS encontrado.";
+
+            codigo.textContent =
+                "Nenhuma categoria WXRS encontrada no banco.";
+
+            status.textContent =
+                "0 conteúdos encontrados.";
+
+            return;
+        }
+
+        montarFaixas();
+
+        status.textContent =
+            conteudosWX.length +
+            " conteúdo(s) WXRS encontrado(s).";
+
+    } catch (e) {
+        menu.innerHTML = "Erro geral";
+        codigo.textContent = e.message;
+        status.textContent = "Erro ao carregar WXRS.";
+    }
+}
+
+function montarFaixas() {
+    const faixa = document.getElementById("faixa");
+
+    faixa.innerHTML =
+        '<option value="">-- escolha um bloco --</option>';
+
+    const categorias = [
+        ...new Set(
+            conteudosWX.map(item => item.categoria)
+        )
+    ];
+
+    categorias.sort(
+        (a, b) =>
+            extrairNumeroBloco(a) -
+            extrairNumeroBloco(b)
+    );
+
+    categorias.forEach(categoria => {
+        const bloco = conteudosWX
+            .filter(item => item.categoria === categoria)
+            .sort(
+                (a, b) =>
+                    extrairSequencial(a.programa) -
+                    extrairSequencial(b.programa)
+            );
+
+        if (bloco.length === 0) return;
+
+        const primeiro = bloco[0];
+        const ultimo = bloco[bloco.length - 1];
+        const numeroBloco = extrairNumeroBloco(categoria);
+
+        const option = document.createElement("option");
+
+        option.value = categoria;
+
+        option.textContent =
+            "WX" +
+            String(numeroBloco).padStart(2, "0") +
+            " — " +
+            formatarNumero(
+                extrairSequencial(primeiro.programa)
+            ) +
+            "–" +
+            formatarNumero(
+                extrairSequencial(ultimo.programa)
+            );
+
+        faixa.appendChild(option);
+    });
+}
+
+function carregarFaixa() {
+    const menu = document.getElementById("menuWX");
+    const categoria = document.getElementById("faixa").value;
+
+    menu.innerHTML = "";
+    document.getElementById("downloadBtn").href = "#";
+    conteudoAtual = "";
+
+    if (!categoria) {
+        menu.innerHTML = "Selecione um bloco acima.";
+
+        document.getElementById("tituloConteudo").textContent =
+            "Selecione um conteúdo WXRS";
+
+        document.getElementById("codigo").textContent =
+            "Aguardando seleção.";
+
+        return;
+    }
+
+    const bloco = conteudosWX
+        .filter(item => item.categoria === categoria)
+        .sort(
+            (a, b) =>
+                extrairSequencial(a.programa) -
+                extrairSequencial(b.programa)
+        );
+
+    if (bloco.length === 0) {
+        menu.innerHTML = "Nenhum conteúdo neste bloco.";
+        return;
+    }
+
+    bloco.forEach(item => {
+        const btn = document.createElement("button");
+
+        btn.className = "menu-btn";
+
+        const programa =
+            String(item.programa || "").trim();
+
+        btn.textContent =
+            programa +
+            " — " +
+            (item.titulo || programa);
+
+        btn.onclick = () => abrirConteudo(item);
+
+        menu.appendChild(btn);
+    });
+
+    const numeroBloco =
+        extrairNumeroBloco(categoria);
+
+    document.getElementById("tituloConteudo").textContent =
+        "WX" +
+        String(numeroBloco).padStart(2, "0") +
+        " | " +
+        formatarNumero(
+            extrairSequencial(bloco[0].programa)
+        ) +
+        "–" +
+        formatarNumero(
+            extrairSequencial(
+                bloco[bloco.length - 1].programa
+            )
+        );
+
+    document.getElementById("codigo").textContent =
+        "Selecione um programa no menu lateral.";
+}
+
+async function abrirConteudo(item) {
+    const url =
+        normalizarUrl(item.arquivo_url);
+
+    const urlLeitura =
+        montarUrlLeitura(item.arquivo_url);
+
+    document.getElementById("tituloConteudo").textContent =
+        (item.programa
+            ? item.programa + " — "
+            : "") +
+        item.titulo;
+
+    document.getElementById("downloadBtn").href = url;
+
+    try {
+        const resp = await fetch(urlLeitura);
+
+        if (!resp.ok) {
+            throw new Error(
+                "Arquivo não encontrado: " + urlLeitura
+            );
+        }
+
+        conteudoAtual = await resp.text();
+
+        document.getElementById("codigo").textContent =
+            conteudoAtual;
+
+    } catch (e) {
+        conteudoAtual = "";
+
+        document.getElementById("codigo").textContent =
+            "Falha ao carregar o arquivo.\n\n" +
+            "URL no banco: " + url +
+            "\nURL tentada: " + urlLeitura +
+            "\n\nErro: " + e.message;
+    }
+}
+
+function copiarConteudo() {
+    if (!conteudoAtual) {
+        alert("Nenhum conteúdo carregado.");
+        return;
+    }
+
+    navigator.clipboard
+        .writeText(conteudoAtual)
+        .then(() => alert("Conteúdo copiado."))
+        .catch(() => alert("Não foi possível copiar."));
 }
 
 carregarWX();
 </script>
+
 </body>
 </html>
