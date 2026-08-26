@@ -13,6 +13,21 @@
     POLYDEV | WX-Collector
 </title>
 
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap"
+    rel="stylesheet"
+>
 
 <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
@@ -79,11 +94,26 @@ header h1 {
     margin:
         0;
 
+    font-family:
+        "Orbitron",
+        Arial,
+        sans-serif;
+
     font-size:
         38px;
 
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
     color:
         #4cc9f0;
+
+    text-shadow:
+        0 0 6px rgba(76, 201, 240, 0.8),
+        0 0 14px rgba(76, 201, 240, 0.45);
 
 }
 
@@ -725,14 +755,10 @@ footer img {
 <body>
 
 
-<!-- =======================================================
-     HEADER
-     ======================================================= -->
-
 <header>
 
     <h1>
-        POLYDEV | WX-Collector
+        POLYDEV | WX-COLLECTOR
     </h1>
 
 
@@ -751,20 +777,12 @@ footer img {
 </header>
 
 
-<!-- =======================================================
-     BANNER
-     ======================================================= -->
-
 <img
     src="wx.jpg"
     class="banner"
     alt="POLYDEV WX-Collector"
 >
 
-
-<!-- =======================================================
-     SELETOR
-     ======================================================= -->
 
 <section
     class="selector-box">
@@ -796,10 +814,6 @@ footer img {
 </section>
 
 
-<!-- =======================================================
-     STATUS
-     ======================================================= -->
-
 <div
     id="status"
     class="status">
@@ -809,17 +823,9 @@ footer img {
 </div>
 
 
-<!-- =======================================================
-     LAYOUT
-     ======================================================= -->
-
 <div
     class="layout">
 
-
-    <!-- ===================================================
-         SIDEBAR
-         =================================================== -->
 
     <aside
         class="sidebar">
@@ -832,10 +838,6 @@ footer img {
 
         </h2>
 
-
-        <!-- ===============================================
-             NAVEGADOR DE GRUPO
-             =============================================== -->
 
         <div
             class="group-nav">
@@ -900,10 +902,6 @@ footer img {
         </div>
 
 
-        <!-- ===============================================
-             MENU
-             =============================================== -->
-
         <div
             id="menuWX">
 
@@ -914,10 +912,6 @@ footer img {
 
     </aside>
 
-
-    <!-- ===================================================
-         CONTENT
-         =================================================== -->
 
     <main
         class="content">
@@ -930,10 +924,6 @@ footer img {
 
         </h2>
 
-
-        <!-- ===============================================
-             TOOLBAR
-             =============================================== -->
 
         <div
             class="toolbar">
@@ -971,10 +961,6 @@ footer img {
         </div>
 
 
-        <!-- ===============================================
-             VIEWER
-             =============================================== -->
-
         <div
             class="viewer">
 
@@ -991,10 +977,6 @@ footer img {
 
 </div>
 
-
-<!-- =======================================================
-     FOOTER
-     ======================================================= -->
 
 <footer>
 
@@ -1023,16 +1005,11 @@ footer img {
 
 /* =========================================================
    CONFIGURAÇÃO
-
-   HOMOLOGAÇÃO:
-   tb_teste
-
-   PRODUÇÃO DEPOIS:
-   conteudos
+   PRODUÇÃO
    ========================================================= */
 
 const TABELA =
-    "tb_teste";
+    "conteudos";
 
 
 /* =========================================================
@@ -1076,14 +1053,6 @@ let conteudoAtual =
 
 /* =========================================================
    EXTRAI BRANCH
-
-   wxpy01 -> wxpy
-   wxpy02 -> wxpy
-   wxpy03 -> wxpy
-
-   wxrs01 -> wxrs
-   wxgo01 -> wxgo
-   wxcp01 -> wxcp
    ========================================================= */
 
 function extrairBranch(
@@ -1119,10 +1088,6 @@ function extrairBranch(
 
 /* =========================================================
    EXTRAI GRUPO
-
-   wxpy01 -> 01
-   wxpy02 -> 02
-   wxpy03 -> 03
    ========================================================= */
 
 function extrairGrupo(
@@ -1169,10 +1134,6 @@ function extrairGrupo(
 
 /* =========================================================
    NOME VISUAL DA LINGUAGEM
-
-   SOMENTE APRESENTAÇÃO.
-
-   NÃO INTERFERE NA ESTRUTURA DO BANCO.
    ========================================================= */
 
 function nomeLinguagem(
@@ -1212,13 +1173,6 @@ function nomeLinguagem(
 
 /* =========================================================
    EXTRAI SEQUENCIAL
-
-   wx-py-001-wxpy
-   wx-rs-001-wxrs
-   wx-go-001-wxgo
-   wx-cp-001-wxcp
-
-   000 = 1000
    ========================================================= */
 
 function extrairSequencial(
@@ -1386,13 +1340,6 @@ function montarUrlLeitura(
 
 /* =========================================================
    CARREGA CATEGORIAS
-
-   ESTA ETAPA SOMENTE DESCOBRE
-   QUAIS BRANCHES WX EXISTEM.
-
-   NÃO CARREGA PROGRAMAS.
-   NÃO CARREGA ARQUIVOS.
-   NÃO MONTA OS GRUPOS.
    ========================================================= */
 
 async function carregarCategorias() {
@@ -1594,9 +1541,6 @@ async function carregarCategorias() {
 
 /* =========================================================
    CARREGA BRANCH
-
-   SOMENTE DEPOIS QUE O USUÁRIO
-   ESCOLHE UMA LINGUAGEM.
    ========================================================= */
 
 async function carregarBranch() {
@@ -1941,15 +1885,6 @@ async function carregarBranch() {
 
 /* =========================================================
    PREPARA GRUPOS
-
-   USA DIRETAMENTE A CATEGORIA:
-
-   wxpy01
-   wxpy02
-   wxpy03
-
-   O GRUPO PODE TER:
-   1 ATÉ 20 REGISTROS.
    ========================================================= */
 
 function prepararGrupos() {
@@ -2071,7 +2006,7 @@ function prepararGrupos() {
 
 
 /* =========================================================
-   EXIBE O GRUPO ATUAL
+   EXIBE GRUPO ATUAL
    ========================================================= */
 
 function exibirGrupoAtual() {
@@ -2118,10 +2053,6 @@ function exibirGrupoAtual() {
         );
 
 
-    /* =====================================================
-       GRUPO ATUAL / TOTAL DE GRUPOS
-       ===================================================== */
-
     document.getElementById(
         "grupoTitulo"
     )
@@ -2141,10 +2072,6 @@ function exibirGrupoAtual() {
             "0"
         );
 
-
-    /* =====================================================
-       FAIXA ATUAL
-       ===================================================== */
 
     document.getElementById(
         "grupoFaixa"
@@ -2168,10 +2095,6 @@ function exibirGrupoAtual() {
         " item(ns)";
 
 
-    /* =====================================================
-       TOTAL GERAL
-       ===================================================== */
-
     document.getElementById(
         "grupoTotal"
     )
@@ -2183,10 +2106,6 @@ function exibirGrupoAtual() {
 
         " conteúdos";
 
-
-    /* =====================================================
-       BOTÕES
-       ===================================================== */
 
     document.getElementById(
         "btnAnterior"
@@ -2206,10 +2125,6 @@ function exibirGrupoAtual() {
 
         gruposAtuais.length - 1;
 
-
-    /* =====================================================
-       STATUS OPERACIONAL
-       ===================================================== */
 
     document.getElementById(
         "status"
@@ -2262,7 +2177,7 @@ function exibirGrupoAtual() {
 
 
 /* =========================================================
-   MONTA SOMENTE O MENU DO GRUPO ATUAL
+   MENU DO GRUPO
    ========================================================= */
 
 function montarMenuGrupo(
@@ -2338,7 +2253,7 @@ function montarMenuGrupo(
 
 
 /* =========================================================
-   GRUPO ANTERIOR
+   NAVEGAÇÃO
    ========================================================= */
 
 function grupoAnterior() {
@@ -2368,10 +2283,6 @@ function grupoAnterior() {
 
 
 
-/* =========================================================
-   PRÓXIMO GRUPO
-   ========================================================= */
-
 function proximoGrupo() {
 
 
@@ -2400,7 +2311,7 @@ function proximoGrupo() {
 
 
 /* =========================================================
-   PREPARA TROCA DE GRUPO
+   PREPARA TROCA
    ========================================================= */
 
 function prepararTrocaGrupo() {
