@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | WX-Collector</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #000;
+    color: #4cc9f0;
+}
+
+header {
+    text-align: center;
+    padding: 24px;
+    border-bottom: 3px solid #4cc9f0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 34px;
+    color: #4cc9f0;
+}
+
+header p {
+    color: yellowgreen;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header-info {
+    margin-top: 12px;
+    color: #FFD700;
+    font-size: 16px;
+}
+
+.banner {
+    width: 55%;
+    max-width: 900px;
+    display: block;
+    margin: 18px auto 28px;
+    border: 2px solid #4cc9f0;
+    border-radius: 8px;
+}
+
+.selector-box {
+    width: 96%;
+    margin: 0 auto 18px;
+    padding: 16px;
+    border: 2px solid #4cc9f0;
+    border-radius: 10px;
+    background: #00101f;
+    text-align: center;
+}
+
+.selector-box label {
+    display: block;
+    color: #FFD700;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.selector-box select {
+    min-width: 330px;
+    max-width: 95%;
+    padding: 11px;
+    background: #111;
+    color: #FFD700;
+    border: 1px solid #4cc9f0;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.status {
+    width: 96%;
+    margin: 0 auto 20px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 25px;
+    width: 96%;
+    margin: auto;
+}
+
+.sidebar {
+    border-right: 3px solid #4cc9f0;
+    padding: 15px;
+}
+
+.sidebar h2 {
+    color: #4cc9f0;
+    margin-top: 0;
+}
+
+.block-title {
+    color: #FFD700;
+    margin: 22px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #4cc9f0;
+    font-size: 16px;
+}
+
+.menu-btn {
+    width: 100%;
+    display: block;
+    margin: 8px 0;
+    padding: 12px;
+    background: #111;
+    color: #FFD700;
+    border: 1px solid #4cc9f0;
+    border-radius: 8px;
+    text-align: left;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu-btn:hover {
+    background: #4cc9f0;
+    color: #000;
+}
+
+.content {
+    padding: 15px;
+}
+
+.content h2 {
+    color: #FFD700;
+    font-size: 28px;
+}
+
+.toolbar {
+    margin-bottom: 15px;
+}
+
+.tool-btn {
+    padding: 10px 14px;
+    margin-right: 8px;
+    background: #4cc9f0;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tool-btn:hover {
+    background: #FFD700;
+}
+
+.viewer {
+    background: #00101f;
+    color: #fff;
+    border: 2px solid #4cc9f0;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 620px;
+    overflow: auto;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+    margin: 0;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 28px;
+    border-top: 3px solid #4cc9f0;
+    color: yellowgreen;
+    font-weight: bold;
+}
+
+footer img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #4cc9f0;
+}
+
+@media (max-width: 850px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        border-right: none;
+        border-bottom: 3px solid #4cc9f0;
+    }
+
+    .banner {
+        width: 90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | WX-Collector</h1>
+
+    <p>
+        Uma árvore • Muitas linguagens • Um único viewer
+    </p>
+
+    <div id="headerInfo" class="header-info">
+        Selecione uma branch WX
+    </div>
+</header>
+
+<img src="wx.jpg" class="banner" alt="POLYDEV WX-Collector">
+
+<section class="selector-box">
+    <label for="linguagem">
+        Selecione a branch / linguagem WX
+    </label>
+
+    <select id="linguagem" onchange="carregarBranch()">
+        <option value="">-- carregando branches WX --</option>
+    </select>
+</section>
+
+<div id="status" class="status">
+    Descobrindo categorias WX...
+</div>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 id="tituloMenu">WX-Collector</h2>
+
+        <div id="menuWX">
+            Selecione uma linguagem acima.
+        </div>
+    </aside>
+
+    <main class="content">
+
+        <h2 id="tituloConteudo">
+            Selecione uma branch WX
+        </h2>
+
+        <div class="toolbar">
+
+            <button
+                class="tool-btn"
+                onclick="copiarConteudo()">
+                Copiar Conteúdo
+            </button>
+
+            <a
+                id="downloadBtn"
+                class="tool-btn"
+                href="#"
+                download>
+                Download
+            </a>
+
+            <button
+                class="tool-btn"
+                onclick="location.href='home.html'">
+                Voltar Home
+            </button>
+
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Aguardando seleção.</pre>
+        </div>
+
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+
+    <h2>POLYDEV WX-COLLECTOR</h2>
+
+    <p>Leia • Entenda • Explore seu código</p>
+</footer>
+
+<script>
+const TABELA = "conteudos";
+const TAMANHO_BLOCO = 20;
+
+let db = null;
+let branchAtual = "";
+let conteudosWX = [];
+let conteudoAtual = "";
+
+
+/* =========================================================
+   NOMES AMIGÁVEIS
+   ========================================================= */
+
+const NOMES_LINGUAGENS = {
+    wxpy: "Python",
+    wxrs: "Rust",
+    wxgo: "Go",
+    wxcp: "C++"
+};
+
+
+/* =========================================================
+   URL
+   ========================================================= */
+
+function normalizarUrl(url) {
+    if (!url) return "";
+
+    return String(url)
+        .trim()
+        .replace(/^\/+/, "");
+}
+
+
+function montarUrlLeitura(url) {
+    const limpo = normalizarUrl(url);
+
+    if (!limpo) return "";
+
+    if (window.location.protocol === "file:") {
+        return "https://degmvp.github.io/polidev/" + limpo;
+    }
+
+    return limpo;
+}
+
+
+/* =========================================================
+   SEQUENCIAL
+   wx-py-001-wxpy
+   wx-rs-001-wxrs
+   wx-go-001-wxgo
+   wx-cp-001-wxcp
+   ========================================================= */
+
+function extrairSequencial(programa) {
+    const texto = String(programa || "")
+        .trim()
+        .toLowerCase();
+
+    const match =
+        texto.match(/^wx-[a-z0-9]+-(\d{3})-/);
+
+    if (!match) {
+        return Number.MAX_SAFE_INTEGER;
+    }
+
+    const numero = Number(match[1]);
+
+    /*
+       Convenção POLYDEV:
+       001 ... 999
+       000 = último elemento da faixa de 1000
+    */
+
+    return numero === 0 ? 1000 : numero;
+}
+
+
+function formatarSequencial(numero) {
+    if (numero === 1000) return "000";
+
+    return String(numero)
+        .padStart(3, "0");
+}
+
+
+/* =========================================================
+   DESCOBRE A BRANCH BASE
+
+   wxpy01 -> wxpy
+   wxpy02 -> wxpy
+   wxpy   -> wxpy
+
+   wxrs01 -> wxrs
+   wxgo01 -> wxgo
+   wxcp01 -> wxcp
+   ========================================================= */
+
+function extrairBranch(categoria) {
+    const texto = String(categoria || "")
+        .trim()
+        .toLowerCase();
+
+    const match =
+        texto.match(/^(wx[a-z]+?)(?:\d{2})?$/);
+
+    return match
+        ? match[1]
+        : "";
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+
+   PRIMEIRA LEITURA:
+   SOMENTE DESCOBRIR QUAIS BRANCHES WX EXISTEM.
+
+   NÃO CARREGA PROGRAMAS PARA O VIEWER.
+   ========================================================= */
+
+async function iniciarCollector() {
+    const combo =
+        document.getElementById("linguagem");
+
+    const status =
+        document.getElementById("status");
+
+    try {
+        db = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        /*
+           Consulta leve para descobrir categorias WX.
+
+           Nenhum menu lateral é preparado aqui.
+           Nenhum conteúdo físico é lido aqui.
+        */
+
+        const { data, error } = await db
+            .from(TABELA)
+            .select("categoria")
+            .like("categoria", "wx%")
+            .eq("ativo", true)
+            .limit(5000);
+
+        if (error) {
+            combo.innerHTML =
+                '<option value="">-- erro --</option>';
+
+            status.textContent =
+                "Falha ao consultar categorias WX.";
+
+            document.getElementById("codigo").textContent =
+                error.message;
+
+            return;
+        }
+
+        const branches = [
+            ...new Set(
+                (data || [])
+                    .map(item =>
+                        extrairBranch(item.categoria)
+                    )
+                    .filter(Boolean)
+            )
+        ].sort();
+
+
+        if (branches.length === 0) {
+            combo.innerHTML =
+                '<option value="">-- nenhuma branch WX --</option>';
+
+            status.textContent =
+                "Nenhuma categoria WX padronizada encontrada.";
+
+            return;
+        }
+
+
+        combo.innerHTML =
+            '<option value="">-- escolha uma linguagem --</option>';
+
+
+        branches.forEach(branch => {
+            const option =
+                document.createElement("option");
+
+            option.value = branch;
+
+            const nome =
+                NOMES_LINGUAGENS[branch] || branch;
+
+            option.textContent =
+                branch + " — " + nome;
+
+            combo.appendChild(option);
+        });
+
+
+        status.textContent =
+            branches.length +
+            " branch(es) WX encontrada(s).";
+
+    } catch (e) {
+        combo.innerHTML =
+            '<option value="">-- erro geral --</option>';
+
+        status.textContent =
+            "Erro ao iniciar WX-Collector.";
+
+        document.getElementById("codigo").textContent =
+            e.message;
+    }
+}
+
+
+/* =========================================================
+   ESCOLHA DA BRANCH
+
+   AQUI COMEÇA O TRABALHO ON THE FLY.
+
+   Exemplo:
+   escolheu wxpy
+   consulta SOMENTE wxpy%
+   ========================================================= */
+
+async function carregarBranch() {
+    const branch =
+        document.getElementById("linguagem").value;
+
+    const menu =
+        document.getElementById("menuWX");
+
+    const status =
+        document.getElementById("status");
+
+    const codigo =
+        document.getElementById("codigo");
+
+
+    branchAtual = branch;
+    conteudosWX = [];
+    conteudoAtual = "";
+
+    document.getElementById("downloadBtn").href = "#";
+
+
+    if (!branch) {
+        document.getElementById("headerInfo").textContent =
+            "Selecione uma branch WX";
+
+        document.getElementById("tituloMenu").textContent =
+            "WX-Collector";
+
+        document.getElementById("tituloConteudo").textContent =
+            "Selecione uma branch WX";
+
+        menu.innerHTML =
+            "Selecione uma linguagem acima.";
+
+        codigo.textContent =
+            "Aguardando seleção.";
+
+        return;
+    }
+
+
+    const nomeLinguagem =
+        NOMES_LINGUAGENS[branch] || branch;
+
+
+    document.getElementById("headerInfo").textContent =
+        "Branch ativa: " +
+        branch +
+        " | " +
+        nomeLinguagem;
+
+
+    document.getElementById("tituloMenu").textContent =
+        "Menu " + nomeLinguagem;
+
+
+    document.getElementById("tituloConteudo").textContent =
+        "Carregando " + nomeLinguagem + "...";
+
+
+    menu.innerHTML =
+        "Preparando branch on the fly...";
+
+
+    codigo.textContent =
+        "Consultando " + branch + "...";
+
+
+    status.textContent =
+        "Lendo somente a branch '" +
+        branch +
+        "'...";
+
+
+    try {
+        /*
+           Compatibilidade:
+
+           HOJE:
+           wxpy01
+           wxrs01
+           wxgo01
+           wxcp01
+
+           FUTURO:
+           wxpy
+           wxrs
+           wxgo
+           wxcp
+
+           O LIKE atende os dois modelos.
+        */
+
+        const { data, error } = await db
+            .from(TABELA)
+            .select(
+                "id,titulo,categoria,arquivo_url,downloads,ativo,programa"
+            )
+            .like("categoria", branch + "%")
+            .eq("ativo", true)
+            .limit(5000);
+
+
+        if (error) {
+            menu.innerHTML =
+                "Erro Supabase";
+
+            codigo.textContent =
+                error.message;
+
+            status.textContent =
+                "Falha ao carregar branch.";
+
+            return;
+        }
+
+
+        /*
+           Garante que só entra a branch selecionada.
+
+           Evita coincidências acidentais.
+        */
+
+        conteudosWX = (data || [])
+            .filter(item =>
+                extrairBranch(item.categoria) === branch
+            );
+
+
+        conteudosWX.sort((a, b) => {
+            const sa =
+                extrairSequencial(a.programa);
+
+            const sb =
+                extrairSequencial(b.programa);
+
+            if (sa !== sb) {
+                return sa - sb;
+            }
+
+            return String(a.programa || "")
+                .localeCompare(
+                    String(b.programa || "")
+                );
+        });
+
+
+        if (conteudosWX.length === 0) {
+            menu.innerHTML =
+                "Nenhum conteúdo encontrado.";
+
+            codigo.textContent =
+                "Branch '" +
+                branch +
+                "' sem conteúdos.";
+
+            status.textContent =
+                "0 conteúdos.";
+
+            return;
+        }
+
+
+        montarMenu();
+
+
+        status.textContent =
+            branch +
+            " | " +
+            conteudosWX.length +
+            " conteúdo(s) | " +
+            Math.ceil(
+                conteudosWX.length /
+                TAMANHO_BLOCO
+            ) +
+            " bloco(s).";
+
+
+        document.getElementById("tituloConteudo").textContent =
+            nomeLinguagem +
+            " | " +
+            conteudosWX.length +
+            " conteúdos";
+
+
+        codigo.textContent =
+            "Selecione um programa no menu lateral.";
+
+    } catch (e) {
+        menu.innerHTML =
+            "Erro geral";
+
+        codigo.textContent =
+            e.message;
+
+        status.textContent =
+            "Erro ao carregar branch.";
+    }
+}
+
+
+/* =========================================================
+   MONTA OS GRUPOS
+
+   1..20
+   21..40
+   41
+   etc.
+
+   SOMENTE APÓS A ESCOLHA DA LINGUAGEM.
+   ========================================================= */
+
+function montarMenu() {
+    const menu =
+        document.getElementById("menuWX");
+
+    menu.innerHTML = "";
+
+
+    for (
+        let inicio = 0;
+        inicio < conteudosWX.length;
+        inicio += TAMANHO_BLOCO
+    ) {
+
+        const fim =
+            Math.min(
+                inicio + TAMANHO_BLOCO,
+                conteudosWX.length
+            );
+
+
+        const bloco =
+            conteudosWX.slice(inicio, fim);
+
+
+        const primeiro =
+            extrairSequencial(
+                bloco[0].programa
+            );
+
+
+        const ultimo =
+            extrairSequencial(
+                bloco[bloco.length - 1].programa
+            );
+
+
+        const titulo =
+            document.createElement("div");
+
+
+        titulo.className =
+            "block-title";
+
+
+        titulo.textContent =
+            "WX" +
+            String(
+                Math.floor(inicio / TAMANHO_BLOCO) + 1
+            ).padStart(2, "0") +
+            " — " +
+            formatarSequencial(primeiro) +
+            "–" +
+            formatarSequencial(ultimo);
+
+
+        menu.appendChild(titulo);
+
+
+        bloco.forEach(item => {
+            const btn =
+                document.createElement("button");
+
+
+            btn.className =
+                "menu-btn";
+
+
+            const programa =
+                String(item.programa || "")
+                    .trim();
+
+
+            btn.textContent =
+                programa +
+                " — " +
+                (item.titulo || programa);
+
+
+            btn.onclick =
+                () => abrirConteudo(item);
+
+
+            menu.appendChild(btn);
+        });
+    }
+}
+
+
+/* =========================================================
+   ABRE ARQUIVO
+   ========================================================= */
+
+async function abrirConteudo(item) {
+    const url =
+        normalizarUrl(
+            item.arquivo_url
+        );
+
+
+    const urlLeitura =
+        montarUrlLeitura(
+            item.arquivo_url
+        );
+
+
+    document.getElementById("tituloConteudo").textContent =
+        (item.programa
+            ? item.programa + " — "
+            : "") +
+        item.titulo;
+
+
+    document.getElementById("downloadBtn").href =
+        url;
+
+
+    try {
+        const resp =
+            await fetch(urlLeitura);
+
+
+        if (!resp.ok) {
+            throw new Error(
+                "Arquivo não encontrado: " +
+                urlLeitura
+            );
+        }
+
+
+        conteudoAtual =
+            await resp.text();
+
+
+        document.getElementById("codigo").textContent =
+            conteudoAtual;
+
+    } catch (e) {
+        conteudoAtual = "";
+
+
+        document.getElementById("codigo").textContent =
+            "Falha ao carregar o arquivo.\n\n" +
+            "URL no banco: " +
+            url +
+            "\nURL tentada: " +
+            urlLeitura +
+            "\n\nErro: " +
+            e.message;
+    }
+}
+
+
+/* =========================================================
+   COPIAR
+   ========================================================= */
+
+function copiarConteudo() {
+    if (!conteudoAtual) {
+        alert(
+            "Nenhum conteúdo carregado."
+        );
+
+        return;
+    }
+
+
+    navigator.clipboard
+        .writeText(conteudoAtual)
+
+        .then(() =>
+            alert(
+                "Conteúdo copiado."
+            )
+        )
+
+        .catch(() =>
+            alert(
+                "Não foi possível copiar."
+            )
+        );
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+iniciarCollector();
+</script>
+
+</body>
+</html>
