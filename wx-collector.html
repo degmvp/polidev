@@ -149,6 +149,7 @@ header p {
 }
 
 .tool-btn {
+    display: inline-block;
     padding: 10px 14px;
     margin-right: 8px;
     background: #4cc9f0;
@@ -232,13 +233,17 @@ footer img {
 <img src="wx.jpg" class="banner" alt="POLYDEV WX-Collector">
 
 <section class="selector-box">
+
     <label for="linguagem">
         Selecione a branch / linguagem WX
     </label>
 
-    <select id="linguagem" onchange="carregarBranch()">
-        <option value="">-- carregando branches WX --</option>
+    <select id="linguagem">
+        <option value="">
+            -- carregando branches WX --
+        </option>
     </select>
+
 </section>
 
 <div id="status" class="status">
@@ -248,11 +253,15 @@ footer img {
 <div class="layout">
 
     <aside class="sidebar">
-        <h2 id="tituloMenu">WX-Collector</h2>
+
+        <h2 id="tituloMenu">
+            WX-Collector
+        </h2>
 
         <div id="menuWX">
             Selecione uma linguagem acima.
         </div>
+
     </aside>
 
     <main class="content">
@@ -294,33 +303,43 @@ footer img {
 </div>
 
 <footer>
+
     <img src="poly.jpg" alt="POLYDEV">
 
-    <h2>POLYDEV WX-COLLECTOR</h2>
+    <h2>
+        POLYDEV WX-COLLECTOR
+    </h2>
 
-    <p>Leia • Entenda • Explore seu código</p>
+    <p>
+        Leia • Entenda • Explore seu código
+    </p>
+
 </footer>
 
 <script>
 const TABELA = "conteudos";
 const TAMANHO_BLOCO = 20;
 
-let db = null;
+let db;
 let branchAtual = "";
 let conteudosWX = [];
 let conteudoAtual = "";
 
 
 /* =========================================================
-   NOMES AMIGÁVEIS
+   SUPABASE
    ========================================================= */
 
-const NOMES_LINGUAGENS = {
-    wxpy: "Python",
-    wxrs: "Rust",
-    wxgo: "Go",
-    wxcp: "C++"
-};
+function criarCliente() {
+    if (!db) {
+        db = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+    }
+
+    return db;
+}
 
 
 /* =========================================================
@@ -328,7 +347,9 @@ const NOMES_LINGUAGENS = {
    ========================================================= */
 
 function normalizarUrl(url) {
-    if (!url) return "";
+    if (!url) {
+        return "";
+    }
 
     return String(url)
         .trim()
@@ -339,10 +360,15 @@ function normalizarUrl(url) {
 function montarUrlLeitura(url) {
     const limpo = normalizarUrl(url);
 
-    if (!limpo) return "";
+    if (!limpo) {
+        return "";
+    }
 
     if (window.location.protocol === "file:") {
-        return "https://degmvp.github.io/polidev/" + limpo;
+        return (
+            "https://degmvp.github.io/polidev/" +
+            limpo
+        );
     }
 
     return limpo;
@@ -350,55 +376,19 @@ function montarUrlLeitura(url) {
 
 
 /* =========================================================
-   SEQUENCIAL
-   wx-py-001-wxpy
-   wx-rs-001-wxrs
-   wx-go-001-wxgo
-   wx-cp-001-wxcp
-   ========================================================= */
+   CATEGORIA / BRANCH
 
-function extrairSequencial(programa) {
-    const texto = String(programa || "")
-        .trim()
-        .toLowerCase();
+   ESTADO ATUAL:
+       wxpy01
+       wxrs01
+       wxgo01
+       wxcp01
 
-    const match =
-        texto.match(/^wx-[a-z0-9]+-(\d{3})-/);
-
-    if (!match) {
-        return Number.MAX_SAFE_INTEGER;
-    }
-
-    const numero = Number(match[1]);
-
-    /*
-       Convenção POLYDEV:
-       001 ... 999
-       000 = último elemento da faixa de 1000
-    */
-
-    return numero === 0 ? 1000 : numero;
-}
-
-
-function formatarSequencial(numero) {
-    if (numero === 1000) return "000";
-
-    return String(numero)
-        .padStart(3, "0");
-}
-
-
-/* =========================================================
-   DESCOBRE A BRANCH BASE
-
-   wxpy01 -> wxpy
-   wxpy02 -> wxpy
-   wxpy   -> wxpy
-
-   wxrs01 -> wxrs
-   wxgo01 -> wxgo
-   wxcp01 -> wxcp
+   RESULTADO:
+       wxpy
+       wxrs
+       wxgo
+       wxcp
    ========================================================= */
 
 function extrairBranch(categoria) {
@@ -406,22 +396,109 @@ function extrairBranch(categoria) {
         .trim()
         .toLowerCase();
 
-    const match =
-        texto.match(/^(wx[a-z]+?)(?:\d{2})?$/);
+    /*
+       PADRÃO ACEITO:
 
-    return match
-        ? match[1]
-        : "";
+       wx + letras
+       seguido opcionalmente por números
+
+       wxpy
+       wxpy01
+       wxpy02
+
+       wxrs
+       wxrs01
+
+       wxgo
+       wxgo01
+
+       wxcp
+       wxcp01
+    */
+
+    const match = texto.match(
+        /^(wx[a-z]+)(?:\d+)?$/
+    );
+
+    if (!match) {
+        return "";
+    }
+
+    return match[1];
 }
 
 
 /* =========================================================
-   INICIALIZAÇÃO
+   SEQUENCIAL
 
-   PRIMEIRA LEITURA:
-   SOMENTE DESCOBRIR QUAIS BRANCHES WX EXISTEM.
+   wx-py-001-wxpy
+   wx-rs-001-wxrs
+   wx-go-001-wxgo
+   wx-cp-001-wxcp
 
-   NÃO CARREGA PROGRAMAS PARA O VIEWER.
+   000 = 1000
+   ========================================================= */
+
+function extrairSequencial(programa) {
+    const texto = String(programa || "")
+        .trim()
+        .toLowerCase();
+
+    const match = texto.match(
+        /^wx-[a-z0-9]+-(\d{3})-/
+    );
+
+    if (!match) {
+        return Number.MAX_SAFE_INTEGER;
+    }
+
+    const numero = Number(match[1]);
+
+    if (numero === 0) {
+        return 1000;
+    }
+
+    return numero;
+}
+
+
+function formatarSequencial(numero) {
+    if (numero === 1000) {
+        return "000";
+    }
+
+    return String(numero)
+        .padStart(3, "0");
+}
+
+
+/* =========================================================
+   NOME VISUAL DA BRANCH
+
+   NÃO PARTICIPA DA LÓGICA DO BANCO.
+   ========================================================= */
+
+function nomeBranch(branch) {
+    const nomes = {
+        wxpy: "Python",
+        wxrs: "Rust",
+        wxgo: "Go",
+        wxcp: "C++"
+    };
+
+    return nomes[branch] || branch.toUpperCase();
+}
+
+
+/* =========================================================
+   START
+
+   PRIMEIRA ETAPA:
+   LÊ SOMENTE CATEGORIAS.
+
+   NÃO LÊ ARQUIVOS.
+   NÃO MONTA MENUS.
+   NÃO CARREGA CONTEÚDOS.
    ========================================================= */
 
 async function iniciarCollector() {
@@ -431,63 +508,66 @@ async function iniciarCollector() {
     const status =
         document.getElementById("status");
 
+    const codigo =
+        document.getElementById("codigo");
+
     try {
-        db = window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+        const cliente = criarCliente();
 
         /*
-           Consulta leve para descobrir categorias WX.
+           IMPORTANTE:
 
-           Nenhum menu lateral é preparado aqui.
-           Nenhum conteúdo físico é lido aqui.
+           A tabela pode ter centenas de registros.
+           Aqui buscamos SOMENTE a coluna categoria.
+
+           O objetivo é descobrir as branches existentes.
         */
 
-        const { data, error } = await db
+        const { data, error } = await cliente
             .from(TABELA)
             .select("categoria")
-            .like("categoria", "wx%")
             .eq("ativo", true)
+            .order("categoria", {
+                ascending: true
+            })
             .limit(5000);
 
         if (error) {
-            combo.innerHTML =
-                '<option value="">-- erro --</option>';
-
-            status.textContent =
-                "Falha ao consultar categorias WX.";
-
-            document.getElementById("codigo").textContent =
-                error.message;
-
-            return;
+            throw error;
         }
+
+        /*
+           FILTRO WX.
+
+           Todo o restante do ecossistema é ignorado.
+        */
 
         const branches = [
             ...new Set(
                 (data || [])
                     .map(item =>
-                        extrairBranch(item.categoria)
+                        extrairBranch(
+                            item.categoria
+                        )
                     )
-                    .filter(Boolean)
+                    .filter(branch =>
+                        branch !== ""
+                    )
             )
         ].sort();
 
 
-        if (branches.length === 0) {
-            combo.innerHTML =
-                '<option value="">-- nenhuma branch WX --</option>';
-
-            status.textContent =
-                "Nenhuma categoria WX padronizada encontrada.";
-
-            return;
-        }
+        combo.innerHTML = "";
 
 
-        combo.innerHTML =
-            '<option value="">-- escolha uma linguagem --</option>';
+        const inicial =
+            document.createElement("option");
+
+        inicial.value = "";
+        inicial.textContent =
+            "-- escolha uma linguagem --";
+
+        combo.appendChild(inicial);
 
 
         branches.forEach(branch => {
@@ -496,46 +576,60 @@ async function iniciarCollector() {
 
             option.value = branch;
 
-            const nome =
-                NOMES_LINGUAGENS[branch] || branch;
-
             option.textContent =
-                branch + " — " + nome;
+                branch +
+                " — " +
+                nomeBranch(branch);
 
             combo.appendChild(option);
         });
+
+
+        if (branches.length === 0) {
+            status.textContent =
+                "Nenhuma branch WX encontrada.";
+
+            codigo.textContent =
+                "Nenhuma categoria WX padronizada encontrada no banco.";
+
+            return;
+        }
 
 
         status.textContent =
             branches.length +
             " branch(es) WX encontrada(s).";
 
+
+        codigo.textContent =
+            "Selecione uma branch WX.";
+
+
+        combo.addEventListener(
+            "change",
+            carregarBranch
+        );
+
     } catch (e) {
         combo.innerHTML =
-            '<option value="">-- erro geral --</option>';
+            '<option value="">-- erro --</option>';
 
         status.textContent =
-            "Erro ao iniciar WX-Collector.";
+            "Falha ao descobrir branches WX.";
 
-        document.getElementById("codigo").textContent =
+        codigo.textContent =
             e.message;
     }
 }
 
 
 /* =========================================================
-   ESCOLHA DA BRANCH
-
-   AQUI COMEÇA O TRABALHO ON THE FLY.
-
-   Exemplo:
-   escolheu wxpy
-   consulta SOMENTE wxpy%
+   CARREGA SOMENTE A BRANCH ESCOLHIDA
    ========================================================= */
 
 async function carregarBranch() {
-    const branch =
-        document.getElementById("linguagem").value;
+    const combo =
+        document.getElementById("linguagem");
 
     const menu =
         document.getElementById("menuWX");
@@ -546,22 +640,32 @@ async function carregarBranch() {
     const codigo =
         document.getElementById("codigo");
 
+    const branch = combo.value;
+
 
     branchAtual = branch;
     conteudosWX = [];
     conteudoAtual = "";
 
-    document.getElementById("downloadBtn").href = "#";
+    document.getElementById(
+        "downloadBtn"
+    ).href = "#";
 
 
     if (!branch) {
-        document.getElementById("headerInfo").textContent =
+        document.getElementById(
+            "headerInfo"
+        ).textContent =
             "Selecione uma branch WX";
 
-        document.getElementById("tituloMenu").textContent =
+        document.getElementById(
+            "tituloMenu"
+        ).textContent =
             "WX-Collector";
 
-        document.getElementById("tituloConteudo").textContent =
+        document.getElementById(
+            "tituloConteudo"
+        ).textContent =
             "Selecione uma branch WX";
 
         menu.innerHTML =
@@ -574,23 +678,28 @@ async function carregarBranch() {
     }
 
 
-    const nomeLinguagem =
-        NOMES_LINGUAGENS[branch] || branch;
+    const nome = nomeBranch(branch);
 
 
-    document.getElementById("headerInfo").textContent =
+    document.getElementById(
+        "headerInfo"
+    ).textContent =
         "Branch ativa: " +
         branch +
         " | " +
-        nomeLinguagem;
+        nome;
 
 
-    document.getElementById("tituloMenu").textContent =
-        "Menu " + nomeLinguagem;
+    document.getElementById(
+        "tituloMenu"
+    ).textContent =
+        "Menu " + nome;
 
 
-    document.getElementById("tituloConteudo").textContent =
-        "Carregando " + nomeLinguagem + "...";
+    document.getElementById(
+        "tituloConteudo"
+    ).textContent =
+        "Carregando " + nome + "...";
 
 
     menu.innerHTML =
@@ -598,85 +707,100 @@ async function carregarBranch() {
 
 
     codigo.textContent =
-        "Consultando " + branch + "...";
+        "Consultando " +
+        branch +
+        "...";
 
 
     status.textContent =
-        "Lendo somente a branch '" +
+        "Lendo somente " +
         branch +
-        "'...";
+        "...";
 
 
     try {
+        const cliente = criarCliente();
+
+
         /*
-           Compatibilidade:
+           BUSCA SOMENTE A BRANCH ESCOLHIDA.
 
-           HOJE:
-           wxpy01
-           wxrs01
-           wxgo01
-           wxcp01
+           wxpy encontra:
+               wxpy
+               wxpy01
+               wxpy02
+               ...
 
-           FUTURO:
-           wxpy
-           wxrs
-           wxgo
-           wxcp
-
-           O LIKE atende os dois modelos.
+           Nenhuma outra linguagem é carregada.
         */
 
-        const { data, error } = await db
+        const { data, error } = await cliente
             .from(TABELA)
             .select(
-                "id,titulo,categoria,arquivo_url,downloads,ativo,programa"
+                "id," +
+                "titulo," +
+                "categoria," +
+                "arquivo_url," +
+                "downloads," +
+                "ativo," +
+                "programa"
             )
-            .like("categoria", branch + "%")
-            .eq("ativo", true)
+            .like(
+                "categoria",
+                branch + "%"
+            )
+            .eq(
+                "ativo",
+                true
+            )
             .limit(5000);
 
 
         if (error) {
-            menu.innerHTML =
-                "Erro Supabase";
-
-            codigo.textContent =
-                error.message;
-
-            status.textContent =
-                "Falha ao carregar branch.";
-
-            return;
+            throw error;
         }
 
 
         /*
-           Garante que só entra a branch selecionada.
+           SEGUNDO FILTRO DE SEGURANÇA.
 
-           Evita coincidências acidentais.
+           Garante correspondência exata da branch.
         */
 
         conteudosWX = (data || [])
             .filter(item =>
-                extrairBranch(item.categoria) === branch
+                extrairBranch(
+                    item.categoria
+                ) === branch
             );
 
 
+        /*
+           ORDENA PELO SEQUENCIAL DO PROGRAMA.
+        */
+
         conteudosWX.sort((a, b) => {
-            const sa =
-                extrairSequencial(a.programa);
+            const numeroA =
+                extrairSequencial(
+                    a.programa
+                );
 
-            const sb =
-                extrairSequencial(b.programa);
+            const numeroB =
+                extrairSequencial(
+                    b.programa
+                );
 
-            if (sa !== sb) {
-                return sa - sb;
+            if (numeroA !== numeroB) {
+                return numeroA - numeroB;
             }
 
-            return String(a.programa || "")
-                .localeCompare(
-                    String(b.programa || "")
-                );
+            return String(
+                a.programa || ""
+            ).localeCompare(
+                String(
+                    b.programa || ""
+                )
+            );
         });
 
 
@@ -685,9 +809,9 @@ async function carregarBranch() {
                 "Nenhum conteúdo encontrado.";
 
             codigo.textContent =
-                "Branch '" +
+                "Nenhum conteúdo encontrado para " +
                 branch +
-                "' sem conteúdos.";
+                ".";
 
             status.textContent =
                 "0 conteúdos.";
@@ -699,20 +823,26 @@ async function carregarBranch() {
         montarMenu();
 
 
+        const quantidadeBlocos =
+            Math.ceil(
+                conteudosWX.length /
+                TAMANHO_BLOCO
+            );
+
+
         status.textContent =
             branch +
             " | " +
             conteudosWX.length +
             " conteúdo(s) | " +
-            Math.ceil(
-                conteudosWX.length /
-                TAMANHO_BLOCO
-            ) +
+            quantidadeBlocos +
             " bloco(s).";
 
 
-        document.getElementById("tituloConteudo").textContent =
-            nomeLinguagem +
+        document.getElementById(
+            "tituloConteudo"
+        ).textContent =
+            nome +
             " | " +
             conteudosWX.length +
             " conteúdos";
@@ -723,26 +853,21 @@ async function carregarBranch() {
 
     } catch (e) {
         menu.innerHTML =
-            "Erro geral";
+            "Erro ao carregar branch.";
 
         codigo.textContent =
             e.message;
 
         status.textContent =
-            "Erro ao carregar branch.";
+            "Falha ao carregar " +
+            branch +
+            ".";
     }
 }
 
 
 /* =========================================================
-   MONTA OS GRUPOS
-
-   1..20
-   21..40
-   41
-   etc.
-
-   SOMENTE APÓS A ESCOLHA DA LINGUAGEM.
+   MONTA GRUPOS DE NO MÁXIMO 20
    ========================================================= */
 
 function montarMenu() {
@@ -757,16 +882,17 @@ function montarMenu() {
         inicio < conteudosWX.length;
         inicio += TAMANHO_BLOCO
     ) {
-
-        const fim =
-            Math.min(
-                inicio + TAMANHO_BLOCO,
-                conteudosWX.length
-            );
+        const fim = Math.min(
+            inicio + TAMANHO_BLOCO,
+            conteudosWX.length
+        );
 
 
         const bloco =
-            conteudosWX.slice(inicio, fim);
+            conteudosWX.slice(
+                inicio,
+                fim
+            );
 
 
         const primeiro =
@@ -777,8 +903,17 @@ function montarMenu() {
 
         const ultimo =
             extrairSequencial(
-                bloco[bloco.length - 1].programa
+                bloco[
+                    bloco.length - 1
+                ].programa
             );
+
+
+        const numeroBloco =
+            Math.floor(
+                inicio /
+                TAMANHO_BLOCO
+            ) + 1;
 
 
         const titulo =
@@ -792,20 +927,31 @@ function montarMenu() {
         titulo.textContent =
             "WX" +
             String(
-                Math.floor(inicio / TAMANHO_BLOCO) + 1
-            ).padStart(2, "0") +
+                numeroBloco
+            ).padStart(
+                2,
+                "0"
+            ) +
             " — " +
-            formatarSequencial(primeiro) +
+            formatarSequencial(
+                primeiro
+            ) +
             "–" +
-            formatarSequencial(ultimo);
+            formatarSequencial(
+                ultimo
+            );
 
 
-        menu.appendChild(titulo);
+        menu.appendChild(
+            titulo
+        );
 
 
         bloco.forEach(item => {
             const btn =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
 
             btn.className =
@@ -813,28 +959,39 @@ function montarMenu() {
 
 
             const programa =
-                String(item.programa || "")
-                    .trim();
+                String(
+                    item.programa || ""
+                ).trim();
 
 
             btn.textContent =
                 programa +
                 " — " +
-                (item.titulo || programa);
+                (
+                    item.titulo ||
+                    programa
+                );
 
 
-            btn.onclick =
-                () => abrirConteudo(item);
+            btn.addEventListener(
+                "click",
+                () =>
+                    abrirConteudo(
+                        item
+                    )
+            );
 
 
-            menu.appendChild(btn);
+            menu.appendChild(
+                btn
+            );
         });
     }
 }
 
 
 /* =========================================================
-   ABRE ARQUIVO
+   ABRE CONTEÚDO
    ========================================================= */
 
 async function abrirConteudo(item) {
@@ -850,23 +1007,30 @@ async function abrirConteudo(item) {
         );
 
 
-    document.getElementById("tituloConteudo").textContent =
-        (item.programa
-            ? item.programa + " — "
-            : "") +
+    document.getElementById(
+        "tituloConteudo"
+    ).textContent =
+        (
+            item.programa
+                ? item.programa + " — "
+                : ""
+        ) +
         item.titulo;
 
 
-    document.getElementById("downloadBtn").href =
-        url;
+    document.getElementById(
+        "downloadBtn"
+    ).href = url;
 
 
     try {
-        const resp =
-            await fetch(urlLeitura);
+        const resposta =
+            await fetch(
+                urlLeitura
+            );
 
 
-        if (!resp.ok) {
+        if (!resposta.ok) {
             throw new Error(
                 "Arquivo não encontrado: " +
                 urlLeitura
@@ -875,17 +1039,21 @@ async function abrirConteudo(item) {
 
 
         conteudoAtual =
-            await resp.text();
+            await resposta.text();
 
 
-        document.getElementById("codigo").textContent =
+        document.getElementById(
+            "codigo"
+        ).textContent =
             conteudoAtual;
 
     } catch (e) {
         conteudoAtual = "";
 
 
-        document.getElementById("codigo").textContent =
+        document.getElementById(
+            "codigo"
+        ).textContent =
             "Falha ao carregar o arquivo.\n\n" +
             "URL no banco: " +
             url +
@@ -912,19 +1080,19 @@ function copiarConteudo() {
 
 
     navigator.clipboard
-        .writeText(conteudoAtual)
-
-        .then(() =>
+        .writeText(
+            conteudoAtual
+        )
+        .then(() => {
             alert(
                 "Conteúdo copiado."
-            )
-        )
-
-        .catch(() =>
+            );
+        })
+        .catch(() => {
             alert(
                 "Não foi possível copiar."
-            )
-        );
+            );
+        });
 }
 
 
