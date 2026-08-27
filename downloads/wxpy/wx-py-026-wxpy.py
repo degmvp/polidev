@@ -1,12 +1,12 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+6 - Async Timer
+async def wrapper(*args, **kwargs):
 
-# Bloco: WXPY02
-# ==========================================================
+    start = time.perf_counter()
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    result = await func(*args, **kwargs)
+
+    end = time.perf_counter()
+
+    print(f"[Async] {end - start:.6f}s")
+
+    return result

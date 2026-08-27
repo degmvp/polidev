@@ -1,12 +1,17 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+8 - Fast Smooth
+Muito utilizado em:
 
-# Bloco: WXPY02
-# ==========================================================
+DSP
+Séries temporais
+Suavização estatística
+Pré-processamento ML
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+def fast_smooth(data, window_size=5):
+
+    kernel = np.ones(window_size) / window_size
+
+    return np.convolve(
+        data,
+        kernel,
+        mode='valid'
+    )

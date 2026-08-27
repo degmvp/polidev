@@ -1,12 +1,32 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+3 - TTL Cache Inteligente
+Implementação manual de cache com expiração temporal.
 
-# Bloco: WXPY02
-# ==========================================================
+def ttl_cache(seconds=60):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    def decorator(func):
+
+        cache = {}
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            key = args + tuple(sorted(kwargs.items()))
+
+            now = time.time()
+
+            if key in cache:
+
+                result, timestamp = cache[key]
+
+                if now - timestamp < seconds:
+                    return result
+
+            result = func(*args, **kwargs)
+
+            cache[key] = (result, now)
+
+            return result
+
+        return wrapper
+
+    return decorator

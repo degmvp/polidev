@@ -1,12 +1,15 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+8 - Deprecated Warning
+def deprecated(reason=""):
 
-# Bloco: WXPY02
-# ==========================================================
+    def decorator(func):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            print("Função depreciada")
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

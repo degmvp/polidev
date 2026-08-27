@@ -1,12 +1,12 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+2 - Feature Engineering Vetorizado
+def create_features_fast(df):
 
-# Bloco: WXPY02
-# ==========================================================
+    price = df['price'].to_numpy()
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    qty = df['quantity'].to_numpy()
+
+    df['total'] = price * qty
+
+    df['log_price'] = np.log1p(price)
+
+    return df

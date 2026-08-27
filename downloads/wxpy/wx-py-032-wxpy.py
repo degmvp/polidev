@@ -1,12 +1,17 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+4 - Rolling Window Sem Cópia
+def rolling_window(a, window):
 
-# Bloco: WXPY02
-# ==========================================================
+    shape = a.shape[:-1] + (
+        a.shape[-1] - window + 1,
+        window
+    )
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    strides = a.strides + (
+        a.strides[-1],
+    )
+
+    return np.lib.stride_tricks.as_strided(
+        a,
+        shape=shape,
+        strides=strides
+    )

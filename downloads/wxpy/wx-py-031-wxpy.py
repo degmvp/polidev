@@ -1,12 +1,11 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+3 - Filtragem Vetorizada
 
-# Bloco: WXPY02
-# ==========================================================
+def filter_outliers(data, n_std=3.0):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    mean = np.mean(data)
+
+    std = np.std(data)
+
+    mask = np.abs(data - mean) < n_std * std
+
+    return data[mask], mask

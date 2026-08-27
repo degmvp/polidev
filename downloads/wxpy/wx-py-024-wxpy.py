@@ -1,12 +1,21 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+4 - Logging Automático
+def log_execution(level="info"):
 
-# Bloco: WXPY02
-# ==========================================================
+    def decorator(func):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            logger = logging.getLogger(func.__module__)
+
+            logger.info(f"Executando {func.__name__}")
+
+            result = func(*args, **kwargs)
+
+            logger.info(f"Retorno: {result}")
+
+            return result
+
+        return wrapper
+
+    return decorator

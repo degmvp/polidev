@@ -1,12 +1,13 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+6 - Pairwise Distance com Broadcasting
+def pairwise_distance(X, Y=None):
 
-# Bloco: WXPY02
-# ==========================================================
+    if Y is None:
+        Y = X
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    X2 = np.sum(X**2, axis=1, keepdims=True)
+
+    Y2 = np.sum(Y**2, axis=1)
+
+    XY = X @ Y.T
+
+    return np.sqrt(X2 + Y2 - 2 * XY)

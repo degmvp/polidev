@@ -1,12 +1,14 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+7 - Singleton Pattern
+def singleton(cls):
 
-# Bloco: WXPY02
-# ==========================================================
+    instances = {}
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    def wrapper(*args, **kwargs):
+
+        if cls not in instances:
+
+            instances[cls] = cls(*args, **kwargs)
+
+        return instances[cls]
+
+    return wrapper

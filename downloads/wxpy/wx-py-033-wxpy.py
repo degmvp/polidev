@@ -1,12 +1,20 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+5 - Group Normalization
+def group_normalize(data, groups):
 
-# Bloco: WXPY02
-# ==========================================================
+    unique_groups = np.unique(groups)
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    result = np.zeros_like(data, dtype=float)
+
+    for g in unique_groups:
+
+        mask = groups == g
+
+        group_data = data[mask]
+
+        result[mask] = (
+            group_data - group_data.mean()
+        ) / (
+            group_data.std() + 1e-8
+        )
+
+    return result

@@ -1,12 +1,12 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+2 - Lookup Ultra-Rápido
+Uso de searchsorted para buscas extremamente eficientes.
 
-# Bloco: WXPY02
-# ==========================================================
+def fast_lookup(codes, values, lookup_table):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    sorted_idx = np.argsort(codes)
+
+    sorted_codes = codes[sorted_idx]
+
+    positions = np.searchsorted(sorted_codes, values)
+
+    return lookup_table[sorted_idx[positions]]

@@ -1,12 +1,21 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+10 - Performance Profiler
+def profile(sort_by="cumulative", lines=10):
 
-# Bloco: WXPY02
-# ==========================================================
+    def decorator(func):
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            pr = cProfile.Profile()
+
+            pr.enable()
+
+            result = func(*args, **kwargs)
+
+            pr.disable()
+
+            return result
+
+        return wrapper
+
+    return decorator

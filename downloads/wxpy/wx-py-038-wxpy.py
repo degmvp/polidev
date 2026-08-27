@@ -1,12 +1,16 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+10 - Sparse Correlation
+def sparse_correlation(a, b, threshold=0.01):
 
-# Bloco: WXPY02
-# ==========================================================
+    mask = (
+        np.abs(a) > threshold
+    ) | (
+        np.abs(b) > threshold
+    )
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    if mask.sum() == 0:
+        return 0.0
+
+    return np.corrcoef(
+        a[mask],
+        b[mask]
+    )[0,1]

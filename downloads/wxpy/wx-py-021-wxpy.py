@@ -1,11 +1,23 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: wx-py-021-wxpy.py
-# Bloco: WXPY02
-# ==========================================================
+1 - Timer Profissional
+Decorator para medir tempo de execução com precisão usando time.perf_counter().
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+def timer(name: str = None):
+
+    def decorator(func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+
+            start = time.perf_counter()
+
+            result = func(*args, **kwargs)
+
+            end = time.perf_counter()
+
+            print(f"{end - start:.6f} segundos")
+
+            return result
+
+        return wrapper
+
+    return decorator

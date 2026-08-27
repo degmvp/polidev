@@ -1,12 +1,8 @@
-# ==========================================================
-# POLYDEV WX — ARQUIVO DE HOMOLOGAÇÃO
-# Programa: 
+9 - Top-K Ultra-Eficiente
+def top_k_fast(arr, k=10):
 
-# Bloco: WXPY02
-# ==========================================================
+    idx = np.argpartition(arr, -k)[-k:]
 
-print("POLYDEV WX - HOMOLOGACAO")
-print("Bloco: WXPY02")
-print("Programa: 021")
-print("Arquivo: wx-py-021-wxpy.py")
-print("Teste de paginacao logica OK")
+    idx = idx[np.argsort(arr[idx])[::-1]]
+
+    return arr[idx], idx
