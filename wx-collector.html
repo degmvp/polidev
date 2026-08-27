@@ -1366,39 +1366,101 @@ async function carregarCategorias() {
     try {
 
 
-        const {
-            data,
-            error
-        } =
-            await client
+        /*
+         * =====================================================
+         * LEITURA COMPLETA DAS CATEGORIAS
+         * =====================================================
+         *
+         * Não existe limite máximo lógico para o acervo.
+         *
+         * O banco é lido em páginas apenas para transporte.
+         * Enquanto uma página vier completa, buscamos a próxima.
+         * Quando vier menor que o tamanho da página, terminou.
+         *
+         * Assim nenhuma branch desaparece quando a tabela cresce.
+         * =====================================================
+         */
 
-                .from(
-                    TABELA
-                )
-
-                .select(
-                    "categoria"
-                )
-
-                .order(
-                    "categoria",
-                    {
-                        ascending:
-                            true
-                    }
-                )
-
-                .limit(
-                    5000
-                );
+        const PAGE_SIZE =
+            1000;
 
 
-        if (
-            error
+        let from =
+            0;
+
+
+        let todasCategorias =
+            [];
+
+
+        while (
+            true
         ) {
 
 
-            throw error;
+            const {
+                data,
+                error
+            } =
+                await client
+
+                    .from(
+                        TABELA
+                    )
+
+                    .select(
+                        "categoria"
+                    )
+
+                    .order(
+                        "categoria",
+                        {
+                            ascending:
+                                true
+                        }
+                    )
+
+                    .range(
+                        from,
+                        from + PAGE_SIZE - 1
+                    );
+
+
+            if (
+                error
+            ) {
+
+
+                throw error;
+
+
+            }
+
+
+            const pagina =
+                data || [];
+
+
+            todasCategorias =
+                todasCategorias.concat(
+                    pagina
+                );
+
+
+            if (
+                pagina.length <
+                PAGE_SIZE
+            ) {
+
+
+                break;
+
+
+            }
+
+
+            from +=
+                PAGE_SIZE;
 
 
         }
@@ -1408,34 +1470,32 @@ async function carregarCategorias() {
             new Set();
 
 
-        (
-            data || []
-        )
-        .forEach(
-            item => {
+        todasCategorias
+            .forEach(
+                item => {
 
 
-                const branch =
-                    extrairBranch(
-                        item.categoria
-                    );
+                    const branch =
+                        extrairBranch(
+                            item.categoria
+                        );
 
 
-                if (
-                    branch
-                ) {
-
-
-                    branches.add(
+                    if (
                         branch
-                    );
+                    ) {
+
+
+                        branches.add(
+                            branch
+                        );
+
+
+                    }
 
 
                 }
-
-
-            }
-        );
+            );
 
 
         const lista =
@@ -1503,20 +1563,6 @@ async function carregarCategorias() {
         );
 
 
-        /* =====================================================
-           GARANTE VISIBILIDADE DE TODAS AS LINGUAGENS WX
-           ===================================================== */
-
-        combo.size =
-            Math.min(
-                Math.max(
-                    lista.length + 1,
-                    2
-                ),
-                8
-            );
-
-
         status.textContent =
 
             "WX-Collector | " +
@@ -1554,7 +1600,6 @@ async function carregarCategorias() {
     }
 
 }
-
 
 
 /* =========================================================
