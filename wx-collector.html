@@ -1503,6 +1503,20 @@ async function carregarCategorias() {
         );
 
 
+        /* =====================================================
+           GARANTE VISIBILIDADE DE TODAS AS LINGUAGENS WX
+           ===================================================== */
+
+        combo.size =
+            Math.min(
+                Math.max(
+                    lista.length + 1,
+                    2
+                ),
+                8
+            );
+
+
         status.textContent =
 
             "WX-Collector | " +
