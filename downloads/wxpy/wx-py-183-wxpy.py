@@ -1,31 +1,52 @@
 print('✅' * 50)
 print('''
 #-------------------------------------------------------
-# ✅ advR005
+# ✅ advR008
 # ✅ Python 3.66 alterado: 2018/07/29
-# ✅ Objetivo: cmd avançado calculadora
-# ✅ Comandos: from tkinter - class
-# ✅ Funções : get(), eval(), grid(), Button()
+# ✅ Objetivo:cmd avançado imprime formato table
+# ✅ Comandos:for,if,
+# ✅ Funções :append(),str(),join(),range()
 #-------------------------------------------------------''')
 print('✅' * 50)
+class Table:
+    def __init__(self,title,headers,rows):
+        self.title=title
+        self.headers=headers
+        self.rows=rows
+        self.nrows=len(self.rows)
+        self.fieldlen=[]
 
-from tkinter import *
+        ncols=len(headers)
 
-class Calculadora:
-    def __init__(self, master):
-        self.frame = Frame(master)
-        self.frame.grid()
-        self.dados = Entry(master, width=64)
-        self.dados.grid(row=1, column=0)
-        bts = ['0','1','2','3','4','5','6','7','8','9','+','-','*','/','=','C']
-        r = 1
-        c = 0
-        for bt in bts:
-            comando = lambda x=bt: self.calcular(x)
-            self.botao = Button(self.frame, bd=6, font=('arial', 10, 'bold'), bg='powder blue',
-                                text=bt, width=8, command=comando)
-            self.botao.grid(row=r, column=c)
-            c += 1
-            if c > 3:
-                c = 0
-                r += 1
+        for i in range(ncols):
+            max=0
+            for j in rows:
+                if len(str(j[i]))>max: max=len(str(j[i]))
+            self.fieldlen.append(max)
+
+        for i in range(len(headers)):
+            if len(str(headers[i]))>self.fieldlen[i]: self.fieldlen[i]=len(str(headers[i]))
+
+
+        self.width=sum(self.fieldlen)+(ncols-1)*3+4
+
+    def __str__(self):
+        bar="-"*self.width
+        title="| "+self.title+" "*(self.width-3-(len(self.title)))+"|"
+        out=[bar,title,bar]
+        header=""
+        for i in range(len(self.headers)):
+            header+="| %s" %(str(self.headers[i])) +" "*(self.fieldlen[i]-len(str(self.headers[i])))+" "
+        header+="|"
+        out.append(header)
+        out.append(bar)
+        for i in self.rows:
+            line=""
+            for j in range(len(i)):
+                line+="| %s" %(str(i[j])) +" "*(self.fieldlen[j]-len(str(i[j])))+" "
+            out.append(line+"|")
+
+        out.append(bar)
+        return "\r\n".join(out)
+
+print (Table("Este é o titulo da tabela ",["Header1","Header2","H3"],[[1,2,3],["Hi","everybody","How are you??"],[None,True,[1,2]]]))
