@@ -1,975 +1,2686 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>POLYDEV | WXX — Homologação WX</title>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<title>
+    POLYDEV | WX-Collector
+</title>
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap"
+    rel="stylesheet"
+>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script
+    src="config.js">
+</script>
+
 
 <style>
-*{
-  box-sizing:border-box;
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+
+    box-sizing:
+        border-box;
+
 }
 
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#000;
-  color:#4cc9f0;
+
+body {
+
+    margin:
+        0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #000;
+
+    color:
+        #4cc9f0;
+
 }
 
-header{
-  text-align:center;
-  padding:24px;
-  border-bottom:3px solid #4cc9f0;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+
+    text-align:
+        center;
+
+    padding:
+        24px;
+
+    border-bottom:
+        3px solid #4cc9f0;
+
 }
 
-header h1{
-  margin:0;
-  font-size:34px;
-  color:#4cc9f0;
+
+header h1 {
+
+    margin:
+        0;
+
+    font-family:
+        "Orbitron",
+        Arial,
+        sans-serif;
+
+    font-size:
+        38px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    color:
+        #4cc9f0;
+
+    text-shadow:
+        0 0 6px rgba(76, 201, 240, 0.8),
+        0 0 14px rgba(76, 201, 240, 0.45);
+
 }
 
-header p{
-  color:yellowgreen;
-  font-size:18px;
-  font-weight:bold;
+
+header p {
+
+    margin:
+        10px 0 0;
+
+    color:
+        yellowgreen;
+
+    font-size:
+        18px;
+
+    font-weight:
+        bold;
+
 }
 
-.banner{
-  width:55%;
-  max-width:900px;
-  display:block;
-  margin:18px auto 28px;
-  border:2px solid #4cc9f0;
-  border-radius:8px;
+
+#headerInfo {
+
+    margin-top:
+        12px;
+
+    color:
+        #FFD700;
+
+    font-size:
+        17px;
+
+    font-weight:
+        bold;
+
 }
 
-.modulo-box{
-  width:96%;
-  margin:0 auto 24px;
-  padding:16px;
-  border:2px solid #4cc9f0;
-  border-radius:10px;
-  background:#00101f;
-  text-align:center;
+
+/* =========================================================
+   BANNER
+   ========================================================= */
+
+.banner {
+
+    width:
+        55%;
+
+    max-width:
+        900px;
+
+    display:
+        block;
+
+    margin:
+        18px auto 28px;
+
+    border:
+        2px solid #4cc9f0;
+
+    border-radius:
+        8px;
+
 }
 
-.modulo-box label{
-  display:block;
-  color:#FFD700;
-  font-weight:bold;
-  margin-bottom:10px;
+
+/* =========================================================
+   SELETOR DE LINGUAGEM
+   ========================================================= */
+
+.selector-box {
+
+    width:
+        96%;
+
+    margin:
+        0 auto 16px;
+
+    padding:
+        16px;
+
+    background:
+        #00101f;
+
+    border:
+        2px solid #4cc9f0;
+
+    border-radius:
+        10px;
+
+    text-align:
+        center;
+
 }
 
-.modulo-box select{
-  min-width:330px;
-  max-width:95%;
-  padding:11px;
-  background:#111;
-  color:#FFD700;
-  border:1px solid #4cc9f0;
-  border-radius:8px;
-  font-weight:bold;
+
+.selector-box label {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
+
+    color:
+        #FFD700;
+
+    font-weight:
+        bold;
+
 }
 
-.layout{
-  display:grid;
-  grid-template-columns:320px 1fr;
-  gap:25px;
-  width:96%;
-  margin:auto;
+
+.selector-box select {
+
+    min-width:
+        340px;
+
+    max-width:
+        95%;
+
+    padding:
+        11px;
+
+    background:
+        #111;
+
+    color:
+        #FFD700;
+
+    border:
+        1px solid #4cc9f0;
+
+    border-radius:
+        8px;
+
+    font-weight:
+        bold;
+
 }
 
-.sidebar{
-  border-right:3px solid #4cc9f0;
-  padding:15px;
+
+/* =========================================================
+   STATUS GLOBAL
+   ========================================================= */
+
+.status {
+
+    width:
+        96%;
+
+    margin:
+        0 auto 20px;
+
+    padding:
+        11px;
+
+    text-align:
+        center;
+
+    color:
+        #fff;
+
+    background:
+        #00101f;
+
+    border:
+        1px solid #4cc9f0;
+
+    border-radius:
+        8px;
+
+    font-size:
+        15px;
+
+    font-weight:
+        bold;
+
 }
 
-.sidebar h2{
-  color:#4cc9f0;
-  margin-top:0;
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.layout {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        370px 1fr;
+
+    gap:
+        25px;
+
+    width:
+        96%;
+
+    margin:
+        auto;
+
 }
 
-.menu-btn{
-  width:100%;
-  display:block;
-  margin:10px 0;
-  padding:14px;
-  background:#111;
-  color:#FFD700;
-  border:1px solid #4cc9f0;
-  border-radius:8px;
-  text-align:left;
-  font-weight:bold;
-  cursor:pointer;
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+
+    padding:
+        15px;
+
+    border-right:
+        3px solid #4cc9f0;
+
 }
 
-.menu-btn:hover{
-  background:#4cc9f0;
-  color:#000;
+
+.sidebar h2 {
+
+    margin-top:
+        0;
+
+    color:
+        #4cc9f0;
+
 }
 
-.content{
-  padding:15px;
+
+/* =========================================================
+   NAVEGADOR DE GRUPOS
+   ========================================================= */
+
+.group-nav {
+
+    margin:
+        0 0 18px;
+
+    padding:
+        14px;
+
+    background:
+        #00101f;
+
+    border:
+        2px solid #4cc9f0;
+
+    border-radius:
+        10px;
+
 }
 
-.content h2{
-  color:#FFD700;
-  font-size:28px;
+
+.group-nav-title {
+
+    color:
+        #FFD700;
+
+    font-size:
+        18px;
+
+    font-weight:
+        bold;
+
+    text-align:
+        center;
+
 }
 
-.toolbar{
-  margin-bottom:15px;
+
+.group-nav-range {
+
+    margin-top:
+        7px;
+
+    color:
+        #fff;
+
+    font-size:
+        14px;
+
+    font-weight:
+        bold;
+
+    text-align:
+        center;
+
 }
 
-.tool-btn{
-  padding:10px 14px;
-  margin-right:8px;
-  background:#4cc9f0;
-  color:#000;
-  border:none;
-  border-radius:6px;
-  font-weight:bold;
-  cursor:pointer;
-  text-decoration:none;
+
+.group-nav-total {
+
+    margin-top:
+        7px;
+
+    color:
+        yellowgreen;
+
+    font-size:
+        14px;
+
+    font-weight:
+        bold;
+
+    text-align:
+        center;
+
 }
 
-.tool-btn:hover{
-  background:#FFD700;
+
+.group-buttons {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        10px;
+
+    margin-top:
+        14px;
+
 }
 
-.viewer{
-  background:#00101f;
-  color:#fff;
-  border:2px solid #4cc9f0;
-  border-radius:10px;
-  padding:20px;
-  min-height:620px;
-  overflow:auto;
+
+.nav-btn {
+
+    padding:
+        10px;
+
+    background:
+        #4cc9f0;
+
+    color:
+        #000;
+
+    border:
+        none;
+
+    border-radius:
+        7px;
+
+    font-size:
+        14px;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
 }
 
-pre{
-  white-space:pre-wrap;
-  word-wrap:break-word;
-  font-size:15px;
-  line-height:1.45;
-  margin:0;
+
+.nav-btn:hover:not(:disabled) {
+
+    background:
+        #FFD700;
+
 }
 
-.status{
-  width:96%;
-  margin:0 auto 20px;
-  color:#fff;
-  text-align:center;
-  font-size:14px;
+
+.nav-btn:disabled {
+
+    opacity:
+        0.30;
+
+    cursor:
+        default;
+
 }
 
-footer{
-  text-align:center;
-  margin-top:40px;
-  padding:28px;
-  border-top:3px solid #4cc9f0;
-  color:yellowgreen;
-  font-weight:bold;
+
+/* =========================================================
+   BOTÕES DO MENU
+   ========================================================= */
+
+.menu-btn {
+
+    width:
+        100%;
+
+    display:
+        block;
+
+    margin:
+        8px 0;
+
+    padding:
+        12px;
+
+    background:
+        #111;
+
+    color:
+        #FFD700;
+
+    border:
+        1px solid #4cc9f0;
+
+    border-radius:
+        8px;
+
+    text-align:
+        left;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
 }
 
-footer img{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  border:4px solid #4cc9f0;
+
+.menu-btn:hover {
+
+    background:
+        #4cc9f0;
+
+    color:
+        #000;
+
 }
 
-@media(max-width:850px){
-  .layout{
-    grid-template-columns:1fr;
-  }
 
-  .sidebar{
-    border-right:none;
-    border-bottom:3px solid #4cc9f0;
-  }
+/* =========================================================
+   CONTENT
+   ========================================================= */
 
-  .banner{
-    width:90%;
-  }
+.content {
+
+    padding:
+        15px;
+
 }
+
+
+.content h2 {
+
+    color:
+        #FFD700;
+
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.toolbar {
+
+    margin-bottom:
+        15px;
+
+}
+
+
+.tool-btn {
+
+    display:
+        inline-block;
+
+    padding:
+        10px 14px;
+
+    margin-right:
+        8px;
+
+    background:
+        #4cc9f0;
+
+    color:
+        #000;
+
+    border:
+        none;
+
+    border-radius:
+        6px;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
+    text-decoration:
+        none;
+
+}
+
+
+.tool-btn:hover {
+
+    background:
+        #FFD700;
+
+}
+
+
+/* =========================================================
+   VIEWER
+   ========================================================= */
+
+.viewer {
+
+    min-height:
+        620px;
+
+    padding:
+        20px;
+
+    overflow:
+        auto;
+
+    background:
+        #00101f;
+
+    color:
+        #fff;
+
+    border:
+        2px solid #4cc9f0;
+
+    border-radius:
+        10px;
+
+}
+
+
+pre {
+
+    margin:
+        0;
+
+    white-space:
+        pre-wrap;
+
+    word-wrap:
+        break-word;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.45;
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+
+    margin-top:
+        40px;
+
+    padding:
+        28px;
+
+    text-align:
+        center;
+
+    border-top:
+        3px solid #4cc9f0;
+
+    color:
+        yellowgreen;
+
+    font-weight:
+        bold;
+
+}
+
+
+footer img {
+
+    width:
+        110px;
+
+    height:
+        110px;
+
+    border-radius:
+        50%;
+
+    border:
+        4px solid #4cc9f0;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media
+(max-width: 850px) {
+
+    .layout {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .sidebar {
+
+        border-right:
+            none;
+
+        border-bottom:
+            3px solid #4cc9f0;
+
+    }
+
+
+    .banner {
+
+        width:
+            90%;
+
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <h1>POLYDEV | WXX — Homologação WX</h1>
-  <p>Teste de paginação lógica por categoria</p>
+
+    <h1>
+        POLYDEV | WX-COLLECTOR
+    </h1>
+
+
+    <p>
+        Uma árvore • Muitas linguagens • Um único viewer
+    </p>
+
+
+    <div
+        id="headerInfo">
+
+        Selecione uma branch WX
+
+    </div>
+
 </header>
 
-<img src="wx.jpg" class="banner" alt="POLYDEV WX">
 
-<section class="modulo-box">
+<img
+    src="wx.jpg"
+    class="banner"
+    alt="POLYDEV WX-Collector"
+>
 
-  <label for="faixa">
-    Selecione o bloco de conteúdos WX
-  </label>
 
-  <select id="faixa" onchange="carregarFaixa()">
-    <option value="">
-      -- carregando blocos --
-    </option>
-  </select>
+<section
+    class="selector-box">
+
+
+    <label
+        for="linguagem">
+
+        Selecione a linguagem WX
+
+    </label>
+
+
+    <select
+        id="linguagem">
+
+
+        <option
+            value="">
+
+            -- carregando categorias --
+
+        </option>
+
+
+    </select>
+
 
 </section>
 
-<div id="status" class="status">
-  Consultando conteúdos WX...
-</div>
 
-<div class="layout">
+<div
+    id="status"
+    class="status">
 
-  <aside class="sidebar">
-
-    <h2>Menu WX</h2>
-
-    <div id="menuWX">
-      Selecione um bloco acima.
-    </div>
-
-  </aside>
-
-  <main class="content">
-
-    <h2 id="tituloConteudo">
-      Selecione um conteúdo WX
-    </h2>
-
-    <div class="toolbar">
-
-      <button
-        class="tool-btn"
-        onclick="copiarConteudo()">
-        Copiar Conteúdo
-      </button>
-
-      <a
-        id="downloadBtn"
-        class="tool-btn"
-        href="#"
-        download>
-        Download
-      </a>
-
-      <button
-        class="tool-btn"
-        onclick="location.href='home.html'">
-        Voltar Home
-      </button>
-
-    </div>
-
-    <div class="viewer">
-      <pre id="codigo">Aguardando seleção.</pre>
-    </div>
-
-  </main>
+    Consultando banco...
 
 </div>
+
+
+<div
+    class="layout">
+
+
+    <aside
+        class="sidebar">
+
+
+        <h2
+            id="tituloMenu">
+
+            WX-Collector
+
+        </h2>
+
+
+        <div
+            class="group-nav">
+
+
+            <div
+                id="grupoTitulo"
+                class="group-nav-title">
+
+                Nenhum grupo selecionado
+
+            </div>
+
+
+            <div
+                id="grupoFaixa"
+                class="group-nav-range">
+
+                Selecione uma linguagem
+
+            </div>
+
+
+            <div
+                id="grupoTotal"
+                class="group-nav-total">
+
+                Total: 0 conteúdos
+
+            </div>
+
+
+            <div
+                class="group-buttons">
+
+
+                <button
+                    id="btnAnterior"
+                    class="nav-btn"
+                    onclick="grupoAnterior()"
+                    disabled>
+
+                    ◀ Anterior
+
+                </button>
+
+
+                <button
+                    id="btnProximo"
+                    class="nav-btn"
+                    onclick="proximoGrupo()"
+                    disabled>
+
+                    Próximo ▶
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            id="menuWX">
+
+            Selecione uma linguagem.
+
+        </div>
+
+
+    </aside>
+
+
+    <main
+        class="content">
+
+
+        <h2
+            id="tituloConteudo">
+
+            Selecione uma linguagem WX
+
+        </h2>
+
+
+        <div
+            class="toolbar">
+
+
+            <button
+                class="tool-btn"
+                onclick="copiarConteudo()">
+
+                Copiar Conteúdo
+
+            </button>
+
+
+            <a
+                id="downloadBtn"
+                class="tool-btn"
+                href="#"
+                download>
+
+                Download
+
+            </a>
+
+
+            <button
+                class="tool-btn"
+                onclick="location.href='home.html'">
+
+                Voltar Home
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            class="viewer">
+
+
+            <pre
+                id="codigo">Aguardando seleção.</pre>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
 
 <footer>
 
-  <img src="poly.jpg" alt="POLYDEV">
 
-  <h2>POLYDEV WX</h2>
+    <img
+        src="poly.jpg"
+        alt="POLYDEV"
+    >
 
-  <p>
-    Leia • Entenda • Execute seu código
-  </p>
+
+    <h2>
+        POLYDEV WX-COLLECTOR
+    </h2>
+
+
+    <p>
+        Leia • Entenda • Explore seu código
+    </p>
+
 
 </footer>
 
+
+
 <script>
 
-/* ==========================================================
-   POLYDEV WXX
-   HOMOLOGAÇÃO DA NOVA PAGINAÇÃO WX
+/* =========================================================
+   CONFIGURAÇÃO
+   PRODUÇÃO
+   ========================================================= */
 
-   TABELA DE TESTE:
-   tb_teste
-
-   CATEGORIAS:
-   wxpy01
-   wxpy02
-   wxpy03
-   ...
-   ========================================================== */
-const TABELA_WX = "conteudos";
-
-const PREFIXO_CATEGORIA = "wxpy";
-
-let conteudosWX = [];
-
-let conteudoAtual = "";
+const TABELA =
+    "conteudos";
 
 
-/* ==========================================================
-   NORMALIZA URL
-   ========================================================== */
+/* =========================================================
+   CLIENTE SUPABASE
+   ========================================================= */
 
-function normalizarUrl(url){
+const client =
+    window.supabase.createClient(
 
-  if(!url){
-    return "";
-  }
+        SUPABASE_URL,
 
-  return String(url)
-    .trim()
-    .replace(/^\/+/, "");
+        SUPABASE_KEY
 
-}
-
-
-/* ==========================================================
-   MONTA URL PARA LEITURA
-   ========================================================== */
-
-function montarUrlLeitura(url){
-
-  const limpo = normalizarUrl(url);
-
-  if(!limpo){
-    return "";
-  }
-
-  if(window.location.protocol === "file:"){
-
-    return "https://degmvp.github.io/polidev/" + limpo;
-
-  }
-
-  return limpo;
-
-}
-
-
-/* ==========================================================
-   EXTRAI SEQUENCIAL DO PROGRAMA
-
-   Exemplo:
-
-   wx-py-001-wxpy.py
-            |
-           001
-   ========================================================== */
-
-function extrairSequencial(programa){
-
-  const texto = String(programa || "")
-    .trim()
-    .toLowerCase();
-
-  const match =
-    texto.match(/^wx-[a-z0-9]+-(\d{3})-/);
-
-  return match
-    ? Number(match[1])
-    : Number.MAX_SAFE_INTEGER;
-
-}
-
-
-/* ==========================================================
-   FORMATA SEQUENCIAL
-   ========================================================== */
-
-function formatarNumero(numero){
-
-  return String(numero)
-    .padStart(3,"0");
-
-}
-
-
-/* ==========================================================
-   EXTRAI NUMERO DO BLOCO DA CATEGORIA
-
-   wxpy01 -> 01
-   wxpy02 -> 02
-   wxpy03 -> 03
-   ========================================================== */
-
-function extrairNumeroBloco(categoria){
-
-  const texto =
-    String(categoria || "")
-      .trim()
-      .toLowerCase();
-
-  const regex =
-    new RegExp(
-      "^" + PREFIXO_CATEGORIA + "(\\d+)$"
     );
 
-  const match =
-    texto.match(regex);
 
-  if(!match){
-    return Number.MAX_SAFE_INTEGER;
-  }
+/* =========================================================
+   ESTADO DO COLLECTOR
+   ========================================================= */
 
-  return Number(match[1]);
-
-}
+let branchAtual =
+    "";
 
 
-/* ==========================================================
-   CARREGA WX DA TABELA DE HOMOLOGAÇÃO
-   ========================================================== */
-
-async function carregarWX(){
-
-  const faixa =
-    document.getElementById("faixa");
-
-  const menu =
-    document.getElementById("menuWX");
-
-  const codigo =
-    document.getElementById("codigo");
-
-  const status =
-    document.getElementById("status");
+let registrosAtuais =
+    [];
 
 
-  faixa.innerHTML =
-    '<option value="">-- carregando blocos --</option>';
-
-  menu.innerHTML =
-    "Consultando banco...";
-
-  codigo.textContent =
-    "Consultando conteúdos WX...";
-
-  status.textContent =
-    "Consultando tabela '" +
-    TABELA_WX +
-    "'...";
-
-  document
-    .getElementById("downloadBtn")
-    .href = "#";
-
-  conteudoAtual = "";
+let gruposAtuais =
+    [];
 
 
-  try{
-
-    const db =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+let indiceGrupoAtual =
+    0;
 
 
-    const {data,error} =
-      await db
+let conteudoAtual =
+    "";
 
-        .from(TABELA_WX)
 
-        .select(
-          "id,titulo,categoria,arquivo_url,downloads,ativo,programa"
+
+/* =========================================================
+   EXTRAI BRANCH
+   ========================================================= */
+
+function extrairBranch(
+    categoria
+) {
+
+
+    const texto =
+        String(
+            categoria || ""
         )
-
-        .like(
-          "categoria",
-          PREFIXO_CATEGORIA + "%"
-        )
-
-        .eq(
-          "ativo",
-          true
-        )
-
-        .limit(5000);
+        .trim()
+        .toLowerCase();
 
 
-    if(error){
+    const match =
+        texto.match(
 
-      menu.innerHTML =
-        "Erro Supabase";
+            /^(wx[a-z]+)/
 
-      codigo.textContent =
-        error.message;
-
-      status.textContent =
-        "Falha ao consultar o banco.";
-
-      return;
-
-    }
-
-
-    conteudosWX =
-      (data || []).slice();
-
-
-    /* ======================================================
-       ORDENA PRIMEIRO PELA CATEGORIA
-       E DEPOIS PELO SEQUENCIAL
-       ====================================================== */
-
-    conteudosWX.sort((a,b)=>{
-
-      const blocoA =
-        extrairNumeroBloco(a.categoria);
-
-      const blocoB =
-        extrairNumeroBloco(b.categoria);
-
-
-      if(blocoA !== blocoB){
-
-        return blocoA - blocoB;
-
-      }
-
-
-      const seqA =
-        extrairSequencial(a.programa);
-
-      const seqB =
-        extrairSequencial(b.programa);
-
-
-      if(seqA !== seqB){
-
-        return seqA - seqB;
-
-      }
-
-
-      return String(a.programa || "")
-        .localeCompare(
-          String(b.programa || "")
         );
 
-    });
 
+    return match
 
-    if(conteudosWX.length === 0){
+        ? match[1]
 
-      faixa.innerHTML =
-        '<option value="">-- nenhum conteúdo --</option>';
-
-      menu.innerHTML =
-        "Nenhum conteúdo WX encontrado.";
-
-      codigo.textContent =
-        "Nenhuma categoria '" +
-        PREFIXO_CATEGORIA +
-        "NN' encontrada em '" +
-        TABELA_WX +
-        "'.";
-
-      status.textContent =
-        "0 conteúdos encontrados.";
-
-      return;
-
-    }
-
-
-    montarFaixas();
-
-
-    status.textContent =
-      conteudosWX.length +
-      " conteúdo(s) encontrado(s) em '" +
-      TABELA_WX +
-      "'.";
-
-  }
-  catch(e){
-
-    menu.innerHTML =
-      "Erro geral";
-
-    codigo.textContent =
-      e.message;
-
-    status.textContent =
-      "Erro ao carregar WX.";
-
-  }
+        : "";
 
 }
 
 
-/* ==========================================================
-   MONTA O COMBO DE BLOCOS
 
-   wxpy01 -> WX01
-   wxpy02 -> WX02
-   wxpy03 -> WX03
-   ========================================================== */
+/* =========================================================
+   EXTRAI GRUPO
+   ========================================================= */
 
-function montarFaixas(){
-
-  const faixa =
-    document.getElementById("faixa");
+function extrairGrupo(
+    categoria
+) {
 
 
-  faixa.innerHTML =
-    '<option value="">-- escolha um bloco --</option>';
+    const texto =
+        String(
+            categoria || ""
+        )
+        .trim()
+        .toLowerCase();
 
 
-  /* ========================================================
-     DESCOBRE AS CATEGORIAS EXISTENTES
-     ======================================================== */
+    const match =
+        texto.match(
 
-  const categorias =
-    [...new Set(
-      conteudosWX.map(
-        item => item.categoria
-      )
-    )];
+            /^wx[a-z]+(\d+)$/
+
+        );
 
 
-  categorias.sort((a,b)=>{
-
-    return
-      extrairNumeroBloco(a) -
-      extrairNumeroBloco(b);
-
-  });
+    if (
+        !match
+    ) {
 
 
-  categorias.forEach(categoria=>{
-
-    const bloco =
-      conteudosWX.filter(
-        item =>
-          item.categoria === categoria
-      );
+        return "01";
 
 
-    bloco.sort((a,b)=>
-      extrairSequencial(a.programa) -
-      extrairSequencial(b.programa)
-    );
-
-
-    if(bloco.length === 0){
-      return;
     }
 
 
-    const primeiro =
-      bloco[0];
-
-    const ultimo =
-      bloco[bloco.length - 1];
-
-
-    const numeroBloco =
-      extrairNumeroBloco(categoria);
-
-
-    const option =
-      document.createElement("option");
-
-
-    option.value =
-      categoria;
-
-
-    option.textContent =
-      "WX" +
-      String(numeroBloco).padStart(2,"0") +
-      " — " +
-      formatarNumero(
-        extrairSequencial(
-          primeiro.programa
-        )
-      ) +
-      "–" +
-      formatarNumero(
-        extrairSequencial(
-          ultimo.programa
-        )
-      );
-
-
-    faixa.appendChild(option);
-
-  });
+    return match[1]
+        .padStart(
+            2,
+            "0"
+        );
 
 }
 
 
-/* ==========================================================
-   CARREGA BLOCO SELECIONADO
-   ========================================================== */
 
-function carregarFaixa(){
+/* =========================================================
+   NOME VISUAL DA LINGUAGEM
+   ========================================================= */
 
-  const menu =
-    document.getElementById("menuWX");
-
-  const categoria =
-    document.getElementById("faixa")
-      .value;
+function nomeLinguagem(
+    branch
+) {
 
 
-  menu.innerHTML = "";
+    const nomes = {
 
 
-  document
-    .getElementById("downloadBtn")
-    .href = "#";
+        wxpy:
+            "Python",
 
 
-  conteudoAtual = "";
+        wxrs:
+            "Rust",
 
 
-  if(!categoria){
-
-    menu.innerHTML =
-      "Selecione um bloco acima.";
-
-    document
-      .getElementById("tituloConteudo")
-      .textContent =
-      "Selecione um conteúdo WX";
-
-    document
-      .getElementById("codigo")
-      .textContent =
-      "Aguardando seleção.";
-
-    return;
-
-  }
+        wxgo:
+            "Go",
 
 
-  const bloco =
-    conteudosWX
-
-      .filter(
-        item =>
-          item.categoria === categoria
-      )
-
-      .sort((a,b)=>
-        extrairSequencial(a.programa) -
-        extrairSequencial(b.programa)
-      );
+        wxcp:
+            "C++"
 
 
-  if(bloco.length === 0){
-
-    menu.innerHTML =
-      "Nenhum conteúdo neste bloco.";
-
-    return;
-
-  }
+    };
 
 
-  bloco.forEach(item=>{
+    return nomes[branch] ||
 
-    const btn =
-      document.createElement("button");
-
-
-    btn.className =
-      "menu-btn";
-
-
-    const programa =
-      String(item.programa || "")
-        .trim();
-
-
-    btn.textContent =
-      programa +
-      " — " +
-      (item.titulo || programa);
-
-
-    btn.onclick =
-      ()=>abrirConteudo(item);
-
-
-    menu.appendChild(btn);
-
-  });
-
-
-  const numeroBloco =
-    extrairNumeroBloco(categoria);
-
-
-  document
-    .getElementById("tituloConteudo")
-    .textContent =
-
-      "WX" +
-      String(numeroBloco).padStart(2,"0") +
-      " | " +
-
-      formatarNumero(
-        extrairSequencial(
-          bloco[0].programa
-        )
-      ) +
-
-      "–" +
-
-      formatarNumero(
-        extrairSequencial(
-          bloco[bloco.length - 1].programa
-        )
-      );
-
-
-  document
-    .getElementById("codigo")
-    .textContent =
-      "Selecione um programa no menu lateral.";
+           branch.toUpperCase();
 
 }
 
 
-/* ==========================================================
-   ABRE CONTEÚDO
-   ========================================================== */
 
-async function abrirConteudo(item){
+/* =========================================================
+   EXTRAI SEQUENCIAL
+   ========================================================= */
 
-  const url =
-    normalizarUrl(
-      item.arquivo_url
-    );
+function extrairSequencial(
+    programa
+) {
 
 
-  const urlLeitura =
-    montarUrlLeitura(
-      item.arquivo_url
-    );
+    const texto =
+        String(
+            programa || ""
+        )
+        .trim()
+        .toLowerCase();
 
 
-  document
-    .getElementById("tituloConteudo")
-    .textContent =
+    const match =
+        texto.match(
 
-      (item.programa
-        ? item.programa + " — "
-        : "") +
+            /^wx-[a-z0-9]+-(\d{3})-/
 
-      item.titulo;
+        );
 
 
-  document
-    .getElementById("downloadBtn")
-    .href = url;
+    if (
+        !match
+    ) {
 
 
-  try{
+        return Number.MAX_SAFE_INTEGER;
 
-    const resp =
-      await fetch(urlLeitura);
-
-
-    if(!resp.ok){
-
-      throw new Error(
-        "Arquivo não encontrado: " +
-        urlLeitura
-      );
 
     }
+
+
+    const numero =
+        Number(
+            match[1]
+        );
+
+
+    return numero === 0
+
+        ? 1000
+
+        : numero;
+
+}
+
+
+
+/* =========================================================
+   FORMATA SEQUENCIAL
+   ========================================================= */
+
+function formatarSequencial(
+    numero
+) {
+
+
+    if (
+        numero === 1000
+    ) {
+
+
+        return "000";
+
+
+    }
+
+
+    return String(
+        numero
+    )
+    .padStart(
+        3,
+        "0"
+    );
+
+}
+
+
+
+/* =========================================================
+   URL
+   ========================================================= */
+
+function normalizarUrl(
+    url
+) {
+
+
+    if (
+        !url
+    ) {
+
+
+        return "";
+
+
+    }
+
+
+    return String(
+        url
+    )
+    .trim()
+    .replace(
+        /^\/+/,
+        ""
+    );
+
+}
+
+
+
+/* =========================================================
+   URL DE LEITURA
+   ========================================================= */
+
+function montarUrlLeitura(
+    url
+) {
+
+
+    const limpo =
+        normalizarUrl(
+            url
+        );
+
+
+    if (
+        !limpo
+    ) {
+
+
+        return "";
+
+
+    }
+
+
+    if (
+        window.location.protocol ===
+        "file:"
+    ) {
+
+
+        return (
+
+            "https://degmvp.github.io/polidev/" +
+
+            limpo
+
+        );
+
+
+    }
+
+
+    return limpo;
+
+}
+
+
+
+/* =========================================================
+   CARREGA CATEGORIAS
+   ========================================================= */
+
+async function carregarCategorias() {
+
+
+    const combo =
+        document.getElementById(
+            "linguagem"
+        );
+
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    const codigo =
+        document.getElementById(
+            "codigo"
+        );
+
+
+    try {
+
+
+        /*
+         * =====================================================
+         * LEITURA COMPLETA DAS CATEGORIAS
+         * =====================================================
+         *
+         * Não existe limite máximo lógico para o acervo.
+         *
+         * O banco é lido em páginas apenas para transporte.
+         * Enquanto uma página vier completa, buscamos a próxima.
+         * Quando vier menor que o tamanho da página, terminou.
+         *
+         * Assim nenhuma branch desaparece quando a tabela cresce.
+         * =====================================================
+         */
+
+        const PAGE_SIZE =
+            1000;
+
+
+        let from =
+            0;
+
+
+        let todasCategorias =
+            [];
+
+
+        while (
+            true
+        ) {
+
+
+            const {
+                data,
+                error
+            } =
+                await client
+
+                    .from(
+                        TABELA
+                    )
+
+                    .select(
+                        "categoria"
+                    )
+
+                    .order(
+                        "categoria",
+                        {
+                            ascending:
+                                true
+                        }
+                    )
+
+                    .range(
+                        from,
+                        from + PAGE_SIZE - 1
+                    );
+
+
+            if (
+                error
+            ) {
+
+
+                throw error;
+
+
+            }
+
+
+            const pagina =
+                data || [];
+
+
+            todasCategorias =
+                todasCategorias.concat(
+                    pagina
+                );
+
+
+            if (
+                pagina.length <
+                PAGE_SIZE
+            ) {
+
+
+                break;
+
+
+            }
+
+
+            from +=
+                PAGE_SIZE;
+
+
+        }
+
+
+        const branches =
+            new Set();
+
+
+        todasCategorias
+            .forEach(
+                item => {
+
+
+                    const branch =
+                        extrairBranch(
+                            item.categoria
+                        );
+
+
+                    if (
+                        branch
+                    ) {
+
+
+                        branches.add(
+                            branch
+                        );
+
+
+                    }
+
+
+                }
+            );
+
+
+        const lista =
+            Array
+                .from(
+                    branches
+                )
+                .sort();
+
+
+        combo.innerHTML =
+            "";
+
+
+        const primeira =
+            document.createElement(
+                "option"
+            );
+
+
+        primeira.value =
+            "";
+
+
+        primeira.textContent =
+            "-- escolha uma linguagem --";
+
+
+        combo.appendChild(
+            primeira
+        );
+
+
+        lista.forEach(
+            branch => {
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    branch;
+
+
+                option.textContent =
+
+                    branch +
+
+                    " — " +
+
+                    nomeLinguagem(
+                        branch
+                    );
+
+
+                combo.appendChild(
+                    option
+                );
+
+
+            }
+        );
+
+
+        status.textContent =
+
+            "WX-Collector | " +
+
+            lista.length +
+
+            " linguagem(ns) disponível(is)";
+
+
+        codigo.textContent =
+            "Selecione uma linguagem WX.";
+
+
+    }
+    catch (
+        erro
+    ) {
+
+
+        combo.innerHTML =
+
+            '<option value="">-- erro --</option>';
+
+
+        status.textContent =
+
+            "Erro ao carregar categorias.";
+
+
+        codigo.textContent =
+
+            erro.message;
+
+
+    }
+
+}
+
+
+/* =========================================================
+   CARREGA BRANCH
+   ========================================================= */
+
+async function carregarBranch() {
+
+
+    const combo =
+        document.getElementById(
+            "linguagem"
+        );
+
+
+    const menu =
+        document.getElementById(
+            "menuWX"
+        );
+
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    const codigo =
+        document.getElementById(
+            "codigo"
+        );
+
+
+    branchAtual =
+        combo.value;
+
+
+    registrosAtuais =
+        [];
+
+
+    gruposAtuais =
+        [];
+
+
+    indiceGrupoAtual =
+        0;
 
 
     conteudoAtual =
-      await resp.text();
+        "";
 
 
-    document
-      .getElementById("codigo")
-      .textContent =
-      conteudoAtual;
-
-  }
-  catch(e){
-
-    conteudoAtual = "";
+    document.getElementById(
+        "downloadBtn"
+    )
+    .href =
+        "#";
 
 
-    document
-      .getElementById("codigo")
-      .textContent =
+    if (
+        !branchAtual
+    ) {
 
-      "Falha ao carregar o arquivo.\n\n" +
 
-      "URL no banco: " +
-      url +
+        limparNavegador();
 
-      "\nURL tentada: " +
-      urlLeitura +
 
-      "\n\nErro: " +
-      e.message;
+        document.getElementById(
+            "headerInfo"
+        )
+        .textContent =
 
-  }
+            "Selecione uma branch WX";
+
+
+        document.getElementById(
+            "tituloMenu"
+        )
+        .textContent =
+
+            "WX-Collector";
+
+
+        document.getElementById(
+            "tituloConteudo"
+        )
+        .textContent =
+
+            "Selecione uma linguagem WX";
+
+
+        status.textContent =
+
+            "WX-Collector aguardando seleção";
+
+
+        menu.innerHTML =
+
+            "Selecione uma linguagem.";
+
+
+        codigo.textContent =
+
+            "Aguardando seleção.";
+
+
+        return;
+
+
+    }
+
+
+    const nome =
+        nomeLinguagem(
+            branchAtual
+        );
+
+
+    document.getElementById(
+        "headerInfo"
+    )
+    .textContent =
+
+        "Branch ativa: " +
+
+        branchAtual +
+
+        " | " +
+
+        nome;
+
+
+    document.getElementById(
+        "tituloMenu"
+    )
+    .textContent =
+
+        "Menu " +
+
+        nome;
+
+
+    document.getElementById(
+        "tituloConteudo"
+    )
+    .textContent =
+
+        "Carregando " +
+
+        nome +
+
+        "...";
+
+
+    menu.innerHTML =
+
+        "Preparando grupos...";
+
+
+    codigo.textContent =
+
+        "Consultando " +
+
+        branchAtual +
+
+        "...";
+
+
+    status.textContent =
+
+        "Carregando " +
+
+        branchAtual +
+
+        "...";
+
+
+    try {
+
+
+        const {
+            data,
+            error
+        } =
+            await client
+
+                .from(
+                    TABELA
+                )
+
+                .select(
+
+                    "id," +
+
+                    "titulo," +
+
+                    "categoria," +
+
+                    "arquivo_url," +
+
+                    "downloads," +
+
+                    "ativo," +
+
+                    "programa"
+
+                )
+
+                .like(
+
+                    "categoria",
+
+                    branchAtual + "%"
+
+                )
+
+                .eq(
+
+                    "ativo",
+
+                    true
+
+                );
+
+
+        if (
+            error
+        ) {
+
+
+            throw error;
+
+
+        }
+
+
+        registrosAtuais =
+
+            (
+                data || []
+            )
+
+            .filter(
+                item =>
+
+
+                    extrairBranch(
+                        item.categoria
+                    ) ===
+                    branchAtual
+
+            );
+
+
+        if (
+            registrosAtuais.length ===
+            0
+        ) {
+
+
+            limparNavegador();
+
+
+            menu.innerHTML =
+
+                "Nenhum conteúdo encontrado.";
+
+
+            codigo.textContent =
+
+                "Nenhum conteúdo encontrado.";
+
+
+            status.textContent =
+
+                branchAtual +
+
+                " | TOTAL: 0 conteúdos";
+
+
+            return;
+
+
+        }
+
+
+        prepararGrupos();
+
+
+        indiceGrupoAtual =
+            0;
+
+
+        exibirGrupoAtual();
+
+
+        document.getElementById(
+            "tituloConteudo"
+        )
+        .textContent =
+
+            nome +
+
+            " | " +
+
+            registrosAtuais.length +
+
+            " conteúdos";
+
+
+        codigo.textContent =
+
+            "Selecione um programa no menu lateral.";
+
+
+    }
+    catch (
+        erro
+    ) {
+
+
+        limparNavegador();
+
+
+        menu.innerHTML =
+
+            "Erro ao carregar.";
+
+
+        codigo.textContent =
+
+            erro.message;
+
+
+        status.textContent =
+
+            "Erro ao carregar branch.";
+
+
+    }
 
 }
 
 
-/* ==========================================================
-   COPIA CONTEÚDO
-   ========================================================== */
 
-function copiarConteudo(){
+/* =========================================================
+   PREPARA GRUPOS
+   ========================================================= */
 
-  if(!conteudoAtual){
+function prepararGrupos() {
 
-    alert(
-      "Nenhum conteúdo carregado."
+
+    const mapa =
+        new Map();
+
+
+    registrosAtuais.forEach(
+        item => {
+
+
+            const grupo =
+                extrairGrupo(
+                    item.categoria
+                );
+
+
+            if (
+                !mapa.has(
+                    grupo
+                )
+            ) {
+
+
+                mapa.set(
+                    grupo,
+                    []
+                );
+
+
+            }
+
+
+            mapa
+                .get(
+                    grupo
+                )
+                .push(
+                    item
+                );
+
+
+        }
     );
 
-    return;
 
-  }
+    gruposAtuais =
+
+        Array
+            .from(
+                mapa.entries()
+            )
+
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
 
 
-  navigator.clipboard
-    .writeText(conteudoAtual)
+                    Number(
+                        a[0]
+                    ) -
 
-    .then(()=>
-      alert(
-        "Conteúdo copiado."
-      )
+                    Number(
+                        b[0]
+                    )
+
+            )
+
+            .map(
+                (
+                    [
+                        numero,
+                        registros
+                    ]
+                ) => {
+
+
+                    registros.sort(
+                        (
+                            a,
+                            b
+                        ) =>
+
+
+                            extrairSequencial(
+                                a.programa
+                            ) -
+
+                            extrairSequencial(
+                                b.programa
+                            )
+
+                    );
+
+
+                    return {
+
+
+                        numero:
+                            numero,
+
+
+                        registros:
+                            registros
+
+
+                    };
+
+
+                }
+            );
+
+}
+
+
+
+/* =========================================================
+   EXIBE GRUPO ATUAL
+   ========================================================= */
+
+function exibirGrupoAtual() {
+
+
+    if (
+        gruposAtuais.length ===
+        0
+    ) {
+
+
+        limparNavegador();
+
+
+        return;
+
+
+    }
+
+
+    const grupo =
+        gruposAtuais[
+            indiceGrupoAtual
+        ];
+
+
+    const registros =
+        grupo.registros;
+
+
+    const primeiro =
+        extrairSequencial(
+            registros[0].programa
+        );
+
+
+    const ultimo =
+        extrairSequencial(
+
+            registros[
+                registros.length - 1
+            ].programa
+
+        );
+
+
+    document.getElementById(
+        "grupoTitulo"
+    )
+    .textContent =
+
+        "GRUPO " +
+
+        grupo.numero +
+
+        " / " +
+
+        String(
+            gruposAtuais.length
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    document.getElementById(
+        "grupoFaixa"
+    )
+    .textContent =
+
+        formatarSequencial(
+            primeiro
+        ) +
+
+        "–" +
+
+        formatarSequencial(
+            ultimo
+        ) +
+
+        " | " +
+
+        registros.length +
+
+        " item(ns)";
+
+
+    document.getElementById(
+        "grupoTotal"
+    )
+    .textContent =
+
+        "TOTAL DA LINGUAGEM: " +
+
+        registrosAtuais.length +
+
+        " conteúdos";
+
+
+    document.getElementById(
+        "btnAnterior"
+    )
+    .disabled =
+
+        indiceGrupoAtual ===
+        0;
+
+
+    document.getElementById(
+        "btnProximo"
+    )
+    .disabled =
+
+        indiceGrupoAtual ===
+
+        gruposAtuais.length - 1;
+
+
+    document.getElementById(
+        "status"
+    )
+    .textContent =
+
+        branchAtual +
+
+        " | TOTAL: " +
+
+        registrosAtuais.length +
+
+        " conteúdos | GRUPO " +
+
+        grupo.numero +
+
+        "/" +
+
+        String(
+            gruposAtuais.length
+        )
+        .padStart(
+            2,
+            "0"
+        ) +
+
+        " | ITENS: " +
+
+        registros.length +
+
+        " | FAIXA: " +
+
+        formatarSequencial(
+            primeiro
+        ) +
+
+        "–" +
+
+        formatarSequencial(
+            ultimo
+        );
+
+
+    montarMenuGrupo(
+        registros
+    );
+
+}
+
+
+
+/* =========================================================
+   MENU DO GRUPO
+   ========================================================= */
+
+function montarMenuGrupo(
+    registros
+) {
+
+
+    const menu =
+        document.getElementById(
+            "menuWX"
+        );
+
+
+    menu.innerHTML =
+        "";
+
+
+    registros.forEach(
+        item => {
+
+
+            const botao =
+                document.createElement(
+                    "button"
+                );
+
+
+            botao.className =
+                "menu-btn";
+
+
+            const programa =
+                String(
+                    item.programa || ""
+                )
+                .trim();
+
+
+            botao.textContent =
+
+                programa +
+
+                " | " +
+
+                nomeLinguagem(
+                    branchAtual
+                ) +
+
+                " — " +
+
+                (
+                    item.titulo ||
+                    programa
+                );
+
+
+            botao.onclick =
+                function () {
+
+
+                    abrirConteudo(
+                        item
+                    );
+
+
+                };
+
+
+            menu.appendChild(
+                botao
+            );
+
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   NAVEGAÇÃO
+   ========================================================= */
+
+function grupoAnterior() {
+
+
+    if (
+        indiceGrupoAtual <=
+        0
+    ) {
+
+
+        return;
+
+
+    }
+
+
+    indiceGrupoAtual--;
+
+
+    prepararTrocaGrupo();
+
+
+    exibirGrupoAtual();
+
+}
+
+
+
+function proximoGrupo() {
+
+
+    if (
+        indiceGrupoAtual >=
+        gruposAtuais.length - 1
+    ) {
+
+
+        return;
+
+
+    }
+
+
+    indiceGrupoAtual++;
+
+
+    prepararTrocaGrupo();
+
+
+    exibirGrupoAtual();
+
+}
+
+
+
+/* =========================================================
+   PREPARA TROCA
+   ========================================================= */
+
+function prepararTrocaGrupo() {
+
+
+    conteudoAtual =
+        "";
+
+
+    document.getElementById(
+        "downloadBtn"
+    )
+    .href =
+        "#";
+
+
+    document.getElementById(
+        "codigo"
+    )
+    .textContent =
+
+        "Selecione um programa no menu lateral.";
+
+
+    document.getElementById(
+        "tituloConteudo"
+    )
+    .textContent =
+
+        nomeLinguagem(
+            branchAtual
+        ) +
+
+        " | " +
+
+        registrosAtuais.length +
+
+        " conteúdos";
+
+}
+
+
+
+/* =========================================================
+   LIMPA NAVEGADOR
+   ========================================================= */
+
+function limparNavegador() {
+
+
+    document.getElementById(
+        "grupoTitulo"
+    )
+    .textContent =
+
+        "Nenhum grupo selecionado";
+
+
+    document.getElementById(
+        "grupoFaixa"
+    )
+    .textContent =
+
+        "Selecione uma linguagem";
+
+
+    document.getElementById(
+        "grupoTotal"
+    )
+    .textContent =
+
+        "Total: 0 conteúdos";
+
+
+    document.getElementById(
+        "btnAnterior"
+    )
+    .disabled =
+        true;
+
+
+    document.getElementById(
+        "btnProximo"
+    )
+    .disabled =
+        true;
+
+}
+
+
+
+/* =========================================================
+   ABRE CONTEÚDO
+   ========================================================= */
+
+async function abrirConteudo(
+    item
+) {
+
+
+    const url =
+        normalizarUrl(
+            item.arquivo_url
+        );
+
+
+    const urlLeitura =
+        montarUrlLeitura(
+            item.arquivo_url
+        );
+
+
+    document.getElementById(
+        "tituloConteudo"
+    )
+    .textContent =
+
+        (
+            item.programa
+
+                ? item.programa +
+                  " — "
+
+                : ""
+        ) +
+
+        item.titulo;
+
+
+    document.getElementById(
+        "downloadBtn"
+    )
+    .href =
+        url;
+
+
+    try {
+
+
+        const resposta =
+            await fetch(
+                urlLeitura
+            );
+
+
+        if (
+            !resposta.ok
+        ) {
+
+
+            throw new Error(
+
+                "Arquivo não encontrado: " +
+
+                urlLeitura
+
+            );
+
+
+        }
+
+
+        conteudoAtual =
+            await resposta.text();
+
+
+        document.getElementById(
+            "codigo"
+        )
+        .textContent =
+
+            conteudoAtual;
+
+
+    }
+    catch (
+        erro
+    ) {
+
+
+        conteudoAtual =
+            "";
+
+
+        document.getElementById(
+            "codigo"
+        )
+        .textContent =
+
+            "Falha ao carregar o arquivo.\n\n" +
+
+            "URL no banco: " +
+
+            url +
+
+            "\nURL tentada: " +
+
+            urlLeitura +
+
+            "\n\nErro: " +
+
+            erro.message;
+
+
+    }
+
+}
+
+
+
+/* =========================================================
+   COPIAR CONTEÚDO
+   ========================================================= */
+
+function copiarConteudo() {
+
+
+    if (
+        !conteudoAtual
+    ) {
+
+
+        alert(
+
+            "Nenhum conteúdo carregado."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+    navigator.clipboard
+
+        .writeText(
+            conteudoAtual
+        )
+
+        .then(
+            () => {
+
+
+                alert(
+
+                    "Conteúdo copiado."
+
+                );
+
+
+            }
+        )
+
+        .catch(
+            () => {
+
+
+                alert(
+
+                    "Não foi possível copiar."
+
+                );
+
+
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   EVENTO DO COMBO
+   ========================================================= */
+
+document
+
+    .getElementById(
+        "linguagem"
     )
 
-    .catch(()=>
-      alert(
-        "Não foi possível copiar."
-      )
+    .addEventListener(
+        "change",
+        carregarBranch
     );
 
-}
 
 
-/* ==========================================================
-   INÍCIO
-   ========================================================== */
+/* =========================================================
+   START
+   ========================================================= */
 
-carregarWX();
+carregarCategorias();
+
 
 </script>
 
+
 </body>
+
 </html>
