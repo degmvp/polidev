@@ -1,0 +1,175 @@
+## HACK27 — Wireless Hacking: Auditoria de Redes Wi-Fi
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo é de caráter exclusivamente educacional e de defesa. O conteúdo foi desenvolvido para profissionais de segurança, pentesters éticos e estudantes que desejam compreender como funcionam as auditorias em redes Wi-Fi com o objetivo de identificar vulnerabilidades e fortalecer defesas.
+
+**Nunca** realize testes em redes Wi-Fi sem autorização explícita e por escrito do proprietário da rede. Testes não autorizados configuram crime. Utilize sempre ambientes controlados, laboratórios próprios ou redes com permissão formal.
+
+---
+
+# 1. Introdução
+
+A auditoria de redes Wi-Fi (Wireless Hacking) é uma das áreas mais práticas e relevantes dentro do Pentest. Diferentemente de ataques remotos, os testes wireless exigem proximidade física, equipamentos compatíveis e conhecimento das tecnologias utilizadas pelos pontos de acesso modernos.
+
+Embora o WPA3 tenha elevado significativamente o nível de segurança das redes sem fio, grande parte das infraestruturas ainda utiliza WPA2, muitas vezes com senhas fracas, configurações inadequadas ou equipamentos desatualizados.
+
+Neste artigo abordaremos uma metodologia prática de auditoria Wi-Fi voltada para ambientes corporativos e residenciais, com foco na identificação de vulnerabilidades e na melhoria da postura de segurança.
+
+---
+
+# 2. Conceitos Essenciais de Segurança Wi-Fi
+
+| Padrão   | Ano  | Nível de Segurança | Principais Fraquezas                    | Ainda relevante? |
+| -------- | ---- | ------------------ | --------------------------------------- | ---------------- |
+| **WEP**  | 1997 | Muito baixo        | Quebrável em poucos minutos             | Quase extinto    |
+| **WPA**  | 2003 | Baixo              | Vulnerável a ataques offline            | Raro             |
+| **WPA2** | 2004 | Médio              | Handshake, PMKID e senhas fracas        | Muito utilizado  |
+| **WPA3** | 2018 | Alto               | Depende da implementação e configuração | Recomendado      |
+
+**Ataques mais relevantes atualmente:**
+
+* Captura do **Four-Way Handshake**
+* Ataque **PMKID**
+* **Evil Twin** (Rogue Access Point)
+* Deautenticação (Deauthentication Attack)
+* Ataques contra **WPS**
+
+> Embora o WPA3 represente um grande avanço em segurança, sua eficácia depende da implementação correta pelo fabricante, da atualização do firmware e da configuração adequada do ambiente.
+
+---
+
+# 3. Ferramentas Essenciais (2026)
+
+| Ferramenta        | Finalidade                             | Categoria    | Recomendação        |
+| ----------------- | -------------------------------------- | ------------ | ------------------- |
+| **Aircrack-ng**   | Suite clássica para auditoria wireless | Clássica     | Essencial           |
+| **Wifite2**       | Automação de auditorias                | Automatizada | Muito útil          |
+| **hcxdumptool**   | Captura de PMKID e Handshake           | Avançada     | Essencial           |
+| **hcxpcapngtool** | Conversão para Hashcat                 | Conversão    | Essencial           |
+| **Bettercap**     | Evil Twin, MITM e Sniffing             | Moderna      | Recomendado         |
+| **Hashcat**       | Quebra de senhas via GPU               | Cracking     | Essencial           |
+| **Kismet**        | Descoberta e mapeamento de redes       | Passivo      | Útil                |
+| **Airgeddon**     | Framework automatizado                 | Automatizado | Bom para iniciantes |
+
+**Adaptadores recomendados**
+
+* Atheros AR9271
+* Realtek RTL8812AU
+
+Ambos oferecem suporte a **Monitor Mode** e **Packet Injection**, recursos fundamentais para auditorias autorizadas.
+
+---
+
+# 4. Metodologia de Auditoria Wi-Fi
+
+## Fase 1 — Reconhecimento
+
+Colocar a interface em modo monitor:
+
+```bash
+sudo airmon-ng start wlan0
+```
+
+Escanear as redes próximas:
+
+```bash
+sudo airodump-ng wlan0mon
+```
+
+---
+
+## Fase 2 — Captura de Handshake ou PMKID
+
+### Método tradicional (Handshake)
+
+```bash
+sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w captura wlan0mon
+```
+
+### Método moderno (PMKID)
+
+```bash
+sudo hcxdumptool -i wlan0mon -o captura.pcapng --enable_status=1
+```
+
+Converter para o formato utilizado pelo Hashcat:
+
+```bash
+hcxpcapngtool -o rede.hc22000 captura.pcapng
+```
+
+---
+
+## Fase 3 — Teste de resistência das credenciais
+
+Em auditorias autorizadas, é possível verificar a robustez das credenciais capturadas utilizando ferramentas especializadas.
+
+Exemplo:
+
+```bash
+hashcat -m 22000 rede.hc22000 /usr/share/wordlists/rockyou.txt -w 3
+```
+
+---
+
+# 5. Técnicas Principais
+
+| Técnica           | Dificuldade | Requer cliente? | Eficiência atual | Observação                                                          |
+| ----------------- | ----------- | --------------- | ---------------- | ------------------------------------------------------------------- |
+| PMKID Attack      | Média       | Não             | Alta             | Melhor abordagem em muitos cenários                                 |
+| Handshake + Crack | Média       | Sim             | Média            | Técnica clássica                                                    |
+| Evil Twin         | Média       | Sim             | Alta             | Muito utilizada em campanhas de phishing                            |
+| Deauthentication  | Baixa       | Sim             | Alta             | Utilizada para obtenção de handshake durante auditorias autorizadas |
+| WPS PIN Attack    | Baixa       | Não             | Baixa            | Cada vez menos eficaz                                               |
+
+---
+
+# 6. O que observar durante a auditoria
+
+* Redes WPA2 utilizando senhas fracas ou padrão.
+* WPS habilitado.
+* Ausência de Protected Management Frames (PMF).
+* SSIDs ocultos (não representam proteção efetiva).
+* Clientes conectados a redes vulneráveis.
+* Possibilidade de sucesso em ataques Evil Twin.
+* Vazamento de informações por meio de Preferred Network List (PNL).
+* Firmware desatualizado em Access Points.
+
+---
+
+# 7. Boas Práticas de Auditoria
+
+* Obtenha autorização formal antes de iniciar qualquer teste.
+* Utilize apenas equipamentos homologados e dentro dos limites legais de potência.
+* Sempre que possível, priorize métodos menos intrusivos durante a avaliação.
+* Evite causar indisponibilidade da rede durante a auditoria.
+* Documente todas as evidências coletadas.
+* Registre capturas, hashes e configurações observadas.
+* Mantenha ferramentas e firmware atualizados.
+* Trabalhe preferencialmente em ambientes controlados.
+
+---
+
+# 8. Recomendações para Administradores
+
+* Migrar para WPA3 sempre que possível.
+* Desabilitar o WPS.
+* Utilizar senhas longas e aleatórias.
+* Atualizar regularmente o firmware dos Access Points.
+* Habilitar Protected Management Frames (PMF).
+* Segmentar redes corporativas e redes de visitantes.
+* Monitorar a presença de Rogue Access Points.
+* Realizar auditorias periódicas na infraestrutura wireless.
+
+---
+
+# Conclusão
+
+A auditoria de redes Wi-Fi continua sendo uma habilidade extremamente relevante em 2026. Embora o WPA3 tenha elevado significativamente o nível de proteção das redes sem fio, a maioria dos ambientes ainda opera com WPA2, e muitos permanecem vulneráveis devido a senhas fracas, configurações inadequadas ou equipamentos desatualizados.
+
+Profissionais que dominam técnicas como captura de PMKID, análise de Handshake e avaliação de cenários envolvendo Evil Twin conseguem identificar riscos que frequentemente passam despercebidos em avaliações tradicionais de infraestrutura.
+
+A segurança de uma rede Wi-Fi não depende apenas do protocolo utilizado, mas principalmente da qualidade da configuração, da força das credenciais e da capacidade da organização em identificar vulnerabilidades antes que elas possam ser exploradas. Auditorias periódicas continuam sendo uma das formas mais eficazes de reduzir a superfície de ataque e fortalecer a segurança de ambientes corporativos e residenciais.
+
+Nos próximos artigos da série HACK aprofundaremos técnicas avançadas de avaliação de redes wireless, mecanismos de defesa e estratégias para aumentar a resiliência contra ataques modernos.

@@ -1,0 +1,25 @@
+/* 
+HACK16 – Hashes, Salt e Armazenamento Seguro de Senhas
+
+Objetivo: Aprender a armazenar senhas de forma segura.
+
+Melhores algoritmos (2026):
+- Argon2id (recomendado)
+- bcrypt
+- scrypt
+
+Exemplo prático Python:
+
+import argon2
+ph = argon2.PasswordHasher()
+hash_senha = ph.hash("minhasenha123")
+
+# Verificar
+ph.verify(hash_senha, "minhasenha123")
+
+Comando exemplo:
+htpasswd -nB usuario
+
+Nunca use MD5, SHA1 ou SHA256 puro para senhas.
+Sempre use salt + algoritmo lento.
+*/

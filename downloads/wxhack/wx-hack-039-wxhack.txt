@@ -1,0 +1,97 @@
+# HACK39 — Fundamentos de Segurança da Informação e Tríade CIA
+
+## Resumo
+
+A segurança da informação é um requisito fundamental para qualquer sistema que manipule dados sensíveis. Este artigo apresenta os conceitos essenciais da segurança da informação por meio da **Tríade CIA** (Confidencialidade, Integridade e Disponibilidade), modelo conceitual amplamente utilizado para orientar a definição de controles e políticas de proteção. São discutidos os três pilares, sua interdependência e exemplos práticos de aplicação no contexto de desenvolvimento de software e administração de sistemas.
+
+**Palavras-chave:** Segurança da informação, Tríade CIA, Confidencialidade, Integridade, Disponibilidade, Desenvolvimento seguro.
+
+## 1. Introdução
+
+Com o aumento da digitalização e a dependência de aplicações que armazenam e processam grandes volumes de dados, proteger a informação tornou-se uma responsabilidade técnica e estratégica. Desenvolvedores e administradores de bancos de dados lidam diariamente com decisões que impactam diretamente a segurança dos sistemas que constroem e mantêm.
+
+Nesse cenário, a **Tríade CIA** surge como um modelo simples, porém poderoso, para estruturar o pensamento sobre segurança. Ela ajuda profissionais a identificar quais aspectos da informação precisam ser protegidos e quais controles são mais adequados para cada situação.
+
+## 2. O que é Segurança da Informação?
+
+Segurança da informação é a prática de proteger informações contra acessos não autorizados, modificações indevidas, perda ou indisponibilidade. Diferente da segurança física, ela foca em dados — independentemente de estarem armazenados em bancos de dados, em trânsito por redes ou sendo processados por aplicações.
+
+A segurança da informação não se resume apenas a ferramentas. Ela envolve políticas, processos, conscientização e escolhas técnicas adequadas durante o desenvolvimento e a operação de sistemas.
+
+## 3. A Tríade CIA: Os Três Pilares da Segurança
+
+A Tríade CIA é composta por três pilares que devem ser equilibrados:
+
+### 3.1 Confidencialidade
+
+**Confidencialidade** significa garantir que apenas pessoas ou sistemas autorizados tenham acesso à informação.
+
+**Exemplo prático:**  
+Uma aplicação web que armazena dados de clientes em um banco de dados PostgreSQL ou MySQL. Se um desenvolvedor expõe inadvertidamente uma rota de API que retorna dados sensíveis sem autenticação adequada, a confidencialidade é violada. Um exemplo clássico é a exposição de dados de usuários através de endpoints mal protegidos ou consultas SQL sem filtros de autorização.
+
+**Medidas comuns:**
+- Implementação de controle de acesso (autenticação + autorização)
+- Criptografia de dados sensíveis em repouso (ex: TDE no SQL Server ou criptografia em colunas no PostgreSQL)
+- Uso de variáveis de ambiente para credenciais em vez de hardcode no código-fonte
+
+### 3.2 Integridade
+
+**Integridade** assegura que a informação não seja alterada de forma não autorizada ou acidental.
+
+**Exemplo prático:**  
+Durante um processo de deploy contínuo, um atacante consegue modificar o código-fonte ou um script de migração de banco de dados. Se não houver mecanismos de verificação de integridade (como assinaturas de commits ou hashes de artefatos), dados importantes podem ser alterados sem que a equipe perceba. Outro caso comum é a injeção de SQL que altera registros de forma maliciosa.
+
+**Medidas comuns:**
+- Controle de versão com revisão de código (pull requests)
+- Uso de hashes e assinaturas digitais em artefatos de deploy
+- Triggers e constraints no banco de dados para evitar alterações indevidas
+- Logs de auditoria detalhados
+
+### 3.3 Disponibilidade
+
+**Disponibilidade** garante que a informação e os serviços estejam acessíveis quando necessário.
+
+**Exemplo prático:**  
+Uma aplicação que utiliza um banco de dados relacional em produção sofre um ataque de negação de serviço ou uma falha de hardware. Se não houver redundância, backups recentes e estratégias de failover, o sistema pode ficar indisponível por horas, gerando prejuízo financeiro e perda de confiança dos usuários.
+
+**Medidas comuns:**
+- Configuração de réplicas e alta disponibilidade no banco de dados (ex: PostgreSQL com Patroni, MySQL Group Replication ou Always On no SQL Server)
+- Estratégias de backup automatizado e testes de restauração
+- Uso de balanceadores de carga e arquiteturas resilientes
+- Monitoramento proativo de saúde dos serviços
+
+## 4. A Interdependência entre os Pilares
+
+Os três elementos da tríade raramente podem ser tratados de forma isolada. Muitas vezes existe uma tensão natural entre eles:
+
+- Aumentar a confidencialidade (ex: criptografar tudo) pode impactar a performance e, consequentemente, a disponibilidade.
+- Controles muito rígidos de integridade podem tornar os processos de desenvolvimento mais lentos.
+- Priorizar alta disponibilidade sem controles adequados pode aumentar riscos de confidencialidade e integridade.
+
+O papel do profissional de segurança e do desenvolvedor é encontrar o equilíbrio adequado para cada sistema, considerando o contexto de negócio e o nível de risco aceitável.
+
+## 5. Aplicação Prática no Dia a Dia de Desenvolvedores e DBAs
+
+No contexto de quem desenvolve aplicações e administra bancos de dados, a Tríade CIA deve ser considerada em diversas etapas:
+
+- Durante a modelagem de dados e definição de schemas
+- Na implementação de autenticação e autorização nas aplicações
+- Na escolha de estratégias de criptografia e backup
+- Na definição de pipelines de CI/CD seguros
+- Na configuração de logs e monitoramento
+
+Ignorar qualquer um dos pilares pode gerar vulnerabilidades graves, mesmo em sistemas aparentemente simples.
+
+## 6. Considerações Finais
+
+A Tríade CIA continua sendo uma referência fundamental para quem trabalha com desenvolvimento de software e gestão de dados. Embora modelos mais modernos tenham surgido, compreender profundamente Confidencialidade, Integridade e Disponibilidade permite tomar decisões técnicas mais conscientes e construir sistemas mais seguros desde a base.
+
+Para profissionais que ensinam e trabalham com múltiplas linguagens e bancos de dados, internalizar esses conceitos é essencial para orientar boas práticas de desenvolvimento seguro e administração responsável de sistemas.
+
+## Referências e Leituras Recomendadas
+
+- ISO/IEC 27001 — Sistemas de Gestão de Segurança da Informação
+- NIST Cybersecurity Framework
+- OWASP Top 10 (para aplicação prática dos conceitos)
+- Documentação oficial de criptografia e alta disponibilidade dos principais SGBDs
+

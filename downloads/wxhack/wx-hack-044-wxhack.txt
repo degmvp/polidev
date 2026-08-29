@@ -1,0 +1,135 @@
+# HACK44 — CVSS: Como Medir a Severidade de Vulnerabilidades
+
+## Resumo
+
+Avaliar corretamente a gravidade de uma vulnerabilidade é essencial para priorizar correções de forma eficiente. O **CVSS** (Common Vulnerability Scoring System) é o padrão mais utilizado mundialmente para classificar a severidade de vulnerabilidades. Este artigo explica o funcionamento do CVSS, suas métricas principais e como aplicá-lo de forma prática no contexto de desenvolvimento de software e administração de bancos de dados.
+
+**Palavras-chave:** CVSS, Severidade de vulnerabilidades, CVSS 3.1, CVSS 4.0, Priorização de correções, Gestão de vulnerabilidades.
+
+## 1. Introdução
+
+Nem todas as vulnerabilidades representam o mesmo nível de risco. Uma falha crítica em um sistema exposto à internet é muito mais urgente do que uma vulnerabilidade de baixa gravidade em um sistema interno sem acesso externo. 
+
+O **Common Vulnerability Scoring System (CVSS)** foi criado para fornecer uma forma padronizada, objetiva e quantitativa de medir a severidade de vulnerabilidades. Ele é mantido pelo FIRST (Forum of Incident Response and Security Teams) e é amplamente adotado por empresas, pesquisadores e bases de dados como o NVD (National Vulnerability Database).
+
+## 2. O que é o CVSS?
+
+O CVSS é um sistema de pontuação que atribui uma nota de **0.0 a 10.0** para cada vulnerabilidade, dividindo-a em categorias de severidade:
+
+| Pontuação | Severidade     |
+|-----------|----------------|
+| 0.0       | None           |
+| 0.1 – 3.9 | Low            |
+| 4.0 – 6.9 | Medium         |
+| 7.0 – 8.9 | High           |
+| 9.0 – 10.0| Critical       |
+
+O CVSS considera três grupos de métricas:
+- **Base Score** (Métricas base)
+- **Temporal Score** (Métricas temporais)
+- **Environmental Score** (Métricas ambientais)
+
+A versão mais utilizada atualmente é a **CVSS 3.1**, embora a **CVSS 4.0** já esteja disponível e traga melhorias significativas.
+
+## 3. Métricas do CVSS Base (as mais importantes)
+
+O CVSS Base avalia a severidade intrínseca da vulnerabilidade e é composto pelas seguintes métricas:
+
+### 3.1 Attack Vector (AV)
+Indica como a vulnerabilidade pode ser explorada:
+- **Network (N)**: Explorável remotamente pela rede
+- **Adjacent (A)**: Requer acesso à rede local ou adjacente
+- **Local (L)**: Requer acesso físico ou local ao sistema
+- **Physical (P)**: Requer acesso físico ao dispositivo
+
+### 3.2 Attack Complexity (AC)
+Refere-se à dificuldade de exploração:
+- **Low (L)**: Fácil de explorar
+- **High (H)**: Requer condições especiais ou conhecimento avançado
+
+### 3.3 Privileges Required (PR)
+Nível de privilégio necessário para explorar a vulnerabilidade:
+- **None (N)**
+- **Low (L)**
+- **High (H)**
+
+### 3.4 User Interaction (UI)
+Se a exploração exige interação de um usuário:
+- **None (N)**
+- **Required (R)**
+
+### 3.5 Scope (S)
+Indica se a vulnerabilidade afeta componentes além do componente vulnerável:
+- **Unchanged (U)**
+- **Changed (C)**
+
+### 3.6 Impact (CIA)
+Medem o impacto nos três pilares da segurança:
+- **Confidentiality (C)**
+- **Integrity (I)**
+- **Availability (A)**
+
+Cada uma pode ser: **None (N)**, **Low (L)** ou **High (H)**.
+
+## 4. Exemplos Práticos
+
+### Exemplo 1: Injeção de SQL em aplicação web
+- **Attack Vector**: Network
+- **Attack Complexity**: Low
+- **Privileges Required**: None
+- **User Interaction**: None
+- **Impact**: Confidentiality High, Integrity High, Availability High
+- **Score aproximado**: **9.8 (Critical)**
+
+### Exemplo 2: Vulnerabilidade em biblioteca de frontend exposta apenas internamente
+- **Attack Vector**: Adjacent
+- **Attack Complexity**: High
+- **Privileges Required**: Low
+- **Impact**: Confidentiality Low
+- **Score aproximado**: **3.5 (Low)**
+
+### Exemplo 3: Exposição de porta de administração de banco de dados na internet
+- **Attack Vector**: Network
+- **Attack Complexity**: Low
+- **Privileges Required**: None
+- **Impact**: Confidentiality High + Integrity High + Availability High
+- **Score aproximado**: **9.8 (Critical)**
+
+Esses exemplos mostram como o mesmo tipo de problema pode ter severidades muito diferentes dependendo do contexto.
+
+## 5. Limitações do CVSS
+
+Apesar de ser muito útil, o CVSS possui limitações importantes:
+
+- Ele **não considera o contexto do ambiente** (uma vulnerabilidade crítica em um sistema isolado pode ser menos urgente que uma de média severidade em um sistema crítico).
+- Não mede a **probabilidade real de exploração** (exploit público, worm, etc.).
+- Não substitui uma análise de risco completa.
+- A versão 3.1 pode superestimar ou subestimar riscos em alguns cenários modernos (containers, nuvem, etc.).
+
+Por isso, muitas organizações utilizam o CVSS como **uma das entradas** para priorização, e não como o único critério.
+
+## 6. Boas Práticas no Uso do CVSS
+
+- Sempre analisar o **Environmental Score** quando possível, ajustando a severidade ao contexto real da organização.
+- Priorizar correções considerando também:
+  - Se existe exploit público disponível
+  - Se o sistema é exposto à internet
+  - O valor do ativo afetado
+  - Facilidade de exploração
+- Usar o CVSS em conjunto com threat modeling e threat intelligence.
+- Manter uma política clara de SLAs de correção por nível de severidade.
+
+## 7. Considerações Finais
+
+O CVSS é uma ferramenta poderosa e padronizada para classificar a severidade de vulnerabilidades. Quando bem utilizado, ajuda equipes de desenvolvimento, DBAs e segurança a tomarem decisões mais racionais sobre o que corrigir primeiro.
+
+No entanto, ele deve ser visto como uma **ferramenta de apoio**, e não como substituto de uma análise de risco contextualizada. A combinação entre CVSS, conhecimento do ambiente e inteligência de ameaças produz os melhores resultados na gestão de vulnerabilidades.
+
+## Referências
+
+- FIRST CVSS: [https://www.first.org/cvss](https://www.first.org/cvss)
+- CVSS 3.1 Specification
+- CVSS 4.0 Specification
+- NIST NVD (National Vulnerability Database)
+- MITRE ATT&CK (para contextualização de técnicas)
+

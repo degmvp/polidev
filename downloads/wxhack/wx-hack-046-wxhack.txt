@@ -1,0 +1,96 @@
+# HACK46 — Análise de Malware: Estática, Dinâmica e Híbrida
+
+## Resumo
+
+A análise de malware é uma disciplina fundamental da cibersegurança defensiva. Ela permite compreender o comportamento, os objetivos e as técnicas utilizadas por softwares maliciosos. Este artigo apresenta os conceitos gerais das três principais abordagens de análise — **estática**, **dinâmica** e **híbrida** —, seus objetivos, diferenças e importância para a melhoria das defesas organizacionais.
+
+**Palavras-chave:** Análise de malware, Análise estática, Análise dinâmica, Análise híbrida, Threat Intelligence, Segurança defensiva.
+
+## 1. Introdução
+
+Com o aumento da sofisticação dos ataques, compreender como funcionam os malwares tornou-se essencial para equipes de segurança. A **análise de malware** é o processo de examinar softwares maliciosos com o objetivo de entender seu funcionamento, identificar indicadores de comprometimento (IOCs) e desenvolver melhores mecanismos de detecção e resposta.
+
+Diferente de abordagens puramente reativas, a análise de malware permite que as organizações antecipem ameaças e fortaleçam suas defesas de forma mais informada.
+
+## 2. Por que Analisar Malware?
+
+A análise de malware é utilizada principalmente para:
+
+- Identificar comportamentos maliciosos e técnicas utilizadas
+- Gerar indicadores de comprometimento (hashes, domínios, IPs, padrões de comportamento)
+- Melhorar regras de detecção em soluções de segurança (antivírus, EDR, SIEM)
+- Apoiar investigações de incidentes e resposta a ataques
+- Alimentar programas de Threat Intelligence
+- Entender o nível de sofisticação de grupos de ameaças
+
+## 3. Abordagens de Análise de Malware
+
+Existem três abordagens principais para analisar malware, cada uma com características, vantagens e limitações específicas.
+
+### 3.1 Análise Estática
+
+A **análise estática** consiste em examinar o malware sem executá-lo. O analista observa o código, a estrutura do arquivo, strings presentes no binário, imports de funções e outros artefatos estáticos.
+
+**Características principais:**
+- Não executa o malware
+- Mais segura para o ambiente de análise
+- Permite identificar características do arquivo de forma rápida
+- Limitada quando o código está ofuscado ou empacotado
+
+Essa abordagem é útil para uma primeira triagem e para extrair informações básicas sobre o artefato.
+
+### 3.2 Análise Dinâmica
+
+A **análise dinâmica** envolve a execução controlada do malware em um ambiente isolado (sandbox) para observar seu comportamento em tempo real.
+
+**Características principais:**
+- Executa o malware em ambiente controlado
+- Permite observar ações como modificações no sistema, conexões de rede, criação de arquivos e comportamento em memória
+- Mais eficaz para entender o comportamento real do malware
+- Requer infraestrutura segura e controlada
+
+Essa abordagem revela o que o malware realmente faz quando executado.
+
+### 3.3 Análise Híbrida
+
+A **análise híbrida** combina elementos da análise estática e dinâmica. Ela busca aproveitar as vantagens de ambas as abordagens, utilizando informações estáticas para guiar a análise dinâmica e vice-versa.
+
+Muitas soluções modernas de segurança utilizam análise híbrida de forma automatizada para aumentar a precisão na classificação de arquivos suspeitos.
+
+## 4. Importância para a Defesa
+
+A análise de malware contribui diretamente para a melhoria das defesas de uma organização ao:
+
+- Fornecer dados reais para criação e ajuste de regras de detecção
+- Identificar novas técnicas utilizadas por atacantes
+- Reduzir falsos positivos em soluções de segurança
+- Apoiar a tomada de decisão durante incidentes
+- Alimentar bases de Threat Intelligence
+
+Quanto melhor a compreensão sobre os malwares que circulam, maior a capacidade de detectá-los e respondê-los de forma eficaz.
+
+## 5. Desafios da Análise de Malware
+
+A análise de malware enfrenta diversos desafios, entre eles:
+
+- Uso crescente de técnicas de ofuscação e empacotamento
+- Malwares que detectam ambientes de análise (anti-analysis)
+- Volume crescente de novas amostras diariamente
+- Necessidade de ambientes isolados e seguros
+- Riscos legais e éticos envolvidos na manipulação de código malicioso
+
+Por esses motivos, a análise de malware costuma ser realizada por times especializados ou por meio de plataformas automatizadas confiáveis.
+
+## 6. Considerações Finais
+
+A análise de malware é uma capacidade importante dentro de uma estratégia defensiva madura. Embora nem toda organização precise realizar análises profundas internamente, compreender os conceitos de análise estática, dinâmica e híbrida ajuda profissionais de segurança, desenvolvedores e gestores a tomarem decisões mais informadas sobre ferramentas, processos e investimentos em detecção.
+
+Em um cenário onde os ataques evoluem rapidamente, a capacidade de entender o comportamento de malwares contribui para construir defesas mais resilientes e baseadas em ameaças reais.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-83 — Guide to Malware Incident Prevention and Handling
+- MITRE ATT&CK — Malware-related techniques
+- Documentação de plataformas de análise automatizada (VirusTotal, Hybrid Analysis, Any.Run, etc.)
+- Livros especializados em malware analysis (abordagem conceitual)
+

@@ -1,0 +1,144 @@
+# HACK37 — Threat Modeling e Modelagem de Ameaças
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar conceitos, metodologias e boas práticas de Threat Modeling (Modelagem de Ameaças) aplicadas ao desenvolvimento de sistemas e à segurança da informação.
+
+Todo o conteúdo deve ser utilizado em contextos autorizados, como projetos internos de segurança, avaliações de arquitetura com permissão da organização ou durante processos formais de desenvolvimento seguro. O uso indevido de técnicas de modelagem de ameaças não substitui avaliações profissionais.
+
+---
+
+# 1. Introdução
+
+**Threat Modeling** (Modelagem de Ameaças) é uma prática estruturada que visa identificar, categorizar e mitigar potenciais ameaças à segurança de um sistema antes que elas possam ser exploradas.
+
+Diferente de testes de penetração (que são realizados após o sistema estar construído), o Threat Modeling é uma atividade **proativa**, idealmente realizada durante as fases iniciais do desenvolvimento (design e arquitetura).
+
+Seu principal objetivo é ajudar equipes a entender **onde estão os riscos** e **como reduzi-los** de forma eficiente e priorizada.
+
+---
+
+# 2. O que é Threat Modeling?
+
+Threat Modeling é o processo de:
+
+- Identificar ativos importantes do sistema
+- Mapear possíveis ameaças e vetores de ataque
+- Avaliar vulnerabilidades e impactos
+- Definir contramedidas e controles de segurança
+- Priorizar riscos de acordo com o contexto do negócio
+
+É uma disciplina que combina conhecimento técnico de segurança com visão de arquitetura e compreensão do negócio.
+
+---
+
+# 3. Por que fazer Threat Modeling?
+
+Fazer Threat Modeling traz diversos benefícios:
+
+- Reduz custos de correção (é mais barato corrigir falhas na fase de design do que em produção)
+- Ajuda a priorizar investimentos em segurança
+- Melhora a comunicação entre equipes de desenvolvimento e segurança
+- Permite construir sistemas mais resilientes por design
+- Contribui para conformidade com normas e frameworks (ISO 27001, NIST, OWASP, etc.)
+
+---
+
+# 4. Principais Metodologias de Threat Modeling
+
+Existem várias abordagens para realizar Threat Modeling. As mais conhecidas são:
+
+| Metodologia     | Foco Principal                          | Características                              | Mais indicada para              |
+|-----------------|-----------------------------------------|----------------------------------------------|---------------------------------|
+| **STRIDE**      | Categorização de ameaças                | Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege | Aplicações e sistemas gerais    |
+| **PASTA**       | Processo de 7 etapas                    | Abordagem mais completa e orientada a risco  | Projetos complexos              |
+| **Attack Trees**| Visualização de ataques                 | Representação hierárquica de ataques         | Análise de cenários específicos |
+| **LINDDUN**     | Privacidade                             | Foco em ameaças à privacidade                | Sistemas que tratam dados pessoais |
+| **OCTAVE**      | Avaliação de risco operacional          | Abordagem mais gerencial                     | Organizações de grande porte    |
+
+A metodologia **STRIDE** é uma das mais utilizadas por ser prática e relativamente simples de aplicar.
+
+---
+
+# 5. Processo de Threat Modeling (Passo a Passo)
+
+Um processo típico de Threat Modeling geralmente segue estas etapas:
+
+1. **Definir o escopo**
+   - O que está sendo modelado? (aplicação, sistema, feature, infraestrutura)
+
+2. **Criar um diagrama de arquitetura**
+   - Data Flow Diagram (DFD) ou diagrama de componentes
+
+3. **Identificar ativos e pontos de confiança**
+   - Quais são os dados sensíveis e os limites de confiança?
+
+4. **Identificar ameaças**
+   - Usar STRIDE ou outra metodologia para encontrar ameaças potenciais
+
+5. **Avaliar riscos**
+   - Qual o impacto e a probabilidade de cada ameaça?
+
+6. **Definir contramedidas**
+   - Quais controles podem mitigar as ameaças identificadas?
+
+7. **Validar e documentar**
+   - Revisar com a equipe e registrar as decisões
+
+---
+
+# 6. Ferramentas de Apoio ao Threat Modeling
+
+| Ferramenta              | Tipo                    | Destaque                              |
+|-------------------------|-------------------------|---------------------------------------|
+| **Microsoft Threat Modeling Tool** | Gratuita             | Fácil de usar, baseada em STRIDE      |
+| **OWASP Threat Dragon** | Open Source             | Web-based e colaborativa              |
+| **IriusRisk**           | Comercial               | Mais completa e profissional          |
+| **Draw.io / Lucidchart**| Diagramas               | Criação manual de diagramas           |
+| **Attack Tree Tools**   | Diversas                | Modelagem visual de árvores de ataque |
+
+---
+
+# 7. Boas Práticas de Threat Modeling
+
+- Envolver pessoas de diferentes áreas (desenvolvimento, segurança, produto e negócio)
+- Fazer Threat Modeling de forma iterativa (não apenas uma única vez)
+- Manter os modelos atualizados conforme o sistema evolui
+- Focar primeiro nas ameaças de maior impacto
+- Documentar as decisões e os riscos aceitos
+- Usar o Threat Modeling como ferramenta de comunicação, não apenas como checklist
+- Integrar o Threat Modeling ao ciclo de desenvolvimento (DevSecOps)
+
+---
+
+# 8. Desafios Comuns
+
+- Falta de tempo e priorização
+- Dificuldade em envolver as equipes de desenvolvimento
+- Modelos que ficam desatualizados rapidamente
+- Dificuldade em quantificar riscos de forma objetiva
+- Resistência cultural (“achamos que não vamos ser atacados”)
+
+Superar esses desafios exige apoio da gestão e integração da segurança no processo de desenvolvimento.
+
+---
+
+# 9. Threat Modeling e o Ciclo de Vida Seguro
+
+O Threat Modeling é uma das práticas mais importantes dentro de um programa de **Secure Software Development Lifecycle (SSDLC)**. Ele complementa outras atividades como:
+
+- Code Review
+- SAST / DAST
+- Penetration Testing
+- Análise de composição de software (SCA)
+- Threat Intelligence
+
+---
+
+# Conclusão
+
+**Threat Modeling** é uma das melhores formas de incorporar segurança desde o início do desenvolvimento de sistemas. Em vez de apenas reagir a vulnerabilidades depois que elas são descobertas, a modelagem de ameaças permite que as equipes projetem sistemas mais seguros desde a concepção.
+
+Dominar Threat Modeling é uma habilidade estratégica para profissionais de segurança que desejam atuar de forma preventiva e influenciar decisões arquiteturais.
+
+No próximo e último módulo da série HACK abordaremos **Criação de Payloads Indetectáveis e Evasão de AV/EDR**.

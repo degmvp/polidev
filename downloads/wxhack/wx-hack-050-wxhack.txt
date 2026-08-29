@@ -1,0 +1,94 @@
+# HACK50 — SOC: Como Funciona um Security Operations Center
+
+## Resumo
+
+O **Security Operations Center (SOC)** é a estrutura responsável por monitorar, detectar, analisar e responder a incidentes de segurança em tempo real. Este artigo explica o funcionamento de um SOC, suas principais funções, estrutura de times, ferramentas utilizadas e desafios enfrentados na operação diária de segurança.
+
+**Palavras-chave:** SOC, Security Operations Center, Operações de segurança, Detecção de ameaças, Resposta a incidentes, Monitoramento de segurança.
+
+## 1. Introdução
+
+Com o aumento da frequência e sofisticação dos ataques cibernéticos, muitas organizações perceberam que não basta ter ferramentas de segurança — é necessário ter uma estrutura dedicada para operá-las de forma contínua. 
+
+O **Security Operations Center (SOC)** surgiu como resposta a essa necessidade. Ele funciona como o “cérebro operacional” da segurança, reunindo pessoas, processos e tecnologias para proteger a organização 24 horas por dia, 7 dias por semana.
+
+## 2. O que é um SOC?
+
+Um **SOC** é uma unidade centralizada responsável por monitorar, detectar, investigar e responder a ameaças e incidentes de segurança. Seu objetivo principal é reduzir o tempo entre a ocorrência de um incidente e sua detecção e contenção.
+
+Diferente de equipes de segurança que atuam de forma pontual (como Red Team ou consultoria), o SOC opera de forma contínua, com foco em detecção e resposta em tempo real.
+
+## 3. Principais Funções de um SOC
+
+As atividades de um SOC geralmente incluem:
+
+- **Monitoramento contínuo** de logs, eventos e alertas de segurança
+- **Detecção de ameaças** e comportamentos anormais
+- **Análise e investigação** de alertas e incidentes
+- **Resposta a incidentes** (contenção, erradicação e recuperação)
+- **Threat Hunting** proativo
+- **Gestão de vulnerabilidades** operacionais
+- **Suporte à conformidade** e geração de relatórios
+- **Melhoria contínua** de detecções e processos
+
+## 4. Estrutura de Times em um SOC
+
+Os times de SOC costumam ser organizados em níveis (tiers):
+
+| Nível       | Função Principal                          | Perfil                          |
+|-------------|-------------------------------------------|---------------------------------|
+| **Tier 1**  | Monitoramento e triagem inicial de alertas | Analistas juniores/plenos      |
+| **Tier 2**  | Investigação aprofundada e resposta       | Analistas seniores             |
+| **Tier 3**  | Threat Hunting, engenharia de detecção    | Especialistas / Threat Hunters |
+| **Gestão**  | Coordenação, processos e melhorias        | SOC Manager / Coordenadores    |
+
+Em SOCs menores, uma mesma pessoa pode atuar em mais de um nível. Em estruturas maiores, há maior especialização.
+
+## 5. Ferramentas Comumente Utilizadas
+
+Um SOC moderno geralmente utiliza um conjunto integrado de tecnologias, tais como:
+
+- **SIEM** — Centralização e correlação de eventos
+- **EDR / XDR** — Detecção e resposta em endpoints
+- **SOAR** — Automação e orquestração de respostas
+- **Threat Intelligence** — Inteligência sobre ameaças
+- **NDR** — Detecção de ameaças em rede
+- **Vulnerability Management** — Gestão de vulnerabilidades
+- **Ticketing e colaboração** — Gestão de incidentes
+
+A integração entre essas ferramentas é fundamental para a eficiência do SOC.
+
+## 6. Desafios na Operação de um SOC
+
+Apesar de sua importância, muitos SOCs enfrentam desafios significativos:
+
+- Alto volume de alertas e fadiga de analistas
+- Dificuldade em reter profissionais qualificados
+- Falsos positivos que consomem tempo
+- Falta de contexto sobre o ambiente protegido
+- Dificuldade de demonstrar valor para a alta gestão
+- Custos elevados de ferramentas e pessoal
+
+Um SOC eficiente precisa equilibrar tecnologia, processos bem definidos e desenvolvimento contínuo da equipe.
+
+## 7. Benefícios de um SOC Bem Estruturado
+
+- Redução do tempo de detecção e resposta a incidentes (MTTD e MTTR)
+- Maior visibilidade sobre o ambiente
+- Capacidade de resposta 24/7
+- Melhoria contínua da postura de segurança
+- Suporte à conformidade e requisitos regulatórios
+- Proteção mais proativa através de Threat Hunting
+
+## 8. Considerações Finais
+
+O Security Operations Center é uma das estruturas mais importantes para organizações que desejam manter uma postura de segurança madura. Ele transforma dados brutos de segurança em ações concretas de detecção e resposta.
+
+No entanto, ter um SOC não significa apenas implementar ferramentas. O sucesso depende da combinação de pessoas capacitadas, processos claros e tecnologia bem integrada. Organizações que investem de forma equilibrada nesses três pilares tendem a obter melhores resultados na proteção contra ameaças.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide
+- MITRE ATT&CK — Framework para detecção e resposta
+- Documentos da SANS Institute sobre SOC operations
+- Livros: *The Security Operations Center* e *Blue Team Handbook*

@@ -1,0 +1,87 @@
+# HACK55 — Segurança em IoT
+
+## Resumo
+
+A **Internet das Coisas (IoT)** trouxe uma enorme expansão da superfície de ataque das organizações. Dispositivos conectados — como câmeras, sensores, equipamentos industriais, wearables e eletrodomésticos inteligentes — frequentemente possuem recursos limitados de segurança, o que os torna alvos atrativos para atacantes. Este artigo aborda os principais desafios de segurança em IoT, os riscos mais comuns e as melhores práticas para proteger esses ambientes.
+
+**Palavras-chave:** IoT, Internet das Coisas, Segurança em IoT, Dispositivos conectados, Vulnerabilidades de IoT, Segurança de dispositivos.
+
+## 1. Introdução
+
+A Internet das Coisas (IoT) refere-se à conexão de objetos físicos à internet, permitindo que eles coletem, troquem e ajam com base em dados. Essa tecnologia está presente em residências, cidades inteligentes, indústrias, saúde e logística.
+
+Apesar dos benefícios em termos de automação e eficiência, a rápida adoção de dispositivos IoT trouxe desafios significativos de segurança. Muitos desses dispositivos são projetados priorizando custo e funcionalidade, em detrimento da segurança.
+
+## 2. Por que a Segurança em IoT é Desafiadora?
+
+Os dispositivos IoT apresentam características que aumentam sua vulnerabilidade:
+
+- **Recursos limitados** (processamento, memória e energia)
+- **Falta de atualizações** de firmware e software
+- **Autenticação fraca** ou inexistente (senhas padrão, ausência de MFA)
+- **Comunicação insegura** (protocolos sem criptografia)
+- **Falta de segmentação** de rede
+- **Longo ciclo de vida** sem suporte do fabricante
+- **Fabricação em massa** com pouca atenção à segurança
+
+Esses fatores fazem com que muitos dispositivos IoT sejam comprometidos e utilizados em ataques de grande escala, como botnets.
+
+## 3. Principais Riscos em Ambientes IoT
+
+Alguns dos riscos mais comuns incluem:
+
+- **Botnets de IoT** (ex: Mirai): Dispositivos comprometidos são usados para realizar ataques DDoS massivos.
+- **Acesso não autorizado** a câmeras, fechaduras inteligentes e sistemas de monitoramento.
+- **Vazamento de dados** coletados por sensores e dispositivos médicos.
+- **Movimentação lateral** a partir de dispositivos IoT comprometidos para redes corporativas.
+- **Ataques físicos** em dispositivos expostos (ex: sensores industriais).
+
+## 4. Boas Práticas de Segurança em IoT
+
+### 4.1 No Desenvolvimento e Aquisição
+- Escolher dispositivos de fabricantes com histórico de suporte e atualizações de segurança.
+- Evitar dispositivos com senhas padrão ou que não permitam alteração.
+- Priorizar dispositivos que suportem criptografia e autenticação forte.
+
+### 4.2 Na Implantação
+- Segmentar a rede IoT (micro-segmentação ou VLANs específicas).
+- Isolar dispositivos IoT da rede corporativa principal.
+- Desativar portas e serviços desnecessários.
+- Implementar firewall e controle de tráfego para dispositivos IoT.
+
+### 4.3 Na Operação e Manutenção
+- Manter firmware e software sempre atualizados.
+- Monitorar o comportamento dos dispositivos (tráfego anormal, conexões suspeitas).
+- Implementar autenticação forte (certificados, chaves, MFA quando possível).
+- Realizar inventário e gestão de ativos IoT.
+
+### 4.4 Monitoramento e Resposta
+- Integrar logs de dispositivos IoT em soluções de SIEM, quando possível.
+- Detectar comportamentos anormais (ex: dispositivo enviando grande volume de dados).
+- Ter planos de resposta específicos para incidentes envolvendo IoT.
+
+## 5. Segurança por Design em IoT
+
+A abordagem mais eficaz é adotar o conceito de **Security by Design** desde a concepção dos dispositivos e sistemas IoT. Isso inclui:
+
+- Criptografia de dados em trânsito e em repouso
+- Autenticação e autorização robustas
+- Princípio do menor privilégio
+- Capacidade de atualização segura de firmware
+- Mecanismos de detecção de adulteração (tamper detection)
+
+## 6. Considerações Finais
+
+A segurança em IoT não pode ser tratada como um complemento posterior. Devido às características dos dispositivos e à sua crescente presença em ambientes críticos, a segurança deve ser considerada desde a escolha do equipamento até sua operação diária.
+
+Organizações que utilizam IoT em larga escala precisam adotar uma abordagem de defesa em profundidade, combinando segmentação de rede, monitoramento, atualização contínua e boas práticas de desenvolvimento seguro.
+
+Com o crescimento da IoT em setores como indústria, saúde e cidades inteligentes, a segurança desses dispositivos deixará de ser um tema técnico para se tornar uma questão estratégica de risco e continuidade de negócios.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-213 — IoT Device Cybersecurity Guidance
+- OWASP IoT Security Top 10
+- ENISA — Good Practices for Security of IoT
+- MITRE ATT&CK for IoT
+

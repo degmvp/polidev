@@ -1,0 +1,91 @@
+# HACK57 — Blockchain Security
+
+## Resumo
+
+A tecnologia **Blockchain** trouxe novos paradigmas de descentralização, transparência e imutabilidade. No entanto, ela também introduz desafios específicos de segurança, especialmente em relação a smart contracts, consenso e gestão de chaves. Este artigo apresenta os principais aspectos de segurança em blockchain, os riscos mais comuns e as melhores práticas para o desenvolvimento e uso seguro dessa tecnologia.
+
+**Palavras-chave:** Blockchain, Segurança em Blockchain, Smart Contracts, Criptomoedas, Consenso, Cibersegurança.
+
+## 1. Introdução
+
+A blockchain é uma tecnologia de registro distribuído que permite transações seguras sem a necessidade de uma autoridade central. Embora seja conhecida principalmente por criptomoedas como Bitcoin e Ethereum, seu uso se expandiu para supply chain, finanças descentralizadas (DeFi), identidade digital, contratos inteligentes e muito mais.
+
+Apesar de suas características de segurança inerentes (como imutabilidade e criptografia), a blockchain não é imune a ataques. Vulnerabilidades em smart contracts, falhas em mecanismos de consenso e erros na gestão de chaves privadas são problemas recorrentes.
+
+## 2. Características de Segurança da Blockchain
+
+A segurança da blockchain se baseia em alguns pilares fundamentais:
+
+- **Criptografia assimétrica**: Uso de chaves públicas e privadas para autenticar transações.
+- **Consenso distribuído**: Mecanismos como Proof of Work (PoW) e Proof of Stake (PoS) para validar transações.
+- **Imutabilidade**: Uma vez registrada, a informação é extremamente difícil de ser alterada.
+- **Transparência**: Todas as transações são visíveis na rede (em blockchains públicas).
+
+No entanto, essas características também criam novos vetores de ataque.
+
+## 3. Principais Riscos e Vulnerabilidades
+
+### 3.1 Vulnerabilidades em Smart Contracts
+Smart contracts são programas que rodam na blockchain e executam automaticamente quando condições são atendidas. Erros de código nesses contratos podem levar a perdas financeiras significativas.
+
+Exemplos comuns:
+- Reentrancy attacks
+- Integer overflow/underflow
+- Falta de controle de acesso
+- Front-running
+
+### 3.2 Ataques a Mecanismos de Consenso
+- **51% Attack**: Quando um único ator controla a maioria do poder de mineração ou stake.
+- **Long-range attacks** e **Nothing-at-stake** em blockchains Proof of Stake.
+
+### 3.3 Gestão de Chaves e Carteiras
+- Roubo ou perda de chaves privadas
+- Falhas em carteiras (wallets)
+- Phishing direcionado a usuários de criptomoedas
+
+### 3.4 Ataques à Camada de Aplicação
+Muitos incidentes não exploram a blockchain em si, mas sim aplicações construídas sobre ela (exchanges, DeFi protocols, bridges).
+
+### 3.5 Riscos de Privacidade
+Em blockchains públicas, todas as transações são visíveis, o que pode expor padrões de comportamento e identidades.
+
+## 4. Boas Práticas de Segurança em Blockchain
+
+### 4.1 Desenvolvimento Seguro de Smart Contracts
+- Realizar auditorias de código por empresas especializadas
+- Utilizar padrões e bibliotecas auditadas (ex: OpenZeppelin)
+- Implementar testes extensivos (incluindo fuzzing)
+- Seguir guidelines de segurança (SWC Registry, ConsenSys Best Practices)
+
+### 4.2 Gestão de Chaves
+- Usar hardware wallets para armazenamento de chaves
+- Implementar soluções de multi-assinatura (multisig)
+- Adotar práticas de key management robustas
+
+### 4.3 Arquitetura e Operação
+- Avaliar o mecanismo de consenso utilizado
+- Considerar soluções de segunda camada (Layer 2) com cuidado
+- Monitorar transações e contratos em busca de comportamentos anormais
+- Planejar mecanismos de resposta a incidentes específicos para blockchain
+
+### 4.4 Due Diligence em Projetos
+Antes de interagir com projetos DeFi ou blockchains, é recomendável avaliar:
+- Qualidade do código e histórico de auditorias
+- Transparência da equipe
+- Mecanismos de governança
+- Histórico de incidentes anteriores
+
+## 5. Considerações Finais
+
+A blockchain oferece propriedades de segurança poderosas, mas não é uma solução mágica. Sua segurança depende fortemente da qualidade do código, da robustez dos mecanismos de consenso e da correta gestão de chaves por parte dos usuários.
+
+À medida que a adoção de blockchain cresce em setores além das criptomoedas, a necessidade de profissionais que compreendam tanto os aspectos de segurança tradicionais quanto as particularidades dessa tecnologia também aumenta.
+
+A segurança em blockchain exige uma abordagem multidisciplinar, combinando conhecimentos de criptografia, desenvolvimento seguro, arquitetura de sistemas distribuídos e resposta a incidentes.
+
+## Referências e Leituras Recomendadas
+
+- SWC Registry (Smart Contract Weakness Classification)
+- ConsenSys Smart Contract Best Practices
+- NIST IR 8408 — Blockchain Technology Overview
+- OWASP Smart Contract Security

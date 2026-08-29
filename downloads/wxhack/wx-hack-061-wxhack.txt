@@ -1,0 +1,100 @@
+# HACK61 — Monitoramento Contínuo e Operação 24x7
+
+## Resumo
+
+O **monitoramento contínuo** e a **operação 24x7** são componentes essenciais para uma postura de segurança eficaz em organizações modernas. Este artigo aborda os conceitos, benefícios, desafios e melhores práticas relacionadas ao monitoramento contínuo de segurança e às operações de segurança realizadas de forma ininterrupta.
+
+**Palavras-chave:** Monitoramento contínuo, Operação 24x7, SOC, Detecção de ameaças, Segurança operacional, Resposta a incidentes.
+
+## 1. Introdução
+
+Em um cenário onde ameaças podem surgir a qualquer momento, depender de monitoramento em horários comerciais ou de análises pontuais tornou-se insuficiente. Organizações que lidam com ativos críticos ou possuem exposição significativa precisam de capacidade de **monitoramento contínuo** e **resposta 24 horas por dia, 7 dias por semana**.
+
+O monitoramento contínuo permite identificar ameaças em tempo real ou quase real, enquanto a operação 24x7 garante que haja profissionais disponíveis para analisar e responder a incidentes independentemente do horário.
+
+## 2. O que é Monitoramento Contínuo?
+
+**Monitoramento contínuo** em segurança da informação refere-se à coleta, análise e correlação constante de dados de segurança provenientes de diferentes fontes, como:
+
+- Logs de sistemas e aplicações
+- Eventos de rede
+- Comportamento de usuários e endpoints
+- Alertas de soluções de segurança (EDR, IDS/IPS, WAF, etc.)
+- Atividades em ambientes de nuvem
+
+O objetivo é identificar comportamentos anormais, tentativas de ataque ou comprometimentos o mais cedo possível.
+
+## 3. Importância da Operação 24x7
+
+Muitos ataques são planejados para ocorrer fora do horário comercial, quando há menor presença de equipes de segurança. Uma operação 24x7 oferece as seguintes vantagens:
+
+- Redução do tempo de detecção de incidentes (MTTD)
+- Redução do tempo de resposta a incidentes (MTTR)
+- Capacidade de conter ameaças antes que causem danos maiores
+- Atendimento a requisitos de conformidade e SLA
+- Proteção contínua de ambientes críticos
+
+## 4. Componentes de uma Operação 24x7 Eficaz
+
+Uma operação de segurança 24x7 geralmente envolve:
+
+### 4.1 Pessoas
+- Equipe de analistas de segurança em turnos (SOC Analysts)
+- Especialistas de plantão (on-call) para incidentes críticos
+- Coordenação entre times de TI, desenvolvimento e segurança
+
+### 4.2 Processos
+- Playbooks e procedimentos de resposta a incidentes bem definidos
+- Escalonamento claro de alertas e incidentes
+- Rotinas de handover entre turnos
+- Métricas e indicadores de desempenho (KPIs)
+
+### 4.3 Tecnologia
+- SIEM com correlação em tempo real
+- EDR/XDR para visibilidade em endpoints
+- Ferramentas de automação (SOAR)
+- Dashboards e alertas bem configurados
+- Integração com Threat Intelligence
+
+## 5. Benefícios do Monitoramento Contínuo e Operação 24x7
+
+- Maior visibilidade sobre o ambiente
+- Detecção precoce de ameaças avançadas
+- Redução do impacto de incidentes
+- Melhoria na capacidade de resposta
+- Atendimento a exigências regulatórias
+- Aumento da confiança da organização na sua postura de segurança
+
+## 6. Desafios Comuns
+
+- Alto custo de manter uma equipe 24x7
+- Fadiga de alertas e burnout dos analistas
+- Dificuldade de reter profissionais qualificados
+- Complexidade na integração de ferramentas
+- Falsos positivos que consomem tempo da equipe
+- Desafios na comunicação entre turnos
+
+## 7. Boas Práticas
+
+- Priorizar qualidade sobre quantidade de alertas
+- Investir em automação para reduzir carga manual
+- Definir claramente os casos de uso mais críticos
+- Realizar tuning constante das ferramentas
+- Cuidar da saúde mental da equipe (evitar sobrecarga)
+- Documentar processos e manter playbooks atualizados
+- Medir e acompanhar métricas relevantes (MTTD, MTTR, taxa de falsos positivos)
+
+## 8. Considerações Finais
+
+O monitoramento contínuo combinado com operação 24x7 representa um nível mais maduro de segurança operacional. Embora exija investimento significativo em pessoas, processos e tecnologia, ele é fundamental para organizações que não podem se dar ao luxo de descobrir um incidente dias ou semanas depois de ele ter ocorrido.
+
+Em um cenário de ameaças persistentes e ataques cada vez mais automatizados, a capacidade de detectar e responder rapidamente faz muita diferença no resultado final de um incidente.
+
+Profissionais que atuam em operações de segurança devem buscar desenvolver tanto habilidades técnicas quanto a capacidade de trabalhar em turnos e sob pressão, mantendo sempre o foco na proteção efetiva do ambiente.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide
+- SANS — Building a World-Class Security Operations Center
+- MITRE ATT&CK — Detection and Response frameworks
+

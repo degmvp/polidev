@@ -1,0 +1,105 @@
+# HACK66 — Root Cause Analysis (RCA) em Cibersegurança
+
+## Resumo
+
+A **Root Cause Analysis (RCA)**, ou Análise de Causa Raiz, é um processo estruturado utilizado para identificar a causa fundamental de um incidente de segurança, em vez de tratar apenas os sintomas. Este artigo apresenta os conceitos, a importância e as principais metodologias de RCA aplicadas ao contexto de cibersegurança, além de exemplos práticos e recomendações para sua execução.
+
+**Palavras-chave:** Root Cause Analysis, Análise de causa raiz, RCA, Resposta a incidentes, Lições aprendidas, Cibersegurança.
+
+## 1. Introdução
+
+Quando ocorre um incidente de segurança, é comum que as equipes foquem rapidamente na contenção e na recuperação do ambiente. Embora essas ações sejam essenciais, elas tratam apenas os efeitos do problema. Sem identificar a **causa raiz**, existe grande risco de que o mesmo tipo de incidente volte a ocorrer no futuro.
+
+A **Root Cause Analysis (RCA)** é uma abordagem sistemática que busca responder à pergunta:  
+**“Por que isso aconteceu?”** — indo além das causas imediatas até chegar à origem real do problema.
+
+## 2. Por que fazer Root Cause Analysis em Segurança?
+
+Fazer RCA traz diversos benefícios:
+
+- Evita a recorrência do mesmo tipo de incidente
+- Melhora os processos e controles de segurança
+- Ajuda a identificar falhas sistêmicas (processos, pessoas ou tecnologia)
+- Fornece subsídios para melhorias reais e duradouras
+- Contribui para a maturidade da organização em segurança
+- Pode ser exigido em auditorias ou investigações regulatórias
+
+## 3. Diferença entre Causa Imediata e Causa Raiz
+
+- **Causa Imediata**: O que diretamente causou o incidente (ex: uma conta comprometida foi usada para acessar o sistema).
+- **Causa Raiz**: O motivo pelo qual essa situação foi possível (ex: ausência de MFA + falta de revisão de acessos + ausência de monitoramento de logins suspeitos).
+
+A RCA busca chegar à causa raiz, e não parar na causa imediata.
+
+## 4. Principais Metodologias de Root Cause Analysis
+
+Existem várias técnicas que podem ser utilizadas. As mais comuns em segurança são:
+
+### 4.1 5 Porquês (5 Whys)
+Técnica simples que consiste em perguntar “por quê?” repetidamente até chegar à causa raiz.
+
+**Exemplo:**
+- Por que o atacante conseguiu acesso? → Porque usou credenciais válidas.
+- Por que as credenciais eram válidas? → Porque eram de um usuário que saiu da empresa.
+- Por que o acesso ainda estava ativo? → Porque não foi desativado no processo de offboarding.
+- Por que o processo de offboarding falhou? → Porque não havia integração entre RH e TI.
+- Por que não havia integração? → Porque nunca foi implementada uma política formal de gestão de acessos.
+
+**Causa raiz identificada:** Ausência de política e processo formal de gestão de identidade e acessos.
+
+### 4.2 Diagrama de Ishikawa (Espinha de Peixe)
+Técnica visual que categoriza possíveis causas em áreas como:
+- Pessoas
+- Processos
+- Tecnologia
+- Ambiente
+- Materiais
+- Medição
+
+É útil quando o incidente tem múltiplas causas possíveis.
+
+### 4.3 Análise de Árvore de Falhas (Fault Tree Analysis)
+Técnica mais formal que utiliza diagramas lógicos para identificar combinações de eventos que levaram ao incidente.
+
+### 4.4 Análise de Causa e Efeito
+Foca em mapear a relação entre eventos e suas consequências.
+
+## 5. Etapas para Realizar uma RCA em Segurança
+
+1. **Coletar informações** — Reúna todos os dados disponíveis (logs, timeline, evidências, entrevistas).
+2. **Definir o problema** — Descreva claramente o que aconteceu.
+3. **Identificar causas imediatas** — O que diretamente causou o incidente.
+4. **Aplicar técnica de RCA** — Use 5 Whys, Ishikawa ou outra metodologia.
+5. **Validar a causa raiz** — Confirme se a causa identificada realmente explica o incidente.
+6. **Propor ações corretivas** — Defina o que será feito para eliminar ou mitigar a causa raiz.
+7. **Documentar e acompanhar** — Registre os resultados e acompanhe a implementação das melhorias.
+
+## 6. Desafios na Aplicação de RCA em Cibersegurança
+
+- Dificuldade em obter todas as evidências necessárias
+- Pressão para restaurar os sistemas rapidamente (pode atrapalhar a investigação)
+- Tendência de parar na causa imediata (mais fácil e rápida)
+- Falta de cultura de análise profunda em algumas organizações
+- Incidentes complexos com múltiplas causas
+
+## 7. Boas Práticas
+
+- Envolver diferentes áreas (TI, Segurança, Desenvolvimento, RH, etc.) quando necessário
+- Ser objetivo e baseado em evidências
+- Evitar buscar culpados — foque no processo e nos controles
+- Documentar a RCA de forma clara
+- Transformar as lições aprendidas em melhorias concretas
+- Revisar periodicamente se as ações corretivas foram efetivas
+
+## 8. Considerações Finais
+
+A Root Cause Analysis é uma etapa fundamental da resposta a incidentes que muitas vezes é negligenciada. Identificar e tratar a causa raiz é o que permite que a organização evolua e reduza a probabilidade de incidentes semelhantes no futuro.
+
+Profissionais de segurança que desenvolvem a capacidade de realizar boas análises de causa raiz contribuem significativamente para a melhoria contínua da postura de segurança da organização.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide
+- SANS — Root Cause Analysis in Incident Response
+- ISO/IEC 27035 — Information security incident management
+

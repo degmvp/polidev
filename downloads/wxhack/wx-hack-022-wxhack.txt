@@ -1,0 +1,14 @@
+/* 
+HACK22 – Segurança em APIs REST
+
+Checklist de segurança essencial:
+- Rate Limiting forte
+- Autenticação (OAuth2 + JWT)
+- Validação rigorosa de todos os inputs
+- Proteção contra BOLA/IDOR
+- CORS bem configurado
+- Logging e monitoramento
+
+Teste rápido com curl:
+curl -H "Authorization: Bearer token" https://api.exemplo.com/users/123
+*/

@@ -1,0 +1,93 @@
+# HACK51 — Threat Hunting na Prática
+
+## Resumo
+
+Enquanto a maioria das soluções de segurança opera de forma reativa (gerando alertas quando algo já aconteceu), o **Threat Hunting** adota uma postura proativa. Ele consiste na busca ativa por ameaças que podem estar presentes no ambiente, mesmo sem alertas automáticos. Este artigo explica o conceito de Threat Hunting, sua metodologia e como ele pode ser aplicado de forma prática para fortalecer a segurança das organizações.
+
+**Palavras-chave:** Threat Hunting, Caça a ameaças, Detecção proativa, Segurança defensiva, SOC, Análise de comportamento.
+
+## 1. Introdução
+
+A maioria dos ataques sofisticados é projetada para evitar detecção por ferramentas automatizadas. Muitos invasores conseguem permanecer em ambientes comprometidos por semanas ou meses sem serem identificados por soluções tradicionais de segurança.
+
+O **Threat Hunting** surge como uma abordagem complementar, na qual profissionais de segurança buscam ativamente por sinais de comprometimento, em vez de esperar que as ferramentas gerem alertas. Trata-se de uma atividade proativa e investigativa.
+
+## 2. O que é Threat Hunting?
+
+**Threat Hunting** é o processo de busca proativa por ameaças dentro de um ambiente, utilizando hipóteses, análise de dados e conhecimento sobre o comportamento de adversários. Diferente da resposta a incidentes (que é reativa), o Threat Hunting busca identificar ameaças que ainda não foram detectadas.
+
+O objetivo não é apenas encontrar malware ou invasores, mas também identificar falhas de configuração, comportamentos anormais e possíveis brechas antes que sejam exploradas ou causem danos maiores.
+
+## 3. Abordagem Hipótese-Driven
+
+Uma das metodologias mais utilizadas em Threat Hunting é a abordagem baseada em hipóteses. O processo geralmente segue estas etapas:
+
+1. **Formular uma hipótese** — Exemplo: “Um atacante pode ter obtido acesso inicial via phishing e está tentando escalar privilégios.”
+2. **Identificar dados relevantes** — Logs de autenticação, eventos de processo, logs de rede, etc.
+3. **Realizar a investigação** — Buscar evidências que confirmem ou refute a hipótese.
+4. **Documentar os achados** — Registrar o que foi encontrado e as lições aprendidas.
+5. **Melhorar as defesas** — Criar novas regras de detecção, ajustar configurações ou implementar novos controles.
+
+Essa abordagem estruturada evita buscas aleatórias e direciona os esforços para ameaças reais.
+
+## 4. Fontes de Dados para Threat Hunting
+
+Para realizar Threat Hunting de forma eficaz, é necessário ter acesso a dados de qualidade. As principais fontes incluem:
+
+- Logs de sistemas operacionais e aplicações
+- Logs de autenticação e autorização
+- Eventos de rede (fluxos, DNS, proxy)
+- Dados de EDR (Endpoint Detection and Response)
+- Logs de bancos de dados
+- Informações de Threat Intelligence
+- Dados de ferramentas de segurança (firewall, IDS/IPS, WAF)
+
+Quanto maior a visibilidade e a qualidade dos dados, maior a eficácia do Threat Hunting.
+
+## 5. Benefícios do Threat Hunting
+
+- Detecção de ameaças que bypassam soluções automatizadas
+- Redução do tempo de permanência de atacantes no ambiente (dwell time)
+- Identificação de falhas de configuração e más práticas
+- Melhoria contínua das capacidades de detecção
+- Aumento da maturidade da equipe de segurança
+- Suporte à resposta a incidentes com maior contexto
+
+## 6. Desafios na Implementação
+
+Apesar dos benefícios, o Threat Hunting apresenta alguns desafios:
+
+- Exige profissionais com alto nível de conhecimento técnico
+- Depende de boa qualidade e volume de dados
+- Pode ser demorado e consumir recursos significativos
+- Dificuldade de medir retorno sobre investimento (ROI)
+- Risco de fadiga da equipe se não houver priorização adequada
+
+Por esses motivos, muitas organizações começam com programas de Threat Hunting em pequena escala, focados em casos de uso prioritários.
+
+## 7. Threat Hunting e o SOC
+
+O Threat Hunting costuma ser realizado por analistas mais experientes (geralmente Tier 2 ou Tier 3) dentro de um SOC, ou por times dedicados de Threat Hunting. Ele complementa o trabalho reativo do SOC, trazendo uma visão mais profunda e proativa.
+
+Enquanto o SOC tradicional foca em responder alertas, o Threat Hunting busca ameaças que ainda não geraram alertas.
+
+## 8. Considerações Finais
+
+O Threat Hunting representa uma evolução na postura de segurança das organizações. Em vez de apenas reagir a alertas gerados automaticamente, as equipes passam a buscar ativamente por ameaças ocultas.
+
+Embora exija investimento em pessoas, processos e dados, o Threat Hunting pode reduzir significativamente o tempo de permanência de atacantes e aumentar a resiliência da organização frente a ameaças avançadas.
+
+Para profissionais que atuam em segurança, desenvolvimento ou infraestrutura, compreender os princípios do Threat Hunting ajuda a construir sistemas e ambientes mais difíceis de serem comprometidos e mais fáceis de serem monitorados.
+
+## Referências e Leituras Recomendadas
+
+- MITRE ATT&CK — Framework de referência para Threat Hunting
+- SANS Institute — Hunting methodologies
+- NIST SP 800-53 e SP 800-61 (relacionados a detecção e resposta)
+- Livro: *The Practice of Network Security Monitoring* – Richard Bejtlich
+
+---
+
+**Pronto.**
+
+Quer que eu faça o **HACK52** (Gestão de Vulnerabilidades e Patch Management) agora?

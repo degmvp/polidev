@@ -1,0 +1,104 @@
+# HACK49 — SIEM: Centralização e Correlação de Eventos
+
+## Resumo
+
+Em ambientes corporativos modernos, a quantidade de eventos gerados por sistemas, aplicações, bancos de dados e dispositivos de segurança é extremamente alta. O **SIEM** (Security Information and Event Management) surge como uma solução para centralizar, normalizar e correlacionar esses eventos, permitindo a detecção de ameaças que seriam difíceis de identificar de forma isolada. Este artigo explica os conceitos de centralização e correlação de eventos, seus benefícios e desafios práticos.
+
+**Palavras-chave:** SIEM, Centralização de logs, Correlação de eventos, Detecção de ameaças, Segurança da informação, Monitoramento de segurança.
+
+## 1. Introdução
+
+A maioria dos incidentes de segurança não é causada por um único evento isolado, mas pela combinação de múltiplos eventos que, quando analisados em conjunto, revelam um padrão malicioso. 
+
+Sistemas isolados geram logs e alertas, mas sem uma visão consolidada, fica muito difícil identificar ataques sofisticados, movimentação lateral ou atividades anormais. O SIEM foi desenvolvido exatamente para resolver esse problema, atuando como um “cérebro” que coleta, organiza e analisa eventos de diversas fontes.
+
+## 2. O que é um SIEM?
+
+**SIEM** (Security Information and Event Management) é uma plataforma que combina duas funções principais:
+
+- **SIM (Security Information Management)**: Coleta, armazenamento e análise de logs e eventos de segurança.
+- **SEM (Security Event Management)**: Correlação de eventos em tempo real, geração de alertas e resposta a incidentes.
+
+Na prática, um SIEM atua como um ponto central de coleta e análise de dados de segurança, permitindo que as equipes tenham visibilidade ampla sobre o ambiente.
+
+## 3. Centralização de Eventos
+
+A **centralização** é o primeiro passo fundamental de um SIEM. Ela consiste em reunir logs e eventos gerados por diferentes fontes em um único local.
+
+Principais fontes de eventos que costumam ser integradas a um SIEM:
+
+- Sistemas operacionais (Windows, Linux)
+- Aplicações e APIs
+- Bancos de dados
+- Dispositivos de rede (firewalls, switches, roteadores)
+- Soluções de segurança (antivírus, EDR, IDS/IPS, WAF)
+- Serviços de nuvem (AWS, Azure, Google Cloud)
+- Ferramentas de autenticação e identidade
+
+A centralização facilita a busca, a análise forense e a geração de relatórios, além de ser um requisito comum em normas de conformidade.
+
+## 4. Correlação de Eventos
+
+A **correlação** é o diferencial mais importante de um SIEM. Ela consiste em analisar múltiplos eventos de diferentes fontes e identificar padrões que indicam possível atividade maliciosa.
+
+**Exemplo prático de correlação:**
+
+Um SIEM pode correlacionar os seguintes eventos:
+1. Login bem-sucedido em um servidor de aplicação fora do horário comercial
+2. Acesso a um banco de dados sensível logo em seguida
+3. Execução de consultas que retornam grande volume de dados
+4. Transferência de arquivos para um endereço IP externo desconhecido
+
+Isoladamente, cada um desses eventos pode parecer normal. Quando correlacionados, eles podem indicar uma possível exfiltração de dados.
+
+## 5. Principais Capacidades de um SIEM
+
+Um SIEM moderno geralmente oferece:
+
+- Coleta e normalização de logs de múltiplas fontes
+- Correlação de eventos em tempo real
+- Geração de alertas baseados em regras e machine learning
+- Dashboards e relatórios
+- Capacidade de busca e investigação histórica
+- Integração com sistemas de resposta (SOAR)
+- Suporte a conformidade e auditoria
+
+## 6. Benefícios e Desafios
+
+**Benefícios:**
+- Visibilidade centralizada do ambiente
+- Detecção de ameaças que passam despercebidas em análises isoladas
+- Redução do tempo de investigação de incidentes
+- Suporte à conformidade regulatória
+- Base para programas de Threat Hunting
+
+**Desafios comuns:**
+- Alto volume de logs e alertas (fadiga de alertas)
+- Dificuldade de criar regras de correlação eficazes
+- Custo de armazenamento e licenciamento
+- Necessidade de profissionais capacitados
+- Falsos positivos que consomem tempo da equipe
+
+## 7. Boas Práticas na Implementação de um SIEM
+
+- Priorizar a qualidade dos logs coletados em vez do volume
+- Definir casos de uso claros antes de criar regras de correlação
+- Realizar tuning constante para reduzir falsos positivos
+- Integrar o SIEM com outras ferramentas (EDR, Threat Intelligence, SOAR)
+- Estabelecer processos claros de tratamento de alertas
+- Revisar periodicamente as regras de correlação
+
+## 8. Considerações Finais
+
+O SIEM é uma das ferramentas mais importantes em operações de segurança modernas. Sua capacidade de centralizar eventos e realizar correlações inteligentes permite que as organizações detectem ameaças de forma mais eficaz do que seria possível com ferramentas isoladas.
+
+No entanto, a ferramenta sozinha não resolve todos os problemas. O sucesso de um SIEM depende da qualidade dos dados coletados, da definição adequada de casos de uso e da capacidade da equipe de analisar e responder aos alertas gerados.
+
+Para profissionais que trabalham com desenvolvimento e infraestrutura, entender o papel do SIEM ajuda a colaborar melhor com as equipes de segurança, especialmente na definição do que deve ser logado e monitorado.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-92 — Guide to Computer Security Log Management
+- MITRE ATT&CK — Detection and Analytics
+- Documentação de plataformas como Microsoft Sentinel, Splunk, Elastic SIEM e QRadar
+

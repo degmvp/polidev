@@ -1,0 +1,86 @@
+# HACK68 — Construindo um Portfólio Profissional em Segurança da Informação
+
+## Resumo
+
+Em um mercado competitivo como o de cibersegurança, ter um **portfólio profissional** bem estruturado pode fazer diferença significativa na hora de conseguir oportunidades de emprego, freelas ou projetos. Este artigo apresenta a importância de construir um portfólio, o que incluir nele e dicas práticas para profissionais que estão iniciando ou buscando crescer na área de segurança da informação.
+
+**Palavras-chave:** Portfólio profissional, Carreira em segurança, Cibersegurança, Portfólio de pentest, GitHub, Desenvolvimento de carreira.
+
+## 1. Introdução
+
+Diferente de muitas outras áreas de TI, na cibersegurança o conhecimento prático costuma ter mais peso do que apenas certificações ou formação acadêmica. Um bom portfólio permite que você demonstre suas habilidades de forma concreta, mostrando o que você sabe fazer na prática.
+
+Empresas e recrutadores valorizam profissionais que conseguem evidenciar projetos reais, estudos de caso, ferramentas desenvolvidas ou contribuições para a comunidade.
+
+## 2. Por que ter um Portfólio em Segurança da Informação?
+
+- Demonstra competências práticas além de certificações
+- Diferencia você de outros candidatos
+- Serve como prova de habilidades durante processos seletivos
+- Ajuda a construir autoridade e networking
+- É útil tanto para quem busca emprego CLT quanto para quem quer atuar como freelancer ou consultor
+- Permite acompanhar sua própria evolução profissional
+
+## 3. O que incluir em um Portfólio de Segurança?
+
+### 3.1 Projetos Práticos
+- Laboratórios e ambientes de estudo (TryHackMe, Hack The Box, Proving Grounds, etc.)
+- Projetos de Threat Modeling em sistemas fictícios ou reais
+- Desenvolvimento de ferramentas simples (scripts de automação, parsers de logs, etc.)
+- Análises de malware (sempre com cuidado ético e legal)
+- Configuração e documentação de ambientes seguros (ex: hardening de servidores, segmentação de rede)
+
+### 3.2 Relatórios e Documentação
+- Relatórios de pentest simulados (em ambientes legais)
+- Relatórios de avaliação de segurança de aplicações ou infraestrutura
+- Documentação de incidentes simulados e análises de causa raiz
+- Artigos técnicos ou write-ups de máquinas exploradas
+
+### 3.3 Contribuições para a Comunidade
+- Artigos publicados em blogs ou Medium
+- Participação em repositórios open source relacionados a segurança
+- Criação de cheatsheets, ferramentas ou documentação útil para a comunidade
+- Palestras ou workshops ministrados
+
+### 3.4 Certificações e Formação
+- Lista de certificações obtidas (com data e escopo)
+- Cursos relevantes concluídos
+- Projetos acadêmicos ou de capacitação relacionados à segurança
+
+## 4. Onde Hospedar seu Portfólio?
+
+- **GitHub**: Excelente para mostrar código, scripts, ferramentas e documentação técnica.
+- **Site pessoal / Blog**: Mais profissional e permite maior controle sobre a apresentação.
+- **LinkedIn**: Importante para networking, mas não substitui um portfólio mais completo.
+- **Notion ou Portfólio online**: Boas opções para organizar projetos de forma visual.
+- **Repositórios específicos**: Alguns profissionais criam repositórios dedicados apenas ao portfólio.
+
+## 5. Dicas para Construir um Bom Portfólio
+
+- **Qualidade > Quantidade**: É melhor ter poucos projetos bem documentados do que muitos superficiais.
+- **Documente bem**: Inclua objetivos, tecnologias utilizadas, desafios encontrados e resultados.
+- **Seja ético**: Nunca publique informações de sistemas reais sem autorização. Use ambientes legais (CTFs, labs, projetos fictícios).
+- **Mantenha atualizado**: Adicione novos projetos e remova ou atualize os antigos conforme evolui.
+- **Mostre evolução**: É interessante mostrar projetos de diferentes níveis de complexidade.
+- **Personalize**: Adapte o portfólio conforme o tipo de vaga que você busca (defensiva, ofensiva, governança, etc.).
+
+## 6. Erros Comuns a Evitar
+
+- Publicar apenas certificações sem mostrar aplicação prática
+- Usar projetos de outras pessoas sem dar crédito
+- Deixar o portfólio desatualizado por longos períodos
+- Não documentar os projetos de forma clara
+- Expor dados sensíveis ou realizar atividades ilegais
+
+## 7. Considerações Finais
+
+Construir um portfólio profissional em segurança da informação é um investimento de médio e longo prazo na sua carreira. Ele não apenas ajuda a conseguir oportunidades, mas também serve como registro da sua jornada de aprendizado e evolução técnica.
+
+Profissionais que conseguem apresentar de forma clara o que sabem fazer na prática têm vantagem competitiva no mercado. Comece pequeno, seja consistente e foque em qualidade. Com o tempo, seu portfólio se tornará uma das suas principais ferramentas de posicionamento profissional.
+
+## Referências e Leituras Recomendadas
+
+- Roadmaps de carreira em cibersegurança (ex: roadmap.sh/cyber-security)
+- Comunidades como TryHackMe, Hack The Box e Discord de segurança
+- Artigos sobre portfólio para pentesters e analistas de segurança
+

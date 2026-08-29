@@ -1,0 +1,89 @@
+# HACK67 — Recuperação de Operações e Continuidade de Negócios
+
+## Resumo
+
+Em um cenário de incidentes cibernéticos cada vez mais frequentes e impactantes, a capacidade de uma organização se recuperar e manter suas operações é tão importante quanto a prevenção. Este artigo aborda os conceitos de **Continuidade de Negócios** e **Recuperação de Desastres**, seus componentes principais e as melhores práticas para garantir a resiliência operacional diante de incidentes de segurança.
+
+**Palavras-chave:** Continuidade de Negócios, Business Continuity, Disaster Recovery, Recuperação de Operações, Resiliência, Cibersegurança.
+
+## 1. Introdução
+
+Mesmo com boas práticas de segurança, é impossível eliminar completamente o risco de incidentes. Ataques de ransomware, falhas graves de infraestrutura ou desastres naturais podem comprometer as operações de uma organização por horas ou dias.
+
+Por esse motivo, ter planos estruturados de **Continuidade de Negócios** e **Recuperação de Desastres** é essencial para minimizar impactos, garantir a sobrevivência do negócio e proteger sua reputação.
+
+## 2. Conceitos Fundamentais
+
+### 2.1 Business Continuity Plan (BCP) – Plano de Continuidade de Negócios
+Conjunto de estratégias e procedimentos que permitem que a organização continue operando (mesmo que de forma limitada) durante e após um incidente, priorizando as atividades críticas.
+
+### 2.2 Disaster Recovery Plan (DRP) – Plano de Recuperação de Desastres
+Foco mais técnico, voltado para a recuperação de sistemas de TI, dados e infraestrutura após um incidente grave. Faz parte do BCP, mas tem escopo mais específico.
+
+### 2.3 Diferença entre BCP e DRP
+- **BCP**: Mais amplo — inclui pessoas, processos, comunicação, instalações e tecnologia.
+- **DRP**: Mais técnico — foca em sistemas, backups, restauração de dados e infraestrutura de TI.
+
+## 3. Objetivos Principais
+
+- Garantir a continuidade das atividades críticas do negócio
+- Minimizar o tempo de indisponibilidade (downtime)
+- Proteger dados e sistemas críticos
+- Reduzir prejuízos financeiros e operacionais
+- Preservar a confiança de clientes, parceiros e stakeholders
+- Atender requisitos regulatórios e contratuais
+
+## 4. Conceitos Importantes: RTO e RPO
+
+Dois indicadores são fundamentais na continuidade de negócios:
+
+- **RTO (Recovery Time Objective)**: Tempo máximo aceitável para restaurar um sistema ou processo após um incidente.
+- **RPO (Recovery Point Objective)**: Quantidade máxima de dados que pode ser perdida (medida em tempo) sem causar prejuízo grave ao negócio.
+
+Quanto menor o RTO e o RPO, mais robusta (e cara) deve ser a estratégia de recuperação.
+
+## 5. Principais Componentes de um Programa de Continuidade
+
+Um programa eficaz de continuidade de negócios geralmente inclui:
+
+- Análise de Impacto nos Negócios (**BIA** – Business Impact Analysis)
+- Identificação e priorização de processos críticos
+- Estratégias de recuperação (backup, redundância, site alternativo, trabalho remoto, etc.)
+- Planos de comunicação em crise
+- Planos de resposta a incidentes integrados com continuidade
+- Treinamentos e simulações periódicas
+- Revisão e atualização constante dos planos
+
+## 6. Boas Práticas
+
+- Realizar Análise de Impacto nos Negócios (BIA) periodicamente
+- Definir RTO e RPO realistas e alinhados com as necessidades do negócio
+- Testar os planos regularmente (testes de mesa, simulações parciais e testes completos)
+- Integrar os planos de continuidade com o plano de resposta a incidentes de segurança
+- Garantir que os backups sejam testados e funcionais
+- Manter documentação clara e acessível
+- Treinar as equipes envolvidas
+- Revisar os planos após cada incidente ou mudança significativa na organização
+
+## 7. Desafios Comuns
+
+- Falta de apoio da alta gestão
+- Dificuldade em definir prioridades reais do negócio
+- Planos que existem apenas no papel (nunca testados)
+- Subestimar o tempo e o custo de uma recuperação real
+- Falta de integração entre TI e áreas de negócio
+
+## 8. Considerações Finais
+
+Ter uma boa estratégia de continuidade de negócios e recuperação de desastres não é apenas uma boa prática técnica — é uma necessidade estratégica para qualquer organização que deseja ser resiliente.
+
+Em um cenário onde ataques cibernéticos podem paralisar operações por dias ou semanas, a capacidade de se recuperar rapidamente pode ser o diferencial entre a sobrevivência e o fracasso do negócio.
+
+Profissionais de segurança devem trabalhar em conjunto com áreas de TI, operações e gestão para garantir que os planos de continuidade sejam realistas, testados e alinhados com as reais necessidades da organização.
+
+## Referências e Leituras Recomendadas
+
+- ISO 22301 — Security and resilience — Business continuity management systems
+- NIST SP 800-34 — Contingency Planning Guide for Federal Information Systems
+- Disaster Recovery Institute International (DRI)
+

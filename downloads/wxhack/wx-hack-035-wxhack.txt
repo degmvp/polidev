@@ -1,0 +1,134 @@
+# HACK35 — Incident Response e Forensics Digitais
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. Seu objetivo é apresentar conceitos, metodologias e boas práticas de resposta a incidentes e forense digital.
+
+Todo o conteúdo deve ser aplicado apenas em ambientes autorizados, durante investigações internas com permissão da organização ou em contextos legais e forenses apropriados. A manipulação de evidências digitais sem autorização pode ter sérias implicações legais.
+
+---
+
+# 1. Introdução
+
+Mesmo com boas práticas de segurança, incidentes podem acontecer. Quando uma violação de segurança ocorre, a forma como a organização responde pode determinar o tamanho do prejuízo.
+
+**Incident Response (Resposta a Incidentes)** é o processo estruturado de identificar, conter, erradicar e recuperar de um incidente de segurança.
+
+Já a **Forense Digital** é a ciência de coletar, preservar, analisar e apresentar evidências digitais de forma que possam ser utilizadas em investigações internas ou processos judiciais.
+
+Essas duas áreas são complementares e fundamentais para qualquer programa maduro de segurança da informação.
+
+---
+
+# 2. O que é Incident Response?
+
+Incident Response é a capacidade de uma organização detectar, analisar e responder a incidentes de segurança de forma rápida e organizada, minimizando impactos.
+
+Um bom processo de resposta a incidentes ajuda a:
+
+- Reduzir o tempo de detecção e contenção
+- Limitar o dano causado pelo incidente
+- Preservar evidências para investigação
+- Recuperar os sistemas de forma controlada
+- Aprender com o incidente e melhorar as defesas
+
+---
+
+# 3. Fases do Incident Response
+
+Diversas metodologias existem para estruturar a resposta a incidentes. Uma das mais utilizadas é a do **NIST**:
+
+| Fase                    | Objetivo                                              | Atividades Principais                              |
+|-------------------------|-------------------------------------------------------|----------------------------------------------------|
+| **Preparação**          | Estar pronto para responder                           | Políticas, ferramentas, treinamento e playbooks    |
+| **Detecção e Análise**  | Identificar e entender o incidente                    | Monitoramento, triagem e análise inicial           |
+| **Contenção**           | Limitar o alcance do incidente                        | Isolar sistemas, bloquear acessos, conter propagação |
+| **Erradicação**         | Remover a ameaça do ambiente                          | Remover malware, fechar vulnerabilidades           |
+| **Recuperação**         | Restaurar sistemas de forma segura                    | Restaurar backups, monitorar após restauração      |
+| **Lições Aprendidas**   | Melhorar o processo para futuros incidentes           | Relatório pós-incidente e melhorias                |
+
+---
+
+# 4. O que é Forense Digital?
+
+**Forense Digital** é o processo de identificar, coletar, preservar, analisar e apresentar evidências digitais de maneira cientificamente válida e legalmente admissível.
+
+Ela é utilizada em:
+
+- Investigação de incidentes de segurança
+- Casos de fraude e crimes cibernéticos
+- Investigação interna de funcionários
+- Contencioso e processos judiciais
+
+A integridade das evidências é fundamental. Qualquer falha no processo de coleta ou preservação pode tornar as evidências inválidas.
+
+---
+
+# 5. Fases da Forense Digital
+
+| Fase                    | Descrição                                                                 | Importância                              |
+|-------------------------|---------------------------------------------------------------------------|------------------------------------------|
+| **Identificação**       | Reconhecer que existe uma evidência digital relevante                     | Início do processo                       |
+| **Coleta**              | Adquirir os dados de forma adequada                                       | Preservar a integridade                  |
+| **Preservação**         | Garantir que as evidências não sejam alteradas                            | Chain of Custody                         |
+| **Análise**             | Examinar os dados coletados                                               | Extrair informações relevantes           |
+| **Apresentação**        | Documentar e apresentar os achados                                        | Relatórios e suporte a decisões          |
+
+---
+
+# 6. Princípios Fundamentais da Forense Digital
+
+- **Não alterar as evidências originais**
+- **Documentar tudo** o que foi feito
+- **Manter a Chain of Custody** (cadeia de custódia)
+- **Usar ferramentas validadas**
+- **Trabalhar com cópias** (nunca diretamente na evidência original)
+- **Registrar data, hora e responsável** por cada ação
+
+---
+
+# 7. Ferramentas Comumente Utilizadas
+
+| Categoria              | Ferramentas                              | Finalidade                              |
+|------------------------|------------------------------------------|-----------------------------------------|
+| **Aquisição de Imagens** | FTK Imager, dd, dc3dd, Guymager         | Criar cópias forenses de discos         |
+| **Análise de Disco**     | Autopsy, EnCase, X-Ways Forensics       | Análise de artefatos                    |
+| **Análise de Memória**   | Volatility, Rekall                      | Análise de memória RAM                  |
+| **Análise de Rede**      | Wireshark, NetworkMiner                 | Análise de tráfego de rede              |
+| **Análise de Malware**   | Cuckoo Sandbox, Any.Run                 | Análise comportamental de malware       |
+| **Gestão de Casos**      | Autopsy, Magnet AXIOM, FTK              | Organização de investigações            |
+
+---
+
+# 8. Boas Práticas em Incident Response e Forense
+
+- Ter **playbooks** documentados para os tipos mais comuns de incidentes
+- Realizar exercícios de simulação (Tabletop e Red Team / Purple Team)
+- Manter backups imutáveis e testados
+- Definir claramente papéis e responsabilidades (IR Team)
+- Preservar evidências o mais rápido possível
+- Nunca apagar ou modificar dados sem documentação
+- Manter comunicação clara com as áreas afetadas e com a alta gestão
+- Realizar análise de causa raiz (Root Cause Analysis)
+
+---
+
+# 9. Importância da Documentação
+
+A documentação é um dos pilares da resposta a incidentes e da forense digital. Um bom registro permite:
+
+- Reconstruir o que aconteceu
+- Tomar decisões baseadas em evidências
+- Cumprir exigências legais e regulatórias
+- Melhorar continuamente o processo de resposta
+- Servir como base para treinamentos futuros
+
+---
+
+# Conclusão
+
+**Incident Response** e **Forense Digital** são áreas críticas para qualquer organização que leva segurança da informação a sério. Não basta apenas prevenir incidentes — é necessário também saber como responder quando eles ocorrem.
+
+Um processo maduro de resposta a incidentes, combinado com práticas sólidas de forense digital, permite que as organizações minimizem danos, preservem evidências e aprendam com os incidentes para fortalecer suas defesas.
+
+Nos próximos módulos da série HACK abordaremos temas como **Segurança em Aplicações Mobile** e **Threat Modeling**.

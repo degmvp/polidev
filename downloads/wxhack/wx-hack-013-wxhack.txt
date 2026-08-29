@@ -1,0 +1,183 @@
+POLYDEV | Security Engineering
+HACK13 — Incident Response e Digital Forensics
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK13 — Incident Response e Digital Forensics
+
+Objetivo:
+
+Organizar uma visão prática de resposta a incidentes e forense digital, com foco em evidência, contenção, análise, recuperação e lições aprendidas.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Incidente
+============================================================
+O Que é Incidente
+
+Incidente é um evento que ameaça:
+
+- Confidencialidade.
+- Integridade.
+- Disponibilidade.
+- Identidade.
+- Operação.
+- Dados.
+- Reputação.
+
+Exemplos:
+
+- Conta comprometida.
+- Malware.
+- Vazamento.
+- Alteração indevida.
+- Acesso não autorizado.
+- Serviço indisponível.
+
+Nem todo alerta é incidente, mas todo alerta relevante merece triagem.
+
+============================================================
+03 - Ciclo de Resposta
+============================================================
+Ciclo de Resposta
+
+Fases comuns:
+
+1. Preparação.
+2. Identificação.
+3. Contenção.
+4. Erradicação.
+5. Recuperação.
+6. Lições aprendidas.
+
+O erro clássico é pular direto para apagar arquivos ou reiniciar servidores sem preservar evidências.
+
+Resposta profissional exige método.
+
+============================================================
+04 - Preservação de Evidência
+============================================================
+Preservação de Evidência
+
+Princípios:
+
+- Não alterar mais que o necessário.
+- Registrar horário.
+- Registrar responsável.
+- Copiar evidências.
+- Manter integridade.
+- Calcular hash quando aplicável.
+- Documentar cadeia de custódia.
+
+Evidência sem contexto perde valor técnico e jurídico.
+
+============================================================
+05 - Coleta Inicial
+============================================================
+Coleta Inicial
+
+Itens úteis:
+
+- Logs de sistema.
+- Logs de aplicação.
+- Logs de autenticação.
+- Processos ativos.
+- Conexões de rede.
+- Tarefas agendadas.
+- Usuários conectados.
+- Arquivos modificados.
+- Eventos de segurança.
+- Artefatos de malware, quando houver.
+
+A coleta deve respeitar prioridade e volatilidade.
+
+============================================================
+06 - Timeline
+============================================================
+Timeline
+
+Timeline ajuda a responder:
+
+- Quando começou?
+- Qual foi o primeiro sinal?
+- Que conta foi usada?
+- Que host foi afetado?
+- Que arquivo mudou?
+- Que conexão ocorreu?
+- Quando houve contenção?
+
+Uma boa timeline transforma caos em sequência lógica.
+
+============================================================
+07 - Contenção e Erradicação
+============================================================
+Contenção e Erradicação
+
+Contenção:
+
+- Isolar host.
+- Bloquear conta.
+- Revogar token.
+- Bloquear indicador.
+- Suspender rota ou serviço.
+- Preservar evidências.
+
+Erradicação:
+
+- Remover persistência.
+- Corrigir vulnerabilidade.
+- Atualizar credenciais.
+- Aplicar patches.
+- Revisar permissões.
+- Reinstalar quando necessário.
+
+Contenção reduz dano. Erradicação remove causa.
+
+============================================================
+08 - Recuperação e Pós-Incidente
+============================================================
+Recuperação e Pós-Incidente
+
+Recuperação:
+
+- Restaurar serviço.
+- Validar integridade.
+- Monitorar reincidência.
+- Comunicar envolvidos.
+- Confirmar correções.
+- Testar controles.
+
+Lições aprendidas:
+
+- O que falhou?
+- O que detectou?
+- O que demorou?
+- O que faltou?
+- Que controle será criado?
+
+Incidente bem tratado fortalece o ambiente.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Conceito de incidente.
+- Ciclo de resposta.
+- Preservação de evidência.
+- Coleta inicial.
+- Timeline.
+- Contenção.
+- Erradicação.
+- Recuperação.
+- Pós-incidente.
+
+POLYDEV | Security Engineering
+Primeira temporada HACK01–HACK13 concluída.
+
+Leia • Entenda • Execute seu código.

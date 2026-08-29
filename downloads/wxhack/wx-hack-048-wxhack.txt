@@ -1,0 +1,98 @@
+# HACK48 — IDS, IPS e Monitoramento de Redes
+
+## Resumo
+
+O monitoramento de redes e a detecção de atividades maliciosas são componentes essenciais de uma estratégia defensiva em cibersegurança. Este artigo apresenta os conceitos de **IDS** (Intrusion Detection System), **IPS** (Intrusion Prevention System) e **Monitoramento de Redes**, explicando suas diferenças, formas de operação e importância na proteção de ambientes corporativos modernos.
+
+**Palavras-chave:** IDS, IPS, Monitoramento de redes, Detecção de intrusão, Prevenção de intrusão, Segurança de rede.
+
+## 1. Introdução
+
+À medida que as redes corporativas se tornam mais complexas — com ambientes híbridos, nuvem, trabalho remoto e grande volume de tráfego — torna-se cada vez mais difícil identificar atividades maliciosas apenas por meio de análise manual. 
+
+Sistemas de detecção e prevenção de intrusão, aliados a um bom monitoramento de rede, permitem identificar comportamentos suspeitos em tempo real ou quase real, aumentando significativamente a capacidade de resposta a incidentes.
+
+## 2. O que é IDS (Intrusion Detection System)?
+
+O **IDS** é um sistema projetado para **detectar** atividades maliciosas ou não autorizadas em uma rede ou host. Ele monitora o tráfego e/ou o comportamento do sistema e gera alertas quando identifica algo suspeito, mas **não bloqueia** o tráfego automaticamente.
+
+### Tipos principais de IDS:
+
+- **Network-based IDS (NIDS)**: Monitora o tráfego de rede em pontos estratégicos.
+- **Host-based IDS (HIDS)**: Monitora atividades em um host específico (logs, integridade de arquivos, chamadas de sistema).
+
+### Métodos de detecção:
+- **Baseado em assinaturas**: Compara o tráfego com padrões conhecidos de ataques.
+- **Baseado em anomalias**: Identifica comportamentos que fogem do padrão normal (baseline).
+
+O IDS é fundamental para visibilidade e detecção, mas depende de uma equipe para analisar e responder aos alertas gerados.
+
+## 3. O que é IPS (Intrusion Prevention System)?
+
+O **IPS** tem como objetivo não apenas detectar, mas também **prevenir** ataques. Diferente do IDS, o IPS está posicionado de forma a poder **bloquear** ou mitigar o tráfego malicioso em tempo real.
+
+### Principais diferenças entre IDS e IPS:
+
+| Característica          | IDS                          | IPS                              |
+|-------------------------|------------------------------|----------------------------------|
+| Função principal        | Detectar e alertar           | Detectar e bloquear              |
+| Posicionamento          | Passivo (fora da linha)      | Ativo (no caminho do tráfego)    |
+| Risco de falsos positivos | Menor impacto                | Pode interromper tráfego legítimo |
+| Resposta                | Depende de análise humana    | Pode agir automaticamente        |
+
+O IPS oferece uma camada de proteção mais ativa, mas exige configuração cuidadosa para evitar interrupções em serviços legítimos.
+
+## 4. Monitoramento de Redes
+
+O **monitoramento de redes** vai além da detecção de ataques. Ele envolve a coleta contínua de dados sobre o desempenho, disponibilidade e comportamento do tráfego de rede.
+
+Um bom programa de monitoramento de redes geralmente inclui:
+
+- Coleta de logs de equipamentos de rede (firewalls, switches, roteadores)
+- Monitoramento de fluxo de tráfego (NetFlow, sFlow, IPFIX)
+- Análise de desempenho e latência
+- Detecção de anomalias de tráfego
+- Visibilidade de aplicações e serviços
+
+Quando combinado com IDS/IPS e SIEM, o monitoramento de redes fornece uma visão mais completa do ambiente.
+
+## 5. Arquitetura e Posicionamento
+
+A eficácia de um IDS/IPS depende fortemente de onde ele é posicionado na rede. Alguns pontos comuns incluem:
+
+- Na fronteira da rede (perímetro)
+- Em frente a servidores críticos
+- Em segmentos internos (detecção de movimentação lateral)
+- Em ambientes de nuvem e containers
+
+Em arquiteturas modernas, é comum o uso de soluções de **Network Detection and Response (NDR)**, que combinam detecção avançada com análise de comportamento de rede.
+
+## 6. Benefícios e Limitações
+
+**Benefícios:**
+- Aumento da visibilidade sobre o que acontece na rede
+- Detecção de ameaças que burlam controles tradicionais
+- Suporte à investigação de incidentes
+- Contribuição para conformidade e auditoria
+
+**Limitações:**
+- Alto volume de alertas (fadiga de alertas)
+- Falsos positivos e falsos negativos
+- Dificuldade em ambientes com tráfego criptografado
+- Necessidade de constante atualização de assinaturas e regras
+- Custo e complexidade de implementação e manutenção
+
+## 7. Considerações Finais
+
+IDS, IPS e monitoramento de redes são componentes importantes de uma estratégia de defesa em profundidade. Enquanto o IDS oferece visibilidade e detecção, o IPS adiciona uma camada de prevenção ativa. Já o monitoramento de redes fornece o contexto necessário para entender o comportamento normal e identificar desvios.
+
+Em ambientes atuais, essas soluções raramente operam de forma isolada. Elas são mais eficazes quando integradas a plataformas de SIEM, EDR e processos de resposta a incidentes.
+
+Profissionais de infraestrutura, desenvolvimento e segurança devem compreender o papel dessas tecnologias para colaborar de forma mais efetiva na proteção dos ambientes que constroem e operam.
+
+## Referências e Leituras Recomendadas
+
+- NIST SP 800-94 — Guide to Intrusion Detection and Prevention Systems
+- MITRE ATT&CK — Network-based detection techniques
+- Documentação de soluções como Suricata, Snort, Zeek, OSSEC e ferramentas de NDR
+

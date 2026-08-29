@@ -1,0 +1,137 @@
+POLYDEV | Security Engineering
+HACK04 — Vulnerability Assessment
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK04 — Vulnerability Assessment
+
+Objetivo:
+
+Aprender a transformar dados de reconhecimento e enumeração em análise de vulnerabilidades, priorizando risco, evidência e correção.
+
+A proposta é diferenciar vulnerabilidade real, falso positivo, exposição aceitável e risco que exige tratamento.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - Conceito
+============================================================
+Vulnerability Assessment
+
+É o processo de identificar, classificar e priorizar vulnerabilidades em ativos autorizados.
+
+Inclui:
+
+- Coleta de dados.
+- Verificação de versões.
+- Checagem de configuração.
+- Associação com CVEs quando aplicável.
+- Priorização por impacto.
+- Recomendação de correção.
+
+O foco é gestão de risco.
+
+============================================================
+03 - Fontes de Evidência
+============================================================
+Fontes de Evidência
+
+- Resultado de scan.
+- Banner de serviço.
+- Header HTTP.
+- Configuração observável.
+- Versão documentada.
+- Log do sistema.
+- Print técnico.
+- Saída de comando.
+- Referência oficial do fornecedor.
+
+Evidência fraca gera retrabalho. Evidência forte orienta correção.
+
+============================================================
+04 - Priorização
+============================================================
+Priorização
+
+Avalie:
+
+- Exposição pública ou interna.
+- Criticidade do ativo.
+- Facilidade de exploração.
+- Impacto no negócio.
+- Existência de mitigação.
+- Presença de dados sensíveis.
+- Probabilidade de abuso.
+
+Nem toda vulnerabilidade tem a mesma urgência.
+
+============================================================
+05 - Exemplo de Checklist
+============================================================
+Checklist de Avaliação
+
+Ativo: aplicação web interna
+Serviço: HTTPS
+Achado: ausência de HSTS
+Evidência: curl -I sem Strict-Transport-Security
+Impacto: downgrade/risco em cenários específicos
+Severidade: média ou baixa conforme exposição
+Correção: habilitar HSTS com política adequada
+Validação: repetir curl -I após ajuste
+
+Checklist simples, claro e auditável.
+
+============================================================
+06 - Falsos Positivos
+============================================================
+Falsos Positivos
+
+Podem ocorrer quando:
+
+- Banner está mascarado.
+- Scanner interpreta versão errada.
+- Patch foi aplicado sem alterar versão aparente.
+- Serviço está atrás de proxy.
+- Configuração compensa o risco.
+
+Sempre valide antes de reportar como crítico.
+
+============================================================
+07 - Relatório
+============================================================
+Relatório Profissional
+
+Inclua:
+
+- Sumário executivo.
+- Escopo.
+- Metodologia.
+- Achados por severidade.
+- Evidências.
+- Recomendações.
+- Plano de correção.
+- Reteste.
+
+O relatório deve servir para decisão, execução e auditoria.
+
+============================================================
+08 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Conceito de vulnerability assessment.
+- Fontes de evidência.
+- Priorização.
+- Falsos positivos.
+- Checklist de achado.
+- Relatório profissional.
+
+Próximo artigo:
+HACK05 — Scanning Avançado e Evasão com Nmap
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.

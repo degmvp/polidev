@@ -1,0 +1,193 @@
+POLYDEV | Security Engineering
+HACK07 — SQL Injection e Defesa Profissional
+
+============================================================
+01 - Objetivo
+============================================================
+POLYDEV | Security Engineering
+HACK07 — SQL Injection e Defesa Profissional
+
+Objetivo:
+
+Entender SQL Injection de forma defensiva, identificar padrões de risco e aplicar correções profissionais com prepared statements, validação e controle de privilégio.
+
+O foco é proteção de aplicações e bancos de dados.
+
+Leia • Entenda • Execute seu código.
+
+============================================================
+02 - O Que é SQL Injection
+============================================================
+O Que é SQL Injection
+
+SQL Injection acontece quando dados externos entram na montagem de uma query sem controle adequado.
+
+Problema conceitual:
+
+entrada do usuário + concatenação de string + execução SQL
+
+Risco:
+
+- Leitura indevida.
+- Alteração de dados.
+- Bypass de autenticação.
+- Exposição de estrutura.
+- Impacto em auditoria.
+
+A defesa começa eliminando concatenação insegura.
+
+============================================================
+03 - Código Vulnerável
+============================================================
+Código Vulnerável
+
+Exemplo didático de padrão ruim:
+
+usuario = input("usuario: ")
+sql = "select * from users where name = '" + usuario + "'"
+
+Problema:
+
+O dado externo muda o significado da consulta.
+
+Sinais de risco:
+
+- Query montada com +.
+- f-string dentro de SQL.
+- Template SQL sem bind.
+- Parâmetros em URL indo direto ao banco.
+
+Esse padrão deve ser substituído.
+
+============================================================
+04 - Prepared Statements
+============================================================
+Prepared Statements
+
+Modelo seguro:
+
+sql = "select * from users where name = ?"
+cursor.execute(sql, (usuario,))
+
+Benefícios:
+
+- Separa comando de dado.
+- Reduz risco de injeção.
+- Melhora clareza.
+- Facilita auditoria.
+- Padroniza acesso ao banco.
+
+Regra POLYDEV:
+
+SQL dinâmico só com necessidade real, controle explícito e revisão.
+
+============================================================
+05 - Validação e Normalização
+============================================================
+Validação e Normalização
+
+Prepared statement é essencial, mas não substitui regra de negócio.
+
+Valide:
+
+- Tipo do campo.
+- Tamanho máximo.
+- Caracteres permitidos.
+- Faixa de valores.
+- Formato esperado.
+- Campos obrigatórios.
+
+Normalize:
+
+- Trim.
+- Lowercase quando fizer sentido.
+- Conversão de tipos.
+- Remoção de ruído.
+
+Entrada limpa reduz risco e melhora qualidade dos dados.
+
+============================================================
+06 - Privilégio Mínimo
+============================================================
+Privilégio Mínimo
+
+O usuário da aplicação no banco deve ter apenas o necessário.
+
+Evite:
+
+- Usar superuser.
+- Usar owner da base.
+- Permissões globais.
+- Acesso desnecessário a tabelas sensíveis.
+
+Prefira:
+
+- Usuário por aplicação.
+- Roles específicas.
+- Permissões por schema.
+- Views controladas.
+- Stored procedures quando fizer sentido.
+- Auditoria de acesso.
+
+Se a aplicação falhar, o banco ainda deve limitar o dano.
+
+============================================================
+07 - Logs e Detecção
+============================================================
+Logs e Detecção
+
+Sinais de tentativa:
+
+- Muitos erros 400/500.
+- Parâmetros muito longos.
+- Caracteres inesperados.
+- Falhas repetidas de autenticação.
+- Consultas com tempo anormal.
+- Erros SQL expostos.
+
+Ações:
+
+- Logar evento.
+- Não exibir erro interno ao usuário.
+- Alertar padrão repetido.
+- Correlacionar IP, usuário e rota.
+- Revisar queries lentas e erros.
+
+============================================================
+08 - Checklist de Defesa
+============================================================
+Checklist de Defesa
+
+- Usar prepared statements.
+- Evitar concatenação SQL.
+- Validar entrada.
+- Normalizar dados.
+- Aplicar privilégio mínimo.
+- Não expor stack trace.
+- Usar logs seguros.
+- Revisar ORM e query builder.
+- Testar rotas críticas.
+- Auditar permissões do banco.
+
+SQL Injection é falha clássica, mas ainda aparece porque padrões inseguros sobrevivem em produção.
+
+============================================================
+09 - Resumo Técnico
+============================================================
+Resumo Técnico
+
+Neste artigo, você viu:
+
+- Conceito de SQL Injection.
+- Padrões vulneráveis.
+- Prepared statements.
+- Validação.
+- Privilégio mínimo.
+- Logs e detecção.
+- Checklist de defesa.
+
+Próximo artigo:
+HACK08 — XSS, CSRF e Segurança no Front-End
+
+POLYDEV | Security Engineering
+Leia • Entenda • Execute seu código.
