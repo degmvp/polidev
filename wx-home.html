@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POLYDEV | WX-HOME</title>
+  <meta name="description" content="POLYDEV WX-HOME — seu acervo técnico organizado por linguagem, com acesso ao WX-COLLECTOR." />
+
+  <style>
+    :root {
+      --bg: #02070d;
+      --bg-soft: #07111d;
+      --panel: rgba(5, 13, 22, 0.94);
+      --gold: #e3b53c;
+      --gold-2: #ffcf55;
+      --blue: #159cff;
+      --blue-soft: #7fd1ff;
+      --text: #eef7ff;
+      --muted: #9eb0c2;
+      --line: rgba(227, 181, 60, 0.38);
+      --shadow-gold: 0 0 24px rgba(227, 181, 60, 0.20);
+      --shadow-blue: 0 0 30px rgba(21, 156, 255, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 83% 8%, rgba(0, 119, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 13% 35%, rgba(227, 181, 60, 0.07), transparent 26%),
+        linear-gradient(180deg, #01050a 0%, #05101a 48%, #01050a 100%);
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: min(1180px, 94%);
+      margin: 0 auto;
+      padding: 28px 0 42px;
+    }
+
+    .banner-shell {
+      position: relative;
+      border: 1px solid rgba(227, 181, 60, 0.55);
+      border-radius: 18px;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.58);
+      box-shadow: var(--shadow-gold), var(--shadow-blue);
+      overflow: hidden;
+    }
+
+    .banner-shell::before,
+    .banner-shell::after {
+      content: "";
+      position: absolute;
+      top: 14%;
+      width: 2px;
+      height: 72%;
+      background: linear-gradient(180deg, transparent, var(--gold-2), transparent);
+      box-shadow: 0 0 18px rgba(255, 207, 85, 0.8);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .banner-shell::before { left: 2px; }
+    .banner-shell::after { right: 2px; }
+
+    .banner {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 32px 18px 20px;
+    }
+
+    .intro h1 {
+      font-size: clamp(1.8rem, 4vw, 3.15rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+      color: var(--gold-2);
+      text-shadow: 0 0 18px rgba(227, 181, 60, 0.18);
+    }
+
+    .intro p {
+      margin-top: 10px;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .flow-wrap {
+      position: relative;
+      margin-top: 12px;
+      padding: 30px 44px;
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(8, 18, 30, 0.96), rgba(2, 8, 14, 0.98));
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    .flow-wrap::before,
+    .flow-wrap::after {
+      content: "";
+      position: absolute;
+      top: 8%;
+      bottom: 8%;
+      width: 5px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, transparent 0%, var(--gold) 18%, var(--gold-2) 50%, var(--gold) 82%, transparent 100%);
+      box-shadow:
+        0 0 10px rgba(227, 181, 60, 0.85),
+        0 0 28px rgba(227, 181, 60, 0.40);
+    }
+
+    .flow-wrap::before { left: 13px; }
+    .flow-wrap::after { right: 13px; }
+
+    .flow-title {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .flow-title span {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      color: var(--blue-soft);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .flow-title h2 {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      line-height: 1.2;
+      font-weight: 750;
+    }
+
+    .flow-title h2 strong {
+      color: var(--gold-2);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step {
+      grid-column: span 2;
+      min-height: 148px;
+      border-radius: 18px;
+      border: 1px solid rgba(21, 156, 255, 0.28);
+      background:
+        linear-gradient(180deg, rgba(10, 24, 39, 0.96), rgba(3, 12, 21, 0.96));
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03), var(--shadow-blue);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-3px);
+      border-color: rgba(227, 181, 60, 0.6);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03), var(--shadow-gold);
+    }
+
+    .step .num {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 12px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #02070d;
+      background: linear-gradient(135deg, var(--gold-2), #b98712);
+      box-shadow: 0 0 16px rgba(227,181,60,.28);
+    }
+
+    .step h3 {
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 7px;
+      letter-spacing: .02em;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.42;
+    }
+
+    .arrow {
+      display: grid;
+      place-items: center;
+      color: var(--gold-2);
+      font-size: 1.8rem;
+      font-weight: 300;
+      text-shadow: 0 0 14px rgba(227,181,60,.52);
+      user-select: none;
+    }
+
+    .cta-box {
+      text-align: center;
+      padding: 30px 10px 8px;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      margin-bottom: 15px;
+      font-size: 0.98rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 230px;
+      padding: 13px 24px;
+      border: 1px solid rgba(227, 181, 60, 0.75);
+      border-radius: 11px;
+      color: var(--gold-2);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      background: linear-gradient(180deg, rgba(227,181,60,.09), rgba(227,181,60,.02));
+      box-shadow: 0 0 20px rgba(227,181,60,.12);
+      transition: all .2s ease;
+    }
+
+    .cta:hover {
+      color: #07111d;
+      background: linear-gradient(135deg, var(--gold-2), #c9951d);
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(227,181,60,.32);
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px 0 6px;
+      color: #61758a;
+      font-size: .82rem;
+      letter-spacing: .06em;
+    }
+
+    @media (max-width: 920px) {
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .step,
+      .arrow {
+        grid-column: 1;
+      }
+
+      .step {
+        min-height: auto;
+      }
+
+      .arrow {
+        transform: rotate(90deg);
+        height: 26px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        width: 96%;
+        padding-top: 12px;
+      }
+
+      .banner-shell {
+        border-radius: 12px;
+        padding: 5px;
+      }
+
+      .banner {
+        min-height: 115px;
+        border-radius: 8px;
+      }
+
+      .intro {
+        padding-top: 24px;
+      }
+
+      .flow-wrap {
+        padding: 26px 28px;
+      }
+
+      .flow-wrap::before { left: 8px; }
+      .flow-wrap::after { right: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="banner-shell" aria-label="Banner POLYDEV WX-COLLECTOR">
+      <img
+        class="banner"
+        src="ban1.png"
+        alt="POLYDEV WX-COLLECTOR — Uma árvore, muitas linguagens, um único viewer"
+      />
+    </section>
+
+    <section class="intro">
+      <h1>POLYDEV | WX-HOME</h1>
+      <p>Seu acervo técnico, organizado por linguagem.</p>
+    </section>
+
+    <section class="flow-wrap" aria-labelledby="flow-title">
+      <div class="flow-title">
+        <span>WX FLOW</span>
+        <h2>Da biblioteca ao código: <strong>um único caminho</strong></h2>
+      </div>
+
+      <div class="flow">
+        <article class="step">
+          <div class="num">01</div>
+          <h3>ACERVO</h3>
+          <p>Todo o conteúdo técnico POLYDEV reunido em uma única estrutura.</p>
+        </article>
+
+        <div class="arrow" aria-hidden="true">›</div>
+
+        <article class="step">
+          <div class="num">02</div>
+          <h3>LINGUAGEM</h3>
+          <p>O WX identifica e organiza cada coleção pelo seu grupo e linguagem.</p>
+        </article>
+
+        <div class="arrow" aria-hidden="true">›</div>
+
+        <article class="step">
+          <div class="num">03</div>
+          <h3>WX-COLLECTOR</h3>
+          <p>Um único viewer para navegar, consultar e localizar o código desejado.</p>
+        </article>
+
+        <div class="arrow" aria-hidden="true">›</div>
+
+        <article class="step">
+          <div class="num">04</div>
+          <h3>DOWNLOAD</h3>
+          <p>O programa selecionado é disponibilizado para uso no ambiente POLYDEV.</p>
+        </article>
+
+        <div class="arrow" aria-hidden="true">›</div>
+
+        <article class="step">
+          <div class="num">05</div>
+          <h3>POLYDEV_VM</h3>
+          <p>O código segue para o ambiente de execução, compilação e testes.</p>
+        </article>
+      </div>
+
+      <div class="cta-box">
+        <p>Escolha a linguagem. Encontre o código. Siga o fluxo.</p>
+        <a class="cta" href="wx.html">ABRIR WX-COLLECTOR</a>
+      </div>
+    </section>
+
+    <footer>POLYDEV • Leia • Entenda • Execute seu código</footer>
+  </main>
+</body>
+</html>
