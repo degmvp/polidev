@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>POLYDEV | WX-TOOLS</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#000;
+    color:#dbefff;
+}
+
+header{
+    text-align:center;
+    padding:24px 18px;
+    border-bottom:3px solid #21b8ff;
+}
+
+header h1{
+    margin:0;
+    font-family:"Orbitron",Arial,sans-serif;
+    font-size:clamp(28px,4vw,42px);
+    font-weight:800;
+    letter-spacing:2px;
+    color:#39c8ff;
+    text-shadow:
+        0 0 7px rgba(57,200,255,.85),
+        0 0 18px rgba(57,200,255,.45);
+}
+
+header p{
+    margin:10px 0 0;
+    color:#FFD700;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.banner{
+    width:min(900px,92%);
+    display:block;
+    margin:20px auto 26px;
+    border:2px solid #21b8ff;
+    border-radius:12px;
+    box-shadow:0 0 24px rgba(33,184,255,.20);
+}
+
+.selector-box{
+    width:96%;
+    margin:0 auto 16px;
+    padding:16px;
+    text-align:center;
+    background:#03101b;
+    border:2px solid #21b8ff;
+    border-radius:10px;
+}
+
+.selector-box label{
+    display:block;
+    margin-bottom:10px;
+    color:#FFD700;
+    font-weight:bold;
+}
+
+.selector-box select{
+    min-width:340px;
+    max-width:95%;
+    padding:11px;
+    background:#0c1520;
+    color:#FFD700;
+    border:1px solid #21b8ff;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.status{
+    width:96%;
+    margin:0 auto 20px;
+    padding:11px;
+    text-align:center;
+    color:#fff;
+    background:#03101b;
+    border:1px solid #21b8ff;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:390px 1fr;
+    gap:24px;
+    width:96%;
+    margin:auto;
+}
+
+.sidebar{
+    padding:15px;
+    border-right:3px solid #21b8ff;
+}
+
+.sidebar h2{
+    margin-top:0;
+    color:#39c8ff;
+}
+
+.tool-card{
+    margin:10px 0;
+    padding:14px;
+    background:#07131e;
+    border:1px solid #21b8ff;
+    border-radius:9px;
+    cursor:pointer;
+    transition:.15s ease;
+}
+
+.tool-card:hover{
+    background:#10324a;
+    transform:translateY(-1px);
+}
+
+.tool-card.active{
+    background:#123b56;
+    border-color:#FFD700;
+}
+
+.tool-card h3{
+    margin:0 0 7px;
+    color:#FFD700;
+    font-size:15px;
+    line-height:1.35;
+}
+
+.tool-card p{
+    margin:0;
+    color:#a9dff6;
+    font-size:12px;
+    word-break:break-word;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h2{
+    margin-top:0;
+    color:#FFD700;
+}
+
+.meta{
+    display:none;
+    margin:0 0 16px;
+    padding:16px;
+    background:#03101b;
+    border:1px solid #21b8ff;
+    border-radius:9px;
+}
+
+.meta-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px 18px;
+}
+
+.meta-item{
+    color:#fff;
+    line-height:1.45;
+}
+
+.meta-item strong{
+    color:#39c8ff;
+}
+
+.description{
+    grid-column:1 / -1;
+    padding-top:4px;
+}
+
+.homologado{
+    color:#9acd32;
+    font-weight:bold;
+}
+
+.toolbar{
+    margin-bottom:15px;
+}
+
+.tool-btn{
+    display:inline-block;
+    padding:10px 14px;
+    margin:0 8px 8px 0;
+    background:#21b8ff;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.tool-btn:hover{
+    background:#FFD700;
+}
+
+.viewer{
+    min-height:580px;
+    padding:20px;
+    overflow:auto;
+    background:#03101b;
+    color:#fff;
+    border:2px solid #21b8ff;
+    border-radius:10px;
+}
+
+pre{
+    margin:0;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    font-size:15px;
+    line-height:1.5;
+    font-family:Consolas,"Courier New",monospace;
+}
+
+footer{
+    margin-top:40px;
+    padding:28px;
+    text-align:center;
+    border-top:3px solid #21b8ff;
+    color:#9acd32;
+    font-weight:bold;
+}
+
+footer img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid #21b8ff;
+}
+
+footer h2{
+    color:#39c8ff;
+    font-family:"Orbitron",Arial,sans-serif;
+}
+
+@media(max-width:900px){
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        border-right:none;
+        border-bottom:3px solid #21b8ff;
+    }
+
+    .meta-grid{
+        grid-template-columns:1fr;
+    }
+
+    .description{
+        grid-column:auto;
+    }
+
+    .selector-box select{
+        min-width:0;
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>POLYDEV | WX-TOOLS</h1>
+    <p>Ferramentas reais • Problemas reais • Código homologado</p>
+</header>
+
+<img
+    src="wx-tools.jpg"
+    class="banner"
+    alt="POLYDEV WX-TOOLS"
+>
+
+<section class="selector-box">
+    <label for="linguagem">Selecione a linguagem</label>
+
+    <select id="linguagem">
+        <option value="">-- carregando categorias --</option>
+    </select>
+</section>
+
+<div id="status" class="status">
+    Consultando banco...
+</div>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2 id="tituloMenu">Ferramentas WX</h2>
+
+        <div id="listaFerramentas">
+            Selecione uma linguagem.
+        </div>
+    </aside>
+
+    <main class="content">
+
+        <h2 id="tituloConteudo">
+            Selecione uma ferramenta WX-TOOLS
+        </h2>
+
+        <div id="meta" class="meta">
+            <div class="meta-grid">
+
+                <div class="meta-item">
+                    <strong>Linguagem:</strong>
+                    <span id="metaLinguagem">-</span>
+                </div>
+
+                <div class="meta-item">
+                    <strong>Categoria:</strong>
+                    <span id="metaCategoria">-</span>
+                </div>
+
+                <div class="meta-item">
+                    <strong>Arquivo:</strong>
+                    <span id="metaArquivo">-</span>
+                </div>
+
+                <div class="meta-item">
+                    <strong>Status:</strong>
+                    <span class="homologado">HOMOLOGADO</span>
+                </div>
+
+                <div class="meta-item description">
+                    <strong>Descrição:</strong>
+                    <span id="metaDescricao">-</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="toolbar">
+
+            <button
+                class="tool-btn"
+                onclick="copiarConteudo()">
+                Copiar Código
+            </button>
+
+            <button
+                class="tool-btn"
+                onclick="baixarAtual()">
+                Download
+            </button>
+
+            <button
+                class="tool-btn"
+                onclick="location.href='home.html'">
+                Voltar Home
+            </button>
+
+        </div>
+
+        <div class="viewer">
+            <pre id="codigo">Aguardando seleção.</pre>
+        </div>
+
+    </main>
+
+</div>
+
+<footer>
+    <img src="poly.jpg" alt="POLYDEV">
+
+    <h2>POLYDEV | WX-TOOLS</h2>
+
+    <p>
+        Leia • Entenda • Utilize seu código
+    </p>
+</footer>
+
+<script>
+const TABELA = "conteudos";
+
+const CATEGORIAS = {
+    wxtpy:  "Python",
+    wxtcpp: "C++",
+    wxtc:   "C",
+    wxtrs:  "Rust",
+    wxtgo:  "Go"
+};
+
+const client =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+let registros = [];
+let registroAtual = null;
+let conteudoAtual = "";
+
+function normalizarUrl(url){
+    if(!url){
+        return "";
+    }
+
+    return String(url)
+        .trim()
+        .replace(/^\/+/, "");
+}
+
+function montarUrlLeitura(url){
+    const limpo = normalizarUrl(url);
+
+    if(!limpo){
+        return "";
+    }
+
+    if(window.location.protocol === "file:"){
+        return "https://degmvp.github.io/polidev/" + limpo;
+    }
+
+    return limpo;
+}
+
+function nomeLinguagem(categoria){
+    return CATEGORIAS[categoria] || categoria.toUpperCase();
+}
+
+async function carregarCategorias(){
+
+    const combo =
+        document.getElementById("linguagem");
+
+    const status =
+        document.getElementById("status");
+
+    const codigo =
+        document.getElementById("codigo");
+
+    try{
+
+        const {data,error} =
+            await client
+                .from(TABELA)
+                .select("categoria")
+                .in(
+                    "categoria",
+                    Object.keys(CATEGORIAS)
+                )
+                .eq("ativo",true)
+                .limit(5000);
+
+        if(error){
+            throw error;
+        }
+
+        const existentes =
+            [...new Set(
+                (data || [])
+                    .map(item =>
+                        String(item.categoria || "")
+                            .trim()
+                            .toLowerCase()
+                    )
+                    .filter(cat =>
+                        Object.prototype.hasOwnProperty.call(
+                            CATEGORIAS,
+                            cat
+                        )
+                    )
+            )];
+
+        combo.innerHTML =
+            '<option value="">-- escolha uma linguagem --</option>';
+
+        Object.keys(CATEGORIAS)
+            .filter(cat => existentes.includes(cat))
+            .forEach(cat => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = cat;
+
+                option.textContent =
+                    cat +
+                    " — " +
+                    CATEGORIAS[cat];
+
+                combo.appendChild(option);
+            });
+
+        status.textContent =
+            "WX-TOOLS | " +
+            existentes.length +
+            " linguagem(ns) disponível(is)";
+
+        codigo.textContent =
+            existentes.length
+                ? "Selecione uma linguagem WX-TOOLS."
+                : "Nenhuma ferramenta WX-TOOLS cadastrada.";
+
+    }
+    catch(erro){
+
+        combo.innerHTML =
+            '<option value="">-- erro --</option>';
+
+        status.textContent =
+            "Erro ao carregar categorias.";
+
+        codigo.textContent =
+            erro.message;
+    }
+}
+
+async function carregarFerramentas(){
+
+    const categoria =
+        document.getElementById("linguagem").value;
+
+    const lista =
+        document.getElementById("listaFerramentas");
+
+    const status =
+        document.getElementById("status");
+
+    const codigo =
+        document.getElementById("codigo");
+
+    const tituloMenu =
+        document.getElementById("tituloMenu");
+
+    registros = [];
+    registroAtual = null;
+    conteudoAtual = "";
+
+    limparMeta();
+
+    if(!categoria){
+
+        tituloMenu.textContent =
+            "Ferramentas WX";
+
+        lista.innerHTML =
+            "Selecione uma linguagem.";
+
+        status.textContent =
+            "WX-TOOLS aguardando seleção";
+
+        codigo.textContent =
+            "Aguardando seleção.";
+
+        document.getElementById("tituloConteudo")
+            .textContent =
+            "Selecione uma ferramenta WX-TOOLS";
+
+        return;
+    }
+
+    tituloMenu.textContent =
+        "WX-TOOLS | " +
+        nomeLinguagem(categoria);
+
+    lista.innerHTML =
+        "Consultando banco...";
+
+    codigo.textContent =
+        "Carregando ferramentas...";
+
+    try{
+
+        const {data,error} =
+            await client
+                .from(TABELA)
+                .select(
+                    "id," +
+                    "titulo," +
+                    "descricao," +
+                    "categoria," +
+                    "arquivo_url," +
+                    "downloads," +
+                    "ativo," +
+                    "programa"
+                )
+                .eq("categoria",categoria)
+                .eq("ativo",true)
+                .order("id",{ascending:true});
+
+        if(error){
+            throw error;
+        }
+
+        registros = data || [];
+
+        if(registros.length === 0){
+
+            lista.innerHTML =
+                "Nenhuma ferramenta encontrada.";
+
+            codigo.textContent =
+                "Nenhuma ferramenta cadastrada em " +
+                categoria +
+                ".";
+
+            status.textContent =
+                categoria +
+                " | 0 ferramenta(s)";
+
+            return;
+        }
+
+        montarLista();
+
+        status.textContent =
+            categoria +
+            " | " +
+            nomeLinguagem(categoria) +
+            " | " +
+            registros.length +
+            " ferramenta(s)";
+
+        codigo.textContent =
+            "Selecione uma ferramenta no menu lateral.";
+
+        document.getElementById("tituloConteudo")
+            .textContent =
+            nomeLinguagem(categoria) +
+            " | " +
+            registros.length +
+            " ferramenta(s)";
+    }
+    catch(erro){
+
+        lista.innerHTML =
+            "Erro ao carregar.";
+
+        codigo.textContent =
+            erro.message;
+
+        status.textContent =
+            "Erro ao consultar WX-TOOLS.";
+    }
+}
+
+function montarLista(){
+
+    const lista =
+        document.getElementById("listaFerramentas");
+
+    lista.innerHTML = "";
+
+    registros.forEach((item,index) => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "tool-card";
+
+        const arquivo =
+            String(item.arquivo_url || "")
+                .split("/")
+                .pop();
+
+        const titulo =
+            document.createElement("h3");
+
+        titulo.textContent =
+            String(index + 1).padStart(3,"0") +
+            " — " +
+            (item.titulo || "Ferramenta sem título");
+
+        const info =
+            document.createElement("p");
+
+        info.textContent =
+            arquivo || "arquivo não informado";
+
+        card.appendChild(titulo);
+        card.appendChild(info);
+
+        card.onclick =
+            function(){
+
+                document
+                    .querySelectorAll(".tool-card")
+                    .forEach(el =>
+                        el.classList.remove("active")
+                    );
+
+                card.classList.add("active");
+
+                abrirFerramenta(item);
+            };
+
+        lista.appendChild(card);
+    });
+}
+
+async function abrirFerramenta(item){
+
+    registroAtual = item;
+    conteudoAtual = "";
+
+    const codigo =
+        document.getElementById("codigo");
+
+    const titulo =
+        document.getElementById("tituloConteudo");
+
+    titulo.textContent =
+        item.titulo || "WX-TOOLS";
+
+    preencherMeta(item);
+
+    const urlLeitura =
+        montarUrlLeitura(item.arquivo_url);
+
+    if(!urlLeitura){
+
+        codigo.textContent =
+            "Arquivo não informado no banco.";
+
+        return;
+    }
+
+    codigo.textContent =
+        "Carregando código...";
+
+    try{
+
+        const resposta =
+            await fetch(
+                urlLeitura +
+                "?v=" +
+                Date.now()
+            );
+
+        if(!resposta.ok){
+
+            throw new Error(
+                "HTTP " +
+                resposta.status +
+                " ao carregar " +
+                urlLeitura
+            );
+        }
+
+        conteudoAtual =
+            await resposta.text();
+
+        codigo.textContent =
+            conteudoAtual;
+    }
+    catch(erro){
+
+        codigo.textContent =
+            "Falha ao carregar o arquivo.\n\n" +
+            "URL: " +
+            urlLeitura +
+            "\n\nErro: " +
+            erro.message;
+    }
+}
+
+function preencherMeta(item){
+
+    const meta =
+        document.getElementById("meta");
+
+    meta.style.display =
+        "block";
+
+    document.getElementById("metaLinguagem")
+        .textContent =
+        nomeLinguagem(
+            String(item.categoria || "")
+                .toLowerCase()
+        );
+
+    document.getElementById("metaCategoria")
+        .textContent =
+        item.categoria || "-";
+
+    document.getElementById("metaArquivo")
+        .textContent =
+        item.arquivo_url || "-";
+
+    document.getElementById("metaDescricao")
+        .textContent =
+        item.descricao ||
+        "Descrição não informada.";
+}
+
+function limparMeta(){
+
+    document.getElementById("meta")
+        .style.display =
+        "none";
+
+    document.getElementById("metaLinguagem")
+        .textContent = "-";
+
+    document.getElementById("metaCategoria")
+        .textContent = "-";
+
+    document.getElementById("metaArquivo")
+        .textContent = "-";
+
+    document.getElementById("metaDescricao")
+        .textContent = "-";
+}
+
+function copiarConteudo(){
+
+    if(!conteudoAtual){
+
+        alert(
+            "Nenhum código carregado."
+        );
+
+        return;
+    }
+
+    navigator.clipboard
+        .writeText(conteudoAtual)
+        .then(() => {
+            alert("Código copiado.");
+        })
+        .catch(() => {
+            alert(
+                "Não foi possível copiar."
+            );
+        });
+}
+
+async function baixarAtual(){
+
+    if(
+        !registroAtual ||
+        !registroAtual.arquivo_url
+    ){
+
+        alert(
+            "Nenhuma ferramenta selecionada."
+        );
+
+        return;
+    }
+
+    try{
+
+        const atual =
+            Number(
+                registroAtual.downloads || 0
+            );
+
+        await client
+            .from(TABELA)
+            .update({
+                downloads: atual + 1
+            })
+            .eq(
+                "id",
+                registroAtual.id
+            );
+
+        registroAtual.downloads =
+            atual + 1;
+    }
+    catch(erro){
+
+        console.log(
+            "Erro no contador:",
+            erro
+        );
+    }
+
+    const caminho =
+        normalizarUrl(
+            registroAtual.arquivo_url
+        );
+
+    const nome =
+        caminho
+            .split("/")
+            .pop();
+
+    const a =
+        document.createElement("a");
+
+    a.href =
+        window.location.protocol === "file:"
+            ? "https://degmvp.github.io/polidev/" + caminho
+            : caminho;
+
+    a.download = nome;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+}
+
+document
+    .getElementById("linguagem")
+    .addEventListener(
+        "change",
+        carregarFerramentas
+    );
+
+carregarCategorias();
+</script>
+
+</body>
+</html>
