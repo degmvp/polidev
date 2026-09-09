@@ -51,10 +51,7 @@ header p{
 }
 
 .banner{
-    width:420px;
-    max-width:90%;
-    height:auto;
-    object-fit:contain;
+    width:min(900px,92%);
     display:block;
     margin:20px auto 26px;
     border:2px solid #21b8ff;
@@ -238,6 +235,15 @@ pre{
     font-family:Consolas,"Courier New",monospace;
 }
 
+#imagemDocumento{
+    display:none;
+    max-width:100%;
+    width:auto;
+    height:auto;
+    margin:0 auto;
+    border-radius:8px;
+}
+
 footer{
     margin-top:40px;
     padding:28px;
@@ -292,7 +298,12 @@ footer h2{
     <p>Ferramentas reais • Problemas reais • Código homologado</p>
 </header>
 
-<img src="wx-tools.jpg" class="banner" alt="POLYDEV WX-TOOLS">
+<img
+    src="wx-tools.jpg"
+    class="banner"
+    alt="POLYDEV WX-TOOLS"
+>
+
 <section class="selector-box">
     <label for="linguagem">Selecione a linguagem</label>
 
@@ -376,6 +387,7 @@ footer h2{
 
         <div class="viewer">
             <pre id="codigo">Aguardando seleção.</pre>
+            <img id="imagemDocumento" alt="Documentação WX-TOOLS">
         </div>
 
     </main>
@@ -721,6 +733,9 @@ async function abrirFerramenta(item){
     const codigo =
         document.getElementById("codigo");
 
+    const imagem =
+        document.getElementById("imagemDocumento");
+
     const titulo =
         document.getElementById("tituloConteudo");
 
@@ -734,12 +749,50 @@ async function abrirFerramenta(item){
 
     if(!urlLeitura){
 
+        imagem.style.display = "none";
+        imagem.removeAttribute("src");
+        codigo.style.display = "block";
         codigo.textContent =
             "Arquivo não informado no banco.";
 
         return;
     }
 
+    const caminhoLimpo =
+        normalizarUrl(item.arquivo_url)
+            .split("?")[0]
+            .toLowerCase();
+
+    const ehImagem =
+        /\.(png|jpe?g|gif|webp|svg)$/.test(caminhoLimpo);
+
+    if(ehImagem){
+
+        codigo.style.display = "none";
+        codigo.textContent = "";
+
+        imagem.style.display = "block";
+        imagem.alt =
+            item.titulo || "Documentação WX-TOOLS";
+        imagem.src =
+            urlLeitura +
+            "?v=" +
+            Date.now();
+
+        imagem.onerror = function(){
+            imagem.style.display = "none";
+            codigo.style.display = "block";
+            codigo.textContent =
+                "Falha ao carregar a imagem.\n\nURL: " +
+                urlLeitura;
+        };
+
+        return;
+    }
+
+    imagem.style.display = "none";
+    imagem.removeAttribute("src");
+    codigo.style.display = "block";
     codigo.textContent =
         "Carregando código...";
 
