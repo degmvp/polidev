@@ -415,6 +415,7 @@ footer h2{
   <form id="formCadastro">
    <div class="form-field"><label for="cadNome">Nome</label><input id="cadNome" required maxlength="150" autocomplete="name"></div>
    <div class="form-field"><label for="cadEmail">E-mail</label><input id="cadEmail" type="email" required maxlength="254" autocomplete="email"></div>
+   <div class="form-field"><label for="cadCelular">Celular</label><input id="cadCelular" type="tel" required maxlength="30" autocomplete="tel" placeholder="DDD + número"></div>
    <button class="tool-btn interest-btn" type="submit">Cadastrar interesse</button>
    <button class="tool-btn" type="button" onclick="fecharCadastro()">Cancelar</button>
    <div id="confirmacaoCadastro" class="confirmacao"></div>
@@ -976,8 +977,10 @@ async function camposCadastro(){
     keys.forEach(k=>m[k.toLowerCase()]=k);
     const nome=m.nome||m.name||m.nome_completo||m.full_name;
     const email=m.email||m.e_mail||m["e-mail"];
-    if(!nome||!email) throw new Error("Colunas nome/e-mail não identificadas em cadastros.");
-    return {nome,email};
+    const celular=m.celular||m.telefone||m.phone||m.mobile||m.whatsapp;
+    if(!nome||!email||!celular)
+        throw new Error("Colunas nome/e-mail/celular não identificadas em cadastros.");
+    return {nome,email,celular};
 }
 async function cadastrarInteresse(ev){
     ev.preventDefault();
@@ -987,6 +990,7 @@ async function cadastrarInteresse(ev){
         const row={};
         row[f.nome]=document.getElementById("cadNome").value.trim();
         row[f.email]=document.getElementById("cadEmail").value.trim().toLowerCase();
+        row[f.celular]=document.getElementById("cadCelular").value.trim();
         const {error}=await client.from("cadastros").insert(row);
         if(error) throw error;
         c.style.display="block";
