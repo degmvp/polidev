@@ -972,7 +972,12 @@ function fecharCadastro(){
 async function camposCadastro(){
     const {data,error}=await client.from("cadastros").select("*").limit(1);
     if(error) throw error;
-    if(!data || !data.length) throw new Error("Tabela cadastros vazia.");
+    // A tabela pode estar vazia. Nesse caso usamos o schema já definido
+    // para o cadastro público: nome, email e celular.
+    if(!data || !data.length){
+        return {nome:"nome",email:"email",celular:"celular"};
+    }
+
     const keys=Object.keys(data[0]), m={};
     keys.forEach(k=>m[k.toLowerCase()]=k);
     const nome=m.nome||m.name||m.nome_completo||m.full_name;
