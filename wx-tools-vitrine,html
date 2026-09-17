@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>POLYDEV | WX-TOOLS</title>
+<title>POLYDEV | WX-TOOLS — Vitrine</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -291,6 +291,14 @@ footer h2{
         width:100%;
     }
 }
+
+.interest-btn{background:#FFD700;color:#000}.interest-btn:hover{background:#9acd32}
+.modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.84);align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}.modal-box{width:min(520px,96vw);padding:24px;background:#03101b;border:2px solid #21b8ff;border-radius:12px;box-shadow:0 0 35px rgba(33,184,255,.3)}
+.modal-box h2{margin-top:0;color:#FFD700}.form-field{margin:14px 0}.form-field label{display:block;margin-bottom:6px;color:#39c8ff;font-weight:bold}
+.form-field input{width:100%;padding:12px;background:#081722;color:#fff;border:1px solid #21b8ff;border-radius:7px;font-size:16px}
+.confirmacao{display:none;margin-top:15px;padding:14px;border:1px solid #9acd32;border-radius:8px;background:#10210b;color:#cfff9b;font-weight:bold}
+
 </style>
 </head>
 
@@ -298,7 +306,7 @@ footer h2{
 
 <header>
     <h1>POLYDEV | WX-TOOLS</h1>
-    <p>Ferramentas reais • Problemas reais • Código homologado</p>
+    <p>Ferramentas reais • Conheça a solução • Solicite seu acesso</p>
 </header>
 
 <img
@@ -368,16 +376,18 @@ footer h2{
 
         <div class="toolbar">
 
-            <button
-                class="tool-btn"
-                onclick="copiarConteudo()">
-                Copiar Código
-            </button>
+            
 
             <button
                 class="tool-btn"
                 onclick="baixarAtual()">
                 Download
+            </button>
+
+            <button
+                class="tool-btn interest-btn"
+                onclick="abrirCadastro()">
+                QUERO ESTA FERRAMENTA
             </button>
 
             <button
@@ -397,13 +407,28 @@ footer h2{
 
 </div>
 
+
+<div id="modalCadastro" class="modal">
+ <div class="modal-box">
+  <h2>QUERO ESTA FERRAMENTA</h2>
+  <p id="ferramentaInteresse"></p>
+  <form id="formCadastro">
+   <div class="form-field"><label for="cadNome">Nome</label><input id="cadNome" required maxlength="150" autocomplete="name"></div>
+   <div class="form-field"><label for="cadEmail">E-mail</label><input id="cadEmail" type="email" required maxlength="254" autocomplete="email"></div>
+   <button class="tool-btn interest-btn" type="submit">Cadastrar interesse</button>
+   <button class="tool-btn" type="button" onclick="fecharCadastro()">Cancelar</button>
+   <div id="confirmacaoCadastro" class="confirmacao"></div>
+  </form>
+ </div>
+</div>
+
 <footer>
     <img src="poly.jpg" alt="POLYDEV">
 
     <h2>POLYDEV | WX-TOOLS</h2>
 
     <p>
-        Leia • Entenda • Utilize seu código
+        Conheça • Solicite • Utilize a ferramenta
     </p>
 </footer>
 
@@ -472,7 +497,7 @@ async function carregarCategorias(){
         const {data,error} =
             await client
                 .from(TABELA)
-                .select("categoria")
+                .select("categoria,arquivo_url")
                 .in(
                     "categoria",
                     Object.keys(CATEGORIAS)
@@ -487,6 +512,7 @@ async function carregarCategorias(){
         const existentes =
             [...new Set(
                 (data || [])
+                    .filter(item => /\.(png|jpe?g|gif|webp|svg)$/i.test(String(item.arquivo_url || "").split("?")[0]))
                     .map(item =>
                         String(item.categoria || "")
                             .trim()
@@ -621,7 +647,11 @@ async function carregarFerramentas(){
             throw error;
         }
 
-        registros = data || [];
+        registros = (data || []).filter(item =>
+            /\.(png|jpe?g|gif|webp|svg)$/i.test(
+                String(item.arquivo_url || "").split("?")[0]
+            )
+        );
 
         if(registros.length === 0){
 
@@ -796,43 +826,8 @@ async function abrirFerramenta(item){
     imagem.style.display = "none";
     imagem.removeAttribute("src");
     codigo.style.display = "block";
-    codigo.textContent =
-        "Carregando código...";
+    codigo.textContent = "Item não disponível nesta vitrine.";
 
-    try{
-
-        const resposta =
-            await fetch(
-                urlLeitura +
-                "?v=" +
-                Date.now()
-            );
-
-        if(!resposta.ok){
-
-            throw new Error(
-                "HTTP " +
-                resposta.status +
-                " ao carregar " +
-                urlLeitura
-            );
-        }
-
-        conteudoAtual =
-            await resposta.text();
-
-        codigo.textContent =
-            conteudoAtual;
-    }
-    catch(erro){
-
-        codigo.textContent =
-            "Falha ao carregar o arquivo.\n\n" +
-            "URL: " +
-            urlLeitura +
-            "\n\nErro: " +
-            erro.message;
-    }
 }
 
 function preencherMeta(item){
@@ -883,29 +878,6 @@ function limparMeta(){
         .textContent = "-";
 }
 
-function copiarConteudo(){
-
-    if(!conteudoAtual){
-
-        alert(
-            "Nenhum código carregado."
-        );
-
-        return;
-    }
-
-    navigator.clipboard
-        .writeText(conteudoAtual)
-        .then(() => {
-            alert("Código copiado.");
-        })
-        .catch(() => {
-            alert(
-                "Não foi possível copiar."
-            );
-        });
-}
-
 async function baixarAtual(){
 
     if(
@@ -917,6 +889,12 @@ async function baixarAtual(){
             "Nenhuma ferramenta selecionada."
         );
 
+        return;
+    }
+
+    const caminhoTeste = normalizarUrl(registroAtual.arquivo_url).split("?")[0];
+    if(!/\.(png|jpe?g|gif|webp|svg)$/i.test(caminhoTeste)){
+        alert("Somente o banner pode ser baixado nesta vitrine.");
         return;
     }
 
@@ -974,6 +952,55 @@ async function baixarAtual(){
 
     document.body.removeChild(a);
 }
+
+
+function abrirCadastro(){
+    if(!registroAtual){
+        alert("Selecione primeiro a ferramenta desejada.");
+        return;
+    }
+    document.getElementById("ferramentaInteresse").textContent =
+        "Ferramenta selecionada: " + (registroAtual.titulo || registroAtual.programa || "WX-TOOLS");
+    const c=document.getElementById("confirmacaoCadastro");
+    c.style.display="none"; c.textContent="";
+    document.getElementById("modalCadastro").classList.add("open");
+}
+function fecharCadastro(){
+    document.getElementById("modalCadastro").classList.remove("open");
+}
+async function camposCadastro(){
+    const {data,error}=await client.from("cadastros").select("*").limit(1);
+    if(error) throw error;
+    if(!data || !data.length) throw new Error("Tabela cadastros vazia.");
+    const keys=Object.keys(data[0]), m={};
+    keys.forEach(k=>m[k.toLowerCase()]=k);
+    const nome=m.nome||m.name||m.nome_completo||m.full_name;
+    const email=m.email||m.e_mail||m["e-mail"];
+    if(!nome||!email) throw new Error("Colunas nome/e-mail não identificadas em cadastros.");
+    return {nome,email};
+}
+async function cadastrarInteresse(ev){
+    ev.preventDefault();
+    const c=document.getElementById("confirmacaoCadastro");
+    try{
+        const f=await camposCadastro();
+        const row={};
+        row[f.nome]=document.getElementById("cadNome").value.trim();
+        row[f.email]=document.getElementById("cadEmail").value.trim().toLowerCase();
+        const {error}=await client.from("cadastros").insert(row);
+        if(error) throw error;
+        c.style.display="block";
+        c.textContent="Cadastro confirmado. Seu interesse foi registrado.";
+        document.getElementById("formCadastro").reset();
+    }catch(e){
+        c.style.display="block";
+        c.textContent="Não foi possível cadastrar: "+e.message;
+    }
+}
+document.getElementById("formCadastro").addEventListener("submit",cadastrarInteresse);
+document.getElementById("modalCadastro").addEventListener("click",function(e){
+    if(e.target===this) fecharCadastro();
+});
 
 document
     .getElementById("linguagem")
