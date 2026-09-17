@@ -984,23 +984,100 @@ async function camposCadastro(){
 }
 async function cadastrarInteresse(ev){
     ev.preventDefault();
+
     const c=document.getElementById("confirmacaoCadastro");
+    const nomeValor=document.getElementById("cadNome").value.trim();
+    const emailValor=document.getElementById("cadEmail").value.trim().toLowerCase();
+    const celularValor=document.getElementById("cadCelular").value.trim();
+
     try{
+        if(!registroAtual) throw new Error("Selecione uma ferramenta.");
+
         const f=await camposCadastro();
-        const row={};
-        row[f.nome]=document.getElementById("cadNome").value.trim();
-        row[f.email]=document.getElementById("cadEmail").value.trim().toLowerCase();
-        row[f.celular]=document.getElementById("cadCelular").value.trim();
-        const {error}=await client.from("cadastros").insert(row);
-        if(error) throw error;
+
+        // 1. Procura cadastro existente pelo e-mail.
+        let {data:existentes,error:erroBusca}=await client
+            .from("cadastros")
+            .select("*")
+            .eq(f.email,emailValor)
+            .limit(1);
+
+        if(erroBusca) throw erroBusca;
+
+        let cadastroId;
+
+        if(existentes && existentes.length){
+            // Pessoa já cadastrada: reutiliza o mesmo ID.
+            cadastroId=existentes[0].id;
+        }else{
+            // Pessoa nova: cria apenas uma vez.
+            const row={};
+            row[f.nome]=nomeValor;
+            row[f.email]=emailValor;
+            row[f.celular]=celularValor;
+
+            const {data:novo,error:erroNovo}=await client
+                .from("cadastros")
+                .insert(row)
+                .select("id")
+                .single();
+
+            if(erroNovo) throw erroNovo;
+            cadastroId=novo.id;
+        }
+
+        // 2. Registra a ferramenta escolhida.
+        // UNIQUE(cadastro_id, programa) impede repetição da mesma escolha.
+        const interesse={
+            cadastro_id: cadastroId,
+            programa: registroAtual.programa || String(registroAtual.id),
+            titulo: registroAtual.titulo || "WX-TOOLS"
+        };
+
+        const {error:erroInteresse}=await client
+            .from("interesses_wxtools")
+            .upsert(interesse,{onConflict:"cadastro_id,programa"});
+
+        if(erroInteresse) throw erroInteresse;
+
         c.style.display="block";
-        c.textContent="Cadastro confirmado. Seu interesse foi registrado.";
+        c.style.borderColor="#9acd32";
+        c.style.background="#10210b";
+        c.style.color="#cfff9b";
+        c.textContent="Solicitação registrada. Retornando ao início do WX-TOOLS...";
         document.getElementById("formCadastro").reset();
+
+        setTimeout(() => {
+            fecharCadastro();
+            registroAtual=null;
+            registros=[];
+            document.getElementById("linguagem").value="";
+            document.getElementById("tituloMenu").textContent="Ferramentas WX";
+            document.getElementById("listaFerramentas").innerHTML="Selecione uma linguagem.";
+            document.getElementById("tituloConteudo").textContent="Selecione uma ferramenta WX-TOOLS";
+            document.getElementById("status").textContent="WX-TOOLS aguardando seleção";
+
+            const imagem=document.getElementById("imagemDocumento");
+            imagem.style.display="none";
+            imagem.removeAttribute("src");
+
+            const codigo=document.getElementById("codigo");
+            codigo.style.display="block";
+            codigo.textContent="Selecione uma linguagem WX-TOOLS.";
+
+            limparMeta();
+            window.scrollTo({top:0,behavior:"smooth"});
+        },1400);
+
     }catch(e){
         c.style.display="block";
-        c.textContent="Não foi possível cadastrar: "+e.message;
+        c.style.borderColor="#ff6b6b";
+        c.style.background="#2a0c0c";
+        c.style.color="#ffd0d0";
+        c.textContent="Não foi possível registrar: "+e.message;
     }
 }
+
 document.getElementById("formCadastro").addEventListener("submit",cadastrarInteresse);
 document.getElementById("modalCadastro").addEventListener("click",function(e){
     if(e.target===this) fecharCadastro();
