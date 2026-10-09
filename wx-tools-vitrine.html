@@ -671,6 +671,16 @@ async function carregarFerramentas(){
             return;
         }
 
+        // A ordem visual segue o numero da ferramenta, nao o ID do banco.
+        registros.sort((a,b) => {
+            const na = numeroFerramenta(a);
+            const nb = numeroFerramenta(b);
+            if(na === null && nb === null) return 0;
+            if(na === null) return 1;
+            if(nb === null) return -1;
+            return na - nb;
+        });
+
         montarLista();
 
         status.textContent =
@@ -704,6 +714,16 @@ async function carregarFerramentas(){
     }
 }
 
+// Identifica o numero real da ferramenta pelo PNG ou pelo slug.
+function numeroFerramenta(item){
+    const fontes = [item.arquivo_url, item.programa];
+    for(const fonte of fontes){
+        const match = String(fonte || "").match(/wxt-cpp-(\d{3})-/i);
+        if(match) return Number(match[1]);
+    }
+    return null;
+}
+
 function montarLista(){
 
     const lista =
@@ -728,7 +748,9 @@ function montarLista(){
             document.createElement("h3");
 
         titulo.textContent =
-            String(index + 1).padStart(3,"0") +
+            (numeroFerramenta(item) === null
+                ? String(index + 1).padStart(3,"0")
+                : String(numeroFerramenta(item)).padStart(3,"0")) +
             " — " +
             (item.titulo || "Ferramenta sem título");
 
