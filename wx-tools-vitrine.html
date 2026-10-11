@@ -764,7 +764,7 @@ function abrirDocumentacao(){
         alert("Documentação HTML em homologação: disponível somente para o 001.");
         return;
     }
-    window.location.href = "wxt-cpp-001-file-organizer.html";
+    window.location.href = "downloads/wxt-html/wxt-cpp-001.html";
 }
 
 function montarLista(){
@@ -949,7 +949,7 @@ async function baixarAtual(){
 
     // Piloto 001: baixar o HTML real, não o PNG da vitrine.
     if(ehDocumentacao001()){
-        const caminhoDoc = "wxt-cpp-001-file-organizer.html";
+        const caminhoDoc = "downloads/wxt-html/wxt-cpp-001.html";
         try{
             const resposta = await fetch(caminhoDoc, {cache:"no-store"});
             if(!resposta.ok) throw new Error("HTTP " + resposta.status);
@@ -957,7 +957,7 @@ async function baixarAtual(){
             const urlTemporaria = URL.createObjectURL(html);
             const link = document.createElement("a");
             link.href = urlTemporaria;
-            link.download = "wxt-cpp-001-file-organizer.html";
+            link.download = "wxt-cpp-001.html";
             document.body.appendChild(link);
             link.click();
             link.remove();
