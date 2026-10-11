@@ -299,6 +299,10 @@ footer h2{
 .form-field input{width:100%;padding:12px;background:#081722;color:#fff;border:1px solid #21b8ff;border-radius:7px;font-size:16px}
 .confirmacao{display:none;margin-top:15px;padding:14px;border:1px solid #9acd32;border-radius:8px;background:#10210b;color:#cfff9b;font-weight:bold}
 
+
+/* WX-TOOLS v1.0 — documentação piloto 001 */
+.doc-btn{background:#FFD700;color:#000;border:1px solid #FFD700}
+.doc-btn:hover{background:#e3b900}
 </style>
 </head>
 
@@ -382,6 +386,13 @@ footer h2{
                 class="tool-btn"
                 onclick="baixarAtual()">
                 Download
+            </button>
+
+            <button
+                id="btnDocumentacao"
+                class="tool-btn doc-btn"
+                onclick="abrirDocumentacao()">
+                DOCUMENTAÇÃO
             </button>
 
             <button
@@ -590,6 +601,7 @@ async function carregarFerramentas(){
 
     registros = [];
     registroAtual = null;
+    atualizarBotaoDocumentacao();
     conteudoAtual = "";
 
     limparMeta();
@@ -724,6 +736,37 @@ function numeroFerramenta(item){
     return null;
 }
 
+// Piloto: habilita a documentacao somente para a ferramenta C++ 001.
+// Piloto 001: botão sempre visível; manual disponível apenas para o 001.
+function ehDocumentacao001(){
+    if(!registroAtual) return false;
+    const programa = String(registroAtual.programa || "").toLowerCase();
+    const arquivo = String(registroAtual.arquivo_url || "").split("?")[0].toLowerCase();
+    return String(registroAtual.categoria || "").toLowerCase() === "wxtcpp" &&
+        (programa === "wxt-cpp-001-file-organizer" ||
+         /(?:^|\/)wxt-cpp-001-file-organizer\.(?:png|jpe?g|gif|webp|svg)$/i.test(arquivo));
+}
+
+function atualizarBotaoDocumentacao(){
+    const botao = document.getElementById("btnDocumentacao");
+    botao.style.display = "inline-block";
+    botao.title = ehDocumentacao001()
+        ? "Abrir o manual HTML do File Organizer 001"
+        : "Selecione o File Organizer 001 para testar a documentação";
+}
+
+function abrirDocumentacao(){
+    if(!registroAtual){
+        alert("Selecione primeiro o File Organizer 001.");
+        return;
+    }
+    if(!ehDocumentacao001()){
+        alert("Documentação HTML em homologação: disponível somente para o 001.");
+        return;
+    }
+    window.location.href = "docs/wxt-cpp-001-file-organizer.html";
+}
+
 function montarLista(){
 
     const lista =
@@ -784,6 +827,7 @@ function montarLista(){
 async function abrirFerramenta(item){
 
     registroAtual = item;
+    atualizarBotaoDocumentacao();
     conteudoAtual = "";
 
     const codigo =
@@ -902,6 +946,27 @@ function limparMeta(){
 }
 
 async function baixarAtual(){
+
+    // Piloto 001: baixar o HTML real, não o PNG da vitrine.
+    if(ehDocumentacao001()){
+        const caminhoDoc = "docs/wxt-cpp-001-file-organizer.html";
+        try{
+            const resposta = await fetch(caminhoDoc, {cache:"no-store"});
+            if(!resposta.ok) throw new Error("HTTP " + resposta.status);
+            const html = await resposta.blob();
+            const urlTemporaria = URL.createObjectURL(html);
+            const link = document.createElement("a");
+            link.href = urlTemporaria;
+            link.download = "wxt-cpp-001-file-organizer.html";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(urlTemporaria), 1000);
+        }catch(erro){
+            alert("Não foi possível baixar o HTML do 001: " + erro.message);
+        }
+        return;
+    }
 
     if(
         !registroAtual ||
@@ -1077,6 +1142,7 @@ async function cadastrarInteresse(ev){
         setTimeout(() => {
             fecharCadastro();
             registroAtual=null;
+            atualizarBotaoDocumentacao();
             registros=[];
             document.getElementById("linguagem").value="";
             document.getElementById("tituloMenu").textContent="Ferramentas WX";
