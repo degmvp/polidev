@@ -300,7 +300,7 @@ footer h2{
 .confirmacao{display:none;margin-top:15px;padding:14px;border:1px solid #9acd32;border-radius:8px;background:#10210b;color:#cfff9b;font-weight:bold}
 
 
-/* WX-TOOLS v1.0 — documentação piloto 001 */
+/* WX-TOOLS — documentação dinâmica */
 .doc-btn{background:#FFD700;color:#000;border:1px solid #FFD700}
 .doc-btn:hover{background:#e3b900}
 </style>
@@ -506,16 +506,16 @@ async function carregarCategorias(){
 
     try{
 
-        const {data,error} =
-            await client
-                .from(TABELA)
-                .select("categoria,arquivo_url")
-                .in(
-                    "categoria",
-                    Object.keys(CATEGORIAS)
-                )
-                .eq("ativo",true)
-                .limit(5000);
+        const data=[];
+         for(let inicio=0;;inicio+=1000){
+           const {data:lote,error}=await client.from(TABELA)
+             .select('categoria,arquivo_url').in('categoria',Object.keys(CATEGORIAS))
+             .eq('ativo',true).range(inicio,inicio+999);
+           if(error)throw error;
+           data.push(...(lote||[]));
+           if(!lote||lote.length<1000)break;
+         }
+         const error=null;
 
         if(error){
             throw error;
@@ -639,22 +639,17 @@ async function carregarFerramentas(){
 
     try{
 
-        const {data,error} =
-            await client
-                .from(TABELA)
-                .select(
-                    "id," +
-                    "titulo," +
-                    "descricao," +
-                    "categoria," +
-                    "arquivo_url," +
-                    "downloads," +
-                    "ativo," +
-                    "programa"
-                )
-                .eq("categoria",categoria)
-                .eq("ativo",true)
-                .order("id",{ascending:true});
+        const data=[];
+         for(let inicio=0;;inicio+=1000){
+           const {data:lote,error}=await client.from(TABELA)
+             .select('id,titulo,descricao,categoria,arquivo_url,downloads,ativo,programa')
+             .eq('categoria',categoria).eq('ativo',true)
+             .order('id',{ascending:true}).range(inicio,inicio+999);
+           if(error)throw error;
+           data.push(...(lote||[]));
+           if(!lote||lote.length<1000)break;
+         }
+         const error=null;
 
         if(error){
             throw error;
@@ -736,35 +731,20 @@ function numeroFerramenta(item){
     return null;
 }
 
-// Piloto: habilita a documentacao somente para a ferramenta C++ 001.
-// Piloto 001: botão sempre visível; manual disponível apenas para o 001.
-function ehDocumentacao001(){
-    if(!registroAtual) return false;
-    const programa = String(registroAtual.programa || "").toLowerCase();
-    const arquivo = String(registroAtual.arquivo_url || "").split("?")[0].toLowerCase();
-    return String(registroAtual.categoria || "").toLowerCase() === "wxtcpp" &&
-        (programa === "wxt-cpp-001-file-organizer" ||
-         /(?:^|\/)wxt-cpp-001-file-organizer\.(?:png|jpe?g|gif|webp|svg)$/i.test(arquivo));
+function caminhoDocumentacao(item){
+ if(!item || String(item.categoria||'').toLowerCase()!=='wxtcpp') return '';
+ const n=numeroFerramenta(item);
+ return n===null ? '' : 'downloads/wxt-html/wxt-cpp-'+String(n).padStart(3,'0')+'.html';
 }
-
 function atualizarBotaoDocumentacao(){
-    const botao = document.getElementById("btnDocumentacao");
-    botao.style.display = "inline-block";
-    botao.title = ehDocumentacao001()
-        ? "Abrir o manual HTML do File Organizer 001"
-        : "Selecione o File Organizer 001 para testar a documentação";
+ const b=document.getElementById('btnDocumentacao');
+ b.disabled=!caminhoDocumentacao(registroAtual);
+ b.title=b.disabled?'Selecione uma ferramenta C++':'Abrir documentação HTML';
 }
-
 function abrirDocumentacao(){
-    if(!registroAtual){
-        alert("Selecione primeiro o File Organizer 001.");
-        return;
-    }
-    if(!ehDocumentacao001()){
-        alert("Documentação HTML em homologação: disponível somente para o 001.");
-        return;
-    }
-    window.location.href = "downloads/wxt-html/wxt-cpp-001.html";
+ const url=caminhoDocumentacao(registroAtual);
+ if(!url){alert('Selecione uma ferramenta C++.');return;}
+ window.location.href=url;
 }
 
 function montarLista(){
@@ -947,25 +927,17 @@ function limparMeta(){
 
 async function baixarAtual(){
 
-    // Piloto 001: baixar o HTML real, não o PNG da vitrine.
-    if(ehDocumentacao001()){
-        const caminhoDoc = "downloads/wxt-html/wxt-cpp-001.html";
-        try{
-            const resposta = await fetch(caminhoDoc, {cache:"no-store"});
-            if(!resposta.ok) throw new Error("HTTP " + resposta.status);
-            const html = await resposta.blob();
-            const urlTemporaria = URL.createObjectURL(html);
-            const link = document.createElement("a");
-            link.href = urlTemporaria;
-            link.download = "wxt-cpp-001.html";
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(urlTemporaria), 1000);
-        }catch(erro){
-            alert("Não foi possível baixar o HTML do 001: " + erro.message);
-        }
-        return;
+    const doc=caminhoDocumentacao(registroAtual);
+    if(doc){
+      try{
+        const r=await fetch(doc,{cache:'no-store'});
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        const blob=await r.blob(), url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;a.download=doc.split('/').pop();
+        document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1000);
+      }catch(e){alert('Falha ao baixar HTML: '+e.message);}
+      return;
     }
 
     if(
