@@ -1,0 +1,130 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 011"><title>POLYDEV | WX-TOOLS | C++ | 011 — Cross-Platform Logger</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 011</div><h1>POLYDEV | WX-TOOLS | C++ | 011 — Cross-Platform Logger</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 011 — Cross-Platform Logger</h1>
+<h2>Visão geral</h2>
+<p>O <strong>Cross-Platform Logger</strong> é uma biblioteca de logging <strong>C++17 header-only</strong>, leve, portátil e sem dependências externas.</p>
+<p>Foi desenvolvida para utilizar o mesmo código em <strong>Windows (MSVC 2022)</strong> e <strong>Linux (GCC/Clang)</strong>, oferecendo saída colorida no console e gravação simultânea em arquivo de log UTF-8.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>C++17, implementação header-only.</li>
+<li>Windows com MSVC 2022.</li>
+<li>Linux com GCC ou Clang.</li>
+<li>Sem dependências externas.</li>
+<li>Níveis <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code> e <code>FATAL</code>.</li>
+<li>Saída colorida no console.</li>
+<li>Arquivo de log em UTF-8.</li>
+<li>Timestamp com milissegundos.</li>
+<li>Thread ID.</li>
+<li>Nome do arquivo e número da linha.</li>
+<li>Formatação de mensagens com <code>{}</code>.</li>
+<li>Suporte a UTF-8 e caracteres acentuados.</li>
+<li>Adequado para aplicações reais.</li>
+</ul>
+<h2>Uso rápido</h2>
+<pre><code class="language-cpp">#include &quot;CrossPlatformLogger.hpp&quot;
+
+// Exemplo de uso
+LOG_INFO(&quot;Conectado a {} na porta {}&quot;, host, port);
+LOG_ERROR(&quot;falha ao abrir arquivo: {}&quot;, path);
+</code></pre>
+<p>Para expressões contendo vírgulas fora de parênteses, como templates com mais de um argumento, utilize parênteses extras:</p>
+<pre><code class="language-cpp">LOG_INFO(&quot;{}&quot;, (std::make_pair(1, 2)));
+</code></pre>
+<h2>Níveis de log</h2>
+<pre><code class="language-text">TRACE
+DEBUG
+INFO
+WARN
+ERROR
+FATAL
+</code></pre>
+<p>Cada mensagem pode incluir:</p>
+<pre><code class="language-text">[timestamp] [nível] [thread-id] [arquivo:linha] mensagem
+</code></pre>
+<h2>Exemplo de saída</h2>
+<pre><code class="language-text">[2026-09-13 14:14:50.746] [TRACE] [33556] [wxt-cpp-011-cross-platform-logger.cpp:583] TRACE - logger iniciado
+[2026-09-13 14:14:50.751] [DEBUG] [33556] [wxt-cpp-011-cross-platform-logger.cpp:584] DEBUG - teste de formatacao: 2 + 3 = 5
+[2026-09-13 14:14:50.752] [INFO ] [33556] [wxt-cpp-011-cross-platform-logger.cpp:585] INFO - Cross Platform Logger ativo
+[2026-09-13 14:14:50.756] [WARN ] [33556] [wxt-cpp-011-cross-platform-logger.cpp:586] WARN - teste de aviso
+[2026-09-13 14:14:50.757] [ERROR] [33556] [wxt-cpp-011-cross-platform-logger.cpp:587] ERROR - teste controlado
+[2026-09-13 14:14:50.757] [FATAL] [33556] [wxt-cpp-011-cross-platform-logger.cpp:588] FATAL - teste controlado, sem encerrar o processo
+[2026-09-13 14:14:50.757] [INFO ] [33556] [wxt-cpp-011-cross-platform-logger.cpp:589] UTF-8 - acentos: informacao, conexao, operacao
+</code></pre>
+<h2>Arquivo de log</h2>
+<p>Durante o teste é criado automaticamente:</p>
+<pre><code class="language-text">wxt-cpp-011-cross-platform-logger.log
+</code></pre>
+<p>Formato:</p>
+<pre><code class="language-text">UTF-8
+</code></pre>
+<p>O arquivo recebe as mesmas mensagens produzidas no console, permitindo manter um histórico persistente da execução.</p>
+<h2>Compilação — Windows</h2>
+<p>Com Visual Studio 2022 / MSVC:</p>
+<pre><code class="language-text">cl /std:c++17 /EHsc wxt-cpp-011-cross-platform-logger.cpp ^
+   /Fe:wxt-cpp-011-cross-platform-logger.exe
+</code></pre>
+<p>Também pode ser utilizado diretamente em um projeto do Visual Studio.</p>
+<h2>Compilação — Linux</h2>
+<p>Com GCC:</p>
+<pre><code class="language-bash">g++ -std=c++17 -O2 -pthread     wxt-cpp-011-cross-platform-logger.cpp     -o wxt-cpp-011-cross-platform-logger
+</code></pre>
+<p>A implementação também é compatível com Clang.</p>
+<h2>Informações do projeto</h2>
+<table>
+<thead>
+<tr>
+  <th>Item</th>
+  <th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Projeto</td>
+  <td>WX-TOOLS 011</td>
+</tr>
+<tr>
+  <td>Nome</td>
+  <td>Cross-Platform Logger</td>
+</tr>
+<tr>
+  <td>Linguagem</td>
+  <td>C++17</td>
+</tr>
+<tr>
+  <td>Tipo</td>
+  <td>Biblioteca header-only</td>
+</tr>
+<tr>
+  <td>Plataformas</td>
+  <td>Windows / Linux</td>
+</tr>
+<tr>
+  <td>Dependências</td>
+  <td>Nenhuma</td>
+</tr>
+<tr>
+  <td>Autor</td>
+  <td>Polydev</td>
+</tr>
+<tr>
+  <td>Licença</td>
+  <td>Uso livre — projeto Polydev</td>
+</tr>
+</tbody>
+</table>
+<h2>Aplicações</h2>
+<p>O logger pode ser incorporado a:</p>
+<ul>
+<li>ferramentas CLI;</li>
+<li>utilitários de sistema;</li>
+<li>serviços;</li>
+<li>aplicações de diagnóstico;</li>
+<li>ferramentas de monitoramento;</li>
+<li>projetos multiplataforma;</li>
+<li>aplicações que necessitam de rastreamento persistente em arquivo.</li>
+</ul>
+<h2>Filosofia</h2>
+<p><strong>Log simples. Portável. Eficiente.</strong></p>
+<p>O objetivo do WX-TOOLS 011 é oferecer o mesmo mecanismo de logging em qualquer plataforma, sem adicionar bibliotecas externas ao projeto.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 011 — Cross-Platform Logger</strong><br />
+<em>Small tools. Big results.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-012.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 011</footer></body></html>

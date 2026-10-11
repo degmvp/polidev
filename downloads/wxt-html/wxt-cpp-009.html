@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 009 — Disk Growth Tracker</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 009</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article>
+<h1>POLYDEV | WX-TOOLS | C++ | 009 — Disk Growth Tracker</h1>
+<h2>Visão geral</h2>
+<p>O <strong>Disk Growth Tracker (009)</strong> é um utilitário de linha de comando em C++ para registrar o tamanho de diretórios em <strong>snapshots</strong> e comparar dois estados, identificando exatamente o que cresceu no disco.</p>
+<p>É indicado para monitorar consumo de espaço, investigar aumentos inesperados e acompanhar a evolução de diretórios específicos.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Cria snapshots do tamanho de diretórios.</li>
+<li>Compara dois snapshots (<code>diff</code>).</li>
+<li>Mostra os diretórios que mais cresceram.</li>
+<li>Suporta profundidade configurável de análise.</li>
+<li>Permite filtrar por tamanho mínimo.</li>
+<li>Saída simples e direta no terminal.</li>
+<li>Leve e rápido.</li>
+<li>Implementado em C++ sem dependências externas.</li>
+</ul>
+<h2>Uso</h2>
+<pre><code class="language-text">dgt snap &lt;dir&gt; [-o arquivo.snap]
+
+dgt diff antigo.snap novo.snap
+         [--depth 2] [--top 20] [--min 1MB]
+</code></pre>
+<h2>Parâmetros</h2>
+<table>
+<thead>
+<tr>
+  <th>Parâmetro</th>
+  <th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>snap</code></td>
+  <td>Cria um snapshot do diretório informado</td>
+</tr>
+<tr>
+  <td><code>diff</code></td>
+  <td>Compara dois snapshots</td>
+</tr>
+<tr>
+  <td><code>--depth N</code></td>
+  <td>Define o nível de profundidade da análise; padrão 2</td>
+</tr>
+<tr>
+  <td><code>--top N</code></td>
+  <td>Mostra apenas os N maiores resultados; padrão 20</td>
+</tr>
+<tr>
+  <td><code>--min X</code></td>
+  <td>Exibe apenas variações a partir de X, por exemplo <code>1MB</code>, <code>100MB</code>, <code>1GB</code></td>
+</tr>
+<tr>
+  <td><code>-o</code></td>
+  <td>Define o nome do arquivo de snapshot</td>
+</tr>
+</tbody>
+</table>
+<h2>Exemplo completo</h2>
+<h3>1. Snapshot inicial</h3>
+<pre><code class="language-text">E:\@LIB-C++\bin&gt;dgt snap &quot;E:\@LIB-C++&quot; -o antes.snap
+
+Varrendo E:/@LIB-C++ (pode demorar)...
+Snapshot salvo: antes.snap
+  diretórios: 2
+  total: 881.7 MB
+</code></pre>
+<h3>2. Criando uma alteração de teste</h3>
+<pre><code class="language-text">E:\@LIB-C++\bin&gt;mkdir E:\@LIB-C++\TESTE_DGT
+
+E:\@LIB-C++\bin&gt;fsutil file createnew ^
+E:\@LIB-C++\TESTE_DGT\arquivo_teste.bin 10485760
+
+Arquivo E:\@LIB-C++\TESTE_DGT\arquivo_teste.bin criado
+</code></pre>
+<p>O comando cria um arquivo de aproximadamente <strong>10 MB</strong> em um novo diretório.</p>
+<h3>3. Segundo snapshot</h3>
+<pre><code class="language-text">E:\@LIB-C++\bin&gt;dgt snap &quot;E:\@LIB-C++&quot; -o depois.snap
+
+Varrendo E:/@LIB-C++ (pode demorar)...
+Snapshot salvo: depois.snap
+  diretórios: 3
+  total: 891.7 MB
+</code></pre>
+<h3>4. Comparação</h3>
+<pre><code class="language-text">E:\@LIB-C++\bin&gt;dgt diff antes.snap depois.snap ^
+  --depth 2 --top 20 --min 1MB
+
+Antigo: 2026-09-12 14:57:41 (E:/@LIB-C++)
+Novo:   2026-09-12 14:59:44 (E:/@LIB-C++)
+
++10.0 MB    TESTE_DGT
+
++10.0 MB    variação total
+</code></pre>
+<h2>Resultado do teste</h2>
+<p>Após criar um arquivo de 10 MB em uma nova pasta, o WX-TOOLS 009 identificou corretamente:</p>
+<pre><code class="language-text">+10.0 MB    TESTE_DGT
+</code></pre>
+<p>Isso demonstra o objetivo central da ferramenta: comparar dois momentos e indicar onde ocorreu o crescimento do armazenamento.</p>
+<h2>Fluxo de utilização</h2>
+<pre><code class="language-text">Snapshot inicial
+      |
+      v
+Uso normal / alteração no disco
+      |
+      v
+Novo snapshot
+      |
+      v
+Comparação (diff)
+      |
+      v
+Diretórios que cresceram
+</code></pre>
+<h2>Aplicações</h2>
+<p>O Disk Growth Tracker pode ser usado para:</p>
+<ul>
+<li>descobrir qual diretório está consumindo espaço;</li>
+<li>acompanhar crescimento de bancos, logs e caches;</li>
+<li>investigar aumentos inesperados de armazenamento;</li>
+<li>comparar o estado do disco antes e depois de uma instalação;</li>
+<li>monitorar diretórios de desenvolvimento;</li>
+<li>analisar crescimento periódico de pastas;</li>
+<li>auxiliar rotinas de manutenção.</li>
+</ul>
+<h2>Tecnologia</h2>
+<table>
+<thead>
+<tr>
+  <th>Item</th>
+  <th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Linguagem</td>
+  <td>C++</td>
+</tr>
+<tr>
+  <td>Plataforma</td>
+  <td>Windows / Visual Studio 2022</td>
+</tr>
+<tr>
+  <td>Tipo</td>
+  <td>Aplicação de linha de comando</td>
+</tr>
+<tr>
+  <td>Categoria</td>
+  <td>File Tools (<code>wxtcpp</code>)</td>
+</tr>
+<tr>
+  <td>Projeto</td>
+  <td>WX-TOOLS / C++ / 009</td>
+</tr>
+<tr>
+  <td>Dependências externas</td>
+  <td>Nenhuma</td>
+</tr>
+</tbody>
+</table>
+<h2>Filosofia</h2>
+<p><strong>Controle o que cresce. Seu disco agradece.</strong></p>
+<p>A ferramenta transforma dois snapshots simples em uma resposta objetiva sobre onde o espaço em disco aumentou.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 009 — Disk Growth Tracker</strong><br />
+<em>Pequenas ferramentas. Grandes resultados.</em></p>
+
+</article>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>

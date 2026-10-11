@@ -1,0 +1,146 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 022"><title>POLYDEV | WX-TOOLS | 022 | Hex Inspector</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 022</div><h1>POLYDEV | WX-TOOLS | 022 | Hex Inspector</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 022 | Hex Inspector</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-022-hex-inspector.cpp</code><br />
+<strong>Executável:</strong> <code>wxt-cpp-022-hex-inspector.exe</code><br />
+<strong>Tecnologia:</strong> C++17 / Windows 11 / Visual Studio 2022<br />
+<strong>Tipo:</strong> laboratório binário via linha de comando</p>
+<h2>Descrição</h2>
+<p>O <strong>Hex Inspector</strong> é uma ferramenta da coleção POLYDEV WX-TOOLS para
+analisar, explorar e modificar arquivos binários pela linha de comando.</p>
+<p>O banner demonstra seis funções principais:</p>
+<ul>
+<li><code>info</code></li>
+<li><code>dump</code></li>
+<li><code>read</code></li>
+<li><code>find</code></li>
+<li><code>strings</code></li>
+<li><code>patch</code></li>
+</ul>
+<h2><code>info</code></h2>
+<p>Analisa um arquivo e apresenta estatísticas.</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe info app.exe
+</code></pre>
+<p>A saída demonstrada inclui:</p>
+<ul>
+<li>nome do arquivo;</li>
+<li>tamanho em bytes e KiB;</li>
+<li>tipo detectado;</li>
+<li>entropia;</li>
+<li>percentual de bytes zero;</li>
+<li>quantidade de valores de byte distintos.</li>
+</ul>
+<p>No exemplo, um executável Windows é identificado pelo cabeçalho <code>MZ</code>.</p>
+<h2><code>dump</code></h2>
+<p>Produz um hex dump canônico acompanhado da representação ASCII.</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe dump app.exe -n 64
+</code></pre>
+<p>O resultado apresenta:</p>
+<pre><code class="language-text">offset | bytes hexadecimais | ASCII
+</code></pre>
+<p>Esse modo permite examinar diretamente a estrutura bruta de um arquivo.</p>
+<h2><code>read</code></h2>
+<p>Realiza leitura de valores tipados em offsets do arquivo.</p>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe read app.exe -s 0 -t u16le -t u16le -t u32le
+</code></pre>
+<p>O banner demonstra leituras de inteiros little-endian, exibindo offset,
+tipo, valor decimal e representação hexadecimal.</p>
+<p>A ferramenta é apresentada como capaz de trabalhar com valores tipados,
+incluindo:</p>
+<ul>
+<li>inteiros;</li>
+<li>floats;</li>
+<li>strings.</li>
+</ul>
+<h2><code>find</code></h2>
+<p>Procura padrões dentro de arquivos.</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe find app.exe hex:4D5A -m 5
+</code></pre>
+<p>No exemplo, procura-se o padrão hexadecimal:</p>
+<pre><code class="language-text">4D 5A
+</code></pre>
+<p>correspondente a <code>MZ</code>.</p>
+<p>A saída apresenta os offsets onde o padrão foi localizado.</p>
+<h2><code>strings</code></h2>
+<p>Extrai strings presentes no arquivo.</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe strings app.exe -n 12
+</code></pre>
+<p>O banner descreve extração de:</p>
+<ul>
+<li>strings ASCII;</li>
+<li>strings UTF-16LE.</li>
+</ul>
+<p>A saída demonstra o offset seguido da string encontrada.</p>
+<h2><code>patch</code></h2>
+<p>Modifica bytes de um arquivo.</p>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe patch test.bin --offset 0 --bytes hex:575821 --apply
+</code></pre>
+<p>No exemplo, três bytes são escritos no offset zero:</p>
+<pre><code class="language-text">50 4F 4C  -&gt;  57 58 21
+</code></pre>
+<p>A operação demonstrada confirma a escrita e cria backup:</p>
+<pre><code class="language-text">backup: test.bin.bak
+</code></pre>
+<p>O banner destaca três mecanismos de segurança para patch:</p>
+<ul>
+<li>dry run;</li>
+<li>backup;</li>
+<li>verificação.</li>
+</ul>
+<h2>Sequência rápida de exploração</h2>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe info app.exe
+
+wxt-cpp-022-hex-inspector.exe dump app.exe -n 64
+
+wxt-cpp-022-hex-inspector.exe read app.exe -s 0 -t u16le -t u16le -t u32le
+
+wxt-cpp-022-hex-inspector.exe find app.exe hex:4D5A -m 5
+
+wxt-cpp-022-hex-inspector.exe strings app.exe -n 12
+</code></pre>
+<h2>Exemplo de patch</h2>
+<pre><code class="language-cmd">wxt-cpp-022-hex-inspector.exe patch test.bin --offset 0 --bytes hex:575821 --apply
+</code></pre>
+<p>Por modificar o conteúdo do arquivo, <code>patch</code> deve ser utilizado
+conscientemente e sobre arquivos apropriados para teste. O banner
+demonstra criação de backup antes da alteração aplicada.</p>
+<h2>Capacidades destacadas</h2>
+<pre><code class="language-text">BINÁRIO
+HEX
+STRINGS
+PATCH
+ANÁLISE
+</code></pre>
+<p>A ferramenta pode ser usada para estudar e explorar formatos como os
+indicados no banner:</p>
+<pre><code class="language-text">PE
+ELF
+BIN
+HEX
+RAW
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">HEX INSPECTOR
+    |
+    +-- info      -&gt; análise e estatísticas
+    +-- dump      -&gt; hex dump + ASCII
+    +-- read      -&gt; leitura tipada
+    +-- find      -&gt; busca de padrões
+    +-- strings   -&gt; extração de strings
+    +-- patch     -&gt; alteração controlada de bytes
+</code></pre>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">Windows 11
+Visual Studio 2022
+C++17
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-022-hex-inspector.cpp
+wxt-cpp-022-hex-inspector.exe
+wxt-cpp-022-hex-inspector.png
+wxt-cpp-022-hex-inspector-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 022 | HEX INSPECTOR</strong></p>
+</article><nav class="nav"><a href="wxt-cpp-021.html">← Anterior</a><a href="wxt-cpp-023.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 022</footer></body></html>

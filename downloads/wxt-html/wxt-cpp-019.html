@@ -1,0 +1,177 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 019"><title>POLYDEV | WX-TOOLS | 019 | POLYDEV_VM</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 019</div><h1>POLYDEV | WX-TOOLS | 019 | POLYDEV_VM</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 019 | POLYDEV_VM</h1>
+<p><strong>Imagem de documentação:</strong> <code>wxt-cpp-019-system-information.png</code><br />
+<strong>Ambiente:</strong> Ubuntu 24.04 / POLYDEV_LAB<br />
+<strong>Objetivo:</strong> executar código diretamente do navegador na VM</p>
+<h2>Descrição</h2>
+<p>O <strong>POLYDEV_VM</strong> é o ambiente de execução do laboratório POLYDEV que
+permite selecionar código no navegador, informar argumentos quando
+necessário, executar o programa na VM e visualizar o resultado em tempo
+real.</p>
+<p>O fluxo documentado no banner é:</p>
+<pre><code class="language-text">BROWSER
+   |
+   +-- escolher programa
+   |
+   +-- informar argumentos
+   |
+   +-- executar na VM
+   |
+   +-- compilação automática
+   |
+   +-- resultado no navegador
+</code></pre>
+<h2>Linguagens destacadas</h2>
+<p>O ambiente é apresentado como multilíngue, com suporte a:</p>
+<pre><code class="language-text">C++
+Python
+C
+Rust
+Go
+Java
+Bash
+</code></pre>
+<h2>1. Escolha o programa</h2>
+<p>No navegador, selecione o programa desejado no combo.</p>
+<p>Exemplos mostrados:</p>
+<pre><code class="language-text">wxt-cpp-001-file-organizer.cpp
+wxt-cpp-002-duplicate-finder.cpp
+wxt-cpp-003-directory-analyzer.cpp
+teste.cpp
+...
+</code></pre>
+<p>O banner utiliza como exemplo:</p>
+<pre><code class="language-text">wxt-cpp-002-duplicate-finder.cpp
+</code></pre>
+<h2>2. Informe os argumentos</h2>
+<p>Quando o programa exigir parâmetros, eles são informados no campo:</p>
+<pre><code class="language-text">ARGUMENTOS DE EXECUÇÃO
+</code></pre>
+<p>O próprio banner orienta:</p>
+<pre><code class="language-text">Deixe vazio para programas que não precisam de argumentos.
+</code></pre>
+<p>Portanto, a execução pode funcionar tanto com quanto sem argumentos,
+dependendo da ferramenta selecionada.</p>
+<h2>3. Execute na VM</h2>
+<p>Após selecionar o programa e preencher os argumentos necessários,
+utilize:</p>
+<pre><code class="language-text">EXECUTAR NA VM
+</code></pre>
+<p>Para o exemplo C++, o banner demonstra:</p>
+<pre><code class="language-text">g++
+COMPILA E EXECUTA NA HORA
+</code></pre>
+<p>Ou seja, o código é compilado no ambiente Linux e executado
+automaticamente.</p>
+<h2>4. Resultado em tempo real</h2>
+<p>A saída do programa é apresentada diretamente no navegador.</p>
+<p>No exemplo do <strong>Duplicate File Finder CLI</strong>, o painel demonstra:</p>
+<pre><code class="language-text">POLYDEV - DUPLICATE FILE FINDER CLI
+
+Diretório: &quot;/home/degsu/polydev_lab/scripts/cpp/.&quot;
+
+Arquivos analisados: 4
+Grupos duplicados: 1
+Espaço potencialmente recuperável: 173.25 KB
+Erros de leitura: 0
+</code></pre>
+<p>Isso permite testar ferramentas sem precisar operar diretamente um
+terminal para cada execução.</p>
+<h2>Fluxo completo</h2>
+<pre><code class="language-text">1. BROWSER
+      |
+      v
+   selecionar código
+
+2. PARÂMETROS
+      |
+      v
+   informar argumentos, quando necessários
+
+3. POLYDEV_VM
+      |
+      v
+   compilar / executar
+
+4. SAÍDA NO BROWSER
+      |
+      v
+   visualizar o resultado
+</code></pre>
+<h2>Compilação on-the-fly</h2>
+<p>Uma das características centrais apresentadas é a compilação automática:</p>
+<pre><code class="language-text">CÓDIGO REAL
+ARGUMENTOS
+COMPILAÇÃO ON-THE-FLY
+RESULTADO EM TEMPO REAL
+</code></pre>
+<p>Para C++, o compilador mostrado é:</p>
+<pre><code class="language-text">g++
+</code></pre>
+<h2>Características destacadas</h2>
+<h3>Simples</h3>
+<pre><code class="language-text">Sem terminal
+Sem complicação
+</code></pre>
+<h3>Flexível</h3>
+<pre><code class="language-text">Funciona com ou sem argumentos
+</code></pre>
+<h3>Poderoso</h3>
+<pre><code class="language-text">Compilação on-the-fly
+Ambiente Linux real
+</code></pre>
+<h3>Produtivo</h3>
+<pre><code class="language-text">Teste suas ferramentas diretamente no browser
+</code></pre>
+<h3>Ideal para aprender</h3>
+<pre><code class="language-text">Leitura
+Prática
+Resultado
+</code></pre>
+<h2>Ambiente POLYDEV_LAB</h2>
+<p>O banner identifica o laboratório como:</p>
+<pre><code class="language-text">POLYDEV_LAB
+Ubuntu 24.04
+Node.js
+GCC
+Multi-linguagens
+</code></pre>
+<h2>Finalidade</h2>
+<p>O POLYDEV_VM transforma o navegador em uma interface simples para o
+laboratório Linux:</p>
+<pre><code class="language-text">Código fonte
+     |
+     v
+Navegador
+     |
+     v
+POLYDEV_VM
+     |
+     +-- compilação
+     +-- execução
+     |
+     v
+Resultado no navegador
+</code></pre>
+<p>A proposta é permitir:</p>
+<pre><code class="language-text">COMPILE
+EXECUTE
+TESTE
+APRENDA
+SEM COMPLICAÇÃO
+</code></pre>
+<h2>Filosofia POLYDEV</h2>
+<p>Conforme registrado no banner:</p>
+<pre><code class="language-text">FAÇA CERTO QUE FUNCIONA
+</code></pre>
+<p>e:</p>
+<pre><code class="language-text">Código em Ação
+Conhecimento em Evolução!
+</code></pre>
+<h2>Arquivos relacionados</h2>
+<pre><code class="language-text">wxt-cpp-019-system-information.png
+</code></pre>
+<p>Este item documenta o fluxo operacional do <strong>POLYDEV_VM</strong> e sua
+integração entre navegador e ambiente Linux.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 019 | POLYDEV_VM</strong></p>
+</article><nav class="nav"><a href="wxt-cpp-018.html">← Anterior</a><a href="wxt-cpp-020.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 019</footer></body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 027 \| SQL Index Health Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 027 | SQL Index Health Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-027-sql-index-health-explorer.cpp</code><br />
+<strong>Tecnologia:</strong> C++17 + ODBC<br />
+<strong>Plataforma demonstrada:</strong> Windows 11 / Visual Studio 2022 / SQL
+Server<br />
+<strong>Modo de operação:</strong> somente leitura</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Index Health Explorer</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS para diagnóstico de índices do Microsoft SQL Server.</p>
+<p>A ferramenta é somente leitura. Conforme documentado no banner, <strong>não
+executa <code>REBUILD</code>, <code>REORGANIZE</code> ou <code>DROP</code></strong>.</p>
+<p>Comandos demonstrados:</p>
+<ul>
+<li><code>summary</code></li>
+<li><code>indexes &lt;schema.table&gt;</code></li>
+<li><code>fragmentation &lt;schema.table&gt;</code></li>
+<li><code>usage &lt;schema.table&gt;</code></li>
+<li><code>unused</code></li>
+<li><code>top</code></li>
+</ul>
+<h2>Sintaxe utilizada nos testes</h2>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe &lt;command&gt; [schema.table] --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2><code>summary</code></h2>
+<p>Apresenta um resumo dos índices do banco e do espaço utilizado.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h3>DATABASE INDEX SUMMARY</h3>
+<p>O banner demonstra:</p>
+<ul>
+<li><code>index_count</code></li>
+<li><code>clustered_indexes</code></li>
+<li><code>nonclustered_indexes</code></li>
+<li><code>unique_indexes</code></li>
+<li><code>primary_keys</code></li>
+<li><code>disabled_indexes</code></li>
+</ul>
+<h3>INDEX SPACE</h3>
+<p>Apresenta:</p>
+<ul>
+<li><code>total_rows</code></li>
+<li><code>reserved_pages</code></li>
+<li><code>used_pages</code></li>
+<li><code>reserved_mb</code></li>
+<li><code>used_mb</code></li>
+</ul>
+<p>Na homologação de <code>dbo.DadosTeste</code> foram demonstradas 100.000 linhas e
+aproximadamente 20,82 MB reservados.</p>
+<h2><code>indexes &lt;schema.table&gt;</code></h2>
+<p>Lista os índices da tabela informada.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe indexes dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Entre as informações apresentadas estão:</p>
+<ul>
+<li><code>index_id</code></li>
+<li><code>index_name</code></li>
+<li><code>type_desc</code></li>
+<li>indicador de índice único;</li>
+<li>indicador de primary key;</li>
+<li>indicador de índice desabilitado;</li>
+<li>quantidade de linhas;</li>
+<li>páginas reservadas;</li>
+<li>páginas utilizadas;</li>
+<li>espaço reservado em MB.</li>
+</ul>
+<h2><code>fragmentation &lt;schema.table&gt;</code></h2>
+<p>Examina a fragmentação dos índices da tabela.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe fragmentation dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A saída demonstrada inclui:</p>
+<ul>
+<li><code>index_id</code></li>
+<li><code>index_name</code></li>
+<li><code>partition_number</code></li>
+<li><code>index_type_desc</code></li>
+<li><code>alloc_unit_type_desc</code></li>
+<li><code>page_count</code></li>
+<li><code>fragmentation_pct</code></li>
+<li><code>page_density_pct</code></li>
+<li><code>avg_fragment_pages</code></li>
+</ul>
+<p>Na captura de homologação, o índice de <code>dbo.DadosTeste</code> apresenta
+fragmentação muito baixa.</p>
+<h2><code>usage &lt;schema.table&gt;</code></h2>
+<p>Examina estatísticas de utilização dos índices.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe usage dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O painel <strong>INDEX USAGE</strong> demonstra informações como:</p>
+<ul>
+<li><code>index_id</code></li>
+<li><code>index_name</code></li>
+<li><code>type_desc</code></li>
+<li><code>user_seeks</code></li>
+<li><code>user_scans</code></li>
+<li><code>user_lookups</code></li>
+<li><code>user_updates</code></li>
+<li><code>total_reads</code></li>
+<li>datas das últimas operações de seek, scan, lookup e update.</li>
+</ul>
+<h2><code>unused</code></h2>
+<p>Procura candidatos a índices não utilizados.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe unused --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção apresentada é:</p>
+<pre><code class="language-text">UNUSED INDEX CANDIDATES
+</code></pre>
+<p>Na captura de homologação:</p>
+<pre><code class="language-text">(no rows)
+</code></pre>
+<h2><code>top</code></h2>
+<p>Lista os maiores índices por tamanho.</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe top --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>TOP INDEXES BY SIZE</strong> demonstra:</p>
+<ul>
+<li>schema;</li>
+<li>tabela;</li>
+<li>índice;</li>
+<li><code>index_id</code>;</li>
+<li>tipo;</li>
+<li>quantidade de linhas;</li>
+<li>páginas reservadas;</li>
+<li>páginas utilizadas;</li>
+<li>MB reservados;</li>
+<li>MB utilizados.</li>
+</ul>
+<h2>Tratamento defensivo</h2>
+<p>O banner também demonstra o tratamento de tabela inexistente.</p>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe indexes dbo.NAO_EXISTE --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">wxt-cpp-027-sql-index-health-explorer:
+error: table not found: dbo.NAO_EXISTE
+</code></pre>
+<h2>Sequência rápida de diagnóstico</h2>
+<pre><code class="language-cmd">wxt-cpp-027-sql-index-health-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-027-sql-index-health-explorer.exe indexes dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-027-sql-index-health-explorer.exe fragmentation dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-027-sql-index-health-explorer.exe usage dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-027-sql-index-health-explorer.exe unused --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-027-sql-index-health-explorer.exe top --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+Tabela     : dbo.DadosTeste
+</code></pre>
+<h2>Segurança operacional</h2>
+<p>A ferramenta foi concebida para diagnóstico.</p>
+<pre><code class="language-text">READ-ONLY
+REBUILD     : não executa
+REORGANIZE  : não executa
+DROP        : não executa
+</code></pre>
+<p>Portanto, seus comandos de inspeção não realizam manutenção automática
+dos índices.</p>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-027-sql-index-health-explorer.cpp
+wxt-cpp-027-sql-index-health-explorer.exe
+wxt-cpp-027-sql-index-health-explorer.png
+wxt-cpp-027-sql-index-health-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 027 | SQL INDEX HEALTH EXPLORER</strong></p>
+</article></main></body></html>

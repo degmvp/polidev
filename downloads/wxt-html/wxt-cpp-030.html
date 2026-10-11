@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 030 \| SQL Server Health Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 030 | SQL Server Health Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-030-sql-server-health-explorer.cpp</code><br />
+<strong>Tecnologia:</strong> C++17 / SQL Server<br />
+<strong>Tipo:</strong> ferramenta de diagnóstico via linha de comando</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Server Health Explorer</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS destinada ao diagnóstico da saúde de uma instância Microsoft
+SQL Server pela linha de comando.</p>
+<p>O banner de homologação apresenta sete comandos:</p>
+<ul>
+<li><code>summary</code></li>
+<li><code>databases</code></li>
+<li><code>memory</code></li>
+<li><code>cpu</code></li>
+<li><code>io</code></li>
+<li><code>tempdb</code></li>
+<li><code>health</code></li>
+</ul>
+<p>Os exemplos abaixo utilizam a instância <code>.\WSRV25</code> e o banco
+<code>WX_RECOVERY_LAB</code>.</p>
+<h2>Sintaxe utilizada</h2>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe &lt;command&gt; --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>1. <code>summary</code></h2>
+<p>Apresenta um resumo da instância e de sua atividade.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O painel demonstrado inclui informações como:</p>
+<ul>
+<li>servidor e instância;</li>
+<li>edição e versão do produto;</li>
+<li>nível do produto/update;</li>
+<li>sessão atual;</li>
+<li>banco atual;</li>
+<li>quantidade de bancos;</li>
+<li>bancos online;</li>
+<li>sessões de usuário;</li>
+<li>requests ativos;</li>
+<li>requests bloqueados.</li>
+</ul>
+<h2>2. <code>databases</code></h2>
+<p>Examina a saúde dos bancos e o espaço dos arquivos.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe databases --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O painel <strong>DATABASE HEALTH</strong> demonstra informações como:</p>
+<ul>
+<li><code>database_id</code></li>
+<li><code>database_name</code></li>
+<li><code>state_desc</code></li>
+<li><code>recovery_model_desc</code></li>
+<li><code>user_access_desc</code></li>
+<li><code>is_read_only</code></li>
+<li><code>is_auto_close_on</code></li>
+<li><code>is_auto_shrink_on</code></li>
+<li><code>log_reuse_wait_desc</code></li>
+</ul>
+<p>O painel <strong>DATABASE FILE SPACE</strong> apresenta banco, tipo de arquivo,
+quantidade de arquivos e espaço alocado.</p>
+<h2>3. <code>memory</code></h2>
+<p>Examina memória física, memória do processo SQL Server e configuração de
+memória.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe memory --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A saída demonstrada é dividida em:</p>
+<ul>
+<li><code>MEMORY HEALTH</code></li>
+<li><code>SQL SERVER PROCESS MEMORY</code></li>
+<li><code>MEMORY CONFIGURATION</code></li>
+</ul>
+<p>Entre os indicadores exibidos estão memória física, memória disponível,
+page file, utilização de memória, commit disponível e configurações
+<code>max server memory (MB)</code> e <code>min server memory (MB)</code>.</p>
+<h2>4. <code>cpu</code></h2>
+<p>Examina CPU e schedulers do SQL Server.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe cpu --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A saída demonstrada contém:</p>
+<h3>CPU / Scheduler Health</h3>
+<ul>
+<li><code>cpu_count</code></li>
+<li><code>scheduler_count</code></li>
+<li><code>hyperthread_ratio</code></li>
+<li><code>socket_count</code></li>
+<li><code>cores_per_socket</code></li>
+<li><code>numa_node_count</code></li>
+</ul>
+<h3>Visible Schedulers</h3>
+<p>Inclui informações como:</p>
+<ul>
+<li><code>scheduler_id</code></li>
+<li><code>cpu_id</code></li>
+<li><code>status</code></li>
+<li><code>is_online</code></li>
+<li><code>current_tasks_count</code></li>
+<li><code>runnable_tasks_count</code></li>
+</ul>
+<h2>5. <code>io</code></h2>
+<p>Examina a atividade de I/O dos arquivos de banco.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe io --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O painel <strong>DATABASE I/O HEALTH</strong> demonstra métricas como:</p>
+<ul>
+<li>banco;</li>
+<li>tipo;</li>
+<li>arquivo lógico;</li>
+<li>quantidade de leituras;</li>
+<li>quantidade de gravações;</li>
+<li>stall de leitura;</li>
+<li>stall de gravação;</li>
+<li>stall total.</li>
+</ul>
+<h2>6. <code>tempdb</code></h2>
+<p>Examina configuração e utilização do <code>tempdb</code>.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe tempdb --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A saída demonstrada contém:</p>
+<h3>TEMPDB HEALTH</h3>
+<ul>
+<li><code>file_id</code></li>
+<li><code>name</code></li>
+<li><code>type_desc</code></li>
+<li><code>physical_name</code></li>
+<li><code>size_mb</code></li>
+<li><code>growth_setting</code></li>
+</ul>
+<h3>TEMPDB SPACE USAGE</h3>
+<ul>
+<li><code>user_objects_mb</code></li>
+<li><code>internal_objects_mb</code></li>
+<li><code>version_store_mb</code></li>
+<li><code>free_space_mb</code></li>
+</ul>
+<h2>7. <code>health</code></h2>
+<p>Executa a verificação consolidada da saúde do SQL Server.</p>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe health --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O banner demonstra as seguintes seções:</p>
+<h3>Consolidated Health Check</h3>
+<ul>
+<li>bancos que não estão ONLINE;</li>
+<li><code>AUTO_CLOSE</code> habilitado;</li>
+<li><code>AUTO_SHRINK</code> habilitado;</li>
+<li>requests bloqueados;</li>
+<li>schedulers com fila;</li>
+<li>pressão de memória física;</li>
+<li>pressão de memória virtual.</li>
+</ul>
+<h3>Database States</h3>
+<p>Agrupa os bancos por estado.</p>
+<h3>Recovery Models</h3>
+<p>Agrupa os bancos por recovery model.</p>
+<h3>Current Activity</h3>
+<p>Apresenta:</p>
+<ul>
+<li>sessões de usuário;</li>
+<li>requests ativos;</li>
+<li>requests bloqueados;</li>
+<li>locks em espera.</li>
+</ul>
+<h3>TempDB Snapshot</h3>
+<p>Apresenta:</p>
+<ul>
+<li>objetos de usuário;</li>
+<li>objetos internos;</li>
+<li>version store;</li>
+<li>espaço livre.</li>
+</ul>
+<h2>Sequência rápida de diagnóstico</h2>
+<pre><code class="language-cmd">wxt-cpp-030-sql-server-health-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe databases --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe memory --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe cpu --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe io --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe tempdb --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-030-sql-server-health-explorer.exe health --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Ambiente demonstrado no banner</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+</code></pre>
+<p>O banner mostra a ferramenta operando sobre SQL Server 2025, com os
+resultados reais do ambiente de homologação POLYDEV.</p>
+<h2>Finalidade operacional</h2>
+<p>O SQL Server Health Explorer reúne em uma única CLI informações que
+normalmente exigiriam várias consultas de diagnóstico, permitindo uma
+passagem rápida por:</p>
+<pre><code class="language-text">Instância
+   |
+   +-- Bancos
+   +-- Memória
+   +-- CPU / Schedulers
+   +-- I/O
+   +-- TempDB
+   |
+   +-- Health consolidado
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-030-sql-server-health-explorer.cpp
+wxt-cpp-030-sql-server-health-explorer.exe
+wxt-cpp-030-sql-server-health-explorer.png
+wxt-cpp-030-sql-server-health-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 030 | SQL SERVER HEALTH EXPLORER</strong></p>
+</article></main></body></html>

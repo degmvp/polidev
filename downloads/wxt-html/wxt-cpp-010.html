@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 010 — File Age Analyzer</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 010</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article>
+<h1>POLYDEV | WX-TOOLS | C++ | 010 — File Age Analyzer</h1>
+<h2>Visão geral</h2>
+<p>O <strong>File Age Analyzer</strong> é uma ferramenta C++ da coleção <strong>POLYDEV WX-TOOLS</strong> para analisar a idade dos arquivos com base na data de modificação.</p>
+<p>O utilitário contabiliza a quantidade e o espaço ocupado por diferentes faixas de tempo, apresenta detalhamento por diretório e identifica os maiores arquivos encontrados.</p>
+<p>Toda a análise é realizada em <strong>modo somente leitura</strong>: nenhum arquivo é excluído ou modificado.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Análise da idade dos arquivos pela data de modificação.</li>
+<li>Contagem de arquivos por faixa de tempo.</li>
+<li>Cálculo do espaço ocupado por cada faixa.</li>
+<li>Detalhamento por diretório.</li>
+<li>Listagem dos maiores arquivos.</li>
+<li>Controle de profundidade da varredura.</li>
+<li>Limite configurável para o ranking de maiores arquivos.</li>
+<li>Saída opcional em JSON.</li>
+<li>Operação somente leitura.</li>
+</ul>
+<h2>Faixas de idade padrão</h2>
+<table>
+<thead>
+<tr>
+  <th>Faixa</th>
+  <th>Classificação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>&lt; 30 dias</code></td>
+  <td>Arquivos muito recentes</td>
+</tr>
+<tr>
+  <td><code>30–90 dias</code></td>
+  <td>Arquivos recentes</td>
+</tr>
+<tr>
+  <td><code>90 dias–1 ano</code></td>
+  <td>Arquivos intermediários</td>
+</tr>
+<tr>
+  <td><code>1–3 anos</code></td>
+  <td>Arquivos antigos</td>
+</tr>
+<tr>
+  <td><code>&gt; 3 anos</code></td>
+  <td>Arquivos muito antigos</td>
+</tr>
+</tbody>
+</table>
+<h2>Sintaxe</h2>
+<pre><code class="language-text">wxt-cpp-010-file-age-analyzer.exe scan &lt;caminho&gt; [opções]
+</code></pre>
+<h2>Exemplos</h2>
+<h3>Pasta atual</h3>
+<pre><code class="language-text">wxt-cpp-010-file-age-analyzer.exe scan .
+</code></pre>
+<h3>Pasta específica</h3>
+<pre><code class="language-text">wxt-cpp-010-file-age-analyzer.exe scan &quot;E:\@LIB-C++&quot;
+</code></pre>
+<h3>Drive C</h3>
+<pre><code class="language-text">wxt-cpp-010-file-age-analyzer.exe scan C:\ --depth 1 --top 20
+</code></pre>
+<h3>Ajuda</h3>
+<pre><code class="language-text">wxt-cpp-010-file-age-analyzer.exe --help
+</code></pre>
+<h2>Opções principais</h2>
+<table>
+<thead>
+<tr>
+  <th>Opção</th>
+  <th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>--depth N</code></td>
+  <td>Define o nível de profundidade; <code>0</code> = ilimitado</td>
+</tr>
+<tr>
+  <td><code>--top N</code></td>
+  <td>Mostra os N maiores arquivos</td>
+</tr>
+<tr>
+  <td><code>--json</code></td>
+  <td>Produz saída em formato JSON</td>
+</tr>
+<tr>
+  <td><code>--help</code></td>
+  <td>Exibe a ajuda</td>
+</tr>
+</tbody>
+</table>
+<h2>Exemplo de execução real</h2>
+<pre><code class="language-text">E:\@LIB-C++&gt;bin\wxt-cpp-010-file-age-analyzer.exe scan C:\ --depth 1 --top 20
+
+Analisando C:/ ...
+File Age Analyzer (somente leitura)
+Raiz: C:/
+Arquivos: 1.101.708
+Total: 163.5 GB
+</code></pre>
+<h3>Distribuição por idade</h3>
+<pre><code class="language-text">IDADE            ARQUIVOS      TAMANHO      % TAM
+--------------------------------------------------
+&lt; 30 dias         139.838       49.1 GB      30.0%
+30-90 dias        113.399       19.1 GB      11.7%
+90 dias-1 ano     165.830       26.9 GB      16.4%
+1-3 anos          450.966       41.5 GB      25.4%
+&gt; 3 anos          231.675       27.0 GB      16.5%
+</code></pre>
+<h2>Detalhamento por diretório</h2>
+<p>A ferramenta também mostra como o espaço de cada faixa de idade está distribuído pelos diretórios de primeiro nível.</p>
+<p>Exemplo:</p>
+<pre><code class="language-text">DIRETORIO          &lt;30d     30d-90d    90d-1a    1a-3a     &gt;3a      TOTAL
+-------------------------------------------------------------------------------
+Users              11.8 GB   6.80 GB   13.1 GB   15.2 GB   9.81 GB   56.8 GB
+Windows            19.7 GB   7.94 GB    4.02 GB  10.2 GB   3.83 GB   45.6 GB
+Program Files       5.61 GB   1.91 GB    4.15 GB   6.87 GB   7.31 GB   25.9 GB
+Program Files (x86) 6.36 GB 641.9 MB     2.35 GB   5.55 GB   3.51 GB   18.4 GB
+ProgramData         5.35 GB   1.78 GB    3.24 GB   3.57 GB   1.73 GB   15.7 GB
+</code></pre>
+<h2>Maiores arquivos</h2>
+<p>Além da idade, o File Age Analyzer permite descobrir arquivos individuais que mais ocupam espaço.</p>
+<p>A listagem apresenta informações como:</p>
+<pre><code class="language-text">tamanho | idade | caminho
+</code></pre>
+<p>Isso facilita localizar arquivos grandes e antigos que podem ser avaliados para arquivamento, movimentação ou limpeza manual.</p>
+<h2>Segurança</h2>
+<p>O <strong>File Age Analyzer é somente leitura</strong>.</p>
+<p>A ferramenta:</p>
+<ul>
+<li>não exclui arquivos;</li>
+<li>não modifica conteúdo;</li>
+<li>não renomeia arquivos;</li>
+<li>não altera timestamps.</li>
+</ul>
+<p>Ao final da varredura, o ambiente permanece inalterado.</p>
+<h2>Aplicações</h2>
+<p>O WX-TOOLS 010 pode ajudar a:</p>
+<ul>
+<li>identificar espaço ocupado por arquivos antigos;</li>
+<li>entender o perfil de crescimento do armazenamento;</li>
+<li>localizar arquivos grandes;</li>
+<li>planejar limpeza de disco;</li>
+<li>decidir o que arquivar ou mover;</li>
+<li>analisar diretórios antes de uma manutenção;</li>
+<li>gerar informações para políticas de retenção.</li>
+</ul>
+<h2>Objetivo</h2>
+<p><strong>Analise o passado. Recupere o presente.</strong></p>
+<p>A proposta da ferramenta é transformar informações de idade e tamanho em decisões práticas para liberar espaço e melhorar a organização do armazenamento.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 010 — File Age Analyzer</strong><br />
+<em>Código aberto • Utilidades reais • Resultados concretos</em></p>
+
+</article>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>

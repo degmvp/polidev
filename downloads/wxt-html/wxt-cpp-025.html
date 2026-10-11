@@ -1,0 +1,151 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 025"><title>POLYDEV | WX-TOOLS | 025 | SQL Dependency Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 025</div><h1>POLYDEV | WX-TOOLS | 025 | SQL Dependency Explorer</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 025 | SQL Dependency Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-025-sql-dependency-explorer.cpp</code><br />
+<strong>Versão:</strong> <code>1.0.0</code><br />
+<strong>Banco:</strong> Microsoft SQL Server</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Dependency Explorer</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS para explorar dependências entre objetos do SQL Server,
+incluindo views, procedures, functions, triggers e outros objetos.</p>
+<p>A ferramenta permite analisar referências, objetos que dependem de outro
+objeto, impacto recursivo e a cadeia de dependências em formato de
+árvore.</p>
+<h2>Versão</h2>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe --version
+</code></pre>
+<p>Saída demonstrada:</p>
+<pre><code class="language-text">wxt-cpp-025-sql-dependency-explorer version 1.0.0
+</code></pre>
+<h2>Sintaxe utilizada nos testes</h2>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe &lt;command&gt; [schema.object] --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2><code>database</code></h2>
+<p>Apresenta um resumo das dependências existentes no banco.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe database --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>DATABASE DEPENDENCY SUMMARY</strong> demonstra:</p>
+<h3>DEPENDENCY TYPES</h3>
+<p>Agrupa as dependências por tipo de objeto referenciador.</p>
+<p>No ambiente de homologação:</p>
+<pre><code class="language-text">VIEW    1
+</code></pre>
+<h3>MOST REFERENCED OBJECTS</h3>
+<p>Apresenta os objetos mais referenciados, incluindo:</p>
+<ul>
+<li><code>schema_name</code></li>
+<li><code>entity_name</code></li>
+<li><code>entity_type</code></li>
+<li><code>referenced_by_count</code></li>
+</ul>
+<h3>CROSS-DATABASE / CROSS-SERVER REFERENCES</h3>
+<p>Identifica referências entre bancos ou servidores.</p>
+<p>Na captura de homologação:</p>
+<pre><code class="language-text">(no rows)
+</code></pre>
+<h2><code>referenced-by &lt;schema.object&gt;</code></h2>
+<p>Mostra quais objetos utilizam o objeto informado.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe referenced-by dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Na homologação, <code>dbo.DadosTeste</code> é referenciada por:</p>
+<pre><code class="language-text">dbo.vw_DadosTeste
+</code></pre>
+<p>A saída demonstra informações como:</p>
+<ul>
+<li><code>schema_name</code></li>
+<li><code>entity_name</code></li>
+<li><code>entity_type</code></li>
+<li><code>object_id</code></li>
+<li><code>schema_bound</code></li>
+<li><code>caller_dependent</code></li>
+</ul>
+<h2><code>references &lt;schema.object&gt;</code></h2>
+<p>Mostra quais objetos são referenciados pelo objeto informado.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe references dbo.vw_DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Na homologação:</p>
+<pre><code class="language-text">dbo.vw_DadosTeste
+        |
+        +-- dbo.DadosTeste
+</code></pre>
+<p>A saída demonstra:</p>
+<ul>
+<li><code>server_name</code></li>
+<li><code>database_name</code></li>
+<li><code>schema_name</code></li>
+<li><code>entity_name</code></li>
+<li><code>entity_type</code></li>
+<li><code>schema_bound</code></li>
+<li><code>caller_dependent</code></li>
+<li><code>ambiguous</code></li>
+</ul>
+<h2><code>impact &lt;schema.object&gt;</code></h2>
+<p>Executa análise recursiva de impacto.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe impact dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>IMPACT ANALYSIS</strong> demonstra os níveis de dependência
+encontrados.</p>
+<p>No ambiente homologado:</p>
+<pre><code class="language-text">Nível 1 : dbo.vw_DadosTeste
+Nível 2 : dbo.vw_DadosTeste_Nivel2
+</code></pre>
+<p>Isso permite visualizar quais objetos podem ser afetados por alterações
+no objeto analisado.</p>
+<h2><code>tree &lt;schema.object&gt;</code></h2>
+<p>Apresenta as dependências em formato de árvore.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe tree dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">dbo.DadosTeste
+    `-- dbo.vw_DadosTeste [VIEW]
+        `-- dbo.vw_DadosTeste_Nivel2 [VIEW]
+</code></pre>
+<h2>Tratamento de objeto inexistente</h2>
+<p>A ferramenta possui tratamento defensivo para objetos não encontrados.</p>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe references dbo.NAO_EXISTE --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">wxt-cpp-025-sql-dependency-explorer: error: object not found: dbo.NAO_EXISTE
+</code></pre>
+<h2>Sequência rápida de análise</h2>
+<pre><code class="language-cmd">wxt-cpp-025-sql-dependency-explorer.exe database --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-025-sql-dependency-explorer.exe referenced-by dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-025-sql-dependency-explorer.exe references dbo.vw_DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-025-sql-dependency-explorer.exe impact dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-025-sql-dependency-explorer.exe tree dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+
+Objeto base:
+dbo.DadosTeste
+
+Dependências:
+dbo.DadosTeste
+    |
+    +-- dbo.vw_DadosTeste
+            |
+            +-- dbo.vw_DadosTeste_Nivel2
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">SQL Dependency Explorer
+        |
+        +-- Database Summary
+        +-- Referenced By
+        +-- References
+        +-- Impact Analysis (recursiva)
+        +-- Dependency Tree
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-025-sql-dependency-explorer.cpp
+wxt-cpp-025-sql-dependency-explorer.exe
+wxt-cpp-025-sql-dependency-explorer.png
+wxt-cpp-025-sql-dependency-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 025 | SQL DEPENDENCY EXPLORER</strong></p>
+</article><nav class="nav"><a href="wxt-cpp-024.html">← Anterior</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 025</footer></body></html>

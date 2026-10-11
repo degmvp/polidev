@@ -1,0 +1,198 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 024"><title>POLYDEV | WX-TOOLS | 024 | SQL Storage Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 024</div><h1>POLYDEV | WX-TOOLS | 024 | SQL Storage Explorer</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 024 | SQL Storage Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-024-sql-storage-explorer.cpp</code><br />
+<strong>Versão:</strong> <code>1.0.0</code><br />
+<strong>Tecnologia:</strong> C++ / ODBC / Microsoft SQL Server<br />
+<strong>Status:</strong> homologada</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Storage Explorer</strong> é uma ferramenta de linha de comando da
+coleção POLYDEV WX-TOOLS para explorar a estrutura física de
+armazenamento dos objetos no SQL Server.</p>
+<p>A ferramenta apresenta de forma hierárquica como objetos e índices
+utilizam partições, allocation units e páginas:</p>
+<pre><code class="language-text">OBJECT -&gt; INDEX -&gt; PARTITION -&gt; ALLOCATION -&gt; PAGES
+</code></pre>
+<h2>Requisitos</h2>
+<ul>
+<li>Windows</li>
+<li>ODBC Driver 18 for SQL Server</li>
+<li>acesso ao SQL Server com autenticação atual do Windows ou conforme
+configuração do ambiente</li>
+</ul>
+<h2>Sintaxe</h2>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe &lt;command&gt; [object_name] --server &lt;servidor\instancia&gt; --db &lt;banco&gt;
+</code></pre>
+<p>Exemplo de conexão utilizado na homologação:</p>
+<pre><code class="language-cmd">--server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Comandos disponíveis</h2>
+<pre><code class="language-text">object       Mapa completo do objeto
+indexes      Índices do objeto
+partitions   Partições do objeto
+allocation   Allocation units do objeto
+top          Ranking de objetos do database
+</code></pre>
+<h2><code>object &lt;schema.object&gt;</code></h2>
+<p>Apresenta o mapa completo de armazenamento do objeto.</p>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe object dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O resultado demonstrado contém informações gerais do objeto e as seções
+<strong>STORAGE SUMMARY</strong> e <strong>INDEX STORAGE</strong>.</p>
+<p>Entre os dados apresentados estão:</p>
+<ul>
+<li>banco e schema;</li>
+<li>nome e <code>object_id</code>;</li>
+<li>tipo do objeto;</li>
+<li>datas de criação e modificação;</li>
+<li>quantidade de partições;</li>
+<li>linhas;</li>
+<li>páginas totais e utilizadas;</li>
+<li>espaço reservado, utilizado e livre;</li>
+<li>armazenamento por índice.</li>
+</ul>
+<h2><code>indexes &lt;schema.object&gt;</code></h2>
+<p>Mostra os índices e seu consumo de armazenamento.</p>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe indexes dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>INDEX STORAGE</strong> demonstra informações como:</p>
+<ul>
+<li><code>index_id</code></li>
+<li><code>index_name</code></li>
+<li><code>type_desc</code></li>
+<li>índice único;</li>
+<li>primary key;</li>
+<li>quantidade de partições;</li>
+<li>linhas;</li>
+<li>páginas totais;</li>
+<li>páginas utilizadas;</li>
+<li>MB reservados;</li>
+<li>MB utilizados.</li>
+</ul>
+<h2><code>partitions &lt;schema.object&gt;</code></h2>
+<p>Examina as partições do objeto.</p>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe partitions dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>PARTITION MAP</strong> demonstra:</p>
+<ul>
+<li>índice;</li>
+<li>número da partição;</li>
+<li><code>partition_id</code>;</li>
+<li><code>hobt_id</code>;</li>
+<li>quantidade de linhas;</li>
+<li>compressão de dados;</li>
+<li>data space;</li>
+<li>tipo do data space.</li>
+</ul>
+<h2><code>allocation &lt;schema.object&gt;</code></h2>
+<p>Mostra as allocation units utilizadas pelo objeto.</p>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe allocation dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>ALLOCATION MAP</strong> demonstra informações como:</p>
+<ul>
+<li>índice;</li>
+<li>partição;</li>
+<li><code>allocation_unit_id</code>;</li>
+<li>tipo da allocation unit;</li>
+<li>páginas totais;</li>
+<li>páginas utilizadas;</li>
+<li>páginas de dados;</li>
+<li>MB reservados;</li>
+<li>MB utilizados;</li>
+<li>MB de dados.</li>
+</ul>
+<p>Tipos de allocation unit destacados na documentação visual:</p>
+<pre><code class="language-text">IN_ROW_DATA
+LOB_DATA
+ROW_OVERFLOW_DATA
+</code></pre>
+<h2><code>top</code></h2>
+<p>Apresenta um ranking dos objetos do banco por utilização de storage.</p>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe top --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>TOP STORAGE OBJECTS</strong> demonstra:</p>
+<ul>
+<li><code>schema_name</code></li>
+<li><code>object_name</code></li>
+<li><code>total_pages</code></li>
+<li><code>used_pages</code></li>
+<li><code>reserved_mb</code></li>
+<li><code>used_mb</code></li>
+<li><code>free_mb</code></li>
+</ul>
+<p>No ambiente de homologação aparecem, entre outros:</p>
+<pre><code class="language-text">dbo.DadosTeste_Recovery
+dbo.DadosTeste
+</code></pre>
+<h2>Cadeia física de armazenamento</h2>
+<p>A ferramenta organiza a análise segundo a estrutura:</p>
+<pre><code class="language-text">OBJECT
+  |
+  +-- sys.objects
+        |
+        +-- INDEX
+              sys.indexes
+                |
+                +-- PARTITION
+                      sys.partitions
+                        |
+                        +-- ALLOCATION UNIT
+                              sys.allocation_units
+                                |
+                                +-- PAGES / STORAGE
+                                      sys.dm_db_partition_stats
+</code></pre>
+<h3>OBJECT</h3>
+<p>Fornece informações gerais do objeto.</p>
+<h3>INDEX</h3>
+<p>Mostra a estrutura e o tipo dos índices, como clustered e nonclustered.</p>
+<h3>PARTITION</h3>
+<p>Apresenta partições, quantidade de linhas, compressão e filegroup/data
+space.</p>
+<h3>ALLOCATION UNIT</h3>
+<p>Mostra como o armazenamento é separado entre <code>IN_ROW_DATA</code>, <code>LOB_DATA</code> e
+<code>ROW_OVERFLOW_DATA</code>.</p>
+<h3>PAGES</h3>
+<p>Apresenta métricas como:</p>
+<pre><code class="language-text">total_pages
+used_pages
+data_pages
+</code></pre>
+<h2>Principais informações disponíveis</h2>
+<p>Conforme o banner da ferramenta:</p>
+<ul>
+<li>rows por índice e partição;</li>
+<li>páginas reservadas, usadas e de dados;</li>
+<li>tamanho em MB reservado, usado e de dados;</li>
+<li>tipo de allocation unit;</li>
+<li>compressão de dados;</li>
+<li>filegroup/data space;</li>
+<li>ranking de objetos por uso de storage;</li>
+<li>visão completa da cadeia física de armazenamento.</li>
+</ul>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+Object     : dbo.DadosTeste
+</code></pre>
+<p>Na homologação, <code>dbo.DadosTeste</code> apresenta 100.000 linhas e
+aproximadamente 20,82 MB reservados.</p>
+<h2>Sequência rápida de inspeção</h2>
+<pre><code class="language-cmd">wxt-cpp-024-sql-storage-explorer.exe object dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-024-sql-storage-explorer.exe indexes dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-024-sql-storage-explorer.exe partitions dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-024-sql-storage-explorer.exe allocation dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-024-sql-storage-explorer.exe top --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-024-sql-storage-explorer.cpp
+wxt-cpp-024-sql-storage-explorer.exe
+wxt-cpp-024-sql-storage-explorer.png
+wxt-cpp-024-sql-storage-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 024 | SQL STORAGE EXPLORER</strong></p>
+</article><nav class="nav"><a href="wxt-cpp-023.html">← Anterior</a><a href="wxt-cpp-025.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 024</footer></body></html>

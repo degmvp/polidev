@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 029 \| SQL Backup &amp; Recovery Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 029 | SQL Backup &amp; Recovery Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-029-sql-backup-recovery-explorer.cpp</code><br />
+<strong>Versão demonstrada:</strong> <code>1.0.0</code><br />
+<strong>Tecnologia:</strong> C++ / Microsoft SQL Server<br />
+<strong>Status:</strong> testes funcionais OK --- source frozen</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Backup &amp; Recovery Explorer</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS para explorar o histórico de backups, arquivos de backup,
+cadeia de recuperação e estado dos bancos no SQL Server.</p>
+<p>O banner de homologação demonstra os comandos:</p>
+<ul>
+<li><code>summary</code></li>
+<li><code>history</code></li>
+<li><code>latest</code></li>
+<li><code>files</code></li>
+<li><code>chain</code></li>
+<li><code>recovery</code></li>
+</ul>
+<p>Também demonstra <code>--version</code> e o tratamento defensivo de comando
+inválido.</p>
+<h2>Versão</h2>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe --version
+</code></pre>
+<p>Saída demonstrada:</p>
+<pre><code class="language-text">wxt-cpp-029-sql-backup-recovery-explorer 1.0.0
+</code></pre>
+<h2>Sintaxe utilizada nos testes</h2>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe &lt;command&gt; --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2><code>summary</code></h2>
+<p>Apresenta um resumo dos backups registrados.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O banner demonstra a seção <strong>BACKUP SUMMARY</strong>, com informações como:</p>
+<ul>
+<li>quantidade de backup sets;</li>
+<li>quantidade de FULL backups;</li>
+<li>differential backups;</li>
+<li>log backups;</li>
+<li>bancos com histórico;</li>
+<li>backup mais antigo;</li>
+<li>backup mais recente.</li>
+</ul>
+<p>Também apresenta <strong>BACKUP SIZE</strong>, com tamanho total e tamanho
+comprimido.</p>
+<h2><code>history</code></h2>
+<p>Apresenta o histórico detalhado de backups.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe history --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Entre as colunas demonstradas estão:</p>
+<ul>
+<li><code>database_name</code></li>
+<li><code>backup_type</code></li>
+<li><code>backup_start_date</code></li>
+<li><code>backup_finish_date</code></li>
+<li><code>backup_mb</code></li>
+<li><code>compressed_mb</code></li>
+<li><code>is_copy_only</code></li>
+<li><code>is_password</code></li>
+<li><code>user_name</code></li>
+</ul>
+<h2><code>latest</code></h2>
+<p>Mostra o último backup por banco/tipo.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe latest --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A saída <strong>LATEST BACKUP BY DATABASE / TYPE</strong> demonstra:</p>
+<ul>
+<li>banco;</li>
+<li>tipo de backup;</li>
+<li>início;</li>
+<li>término;</li>
+<li>tamanho;</li>
+<li>tamanho comprimido;</li>
+<li>recovery model.</li>
+</ul>
+<h2><code>files</code></h2>
+<p>Mostra as mídias e arquivos físicos associados aos backups.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe files --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>BACKUP MEDIA / FILES</strong> demonstra informações como:</p>
+<ul>
+<li><code>database_name</code></li>
+<li><code>backup_type</code></li>
+<li><code>backup_finish_date</code></li>
+<li><code>physical_device_name</code></li>
+<li><code>device_type</code></li>
+<li><code>backup_name</code></li>
+<li><code>description</code></li>
+</ul>
+<h2><code>chain</code></h2>
+<p>Examina a cadeia de recuperação dos backups por meio dos LSNs.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe chain --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>BACKUP RECOVERY CHAIN</strong> demonstra campos como:</p>
+<ul>
+<li><code>database_name</code></li>
+<li><code>backup_type</code></li>
+<li><code>backup_start_date</code></li>
+<li><code>backup_finish_date</code></li>
+<li><code>first_lsn</code></li>
+<li><code>last_lsn</code></li>
+<li><code>checkpoint_lsn</code></li>
+<li><code>database_backup_lsn</code></li>
+<li><code>differential_base_lsn</code></li>
+<li><code>is_copy_only</code></li>
+<li><code>recovery_model</code></li>
+</ul>
+<p>Esse comando é especialmente útil para visualizar os identificadores que
+compõem a cadeia lógica de recuperação.</p>
+<h2><code>recovery</code></h2>
+<p>Examina o estado dos bancos e informações relacionadas à recuperação.</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe recovery --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>O banner demonstra duas áreas principais.</p>
+<h3>DATABASE RECOVERY STATUS</h3>
+<p>Inclui informações como:</p>
+<ul>
+<li><code>database_id</code></li>
+<li><code>database_name</code></li>
+<li><code>state_desc</code></li>
+<li><code>recovery_model_desc</code></li>
+<li><code>user_access_desc</code></li>
+<li><code>is_read_only</code></li>
+<li><code>is_auto_close_on</code></li>
+<li><code>is_auto_shrink_on</code></li>
+<li><code>log_reuse_wait_desc</code></li>
+<li><code>compatibility_level</code></li>
+<li><code>create_date</code></li>
+</ul>
+<h3>LAST KNOWN BACKUPS</h3>
+<p>Apresenta por banco:</p>
+<ul>
+<li>último FULL;</li>
+<li>último DIFF;</li>
+<li>último LOG.</li>
+</ul>
+<h2>Tratamento de comando inválido</h2>
+<p>A ferramenta possui tratamento defensivo para comandos desconhecidos.</p>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe banana --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">error: unknown command: banana
+</code></pre>
+<h2>Sequência rápida de inspeção</h2>
+<pre><code class="language-cmd">wxt-cpp-029-sql-backup-recovery-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-029-sql-backup-recovery-explorer.exe history --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-029-sql-backup-recovery-explorer.exe latest --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-029-sql-backup-recovery-explorer.exe files --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-029-sql-backup-recovery-explorer.exe chain --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-029-sql-backup-recovery-explorer.exe recovery --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">SQL Backup &amp; Recovery Explorer
+        |
+        +-- Summary
+        +-- History
+        +-- Latest
+        +-- Files
+        +-- Recovery Chain (LSNs)
+        +-- Recovery Status
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-029-sql-backup-recovery-explorer.cpp
+wxt-cpp-029-sql-backup-recovery-explorer.exe
+wxt-cpp-029-sql-backup-recovery-explorer.png
+wxt-cpp-029-sql-backup-recovery-explorer-README.md
+</code></pre>
+<h2>Homologação</h2>
+<p>Conforme o banner:</p>
+<pre><code class="language-text">WX-TOOLS 029 | TESTES FUNCIONAIS: OK | SOURCE FROZEN
+VERSION  ✓
+SUMMARY  ✓
+HISTORY  ✓
+LATEST   ✓
+FILES    ✓
+CHAIN    ✓
+RECOVERY ✓
+DEFENSIVO ✓
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 029 | SQL BACKUP &amp; RECOVERY EXPLORER</strong></p>
+</article></main></body></html>

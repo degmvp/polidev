@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 006 — FileTools</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 006</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article>
+<h1>POLYDEV | WX-TOOLS | C++ | 006 — FileTools</h1>
+<h2>Visão geral</h2>
+<p>O <strong>FileTools v1.0</strong> é um utilitário de linha de comando em <strong>C++17</strong> para operações com arquivos, desenvolvido para funcionar tanto em <strong>Linux (Ubuntu 24.04)</strong> quanto em <strong>Windows 11</strong>.</p>
+<p>A ferramenta reúne quatro comandos principais para busca, limpeza, organização e verificação de integridade de arquivos, com interface simples e saída colorida no terminal.</p>
+<h2>Comandos principais</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>find</code></td>
+  <td>Procura arquivos por nome, extensão, tamanho ou data de modificação</td>
+</tr>
+<tr>
+  <td><code>clean</code></td>
+  <td>Limpa arquivos temporários e diretórios de cache</td>
+</tr>
+<tr>
+  <td><code>organize</code></td>
+  <td>Organiza arquivos por categoria com base na extensão</td>
+</tr>
+<tr>
+  <td><code>hash</code></td>
+  <td>Calcula hashes SHA-256 e MD5</td>
+</tr>
+</tbody>
+</table>
+<h2>Principais características</h2>
+<ul>
+<li>Multiplataforma: Linux e Windows.</li>
+<li>C++17.</li>
+<li>Uso de guards <code>#ifdef _WIN32</code>.</li>
+<li>Cores ANSI no terminal.</li>
+<li>No Windows, ativa <code>ENABLE_VIRTUAL_TERMINAL_PROCESSING</code>.</li>
+<li>Barras de progresso para operações demoradas.</li>
+<li>Modo <code>dry-run</code> para simular operações sem modificar arquivos.</li>
+<li>Implementação própria de SHA-256 e MD5 em C++17.</li>
+<li>Sem dependências externas.</li>
+<li>Parser de linha de comando com flags, opções com valor e argumentos posicionais.</li>
+</ul>
+<h2>Exemplos de uso</h2>
+<h3>Encontrar arquivos C++</h3>
+<pre><code class="language-text">filetools find --dir . --ext=cpp
+</code></pre>
+<p>Exemplo de saída:</p>
+<pre><code class="language-text">Buscando arquivos (*.cpp) em ...
+
+./src/main.cpp              12.4 KB
+./src/utils.cpp              8.7 KB
+./include/filetools.cpp      6.1 KB
+
+Total: 3 arquivo(s) encontrado(s).
+</code></pre>
+<h3>Encontrar arquivos grandes</h3>
+<pre><code class="language-text">filetools find --dir . --size=100M
+</code></pre>
+<h3>Limpar temporários em modo de simulação</h3>
+<pre><code class="language-text">filetools clean --tmp --dry-run
+</code></pre>
+<p>O <code>--dry-run</code> permite verificar antecipadamente o que seria afetado sem realizar alterações.</p>
+<h3>Organizar arquivos por categoria</h3>
+<pre><code class="language-text">filetools organize --dir &quot;C:\Projetos&quot;
+</code></pre>
+<h3>Calcular hashes</h3>
+<pre><code class="language-text">filetools hash &quot;arquivo.iso&quot;
+</code></pre>
+<p>Exemplo:</p>
+<pre><code class="language-text">Arquivo: arquivo.cpp
+SHA-256: 3f2a6e9c4b7d8c1e0f2a8d9c6e7f4b1c8d9e0f2a6e7...
+MD5    : 9a3f4d2e1b6c8d7e5f4a3c2b1e0d9f8a
+</code></pre>
+<h2>Compilação — Linux</h2>
+<p>Ubuntu 24.04 / g++:</p>
+<pre><code class="language-bash">g++ -std=c++17 -O2 -o filetools     filetools.cpp -lstdc++fs
+</code></pre>
+<h2>Compilação — Windows</h2>
+<p>Visual Studio 2022:</p>
+<pre><code class="language-text">cl /std:c++17 /O2 ^
+   filetools.cpp /Fe:filetools.exe
+</code></pre>
+<h2>Benefícios</h2>
+<p>O FileTools fornece uma interface única para tarefas comuns de administração de arquivos:</p>
+<ul>
+<li>busca avançada;</li>
+<li>limpeza segura;</li>
+<li>organização automática;</li>
+<li>verificação de integridade;</li>
+<li>funcionamento equivalente em Linux e Windows;</li>
+<li>ausência de dependências externas.</li>
+</ul>
+<h2>Aplicações</h2>
+<p>É indicado para:</p>
+<ul>
+<li>desenvolvedores;</li>
+<li>administradores de sistema;</li>
+<li>organização de ambientes de desenvolvimento;</li>
+<li>rotinas de manutenção e limpeza;</li>
+<li>estudos e aprendizado de C++17;</li>
+<li>ambientes mistos Linux/Windows.</li>
+</ul>
+<h2>Segurança</h2>
+<p>Para operações que podem modificar o sistema de arquivos, o modo <code>--dry-run</code> permite realizar uma simulação antes da execução efetiva.</p>
+<p>Essa abordagem facilita conferir quais arquivos serão afetados antes de qualquer alteração.</p>
+<h2>Filosofia</h2>
+<p><strong>Arquivos organizados, ideias mais produtivas.</strong></p>
+<p>O WX-TOOLS 006 reúne pequenas operações recorrentes de arquivos em um único utilitário C++ multiplataforma, leve e eficiente.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 006 — FileTools v1.0</strong><br />
+<em>Ferramentas reais para desenvolvedores reais.</em></p>
+
+</article>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 026 \| SQL Security Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 026 | SQL Security Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-026-sql-security-explorer.cpp</code><br />
+<strong>Versão demonstrada:</strong> <code>1.0.0</code><br />
+<strong>Banco:</strong> Microsoft SQL Server</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Security Explorer</strong> é uma ferramenta da coleção POLYDEV WX-TOOLS
+para inspeção da segurança de bancos SQL Server pela linha de comando.</p>
+<p>O banner de homologação demonstra consultas de resumo de segurança,
+usuários, roles, permissões explícitas, segurança de objetos e
+candidatos a usuários órfãos.</p>
+<p>Comandos demonstrados:</p>
+<ul>
+<li><code>summary</code></li>
+<li><code>users</code></li>
+<li><code>roles</code></li>
+<li><code>permissions &lt;user&gt;</code></li>
+<li><code>object &lt;schema.object&gt;</code></li>
+<li><code>orphans</code></li>
+</ul>
+<p>Também são demonstrados <code>--version</code> e o tratamento de objeto
+inexistente.</p>
+<h2>Versão</h2>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe --version
+</code></pre>
+<p>Saída demonstrada:</p>
+<pre><code class="language-text">wxt-cpp-026-sql-security-explorer 1.0.0
+</code></pre>
+<h2>Sintaxe utilizada nos testes</h2>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe &lt;command&gt; [argument] --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2><code>summary</code></h2>
+<p>Apresenta um resumo dos principals de segurança do banco.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>SECURITY SUMMARY</strong> agrupa os principals por tipo, incluindo no
+exemplo:</p>
+<ul>
+<li><code>DATABASE_USER</code></li>
+<li><code>DATABASE_ROLE</code></li>
+<li><code>APPLICATION_ROLE</code></li>
+<li><code>WINDOWS_GROUP</code></li>
+<li><code>WINDOWS_USER</code></li>
+</ul>
+<h2><code>users</code></h2>
+<p>Lista os usuários do banco.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe users --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>DATABASE USERS</strong> demonstra informações como:</p>
+<ul>
+<li><code>principal_id</code></li>
+<li><code>user_name</code></li>
+<li><code>type_desc</code></li>
+<li><code>authentication_type_desc</code></li>
+<li><code>orphan_candidate</code></li>
+<li><code>create_date</code></li>
+<li><code>modify_date</code></li>
+</ul>
+<p>No ambiente demonstrado aparece o usuário:</p>
+<pre><code class="language-text">WX_TEST_USER
+</code></pre>
+<h2><code>roles</code></h2>
+<p>Mostra os membros das roles do banco.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe roles --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>DATABASE ROLE MEMBERSHIP</strong> apresenta:</p>
+<ul>
+<li><code>role_name</code></li>
+<li><code>member_name</code></li>
+<li><code>member_type</code></li>
+<li><code>authentication_type</code></li>
+</ul>
+<p>O banner demonstra, entre outros, <code>WX_TEST_USER</code> como membro de:</p>
+<pre><code class="language-text">db_datareader
+</code></pre>
+<h2><code>permissions &lt;user&gt;</code></h2>
+<p>Mostra as permissões explícitas de um usuário e suas associações a
+roles.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe permissions WX_TEST_USER --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h3>EXPLICIT PERMISSIONS</h3>
+<p>A saída demonstrada inclui:</p>
+<ul>
+<li><code>principal_name</code></li>
+<li><code>principal_type</code></li>
+<li><code>state_desc</code></li>
+<li><code>permission_name</code></li>
+<li><code>class_desc</code></li>
+<li><code>securable</code></li>
+<li><code>column_name</code></li>
+</ul>
+<p>No exemplo de homologação, <code>WX_TEST_USER</code> possui permissões demonstradas
+como:</p>
+<pre><code class="language-text">GRANT CONNECT
+GRANT SELECT
+</code></pre>
+<h3>ROLE MEMBERSHIP</h3>
+<p>Também é apresentada a associação:</p>
+<pre><code class="language-text">db_datareader
+</code></pre>
+<h2><code>object &lt;schema.object&gt;</code></h2>
+<p>Examina as permissões explícitas aplicadas a um objeto.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe object dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>OBJECT SECURITY</strong> identifica o objeto e apresenta <strong>EXPLICIT
+OBJECT / COLUMN PERMISSIONS</strong>.</p>
+<p>No exemplo demonstrado:</p>
+<pre><code class="language-text">principal : WX_TEST_USER
+type      : SQL_USER
+state     : GRANT
+permission: SELECT
+scope     : (object)
+</code></pre>
+<h2><code>orphans</code></h2>
+<p>Procura candidatos a usuários órfãos.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe orphans --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção apresentada é:</p>
+<pre><code class="language-text">ORPHAN USER CANDIDATES
+</code></pre>
+<p>Na captura de homologação:</p>
+<pre><code class="language-text">(no rows)
+</code></pre>
+<h2>Tratamento de erro --- objeto inexistente</h2>
+<p>O banner demonstra tratamento defensivo quando o objeto solicitado não
+existe.</p>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe object dbo.NAO_EXISTE --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">wxt-cpp-026-sql-security-explorer: error: object not found: dbo.NAO_EXISTE
+</code></pre>
+<h2>Sequência rápida de inspeção</h2>
+<pre><code class="language-cmd">wxt-cpp-026-sql-security-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-026-sql-security-explorer.exe users --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-026-sql-security-explorer.exe roles --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-026-sql-security-explorer.exe permissions WX_TEST_USER --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-026-sql-security-explorer.exe object dbo.DadosTeste --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-026-sql-security-explorer.exe orphans --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+User       : WX_TEST_USER
+Object     : dbo.DadosTeste
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">SQL Security Explorer
+        |
+        +-- Security Summary
+        +-- Database Users
+        +-- Role Membership
+        +-- User Permissions
+        +-- Object / Column Permissions
+        +-- Orphan User Candidates
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-026-sql-security-explorer.cpp
+wxt-cpp-026-sql-security-explorer.exe
+wxt-cpp-026-sql-security-explorer.png
+wxt-cpp-026-sql-security-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 026 | SQL SECURITY EXPLORER</strong></p>
+</article></main></body></html>

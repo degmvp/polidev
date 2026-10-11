@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 004 — System Monitor</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 004</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article>
+<h1>POLYDEV | WX-TOOLS | C++ | 004 — System Monitor</h1>
+<h2>Visão geral</h2>
+<p>O <strong>System Monitor</strong> é uma ferramenta CLI em C++17 para inspecionar processos, discos, memória e arquivos de log em <strong>Linux</strong>. O código utiliza interfaces do sistema como <code>/proc</code>, <code>sysinfo</code> e <code>statvfs</code>.</p>
+<p><strong>Fonte:</strong> <code>wxt-cpp-004-system-monitor.cpp</code><br />
+<strong>Banner:</strong> <code>wxt-cpp-004-system-monitor.png</code><br />
+<strong>Versão declarada no fonte:</strong> 1.0.</p>
+<h2>Recursos e comandos</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Finalidade</th>
+  <th>Opções</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>procs</code></td>
+  <td>Monitorar processos</td>
+  <td><code>--sort cpu\|mem\|pid</code>, <code>--filter STR</code>, <code>--count N</code></td>
+</tr>
+<tr>
+  <td><code>disk</code></td>
+  <td>Mostrar uso de disco e partições</td>
+  <td><code>--path DIR</code>, <code>--all</code>, <code>--bytes</code></td>
+</tr>
+<tr>
+  <td><code>mem</code></td>
+  <td>Mostrar RAM e swap</td>
+  <td><code>--watch N</code>, <code>--bytes</code></td>
+</tr>
+<tr>
+  <td><code>logs</code></td>
+  <td>Visualizar e filtrar logs</td>
+  <td><code>--file PATH</code>, <code>--lines N</code>, <code>--filter STR</code>, <code>--follow</code> ou <code>-f</code></td>
+</tr>
+</tbody>
+</table>
+<p>Opções globais: <code>--no-color</code> para desativar cores; <code>-h</code> ou <code>--help</code> para consultar a ajuda.</p>
+<h2>Ambiente e compilação</h2>
+<p>Requer Linux com suporte às interfaces <code>/proc</code>, <code>sysinfo</code> e <code>statvfs</code>. Não é um programa Windows nativo, apesar de usar C++17.</p>
+<p>No Ubuntu 24.04:</p>
+<pre><code class="language-bash">g++-13 -std=c++17 -O2 wxt-cpp-004-system-monitor.cpp -o wxt-cpp-004-system-monitor
+</code></pre>
+<h2>Exemplos de uso</h2>
+<pre><code class="language-bash">./wxt-cpp-004-system-monitor --help
+./wxt-cpp-004-system-monitor procs --sort mem --count 15
+./wxt-cpp-004-system-monitor procs --filter python
+./wxt-cpp-004-system-monitor disk --path /
+./wxt-cpp-004-system-monitor disk --all
+./wxt-cpp-004-system-monitor mem
+./wxt-cpp-004-system-monitor mem --watch 5
+./wxt-cpp-004-system-monitor logs --file /var/log/syslog --lines 30
+./wxt-cpp-004-system-monitor logs --file /var/log/syslog --filter error --follow
+./wxt-cpp-004-system-monitor disk --no-color
+</code></pre>
+<p>O caminho do log é apenas um exemplo: o arquivo deve existir no sistema e estar acessível ao usuário que executa o comando. Para encerrar os modos contínuos (<code>--watch</code> ou <code>--follow</code>), utilize <strong>Ctrl+C</strong>.</p>
+<h2>Segurança e observações</h2>
+<ul>
+<li>Os comandos de inspeção não foram projetados para modificar processos, discos ou memória.</li>
+<li>A leitura de determinados processos e logs pode exigir permissões específicas.</li>
+<li>O comando <code>logs</code> apenas lê arquivos de log; não realiza rotação ou exclusão.</li>
+<li>A disponibilidade dos dados depende do ambiente Linux e dos arquivos presentes.</li>
+</ul>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 004 — System Monitor</strong></p>
+
+</article>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>

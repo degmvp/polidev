@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV | WX-TOOLS | 033 — SQL Restore &amp; Recovery Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 033 — SQL Restore &amp; Recovery Explorer</h1>
+<p><strong>Versão:</strong> 1.0.0<br />
+<strong>Linguagem:</strong> C++17<br />
+<strong>Plataforma homologada:</strong> Windows / Visual Studio 2022<br />
+<strong>Banco de testes:</strong> SQL Server 2025, instância <code>.\WSRV25</code>, banco <code>WX_RECOVERY_LAB</code><br />
+<strong>Fonte:</strong> <code>wxt-cpp-033-sql-restore-recovery-explorer.cpp</code><br />
+<strong>Executável:</strong> <code>wxt-cpp-033-sql-restore-recovery-explorer.exe</code><br />
+<strong>Banner:</strong> <code>wxt-cpp-033-sql-restore-recovery-explorer.png</code></p>
+<h2>Objetivo</h2>
+<p>Utilitário de linha de comando em C++17 e ODBC para examinar o histórico e os metadados de backups do SQL Server, solicitar a verificação de um arquivo de backup e gerar um <strong>modelo ilustrativo</strong> de restauração, sem executar <code>RESTORE DATABASE</code>.</p>
+<h2>Comandos</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Finalidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>history</code></td>
+  <td>Consulta o histórico de backups no <code>msdb</code>, com tipos FULL/DIFF/LOG, datas, LSNs, posição, tamanho e dispositivo.</td>
+</tr>
+<tr>
+  <td><code>header</code></td>
+  <td>Executa a inspeção do cabeçalho de um backup (<code>RESTORE HEADERONLY</code>).</td>
+</tr>
+<tr>
+  <td><code>files</code></td>
+  <td>Lista arquivos lógicos e físicos contidos no backup (<code>RESTORE FILELISTONLY</code>).</td>
+</tr>
+<tr>
+  <td><code>verify</code></td>
+  <td>Solicita ao SQL Server <code>RESTORE VERIFYONLY</code>.</td>
+</tr>
+<tr>
+  <td><code>plan</code></td>
+  <td>Exibe um roteiro <strong>ilustrativo e não executado</strong> com comandos de inspeção e um exemplo comentado de restauração.</td>
+</tr>
+</tbody>
+</table>
+<h2>Requisitos</h2>
+<ul>
+<li>Windows e Visual Studio 2022 com suporte a C++17.</li>
+<li>Biblioteca ODBC do Windows (<code>odbc32.lib</code>) e driver ODBC compatível com SQL Server.</li>
+<li>Acesso autorizado à instância SQL Server e permissões necessárias aos comandos consultados.</li>
+<li>Para <code>header</code>, <code>files</code>, <code>verify</code> e <code>plan</code>, o caminho indicado em <code>--file</code> deve ser acessível <strong>ao serviço do SQL Server</strong>, não apenas ao computador cliente.</li>
+</ul>
+<h2>Compilação</h2>
+<p>No projeto do Visual Studio 2022, configure C++17 e gere o executável com o nome <code>wxt-cpp-033-sql-restore-recovery-explorer.exe</code> no diretório <code>E:\@LIB-C++\bin</code>. A ligação com <code>odbc32.lib</code> é necessária.</p>
+<h2>Exemplos no PowerShell</h2>
+<pre><code class="language-powershell">&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; --version
+
+&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; history --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+
+&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; header --server &quot;.\WSRV25&quot; --file &quot;E:\@LIB-C++\WX_RECOVERY_LAB_FULL.bak&quot;
+
+&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; files --server &quot;.\WSRV25&quot; --file &quot;E:\@LIB-C++\WX_RECOVERY_LAB_FULL.bak&quot;
+
+&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; verify --server &quot;.\WSRV25&quot; --file &quot;E:\@LIB-C++\WX_RECOVERY_LAB_FULL.bak&quot;
+
+&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-033-sql-restore-recovery-explorer.exe&quot; plan --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot; --file &quot;E:\@LIB-C++\WX_RECOVERY_LAB_FULL.bak&quot;
+</code></pre>
+<h2>Segurança e limites</h2>
+<ul>
+<li>O utilitário <strong>não executa a restauração</strong> do banco de dados.</li>
+<li>O comando <code>verify</code> executa uma verificação solicitada ao SQL Server; o sucesso de <code>RESTORE VERIFYONLY</code> <strong>não garante</strong> que uma restauração real será concluída nem substitui testes periódicos de recuperação.</li>
+<li>O comando <code>plan</code> <strong>não determina automaticamente</strong> uma cadeia FULL → DIFF → LOG, nem valida a compatibilidade dos LSNs. O exemplo gerado deve ser revisado e completado manualmente antes de qualquer utilização fora da ferramenta.</li>
+<li>Caminhos <code>MOVE</code>, nomes lógicos, banco de destino, <code>NORECOVERY</code> e <code>RECOVERY</code> precisam ser conferidos antes de uma restauração real.</li>
+</ul>
+<h2>Homologação funcional — 09/10/2026</h2>
+<p>Testes informados no ambiente <code>WX_RECOVERY_LAB</code>:</p>
+<table>
+<thead>
+<tr>
+  <th>Teste</th>
+  <th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>history</code></td>
+  <td>Listou backups FULL, LOG e DIFF e seus metadados.</td>
+</tr>
+<tr>
+  <td><code>header</code></td>
+  <td>Exibiu cabeçalho do backup FULL.</td>
+</tr>
+<tr>
+  <td><code>files</code></td>
+  <td>Identificou os arquivos lógicos de dados e log.</td>
+</tr>
+<tr>
+  <td><code>verify</code></td>
+  <td>Concluiu sem erro SQL reportado pelo programa.</td>
+</tr>
+<tr>
+  <td><code>plan</code></td>
+  <td>Gerou roteiro ilustrativo, sem execução.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Situação:</strong> testes funcionais concluídos no ambiente informado; documentação não representa teste de restauração efetiva.</p>
+</article></main></body></html>

@@ -1,0 +1,148 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 015"><title>POLYDEV | WX-TOOLS | C++ | 015 — SQL Table Recovery</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 015</div><h1>POLYDEV | WX-TOOLS | C++ | 015 — SQL Table Recovery</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 015 — SQL Table Recovery</h1>
+<h2>Visão geral</h2>
+<p>O <strong>SQL Table Recovery</strong> é a terceira etapa da suíte de recuperação física POLYDEV WX-TOOLS, após as ferramentas 013 e 014.</p>
+<p>O utilitário percorre páginas <strong>DATA</strong> de arquivos <strong>MDF/NDF</strong>, examina os slots, decodifica os registros pertencentes à tabela alvo e exporta os dados recuperados para <strong>CSV</strong>.</p>
+<p>O processamento é realizado diretamente sobre o arquivo físico do banco, em modo <strong>somente leitura (READ-ONLY)</strong>, sem necessidade de o SQL Server estar em execução.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Varredura das páginas DATA do MDF/NDF.</li>
+<li>Identificação e leitura dos slots das páginas.</li>
+<li>Reconstrução dos registros a partir dos bytes armazenados.</li>
+<li>Decodificação e validação dos campos da tabela.</li>
+<li>Filtragem de registros inválidos ou pertencentes a outras estruturas.</li>
+<li>Exportação dos registros recuperados para CSV.</li>
+<li>Operação somente leitura.</li>
+<li>Possibilidade de analisar o arquivo completo ou um intervalo de páginas.</li>
+<li>Uso em recuperação, análise forense, auditoria e diagnóstico de corrupção.</li>
+</ul>
+<h2>Fluxo de funcionamento</h2>
+<pre><code class="language-text">Arquivo MDF/NDF
+    |
+    v
+Percorrer páginas
+    |
+    v
+Identificar páginas DATA
+    |
+    v
+Ler todos os slots da página
+    |
+    v
+Decodificar e validar o registro
+    |
+    v
+Registro válido?
+  Sim -&gt; exporta para CSV
+  Não -&gt; descarta
+    |
+    v
+Arquivo CSV com registros recuperados
+</code></pre>
+<h2>Sintaxe básica</h2>
+<pre><code class="language-text">wxt-cpp-015-sql-table-recovery.exe harvest
+    &lt;arquivo_mdf&gt;
+    &lt;arquivo_csv_saida&gt;
+    [pagina_inicio] [pagina_fim]
+</code></pre>
+<h2>Exemplo — varredura completa</h2>
+<pre><code class="language-text">wxt-cpp-015-sql-table-recovery.exe harvest ^
+  &quot;E:\ZZW-2025\MSSQL17.WSRV25\MSSQL\DATA\WX_RECOVERY_LAB.mdf&quot; ^
+  &quot;E:\@LIB-C++\bin\recovered-015-full.csv&quot;
+</code></pre>
+<h2>Exemplo — intervalo de páginas</h2>
+<pre><code class="language-text">wxt-cpp-015-sql-table-recovery.exe harvest ^
+  &quot;E:\ZZW-2025\MSSQL17.WSRV25\MSSQL\DATA\WX_RECOVERY_LAB.mdf&quot; ^
+  &quot;E:\@LIB-C++\bin\recovered-015.csv&quot; 248 248
+</code></pre>
+<h2>Saída de exemplo</h2>
+<pre><code class="language-text">============================================================
+ POLYDEV | WX-TOOLS - SQL TABLE RECOVERY
+ Phase 3: DATA page row harvester (READ-ONLY)
+============================================================
+
+RECOVERED page 248 slot 0  Id=1 Codigo=WX-00000001
+RECOVERED page 248 slot 1  Id=2 Codigo=WX-00000002
+RECOVERED page 248 slot 2  Id=3 Codigo=WX-00000003
+...
+
+Rows recovered : 100000
+Rows rejected  : 14291
+Output CSV     : E:\@LIB-C++\bin\recovered-015-full.csv
+
+RESULT: recovery harvest completed successfully.
+</code></pre>
+<h2>Resultado da homologação</h2>
+<table>
+<thead>
+<tr>
+  <th>Métrica</th>
+  <th style="text-align:right">Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Arquivo</td>
+  <td style="text-align:right">WX_RECOVERY_LAB.mdf</td>
+</tr>
+<tr>
+  <td>Páginas lidas</td>
+  <td style="text-align:right">9.216</td>
+</tr>
+<tr>
+  <td>Páginas DATA</td>
+  <td style="text-align:right">2.836</td>
+</tr>
+<tr>
+  <td>Slots examinados</td>
+  <td style="text-align:right">114.291</td>
+</tr>
+<tr>
+  <td>Registros recuperados</td>
+  <td style="text-align:right"><strong>100.000</strong></td>
+</tr>
+<tr>
+  <td>Registros rejeitados</td>
+  <td style="text-align:right">14.291</td>
+</tr>
+<tr>
+  <td>Arquivo CSV</td>
+  <td style="text-align:right">recovered-015-full.csv</td>
+</tr>
+<tr>
+  <td>Status</td>
+  <td style="text-align:right"><strong>HOMOLOGADO</strong></td>
+</tr>
+</tbody>
+</table>
+<p>O teste recuperou <strong>100.000 registros com sucesso</strong>.</p>
+<h2>Requisitos</h2>
+<ul>
+<li>Windows ou Linux.</li>
+<li>Compilador com suporte a <strong>C++17</strong>.</li>
+<li>Nenhuma dependência externa.</li>
+<li>Acesso somente leitura ao arquivo MDF/NDF.</li>
+<li>Conhecimento da estrutura da tabela alvo para a decodificação correta.</li>
+</ul>
+<h2>Aplicações</h2>
+<p>O SQL Table Recovery é útil para:</p>
+<ul>
+<li>recuperação de tabelas em bancos danificados;</li>
+<li>análise forense de dados;</li>
+<li>extração de registros inacessíveis pelo SQL Server;</li>
+<li>auditoria e diagnóstico de corrupção;</li>
+<li>cenários de desastre nos quais os métodos tradicionais não conseguem acessar os dados.</li>
+</ul>
+<h2>Segurança</h2>
+<p>A ferramenta trabalha em <strong>READ-ONLY</strong> e não altera o MDF/NDF em nenhum momento.</p>
+<p>Para operações reais de recuperação, recomenda-se trabalhar sobre uma cópia do arquivo físico, mantendo o original preservado.</p>
+<h2>Suíte de recuperação</h2>
+<p>O WX-TOOLS 015 integra a sequência de ferramentas de recuperação física:</p>
+<pre><code class="language-text">013 — SQL Page Recovery
+014 — SQL Row Recovery
+015 — SQL Table Recovery
+</code></pre>
+<p>Cada etapa amplia o nível de recuperação: da página física para os registros e, em seguida, para a reconstrução de uma tabela completa.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++</strong><br />
+<em>Pequenos utilitários, grandes soluções.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-014.html">← Anterior</a><a href="wxt-cpp-016.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 015</footer></body></html>

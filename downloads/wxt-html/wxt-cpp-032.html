@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 032 \| SQL Backup Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 032 | SQL Backup Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-032-sql-backup-explorer.cpp</code><br />
+<strong>Versão:</strong> <code>1.0.0</code><br />
+<strong>Tecnologia:</strong> C++17 + ODBC<br />
+<strong>Modo de operação:</strong> somente leitura (read-only)</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Backup Explorer</strong> é uma ferramenta de linha de comando da
+coleção POLYDEV WX-TOOLS para inspeção do histórico e da saúde dos
+backups do Microsoft SQL Server.</p>
+<p>A ferramenta consulta informações do SQL Server e do banco <code>msdb</code> para
+apresentar:</p>
+<ul>
+<li>resumo dos últimos backups FULL, DIFF e LOG;</li>
+<li>situação de backup de um banco específico;</li>
+<li>histórico recente de backups;</li>
+<li>arquivos/dispositivos físicos utilizados pelos backups;</li>
+<li>avaliação da saúde dos backups, com avisos e condições críticas.</li>
+</ul>
+<p>A ferramenta não executa BACKUP, RESTORE nem altera dados do SQL Server.</p>
+<h2>Requisitos</h2>
+<ul>
+<li>Windows</li>
+<li>Microsoft SQL Server</li>
+<li>ODBC Driver 18 for SQL Server</li>
+<li>Visual Studio 2022 para compilação do fonte</li>
+<li>C++17</li>
+<li>biblioteca <code>odbc32.lib</code></li>
+<li>autenticação integrada do Windows com permissão para consultar as
+informações utilizadas pela ferramenta</li>
+</ul>
+<p>A conexão é realizada inicialmente no banco <code>master</code> usando:</p>
+<ul>
+<li><code>Trusted_Connection=Yes</code></li>
+<li><code>TrustServerCertificate=Yes</code></li>
+</ul>
+<h2>Sintaxe</h2>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe &lt;command&gt; [options]
+</code></pre>
+<h2>Comandos</h2>
+<h3><code>summary</code></h3>
+<p>Mostra o último backup FULL, DIFF e LOG para cada banco de usuário do
+SQL Server.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe summary --server &quot;.\WSRV25&quot;
+</code></pre>
+<h3><code>database</code></h3>
+<p>Mostra o estado de backup de um banco específico, incluindo estado do
+banco, recovery model, último FULL, último DIFF, último LOG e quantidade
+de backup sets encontrados.</p>
+<p>O parâmetro <code>--db</code> é obrigatório para este comando.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe database --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+</code></pre>
+<h3><code>history</code></h3>
+<p>Mostra os 100 backups mais recentes, ordenados pela data de término do
+backup.</p>
+<p>A saída inclui:</p>
+<ul>
+<li>banco;</li>
+<li>tipo do backup;</li>
+<li>início;</li>
+<li>término;</li>
+<li>duração em segundos;</li>
+<li>tamanho;</li>
+<li>tamanho comprimido;</li>
+<li>usuário.</li>
+</ul>
+<p>Sem <code>--db</code>, consulta o histórico geral. Com <code>--db</code>, filtra pelo banco
+informado.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe history --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+</code></pre>
+<h3><code>files</code></h3>
+<p>Mostra os dispositivos/arquivos físicos associados aos backups.</p>
+<p>A saída inclui:</p>
+<ul>
+<li>banco;</li>
+<li>tipo do backup;</li>
+<li>data/hora de término;</li>
+<li>tipo do dispositivo;</li>
+<li>caminho físico do arquivo/dispositivo.</li>
+</ul>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe files --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+</code></pre>
+<p>Exemplo de arquivos utilizados durante a homologação:</p>
+<pre><code class="language-text">E:\@LIB-C++\WX_RECOVERY_LAB_FULL.bak
+E:\@LIB-C++\WX_RECOVERY_LAB_DIFF.bak
+E:\@LIB-C++\WX_RECOVERY_LAB_LOG.trn
+</code></pre>
+<h3><code>health</code></h3>
+<p>Executa uma avaliação consolidada da saúde dos backups dos bancos de
+usuário ONLINE.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe health --server &quot;.\WSRV25&quot;
+</code></pre>
+<p>A classificação utilizada pela versão 1.0.0 é:</p>
+<hr />
+<p>Condição                            Resultado</p>
+<hr />
+<p>Nenhum FULL encontrado              <code>CRITICAL: NO FULL BACKUP</code></p>
+<p>Último FULL com 7 dias ou mais      <code>CRITICAL: FULL &gt;= 7 DAYS</code></p>
+<p>Último FULL com 1 dia ou mais       <code>WARNING: FULL &gt;= 1 DAY</code></p>
+<p>Recovery model FULL sem backup de   <code>WARNING: NO LOG BACKUP</code>
+LOG</p>
+<p>Recovery model FULL com LOG de 24   <code>WARNING: LOG &gt;= 24 HOURS</code>
+horas ou mais</p>
+<h2>Nenhuma das condições acima         <code>OK</code></h2>
+<h2>Opções</h2>
+<h3><code>--server &lt;server&gt;</code></h3>
+<p>Instância do SQL Server.</p>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">--server &quot;.\WSRV25&quot;
+</code></pre>
+<p>O parâmetro <code>--server</code> é obrigatório para a execução dos comandos de
+consulta.</p>
+<h3><code>--db &lt;database&gt;</code></h3>
+<p>Banco usado como filtro pelos comandos <code>database</code>, <code>history</code> e <code>files</code>.</p>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">--db WX_RECOVERY_LAB
+</code></pre>
+<h3><code>--help</code></h3>
+<p>Exibe a ajuda integrada.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe --help
+</code></pre>
+<p>Também são aceitos:</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe -h
+wxt-cpp-032-sql-backup-explorer.exe help
+</code></pre>
+<h3><code>--version</code></h3>
+<p>Exibe a versão da ferramenta.</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe --version
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe -v
+</code></pre>
+<p>Saída esperada:</p>
+<pre><code class="language-text">wxt-cpp-032-sql-backup-explorer 1.0.0
+</code></pre>
+<h2>Sequência rápida de operação</h2>
+<p>Para uma inspeção completa do ambiente:</p>
+<pre><code class="language-cmd">wxt-cpp-032-sql-backup-explorer.exe summary --server &quot;.\WSRV25&quot;
+
+wxt-cpp-032-sql-backup-explorer.exe health --server &quot;.\WSRV25&quot;
+
+wxt-cpp-032-sql-backup-explorer.exe database --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+
+wxt-cpp-032-sql-backup-explorer.exe history --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+
+wxt-cpp-032-sql-backup-explorer.exe files --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Compilação</h2>
+<p>O fonte foi desenvolvido para Visual Studio 2022, C++17, utilizando
+ODBC.</p>
+<p>A biblioteca necessária é:</p>
+<pre><code class="language-text">odbc32.lib
+</code></pre>
+<p>O próprio fonte inclui:</p>
+<pre><code class="language-cpp">#pragma comment(lib, &quot;odbc32.lib&quot;)
+</code></pre>
+<h2>Segurança</h2>
+<p>O SQL Backup Explorer foi projetado como utilitário de inspeção
+<strong>read-only</strong>.</p>
+<p>As consultas utilizadas pela versão 1.0.0 leem informações de catálogo e
+histórico, principalmente de:</p>
+<ul>
+<li><code>sys.databases</code></li>
+<li><code>msdb.dbo.backupset</code></li>
+<li><code>msdb.dbo.backupmediafamily</code></li>
+</ul>
+<p>Nenhum dos comandos da ferramenta executa alteração de dados ou inicia
+operações de backup/restore.</p>
+<h2>Ambiente de homologação POLYDEV</h2>
+<p>Exemplos desta documentação utilizam:</p>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-032-sql-backup-explorer.cpp
+wxt-cpp-032-sql-backup-explorer.exe
+wxt-cpp-032-sql-backup-explorer.png
+wxt-cpp-032-sql-backup-explorer-README.md
+</code></pre>
+<h2>Versão</h2>
+<p><strong>1.0.0</strong></p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 032 | SQL Backup Explorer</strong></p>
+</article></main></body></html>

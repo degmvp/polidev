@@ -1,0 +1,85 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 016"><title>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 016</div><h1>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</h1>
+<h2>Visão geral</h2>
+<p>O <strong>SQL MDF Damage Mapper</strong> é uma ferramenta da coleção <strong>POLYDEV WX-TOOLS</strong>, desenvolvida para análise física de arquivos de dados do SQL Server.</p>
+<p>Seu objetivo é varrer as páginas de arquivos <strong>MDF/NDF</strong>, classificá-las e localizar regiões com possíveis inconsistências, produzindo um mapa de diagnóstico que auxilia investigações e trabalhos de recuperação.</p>
+<p>A operação é realizada em <strong>modo somente leitura</strong>, preservando o arquivo original.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li><strong>Varredura física</strong> — analisa as páginas do arquivo.</li>
+<li><strong>Classificação de páginas</strong> — identifica páginas OK, suspeitas e inválidas.</li>
+<li><strong>Mapeamento de danos</strong> — localiza regiões com inconsistências.</li>
+<li><strong>Relatório detalhado</strong> — gera saída em CSV e resumo no console.</li>
+<li><strong>Suporte a MDF e NDF</strong> — trabalha com arquivos de dados do SQL Server.</li>
+<li><strong>Somente leitura</strong> — não modifica o arquivo analisado.</li>
+<li><strong>Investigação de recuperação</strong> — complementa as ferramentas WX-TOOLS 013, 014 e 015.</li>
+</ul>
+<h2>Exemplo de classificação</h2>
+<p>Durante a análise, páginas podem ser apresentadas de forma semelhante a:</p>
+<pre><code class="language-text">PageID    Type          Status
+--------------------------------
+1:0       FILE_HEADER   OK
+1:8       DATA          OK
+1:16      DATA          SUSPECT
+1:23      INDEX         OK
+1:248     DATA          SUSPECT
+1:512     DATA          INVALID
+</code></pre>
+<p>Essa classificação permite identificar rapidamente áreas que merecem investigação mais detalhada antes de uma tentativa de recuperação.</p>
+<h2>Fluxo de trabalho</h2>
+<p>O processo do WX-TOOLS 016 pode ser resumido em quatro etapas:</p>
+<pre><code class="language-text">DIAGNOSE
+   |
+ANALYZE
+   |
+RECOVER
+   |
+PRESERVE
+</code></pre>
+<p>Primeiro o arquivo é diagnosticado e suas páginas são analisadas. As regiões problemáticas podem então orientar as ferramentas de recuperação, sempre preservando o arquivo original.</p>
+<h2>Relatório CSV</h2>
+<p>Além do resumo exibido no console, a ferramenta pode produzir um relatório CSV para análise posterior.</p>
+<p>O relatório permite registrar informações como:</p>
+<ul>
+<li>identificação da página;</li>
+<li>tipo da página;</li>
+<li>classificação/status;</li>
+<li>regiões suspeitas;</li>
+<li>páginas inválidas;</li>
+<li>informações úteis para investigação física do arquivo.</li>
+</ul>
+<h2>Integração com a suíte de recuperação</h2>
+<p>O <strong>SQL MDF Damage Mapper</strong> faz parte da sequência de ferramentas de recuperação física da coleção:</p>
+<ul>
+<li><strong>013 — SQL Page Recovery</strong></li>
+<li><strong>014 — SQL Row Recovery</strong></li>
+<li><strong>015 — SQL Table Recovery</strong></li>
+<li><strong>016 — SQL MDF Damage Mapper</strong></li>
+</ul>
+<p>Enquanto as ferramentas anteriores trabalham progressivamente com páginas, registros e tabelas, o 016 acrescenta uma visão de diagnóstico do arquivo físico, ajudando a localizar onde os problemas estão concentrados.</p>
+<h2>Compatibilidade</h2>
+<p>O projeto foi concebido para trabalhar com arquivos de dados de versões modernas do SQL Server, incluindo:</p>
+<pre><code class="language-text">SQL Server 2025
+SQL Server 2022
+SQL Server 2019
+SQL Server 2017
+</code></pre>
+<h2>Segurança</h2>
+<p>O utilitário opera em <strong>READ-ONLY</strong>.</p>
+<p>Ele não deve alterar o MDF/NDF analisado. Em trabalhos reais de recuperação, a prática recomendada é trabalhar sobre uma <strong>cópia offline</strong> do arquivo de dados e manter o original preservado.</p>
+<h2>Aplicações</h2>
+<p>O WX-TOOLS 016 pode auxiliar em cenários como:</p>
+<ul>
+<li>investigação de corrupção física;</li>
+<li>localização de páginas suspeitas;</li>
+<li>identificação de regiões inválidas;</li>
+<li>análise preliminar antes da recuperação;</li>
+<li>documentação técnica de danos;</li>
+<li>geração de mapa para orientar ferramentas de recuperação.</li>
+</ul>
+<h2>Filosofia</h2>
+<p><strong>Mapeia • Diagnostica • Localiza • Facilita a Recuperação</strong></p>
+<p>O objetivo é transformar um arquivo potencialmente danificado em um cenário investigável, permitindo sair do problema em direção à solução sem modificar a fonte original.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++</strong><br />
+<em>Developer Tools for a Better Tomorrow</em></p>
+</article><nav class="nav"><a href="wxt-cpp-015.html">← Anterior</a><a href="wxt-cpp-017.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 016</footer></body></html>

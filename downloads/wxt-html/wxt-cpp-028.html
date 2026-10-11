@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV \| WX-TOOLS \| 028 \| SQL Session &amp; Lock Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 028 | SQL Session &amp; Lock Explorer</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-028-sql-session-lock-explorer.cpp</code><br />
+<strong>Versão demonstrada:</strong> <code>1.0.0</code><br />
+<strong>Banco:</strong> Microsoft SQL Server<br />
+<strong>Status:</strong> homologado</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Session &amp; Lock Explorer</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS para explorar sessões, requests, bloqueios, locks e waits do
+SQL Server pela linha de comando.</p>
+<p>O banner de homologação demonstra os comandos:</p>
+<ul>
+<li><code>summary</code></li>
+<li><code>active</code></li>
+<li><code>sessions</code></li>
+<li><code>blockers</code></li>
+<li><code>locks</code></li>
+<li><code>waits</code></li>
+</ul>
+<p>Também demonstra <code>--version</code> e tratamento defensivo de comando inválido.</p>
+<h2>Versão</h2>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe --version
+</code></pre>
+<p>Saída demonstrada:</p>
+<pre><code class="language-text">wxt-cpp-028-sql-session-lock-explorer 1.0.0
+</code></pre>
+<h2>Sintaxe utilizada nos testes</h2>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe &lt;command&gt; --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2><code>summary</code></h2>
+<p>Apresenta um resumo da atividade do servidor e informações da conexão
+atual.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h3>SERVER ACTIVITY SUMMARY</h3>
+<p>O banner demonstra:</p>
+<ul>
+<li><code>user_sessions</code></li>
+<li><code>active_requests</code></li>
+<li><code>blocked_requests</code></li>
+<li><code>blocker_sessions</code></li>
+<li><code>waiting_locks</code></li>
+</ul>
+<h3>CURRENT CONNECTION</h3>
+<p>Apresenta informações como:</p>
+<ul>
+<li><code>session_id</code></li>
+<li><code>database_name</code></li>
+<li><code>original_login</code></li>
+<li><code>host_name</code></li>
+<li><code>program_name</code></li>
+</ul>
+<h2><code>active</code></h2>
+<p>Mostra os requests ativos.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe active --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção apresentada é:</p>
+<pre><code class="language-text">ACTIVE REQUESTS
+</code></pre>
+<p>Na captura de homologação não havia requests ativos no momento da
+consulta, resultando em:</p>
+<pre><code class="language-text">(no rows)
+</code></pre>
+<h2><code>sessions</code></h2>
+<p>Lista as sessões de usuário.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe sessions --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>USER SESSIONS</strong> demonstra informações como:</p>
+<ul>
+<li><code>session_id</code></li>
+<li><code>status</code></li>
+<li><code>login_name</code></li>
+<li><code>host_name</code></li>
+<li><code>program_name</code></li>
+<li><code>client_interface_name</code></li>
+<li><code>database_name</code></li>
+<li><code>cpu_time</code></li>
+<li><code>memory_usage</code></li>
+<li><code>reads</code></li>
+<li><code>writes</code></li>
+<li><code>logical_reads</code></li>
+<li><code>open_transaction_count</code></li>
+<li><code>login_time</code></li>
+<li>horários dos últimos requests</li>
+</ul>
+<h2><code>blockers</code></h2>
+<p>Examina cadeias de bloqueio.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe blockers --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção apresentada é:</p>
+<pre><code class="language-text">BLOCKING CHAINS
+</code></pre>
+<p>Na captura de homologação não havia cadeia de bloqueio ativa:</p>
+<pre><code class="language-text">(no rows)
+</code></pre>
+<h2><code>locks</code></h2>
+<p>Mostra os locks ativos.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe locks --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>ACTIVE LOCKS</strong> demonstra informações como:</p>
+<ul>
+<li><code>session_id</code></li>
+<li><code>database_name</code></li>
+<li><code>resource_type</code></li>
+<li><code>resource_subtype</code></li>
+<li><code>request_mode</code></li>
+<li><code>request_status</code></li>
+<li><code>request_owner_type</code></li>
+<li><code>object_name</code></li>
+<li><code>resource_description</code></li>
+</ul>
+<h2><code>waits</code></h2>
+<p>Mostra requests/waits observados no SQL Server.</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe waits --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>A seção <strong>REQUEST WAITS</strong> demonstra informações como:</p>
+<ul>
+<li><code>session_id</code></li>
+<li><code>wait_duration_ms</code></li>
+<li><code>wait_type</code></li>
+<li><code>blocking_session_id</code></li>
+<li><code>resource_description</code></li>
+<li><code>status</code></li>
+<li><code>database_name</code></li>
+<li><code>command</code></li>
+<li><code>cpu_time</code></li>
+<li><code>total_elapsed_time</code></li>
+<li><code>wait_resource</code></li>
+</ul>
+<h2>Tratamento de comando inválido</h2>
+<p>A ferramenta rejeita comandos desconhecidos.</p>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe banana --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">wxt-cpp-028-sql-session-lock-explorer: error: unknown command: banana
+</code></pre>
+<h2>Sequência rápida de diagnóstico</h2>
+<pre><code class="language-cmd">wxt-cpp-028-sql-session-lock-explorer.exe summary --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-028-sql-session-lock-explorer.exe active --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-028-sql-session-lock-explorer.exe sessions --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-028-sql-session-lock-explorer.exe blockers --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-028-sql-session-lock-explorer.exe locks --server .\WSRV25 --db WX_RECOVERY_LAB
+
+wxt-cpp-028-sql-session-lock-explorer.exe waits --server .\WSRV25 --db WX_RECOVERY_LAB
+</code></pre>
+<h2>Registro demonstrado no SYS_TOOLS</h2>
+<p>O banner registra a ferramenta com:</p>
+<pre><code class="language-text">tool_id     : 028
+tool_name   : wxt-cpp-028-sql-session-lock-explorer
+category    : SQL
+description : Explora sessões, requests, bloqueios, locks e waits do SQL Server.
+</code></pre>
+<p>Também demonstra a confirmação do registro por consulta ao
+<code>dbo.SYS_TOOLS</code>.</p>
+<h2>Ambiente demonstrado</h2>
+<pre><code class="language-text">SQL Server : .\WSRV25
+Database   : WX_RECOVERY_LAB
+</code></pre>
+<h2>Arquivo em produção</h2>
+<p>O banner demonstra o executável:</p>
+<pre><code class="language-text">E:\@LIB-C++\bin\wxt-cpp-028-sql-session-lock-explorer.exe
+</code></pre>
+<h2>Homologação</h2>
+<p>Conforme o banner:</p>
+<pre><code class="language-text">Compilação OK
+Todos os comandos funcionais
+Registro no SYS_TOOLS OK (tool_id = '028')
+Executável em produção OK
+Pronto para uso
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-028-sql-session-lock-explorer.cpp
+wxt-cpp-028-sql-session-lock-explorer.exe
+wxt-cpp-028-sql-session-lock-explorer.png
+wxt-cpp-028-sql-session-lock-explorer-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 028 | SQL SESSION &amp; LOCK EXPLORER</strong></p>
+</article></main></body></html>

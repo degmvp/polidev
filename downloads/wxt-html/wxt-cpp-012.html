@@ -1,0 +1,96 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 012"><title>POLYDEV | WX-TOOLS | C++ | 012 — FileWatcher</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 012</div><h1>POLYDEV | WX-TOOLS | C++ | 012 — FileWatcher</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 012 — FileWatcher</h1>
+<h2>Visão geral</h2>
+<p>O <strong>FileWatcher</strong> é uma biblioteca <strong>C++17 multiplataforma</strong> da coleção WX-TOOLS para monitoramento, em tempo real, de alterações em arquivos e diretórios.</p>
+<p>A ferramenta detecta eventos de criação, modificação, renomeação e exclusão, oferecendo uma API simples, leve e sem dependências externas.</p>
+<h2>Eventos monitorados</h2>
+<p>O FileWatcher identifica os principais eventos do sistema de arquivos:</p>
+<ul>
+<li><strong>CREATED</strong> — criação de arquivos e diretórios.</li>
+<li><strong>MODIFIED</strong> — alteração de conteúdo.</li>
+<li><strong>RENAMED</strong> — renomeação.</li>
+<li><strong>DELETED</strong> — exclusão de arquivos e diretórios.</li>
+</ul>
+<h2>Plataformas suportadas</h2>
+<h3>Windows 11</h3>
+<p>Utiliza o mecanismo nativo:</p>
+<pre><code class="language-text">ReadDirectoryChangesW
+</code></pre>
+<h3>Linux / Ubuntu 24.04</h3>
+<p>Utiliza:</p>
+<pre><code class="language-text">inotify
+</code></pre>
+<p>Isso permite manter uma interface comum em C++ enquanto cada plataforma utiliza seu mecanismo nativo de monitoramento.</p>
+<h2>Principais características</h2>
+<ul>
+<li>API simples e objetiva.</li>
+<li>Suporte a arquivos e diretórios.</li>
+<li>Eventos em tempo real.</li>
+<li>Multiplataforma: Windows e Linux.</li>
+<li>C++17 com <code>std::filesystem</code>.</li>
+<li>Leve e sem dependências externas.</li>
+<li>Tratamento de encerramento com <code>Ctrl+C</code>.</li>
+</ul>
+<h2>Arquivos do módulo</h2>
+<pre><code class="language-text">wxt-cpp-012-filewatcher.hpp
+wxt-cpp-012-filewatcher.cpp
+README.md
+</code></pre>
+<h3><code>wxt-cpp-012-filewatcher.hpp</code></h3>
+<p>Implementação principal do módulo em formato header-only.</p>
+<h3><code>wxt-cpp-012-filewatcher.cpp</code></h3>
+<p>Programa de exemplo para demonstração e teste da biblioteca.</p>
+<h2>Testes e homologação</h2>
+<h3>Windows 11 / Visual Studio 2022</h3>
+<pre><code class="language-text">Compilação : 0 warnings / 0 errors
+Eventos    : CREATED, RENAMED, DELETED
+Encerramento: OK
+</code></pre>
+<h3>Ubuntu 24.04 / g++</h3>
+<pre><code class="language-text">Compilação : sem warnings / 0 errors
+Eventos    : CREATED, RENAMED, DELETED
+Encerramento: OK
+</code></pre>
+<p>O módulo foi homologado nas duas plataformas.</p>
+<h2>Exemplo de execução</h2>
+<p>Uma aplicação típica pode monitorar um diretório e apresentar os eventos conforme ocorrem:</p>
+<pre><code class="language-text">fwdemo — monitorando: E:\FWTEST
+modo: recursivo | debounce: 250 ms | Ctrl+C para sair
+
+16:47:51  CREATED   arquivo.txt
+16:48:03  MODIFIED  arquivo.txt
+16:48:20  RENAMED   arquivo.txt -&gt; arquivo2.txt
+16:48:35  DELETED   arquivo2.txt
+</code></pre>
+<h2>Aplicações</h2>
+<p>O FileWatcher pode ser utilizado em:</p>
+<ul>
+<li>sincronização de arquivos;</li>
+<li>monitoramento de diretórios;</li>
+<li>sistemas de build automático;</li>
+<li>processamento de arquivos recém-criados;</li>
+<li>auditoria de alterações;</li>
+<li>atualização automática de caches;</li>
+<li>ferramentas de desenvolvimento;</li>
+<li>automações locais;</li>
+<li>serviços que precisam reagir a mudanças no filesystem.</li>
+</ul>
+<h2>Requisitos</h2>
+<ul>
+<li>Compilador compatível com <strong>C++17</strong>.</li>
+<li>Windows ou Linux.</li>
+<li><code>std::filesystem</code>.</li>
+<li>Nenhuma biblioteca externa.</li>
+</ul>
+<h2>Status</h2>
+<pre><code class="language-text">WX-TOOLS 012
+FileWatcher
+
+HOMOLOGADO
+FONTE CONGELADO
+</code></pre>
+<p>Após os testes em Windows 11 e Ubuntu 24.04, o código foi considerado homologado e congelado.</p>
+<hr />
+<p><strong>WX-TOOLS | C++ | 012 — FileWatcher</strong><br />
+<em>Small Tools. Big Results.</em><br />
+<em>Observe o que importa. Em tempo real.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-011.html">← Anterior</a><a href="wxt-cpp-013.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 012</footer></body></html>

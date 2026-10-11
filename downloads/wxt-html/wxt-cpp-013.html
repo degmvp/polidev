@@ -1,0 +1,112 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 013"><title>POLYDEV | WX-TOOLS | C++ | 013 — SQL Page Recovery</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 013</div><h1>POLYDEV | WX-TOOLS | C++ | 013 — SQL Page Recovery</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 013 — SQL Page Recovery</h1>
+<h2>Visão geral</h2>
+<p>O <strong>SQL Page Recovery</strong> é a primeira fase da suíte de recuperação física do <strong>POLYDEV WX-TOOLS</strong>.</p>
+<p>A ferramenta realiza a leitura direta e offline de arquivos <strong>MDF/NDF do SQL Server</strong>, examinando páginas físicas de 8 KB sem utilizar o mecanismo do SQL Server.</p>
+<p>O utilitário foi projetado para operar em modo <strong>100% READ-ONLY</strong>, sendo indicado para diagnóstico, análise forense e preparação de processos de recuperação.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Leitura direta de arquivos MDF/NDF.</li>
+<li>Operação offline, sem necessidade do SQL Server.</li>
+<li>Varredura de todas as páginas físicas do arquivo.</li>
+<li>Interpretação do cabeçalho das páginas.</li>
+<li>Identificação de tipos como <code>FILE_HEADER</code>, <code>DATA</code>, <code>INDEX</code> e outros.</li>
+<li>Extração do slot array dos registros.</li>
+<li>Verificação básica de sanidade dos cabeçalhos.</li>
+<li>Comparação entre identificação física e Page ID armazenado.</li>
+<li>Inspeção hexadecimal do cabeçalho.</li>
+<li>Operação somente leitura.</li>
+</ul>
+<h2>Informações do arquivo</h2>
+<p>No ambiente de homologação, o arquivo analisado apresentou:</p>
+<pre><code class="language-text">File       : WX_RECOVERY_LAB.mdf
+Size       : 75497472 bytes (72.00 MiB)
+Page size  : 8192 bytes
+Full pages : 9216
+Remainder  : 0 bytes
+</code></pre>
+<h2>Varredura física</h2>
+<p>A ferramenta pode percorrer o MDF/NDF e produzir um resumo da análise das páginas.</p>
+<p>Exemplo do laboratório:</p>
+<pre><code class="language-text">Summary:
+
+Readable pages       : 9216
+All-zero pages       : 1830
+Sane headers         : 4099
+Suspicious headers   : 3287
+Page-id matches      : 3091
+Page-id mismatches   : 4295
+</code></pre>
+<p>Esses números ajudam a localizar regiões que exigem investigação mais detalhada nas fases seguintes da recuperação.</p>
+<h2>Inspeção de página</h2>
+<p>Exemplo de análise da página física 8:</p>
+<pre><code class="language-text">Physical page : 8
+Header version: 1
+Type          : 1 (DATA)
+Type flags    : 0x04
+Level         : 0
+Flag bits     : 0x0200
+Index ID      : 256
+Page ID       : (1:8)
+Prev page     : (0:0)
+Next page     : (0:0)
+Object/Alloc  : 10
+pminlen       : 16
+Slot count    : 98
+Free count    : 3284
+Free data off.: 4731
+Reserved count: 0
+Basic sanity  : OK
+Page-id match : YES
+</code></pre>
+<h2>Slot array</h2>
+<p>A inspeção também permite localizar os offsets dos registros presentes na página:</p>
+<pre><code class="language-text">Slot      Offset      Status
+--------------------------------
+0         115         OK
+1         2121        OK
+2         4662        OK
+3         4613        OK
+4         3725        OK
+...
+
+Slots total : 98
+Invalid     : 0
+</code></pre>
+<p>O slot array é fundamental para as etapas posteriores, pois permite localizar fisicamente cada registro dentro de uma página DATA.</p>
+<h2>Exemplos de uso</h2>
+<h3>Informações do arquivo</h3>
+<pre><code class="language-text">wxt-cpp-013-sql-page-recovery.exe info WX_RECOVERY_LAB.mdf
+</code></pre>
+<h3>Varredura completa</h3>
+<pre><code class="language-text">wxt-cpp-013-sql-page-recovery.exe scan WX_RECOVERY_LAB.mdf
+</code></pre>
+<h3>Inspeção de uma página</h3>
+<pre><code class="language-text">wxt-cpp-013-sql-page-recovery.exe page WX_RECOVERY_LAB.mdf 8
+</code></pre>
+<h2>Aplicações</h2>
+<p>O SQL Page Recovery é indicado para:</p>
+<ul>
+<li>diagnóstico de arquivos MDF/NDF;</li>
+<li>análise forense;</li>
+<li>investigação de corrupção física;</li>
+<li>identificação de páginas DATA e INDEX;</li>
+<li>localização de registros através do slot array;</li>
+<li>preparação para recuperação de rows e tabelas;</li>
+<li>estudo da estrutura física do SQL Server.</li>
+</ul>
+<h2>Segurança</h2>
+<p>A ferramenta é <strong>READ-ONLY</strong>.</p>
+<p>Nenhuma página é gravada ou modificada durante a análise. Em trabalhos reais de recuperação, recomenda-se utilizar uma cópia offline do MDF/NDF e preservar o arquivo original.</p>
+<h2>Suíte de recuperação</h2>
+<p>O WX-TOOLS 013 inicia a sequência de recuperação física:</p>
+<pre><code class="language-text">013 — SQL Page Recovery
+014 — SQL Row Recovery
+015 — SQL Table Recovery
+016 — SQL MDF Damage Mapper
+017 — SQL MDF Recovery Exporter
+</code></pre>
+<p>O 013 trabalha no nível mais fundamental: <strong>as páginas físicas do arquivo</strong>. As ferramentas seguintes avançam para registros, tabelas, mapeamento de danos e exportação dos dados recuperados.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++</strong><br />
+<em>Read. Analyze. Recover.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-012.html">← Anterior</a><a href="wxt-cpp-014.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 013</footer></body></html>

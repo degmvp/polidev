@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV | WX-TOOLS | 034 — SQL Transaction Log Explorer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 034 — SQL Transaction Log Explorer</h1>
+<h2>Visão geral</h2>
+<p>Utilitário de diagnóstico em <strong>C++17 + ODBC</strong> para inspecionar o log de transações de um banco no SQL Server. Os comandos consultam DMVs e metadados, sem executar <code>ALTER DATABASE</code>, <code>DBCC SHRINKFILE</code>, <code>BACKUP</code> ou recuperação automática.</p>
+<ul>
+<li><strong>Fonte:</strong> <code>wxt-cpp-034-sql-transaction-log-explorer.cpp</code></li>
+<li><strong>Executável:</strong> <code>wxt-cpp-034-sql-transaction-log-explorer.exe</code></li>
+<li><strong>Banner:</strong> <code>wxt-cpp-034-sql-transaction-log-explorer.png</code></li>
+<li><strong>Versão:</strong> 1.0.0</li>
+<li><strong>Ambiente homologado funcionalmente:</strong> Windows 11, Visual Studio 2022, SQL Server 2025, instância <code>.\WSRV25</code>, banco <code>WX_RECOVERY_LAB</code>.</li>
+</ul>
+<h2>Requisitos</h2>
+<ul>
+<li>Windows e compilador com suporte a C++17 (Visual Studio 2022).</li>
+<li>Microsoft ODBC Driver 18 for SQL Server.</li>
+<li>Acesso à instância SQL Server e permissões suficientes para consultar as DMVs usadas (as permissões exigidas podem variar por versão do servidor).</li>
+<li>Autenticação integrada do Windows por padrão; o programa também aceita <code>--user</code> e <code>--password</code> (evite senha literal na linha de comando em ambientes compartilhados).</li>
+</ul>
+<h2>Compilação</h2>
+<p>No projeto do Visual Studio 2022, incluir o <code>.cpp</code>, habilitar <code>/std:c++17</code>, <code>/EHsc</code> e <code>/utf-8</code>. O fonte inclui <code>#pragma comment(lib, &quot;odbc32.lib&quot;)</code>. Configure a saída para <code>wxt-cpp-034-sql-transaction-log-explorer.exe</code>.</p>
+<h2>Sintaxe</h2>
+<pre><code class="language-powershell">&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-034-sql-transaction-log-explorer.exe&quot; &lt;comando&gt; --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+</code></pre>
+<h2>Comandos</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>status</code></td>
+  <td>Espaço total, utilizado, percentual de uso e log gerado desde o último backup conforme DMV.</td>
+</tr>
+<tr>
+  <td><code>vlf</code></td>
+  <td>Resumo e mapa dos Virtual Log Files, incluindo tamanhos e estados.</td>
+</tr>
+<tr>
+  <td><code>reuse</code></td>
+  <td>Recovery model, estado do banco e motivo de espera para reutilização do log.</td>
+</tr>
+<tr>
+  <td><code>transactions</code></td>
+  <td>Transações de banco retornadas pelas DMVs, com dados de sessão quando disponíveis.</td>
+</tr>
+<tr>
+  <td><code>growth</code></td>
+  <td>Tamanho, limite máximo e configuração de autogrowth do arquivo de log; não é histórico de eventos de crescimento.</td>
+</tr>
+<tr>
+  <td><code>health</code></td>
+  <td>Executa as consultas consolidadas de status, VLF, reuse, transactions e growth e exibe orientação geral.</td>
+</tr>
+</tbody>
+</table>
+<h2>Exemplos</h2>
+<pre><code class="language-powershell">$exe = &quot;E:\@LIB-C++\bin\wxt-cpp-034-sql-transaction-log-explorer.exe&quot;
+&amp; $exe --version
+&amp; $exe status --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+&amp; $exe vlf --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+&amp; $exe reuse --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+&amp; $exe transactions --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+&amp; $exe growth --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+&amp; $exe health --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+</code></pre>
+<h2>Resultados observados na homologação</h2>
+<table>
+<thead>
+<tr>
+  <th>Indicador</th>
+  <th>Resultado no momento do teste</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Log total</td>
+  <td>135,99 MB</td>
+</tr>
+<tr>
+  <td>Log utilizado</td>
+  <td>39,19 MB (28,82%)</td>
+</tr>
+<tr>
+  <td>VLFs</td>
+  <td>6 (1 ativo e 5 inativos)</td>
+</tr>
+<tr>
+  <td><code>log_reuse_wait_desc</code></td>
+  <td><code>NOTHING</code></td>
+</tr>
+<tr>
+  <td>Transações retornadas</td>
+  <td>Nenhuma linha</td>
+</tr>
+<tr>
+  <td>Arquivo de log</td>
+  <td><code>WX_RECOVERY_LAB_log.ldf</code>, 136 MB</td>
+</tr>
+<tr>
+  <td>Autogrowth</td>
+  <td>64 MB fixos</td>
+</tr>
+</tbody>
+</table>
+<p>Esses valores são uma <strong>amostra do ambiente de teste</strong>, não valores constantes do programa nem garantia de saúde futura. <code>NOTHING</code> não significa que todo o espaço possa ser liberado imediatamente. O <code>health</code> apresenta dados e orientação geral; não aplica correções automáticas.</p>
+<h2>Segurança e limitações</h2>
+<p>A ferramenta faz consultas de diagnóstico e não altera dados ou configuração persistente do banco. Não executa operações de backup, truncamento ou redução de log. A ausência de transações na saída significa apenas que nenhuma linha foi retornada pelos critérios da consulta naquele instante. Recomendações de administração devem ser validadas separadamente pelo DBA.</p>
+<h2>Homologação</h2>
+<p>Os seis comandos (<code>status</code>, <code>vlf</code>, <code>reuse</code>, <code>transactions</code>, <code>growth</code> e <code>health</code>) foram executados no <code>WX_RECOVERY_LAB</code> com saídas coerentes. Publicação no GitHub e registro no Supabase devem ser confirmados separadamente.</p>
+</article></main></body></html>

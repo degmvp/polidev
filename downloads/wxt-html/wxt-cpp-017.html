@@ -1,0 +1,110 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 017"><title>POLYDEV | WX-TOOLS | C++ | 017 — SQL MDF Recovery Exporter</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 017</div><h1>POLYDEV | WX-TOOLS | C++ | 017 — SQL MDF Recovery Exporter</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 017 — SQL MDF Recovery Exporter</h1>
+<h2>Visão geral</h2>
+<p>O <strong>SQL MDF Recovery Exporter</strong> é uma ferramenta da coleção <strong>POLYDEV WX-TOOLS</strong>, desenvolvida em <strong>C++17</strong>, para leitura física de arquivos <strong>MDF do SQL Server</strong> e exportação dos registros recuperados para um script <strong>T-SQL</strong>.</p>
+<p>A ferramenta trabalha diretamente sobre o arquivo MDF, em modo <strong>somente leitura</strong>, permitindo recuperar dados de uma tabela mesmo sem acesso ao servidor SQL Server original. O arquivo gerado contém comandos <code>INSERT</code> que podem ser utilizados para reconstruir os registros em outro banco ou ambiente.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Leitura direta do arquivo MDF do SQL Server.</li>
+<li>Operação somente leitura, sem alteração do arquivo original.</li>
+<li>Extração de dados de tabelas mesmo sem acesso ao servidor.</li>
+<li>Geração de script T-SQL com comandos <code>INSERT</code>.</li>
+<li>Suporte a diferentes tipos de dados.</li>
+<li>Preservação dos valores originais, incluindo colunas <code>IDENTITY</code>.</li>
+<li>Útil em cenários de corrupção, exclusão acidental ou perda de dados.</li>
+<li>Permite reconstruir os registros recuperados em outro banco.</li>
+</ul>
+<h2>Uso</h2>
+<pre><code class="language-text">wxt-cpp-017-mdf-exporter.exe \
+  --file=&quot;C:\SQLDATA\MeuBanco.mdf&quot; \
+  --table=&quot;dbo.DadosTeste&quot; \
+  --output=&quot;recovered.sql&quot;
+</code></pre>
+<h2>Exemplo de execução</h2>
+<pre><code class="language-text">E:\&gt; wxt-cpp-017-mdf-exporter.exe \
+  --file=&quot;C:\SQLDATA\WX_RECOVERY_LAB.mdf&quot; \
+  --table=&quot;dbo.DadosTeste&quot; \
+  --output=&quot;wxt-cpp-017-recovered-full.sql&quot;
+
+[TABLE] dbo.DadosTeste
+[ROWS ] 100000
+[FILE ] wxt-cpp-017-recovered-full.sql
+[DONE ] Export concluido com sucesso!
+</code></pre>
+<h2>Exemplo do T-SQL gerado</h2>
+<pre><code class="language-sql">-- Script gerado pelo WX-TOOLS 017
+-- Tabela: dbo.DadosTeste
+-- Registros: 100000
+
+BEGIN TRANSACTION;
+SET IDENTITY_INSERT dbo.DadosTeste_Recovery ON;
+
+INSERT INTO dbo.DadosTeste_Recovery
+    (Id, Codigo, Nome, Descricao, Valor, DataCadastro, Marcador)
+VALUES
+    (1, 'WX-00000001', 'Registro 1', 'Teste...', 1.37,
+     '2026-01-01 00:00:01', 'A');
+
+-- demais registros...
+
+SET IDENTITY_INSERT dbo.DadosTeste_Recovery OFF;
+COMMIT TRANSACTION;
+</code></pre>
+<blockquote>
+<p>Durante testes de recuperação, o <code>COMMIT TRANSACTION</code> pode ser substituído por <code>ROLLBACK</code> para validar o resultado sem tornar as alterações permanentes.</p>
+</blockquote>
+<h2>Ambiente de homologação</h2>
+<table>
+<thead>
+<tr>
+  <th>Item</th>
+  <th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>SQL Server</td>
+  <td>2025 Developer</td>
+</tr>
+<tr>
+  <td>Banco</td>
+  <td>WX_RECOVERY_LAB</td>
+</tr>
+<tr>
+  <td>Arquivo MDF</td>
+  <td>72.00 MiB — 9.216 páginas</td>
+</tr>
+<tr>
+  <td>Tabela</td>
+  <td>dbo.DadosTeste</td>
+</tr>
+<tr>
+  <td>Registros</td>
+  <td>100.000</td>
+</tr>
+<tr>
+  <td>Resultado</td>
+  <td>100000 / 1 / 100000</td>
+</tr>
+<tr>
+  <td>Status</td>
+  <td>Homologado</td>
+</tr>
+</tbody>
+</table>
+<p>No laboratório de recuperação, os <strong>100.000 registros</strong> foram recuperados com sucesso.</p>
+<h2>Compilação no Windows</h2>
+<p>Exemplo com o compilador Microsoft C++:</p>
+<pre><code class="language-text">cl /std:c++17 /O2 /EHsc /utf-8 /W4 ^
+   wxt-cpp-017-mdf-recovery.cpp ^
+   /Fe:wxt-cpp-017-mdf-exporter.exe
+</code></pre>
+<h2>Segurança</h2>
+<p>O utilitário foi projetado para operar sobre o MDF em <strong>modo somente leitura</strong>. Para trabalhos de recuperação, recomenda-se utilizar uma <strong>cópia offline do arquivo MDF</strong>, preservando o arquivo original.</p>
+<p>O script T-SQL produzido deve ser revisado antes da execução definitiva, especialmente quanto ao banco de destino, tabela, <code>IDENTITY_INSERT</code> e controle de transação.</p>
+<h2>Caso de uso</h2>
+<p>O WX-TOOLS 017 é indicado para situações em que registros precisam ser recuperados diretamente do MDF, como corrupção do banco, exclusão acidental ou indisponibilidade de um backup adequado.</p>
+<p>A recuperação física permite extrair os dados e gerar um script independente para reconstrução em outro ambiente SQL Server.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++</strong><br />
+<em>Tools for a Better Tomorrow</em></p>
+</article><nav class="nav"><a href="wxt-cpp-016.html">← Anterior</a><a href="wxt-cpp-018.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 017</footer></body></html>

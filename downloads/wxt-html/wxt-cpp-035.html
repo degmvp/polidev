@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POLYDEV | WX-TOOLS | 035 | SQL Lock &amp; Deadlock Analyzer</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1424;color:#e7edf6;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}.wrap{max-width:1060px;margin:auto;padding:32px 24px 72px}.brand{color:#f2c75a;font-size:13px;font-weight:800;letter-spacing:2px;border-bottom:1px solid #33435c;padding-bottom:18px}article{margin-top:26px}h1{font-size:clamp(25px,4vw,38px);line-height:1.25;color:#f5d278}h2{margin-top:38px;border-bottom:1px solid #34445c;padding-bottom:8px;color:#f4c95d}h3{color:#a8d9ff}a{color:#91d1ff}code{font-family:Consolas,monospace;background:#1b2b42;border-radius:4px;padding:2px 5px}pre{overflow-x:auto;background:#101f33;border:1px solid #34465f;border-radius:9px;padding:16px}pre code{padding:0;background:none;color:#d4f2d6}table{width:100%;border-collapse:collapse;display:block;overflow-x:auto}th,td{border:1px solid #43526b;padding:8px 12px;text-align:left;vertical-align:top}th{background:#243550;color:#f4cf6a}blockquote{border-left:3px solid #f4cf6a;padding-left:16px;color:#cbd7e8}hr{border:0;border-top:1px solid #33445c}strong{color:#fff}li{margin:4px 0}@media print{body{background:white;color:#111}h1,h2,h3{color:#333}.brand{color:#333}pre{white-space:pre-wrap}}</style></head><body><main class="wrap"><header class="brand">POLYDEV / WX-TOOLS / DOCUMENTAÇÃO TÉCNICA</header><article><h1>POLYDEV | WX-TOOLS | 035 | SQL Lock &amp; Deadlock Analyzer</h1>
+<p><strong>Versão:</strong> 1.1.0<br />
+<strong>Linguagem:</strong> C++17<br />
+<strong>Plataforma:</strong> Windows / Visual Studio 2022<br />
+<strong>Integração:</strong> ODBC Driver 18 for SQL Server<br />
+<strong>Tipo:</strong> diagnóstico somente leitura</p>
+<h2>Descrição</h2>
+<p>Utilitário de linha de comando para diagnosticar locks, sessões, requisições bloqueadas e tarefas em espera no SQL Server. Consulta os relatórios históricos de deadlock da sessão Extended Events <code>system_health</code> (escopo de servidor) e apresenta os participantes, vítimas, comandos SQL, recursos, índices e relações entre processos. Também permite consultar o XML completo dos eventos.</p>
+<h2>Arquivos padronizados</h2>
+<ul>
+<li>Fonte: <code>wxt-cpp-035-sql-lock-deadlock-analyzer.cpp</code></li>
+<li>Executável: <code>wxt-cpp-035-sql-lock-deadlock-analyzer.exe</code></li>
+<li>Banner: <code>wxt-cpp-035-sql-lock-deadlock-analyzer.png</code></li>
+<li>Documentação: <code>wxt-cpp-035-sql-lock-deadlock-analyzer-README.md</code></li>
+</ul>
+<h2>Comandos</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Finalidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>locks</code></td>
+  <td>Locks e recursos atualmente registrados</td>
+</tr>
+<tr>
+  <td><code>blocking</code></td>
+  <td>Requisições atualmente bloqueadas</td>
+</tr>
+<tr>
+  <td><code>waits</code></td>
+  <td>Tarefas e tipos de espera</td>
+</tr>
+<tr>
+  <td><code>sessions</code></td>
+  <td>Sessões e atividade atual</td>
+</tr>
+<tr>
+  <td><code>deadlocks</code></td>
+  <td>Resumo interpretado de deadlocks históricos</td>
+</tr>
+<tr>
+  <td><code>deadlock-xml</code></td>
+  <td>XML bruto dos eventos de deadlock</td>
+</tr>
+<tr>
+  <td><code>health</code></td>
+  <td>Diagnóstico consolidado dos comandos anteriores, exceto XML bruto</td>
+</tr>
+<tr>
+  <td><code>--help</code></td>
+  <td>Ajuda</td>
+</tr>
+<tr>
+  <td><code>--version</code></td>
+  <td>Versão</td>
+</tr>
+</tbody>
+</table>
+<h2>Execução no PowerShell</h2>
+<pre><code class="language-powershell">&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-035-sql-lock-deadlock-analyzer.exe&quot; health --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+</code></pre>
+<p>Para consultar apenas os deadlocks:</p>
+<pre><code class="language-powershell">&amp; &quot;E:\@LIB-C++\bin\wxt-cpp-035-sql-lock-deadlock-analyzer.exe&quot; deadlocks --server &quot;.\WSRV25&quot; --db &quot;WX_RECOVERY_LAB&quot;
+</code></pre>
+<h2>Requisitos e segurança</h2>
+<ul>
+<li>SQL Server acessível pela instância informada.</li>
+<li>ODBC Driver 18 for SQL Server instalado.</li>
+<li>Autenticação integrada do Windows (<code>Trusted_Connection=Yes</code>).</li>
+<li>Permissões de visualização das DMVs e eventos necessárias, conforme a versão/configuração do SQL Server.</li>
+<li>O programa consulta dados; <strong>não encerra sessões, não altera transações e não modifica registros</strong>.</li>
+<li>O histórico de deadlocks depende da retenção de eventos pelo <code>system_health</code>; não representa necessariamente todo o histórico do servidor.</li>
+<li>Os horários <code>utc_timestamp</code> são exibidos em UTC (<code>Z</code>).</li>
+</ul>
+<h2>Homologação — 09/10/2026</h2>
+<p>Compilação confirmada no Visual Studio 2022. Testes reais executados na instância <code>.\WSRV25</code>, banco <code>WX_RECOVERY_LAB</code>. O comando <code>deadlocks</code> identificou dois eventos: um com vítima SPID 57 (participantes 57 e 73) e outro com vítima SPID 55 (participantes 55, 57 e 73), envolvendo a tabela <code>dbo.WX_Deadlock_Test</code> e bloqueios exclusivos de chaves. O comando <code>health</code> executou as consultas consolidadas, sem bloqueios ou tarefas em espera no momento do teste.</p>
+<h2>Observação de publicação</h2>
+<p>O slug de todos os arquivos é <code>wxt-cpp-035-sql-lock-deadlock-analyzer</code>. Conferir a correspondência entre número, título e banner antes de publicar no catálogo POLYDEV.</p>
+</article></main></body></html>

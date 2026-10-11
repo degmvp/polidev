@@ -1,0 +1,207 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 021"><title>POLYDEV | WX-TOOLS | 021 | Bitfield &amp; Bitmask Inspector</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 021</div><h1>POLYDEV | WX-TOOLS | 021 | Bitfield &amp; Bitmask Inspector</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 021 | Bitfield &amp; Bitmask Inspector</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-021-bitfield-tool.cpp</code><br />
+<strong>Executável:</strong> <code>wxt-cpp-021-bitfield-tool</code><br />
+<strong>Versão:</strong> <code>1.0.0</code><br />
+<strong>Tecnologia:</strong> C++</p>
+<h2>Descrição</h2>
+<p>O <strong>Bitfield &amp; Bitmask Inspector</strong> é uma ferramenta de linha de comando
+para inspecionar, calcular, criar e decodificar valores de bitfield e
+bitmask.</p>
+<p>É útil em firmware, protocolos, registradores e estruturas de dados
+compactas.</p>
+<h2>Uso</h2>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool &lt;comando&gt; [opções]
+</code></pre>
+<h2>Comandos</h2>
+<pre><code class="language-text">calc      Avalia uma expressão bit a bit com precedência estilo C
+show      Mostra um valor em hex, binário, bits ligados, runs e grade
+mask      Cria uma máscara a partir de especificações de bits
+decode    Decodifica um valor usando um arquivo de mapa (MAP)
+encode    Monta um valor a partir de campos e decodifica o resultado
+</code></pre>
+<h2>Opções</h2>
+<pre><code class="language-text">-m, --map FILE    Arquivo de mapa
+-w, --width N     Largura em bits: 8, 16, 32 ou 64
+                  O padrão é 64
+
+--base EXPR       Valor inicial utilizado por encode
+                  O padrão é 0
+
+--signed          Mostra também a interpretação em complemento de dois
+
+-h, --help        Mostra a ajuda e sai
+-V, --version     Mostra a versão e sai
+</code></pre>
+<h2><code>calc</code> --- avaliar expressão</h2>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool calc &quot;(0xF0 | 0x0F) &amp; ~0x08&quot; -w 8
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">= 247
+hex:       0xF7
+bin:       0b1111_0111
+popcount:  7
+set bits:  0, 1, 2, 4, 5, 6, 7
+runs:      [0..2], [4..7]
+</code></pre>
+<p>O comando avalia expressões bitwise utilizando a mesma precedência
+básica da linguagem C.</p>
+<h3>Operadores</h3>
+<p>Do menor para o maior nível de precedência, conforme documentado no
+banner:</p>
+<pre><code class="language-text">|  ^  &amp;  &lt;&lt;  &gt;&gt;  +  -  *  /  %  ~  !
+</code></pre>
+<p>Operadores/operandos podem utilizar:</p>
+<ul>
+<li>decimal;</li>
+<li><code>0x</code> hexadecimal;</li>
+<li><code>0b</code> binário;</li>
+<li><code>0o</code> octal;</li>
+<li><code>_</code> como separador;</li>
+<li><code>k</code> em literais de caractere;</li>
+<li>parênteses.</li>
+</ul>
+<p>O cálculo é executado dentro da largura definida por <code>--width</code>,
+funcionando como um registrador de N bits. Os demais comandos exigem que
+o valor caiba na largura especificada.</p>
+<h2><code>show</code> --- inspecionar valor</h2>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool show 0b1010_0011 -w 8
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">= 163
+hex:       0xA3
+bin:       0b1010_0011
+popcount:  4
+set bits:  0, 1, 5, 7
+runs:      [0..1], [5], [7]
+bit grid:  7 6 5 4 | 3 2 1 0
+           1 0 1 0 | 0 0 1 1
+</code></pre>
+<p>Esse comando facilita a visualização do valor, dos bits ativos e dos
+intervalos consecutivos.</p>
+<h2><code>mask</code> --- criar máscara</h2>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool mask 0,4..7 -w 8
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">= 241
+hex:       0xF1
+bin:       0b1111_0001
+popcount:  5
+set bits:  0, 4, 5, 6, 7
+runs:      [0], [4..7]
+</code></pre>
+<p>É possível criar máscaras a partir de bits individuais ou intervalos.</p>
+<h2><code>encode</code> --- montar valor usando arquivo MAP</h2>
+<p>Exemplo demonstrado:</p>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool encode -m uart.map ENABLE PARITY=odd BAUD=10 ADDR=42
+</code></pre>
+<p>Resultado:</p>
+<pre><code class="language-text">UART_CTRL = 0x2AAA (dec 10922, 0b0010_1010_1010_1010)
+
+BITS   FIELD    RAW   VALUE
+15:8   ADDR     42    42 (0x2A)
+7      ENABLE   1     set
+6      -        -     -
+5:4    PARITY   2     odd
+3:0    BAUD     10    10
+</code></pre>
+<p>O comando monta o valor a partir de campos, enums e flags definidos no
+arquivo de mapa.</p>
+<h2><code>decode</code> --- decodificar valor usando arquivo MAP</h2>
+<p>Exemplo:</p>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool decode 0x2AAA -m uart.map
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">UART_CTRL = 0x2AAA (dec 10922, 0b0010_1010_1010_1010)
+
+BITS   FIELD    RAW   VALUE
+15:8   ADDR     42    42 (0x2A)
+7      ENABLE   1     set
+6      -        -     -
+5:4    PARITY   2     odd
+3:0    BAUD     10    10
+</code></pre>
+<h2>Formato do arquivo MAP</h2>
+<p>O banner demonstra um arquivo de mapa no seguinte formato:</p>
+<pre><code class="language-text"># comentário
+
+name UART_CTRL
+width 16
+
+field BAUD   3:0  uint
+field PARITY 5:4  enum none=0 even=1 odd=2
+flag  ENABLE 7
+field ADDR   15:8 uint
+</code></pre>
+<h3>Regras</h3>
+<pre><code class="language-text">msb &gt;= lsb
+bits dentro da largura
+sem sobreposição
+nomes únicos
+</code></pre>
+<h2>Especificações para <code>encode</code></h2>
+<p>O formato documentado é:</p>
+<pre><code class="language-text">FIELD=VALUE
+</code></pre>
+<p>O valor pode ser numérico ou o nome de um enum.</p>
+<p>Exemplos:</p>
+<pre><code class="language-text">PARITY=odd
+BAUD=10
+ADDR=42
+</code></pre>
+<p>Para flags de um bit:</p>
+<pre><code class="language-text">NAME     liga a flag
++NAME    define a flag
+-NAME    limpa a flag
+</code></pre>
+<h2>Exemplo completo</h2>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool encode -m uart.map ENABLE PARITY=odd BAUD=10 ADDR=42
+wxt-cpp-021-bitfield-tool decode 0x2AAA -m uart.map
+</code></pre>
+<p>O resultado do <code>encode</code> e do <code>decode</code> deve ser consistente.</p>
+<h2>Mais exemplos</h2>
+<pre><code class="language-cmd">wxt-cpp-021-bitfield-tool calc &quot;(0xA4 &lt;&lt; 3) | 0x05&quot; -w 16
+
+wxt-cpp-021-bitfield-tool mask 0,4..7,12
+
+wxt-cpp-021-bitfield-tool show 0x1234 -w 16 --signed
+</code></pre>
+<h2>Códigos de saída</h2>
+<pre><code class="language-text">0    OK
+1    uso incorreto (linha de comando)
+2    erro de I/O
+3    expressão ou mapa inválido
+4    campo não encontrado
+5    erro semântico
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">BITFIELD &amp; BITMASK INSPECTOR
+        |
+        +-- calc
+        |     +-- expressões bitwise
+        |
+        +-- show
+        |     +-- hex / bin / set bits / runs / grade
+        |
+        +-- mask
+        |     +-- bits individuais / intervalos
+        |
+        +-- encode
+        |     +-- MAP -&gt; valor
+        |
+        +-- decode
+              +-- valor -&gt; MAP
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-021-bitfield-tool.cpp
+wxt-cpp-021-bitfield-tool.exe
+wxt-cpp-021-bitfield-tool.png
+wxt-cpp-021-bitfield-tool-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 021 | BITFIELD &amp; BITMASK INSPECTOR</strong></p>
+<p><em>Bits pequenos. Ideias grandes.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-020.html">← Anterior</a><a href="wxt-cpp-022.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 021</footer></body></html>

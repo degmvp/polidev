@@ -1,0 +1,165 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 018"><title>POLYDEV | WX-TOOLS | 018 | SQL Deleted Ghost Row Hunter</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 018</div><h1>POLYDEV | WX-TOOLS | 018 | SQL Deleted Ghost Row Hunter</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 018 | SQL Deleted Ghost Row Hunter</h1>
+<p><strong>Executável:</strong> <code>wxt-cpp-018-sql-deleted-ghost-row-hunter.exe</code><br />
+<strong>Tecnologia:</strong> C++17<br />
+<strong>Alvo:</strong> arquivos de dados Microsoft SQL Server (<code>MDF</code> / <code>NDF</code>)<br />
+<strong>Modo:</strong> offline / somente leitura</p>
+<h2>Descrição</h2>
+<p>O <strong>SQL Deleted Ghost Row Hunter</strong> é uma ferramenta da coleção POLYDEV
+WX-TOOLS para localizar linhas excluídas (<em>ghost rows</em>) que ainda
+permanecem fisicamente em arquivos de dados do SQL Server.</p>
+<p>A ferramenta trabalha diretamente sobre estruturas de páginas,
+identifica allocation units, analisa slots e recupera dados de linhas
+mesmo quando os registros já não estão acessíveis normalmente pelo SQL
+Server.</p>
+<p>Conforme o banner:</p>
+<pre><code class="language-text">Offline scan
+Read-only
+Forensic recovery
+No SQL Server required
+</code></pre>
+<h2>Uso</h2>
+<pre><code class="language-cmd">wxt-cpp-018-sql-deleted-ghost-row-hunter.exe hunt &lt;data_file.mdf&gt; &lt;output.csv&gt;
+</code></pre>
+<h2>Exemplo</h2>
+<pre><code class="language-cmd">wxt-cpp-018-sql-deleted-ghost-row-hunter.exe hunt &quot;E:\DATA-tools\WX_GHOST_LAB_DELETED.mdf&quot; &quot;E:\DATA-tools\wxt-cpp-018-final-evidence.csv&quot;
+</code></pre>
+<h2>Comandos</h2>
+<h3><code>hunt</code></h3>
+<p>Analisa o arquivo de dados e exporta as linhas excluídas encontradas
+para CSV.</p>
+<pre><code class="language-cmd">wxt-cpp-018-sql-deleted-ghost-row-hunter.exe hunt &lt;data_file.mdf&gt; &lt;output.csv&gt;
+</code></pre>
+<h3><code>help</code></h3>
+<p>Mostra as informações de uso.</p>
+<pre><code class="language-cmd">wxt-cpp-018-sql-deleted-ghost-row-hunter.exe help
+</code></pre>
+<h2>Características</h2>
+<p>Conforme a documentação visual, a ferramenta:</p>
+<ul>
+<li>funciona offline, sem exigir SQL Server;</li>
+<li>opera em modo somente leitura;</li>
+<li>localiza linhas excluídas / ghost rows;</li>
+<li>interpreta páginas de dados e metadados de slots;</li>
+<li>extrai valores de colunas das linhas recuperadas;</li>
+<li>gera relatório CSV detalhado;</li>
+<li>suporta arquivos MDF e NDF;</li>
+<li>é implementada em C++17;</li>
+<li>pode ser utilizada em análise forense e auditorias.</li>
+</ul>
+<h2>Exemplo de saída</h2>
+<p>O banner demonstra uma execução sobre:</p>
+<pre><code class="language-text">E:\DATA-tools\WX_GHOST_LAB_DELETED.mdf
+</code></pre>
+<p>com saída em:</p>
+<pre><code class="language-text">E:\DATA-tools\wxt-cpp-018-final-evidence.csv
+</code></pre>
+<p>Resumo demonstrado:</p>
+<pre><code class="language-text">Total rows found       : 1000
+Active rows            : 990
+Deleted (ghost) rows   : 10
+</code></pre>
+<p>Chaves das linhas excluídas encontradas:</p>
+<pre><code class="language-text">501, 502, 503, 504, 505, 506, 507, 508, 509, 510
+</code></pre>
+<p>Ao final:</p>
+<pre><code class="language-text">CSV saved: E:\DATA-tools\wxt-cpp-018-final-evidence.csv
+
+Scan completed successfully.
+</code></pre>
+<h2>Exemplo de linhas recuperadas</h2>
+<p>O banner representa o relatório de evidência com linhas como:</p>
+<pre><code class="language-text">RowKey   Status    Sample Data
+501      DELETED   ...
+502      DELETED   ...
+503      DELETED   ...
+504      DELETED   ...
+505      DELETED   ...
+506      DELETED   ...
+507      DELETED   ...
+508      DELETED   ...
+509      DELETED   ...
+510      DELETED   ...
+</code></pre>
+<p>Resultado apresentado:</p>
+<pre><code class="language-text">10 deleted rows recovered from disk!
+</code></pre>
+<h2>Funcionamento conceitual</h2>
+<pre><code class="language-text">MDF / NDF
+   |
+   v
+leitura física
+   |
+   v
+páginas de dados
+   |
+   v
+allocation units
+   |
+   v
+slots
+   |
+   +-- linhas ativas
+   |
+   +-- ghost rows
+          |
+          v
+   extração dos valores
+          |
+          v
+         CSV
+</code></pre>
+<h2>Operação somente leitura</h2>
+<p>A ferramenta é apresentada como:</p>
+<pre><code class="language-text">READ-ONLY
+</code></pre>
+<p>Seu objetivo é inspecionar o arquivo de dados sem modificá-lo.</p>
+<p>Isso é especialmente importante em cenários de recuperação e análise
+forense, nos quais preservar a evidência original é fundamental.</p>
+<h2>Casos de uso</h2>
+<p>Conforme o banner:</p>
+<ul>
+<li>recuperar registros apagados acidentalmente;</li>
+<li>investigar incidentes de perda de dados;</li>
+<li>análise forense de arquivos SQL Server;</li>
+<li>validar integridade de dados;</li>
+<li>complementar estratégias de backup e recuperação.</li>
+</ul>
+<h2>Cenário demonstrado</h2>
+<p>A documentação visual mostra a identificação de registros excluídos
+diretamente nas páginas/slots do arquivo, exemplificando entradas como:</p>
+<pre><code class="language-text">Page (...) DATA    Slot 501 - DELETED
+Page (...) DATA    Slot 502 - DELETED
+Page (...) DATA    Slot 503 - DELETED
+...
+Page (...) DATA    Slot 510 - DELETED
+</code></pre>
+<h2>Saída CSV</h2>
+<p>O comando <code>hunt</code> recebe explicitamente o caminho do CSV de saída:</p>
+<pre><code class="language-cmd">wxt-cpp-018-sql-deleted-ghost-row-hunter.exe hunt &lt;arquivo.mdf&gt; &lt;saida.csv&gt;
+</code></pre>
+<p>Isso permite preservar os resultados da análise para inspeção posterior,
+documentação e evidência.</p>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">SQL DELETED GHOST ROW HUNTER
+             |
+             +-- MDF / NDF
+                    |
+                    +-- scan offline
+                    +-- parse pages
+                    +-- inspect slots
+                    +-- identify ghost rows
+                    +-- recover column values
+                    |
+                    +-- export CSV
+</code></pre>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-018-sql-deleted-ghost-row-hunter.cpp
+wxt-cpp-018-sql-deleted-ghost-row-hunter.exe
+wxt-cpp-018-sql-deleted-ghost-row-hunter.png
+wxt-cpp-018-sql-deleted-ghost-row-hunter-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 018 | SQL DELETED GHOST ROW HUNTER</strong></p>
+<p><em>Data may be deleted, but not always gone.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-017.html">← Anterior</a><a href="wxt-cpp-019.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 018</footer></body></html>

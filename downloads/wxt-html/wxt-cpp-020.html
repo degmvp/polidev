@@ -1,0 +1,121 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 020"><title>POLYDEV | WX-TOOLS | 020 | JSON Config Manager</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 020</div><h1>POLYDEV | WX-TOOLS | 020 | JSON Config Manager</h1></header><main><article><h1>POLYDEV | WX-TOOLS | 020 | JSON Config Manager</h1>
+<p><strong>Arquivo:</strong> <code>wxt-cpp-020-json-config-manager.cpp</code><br />
+<strong>Executável:</strong> <code>wxt-cpp-020-json-config-manager.exe</code><br />
+<strong>Versão:</strong> <code>1.0.0</code><br />
+<strong>Tecnologia:</strong> C++</p>
+<h2>Descrição</h2>
+<p>O <strong>JSON Config Manager</strong> é uma ferramenta de linha de comando da
+coleção POLYDEV WX-TOOLS para gerenciamento de arquivos JSON.</p>
+<p>Conforme o banner de homologação, permite:</p>
+<ul>
+<li>validar JSON;</li>
+<li>consultar valores;</li>
+<li>editar valores;</li>
+<li>formatar JSON (<code>pretty</code>);</li>
+<li>minificar JSON (<code>minify</code>).</li>
+</ul>
+<h2>Versão</h2>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager --version
+</code></pre>
+<p>Saída demonstrada:</p>
+<pre><code class="language-text">wxt-cpp-020-json-config-manager 1.0.0
+</code></pre>
+<h2><code>validate</code> --- validar JSON</h2>
+<p>Valida a estrutura de um arquivo JSON.</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager validate config.json
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">config.json: ok
+</code></pre>
+<h2><code>get</code> --- obter valor</h2>
+<p>Consulta um valor dentro do documento JSON.</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager get config.json opcoes.tema -r
+</code></pre>
+<p>Resultado demonstrado:</p>
+<pre><code class="language-text">escuro
+</code></pre>
+<p>O exemplo mostra acesso a um valor aninhado usando:</p>
+<pre><code class="language-text">opcoes.tema
+</code></pre>
+<h2><code>set</code> --- definir valor</h2>
+<p>Altera um valor no documento JSON.</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager set config.json versao &quot;2.0&quot; -s
+</code></pre>
+<p>Conforme o banner:</p>
+<pre><code class="language-text">(sem saída, grava no arquivo)
+</code></pre>
+<p>Portanto, o exemplo altera a chave <code>versao</code> para <code>&quot;2.0&quot;</code> e persiste a
+modificação no arquivo.</p>
+<h2><code>pretty</code> --- formatar JSON</h2>
+<p>Gera uma versão formatada do documento.</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager pretty config.json -i 2 -o config-pretty.json
+</code></pre>
+<p>O exemplo gera JSON formatado utilizando:</p>
+<pre><code class="language-text">2 espaços de indentação
+</code></pre>
+<p>Arquivo de saída:</p>
+<pre><code class="language-text">config-pretty.json
+</code></pre>
+<h2><code>minify</code> --- minificar JSON</h2>
+<p>Gera uma versão compactada do documento JSON.</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager minify config.json -o config-min.json
+</code></pre>
+<p>O resultado é um JSON gravado em uma única linha.</p>
+<p>Arquivo de saída:</p>
+<pre><code class="language-text">config-min.json
+</code></pre>
+<h2>Fluxo rápido de trabalho</h2>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager validate config.json
+
+wxt-cpp-020-json-config-manager get config.json opcoes.tema -r
+
+wxt-cpp-020-json-config-manager set config.json versao &quot;2.0&quot; -s
+
+wxt-cpp-020-json-config-manager pretty config.json -i 2 -o config-pretty.json
+
+wxt-cpp-020-json-config-manager minify config.json -o config-min.json
+</code></pre>
+<h2>Exemplo conceitual</h2>
+<p>Um arquivo de configuração pode conter:</p>
+<pre><code class="language-json">{
+  &quot;nome&quot;: &quot;POLYDEV&quot;,
+  &quot;versao&quot;: &quot;2.0&quot;,
+  &quot;opcoes&quot;: {
+    &quot;tema&quot;: &quot;escuro&quot;,
+    &quot;idioma&quot;: &quot;pt-BR&quot;
+  }
+}
+</code></pre>
+<p>Consulta:</p>
+<pre><code class="language-cmd">wxt-cpp-020-json-config-manager get config.json opcoes.tema -r
+</code></pre>
+<p>Retorno:</p>
+<pre><code class="language-text">escuro
+</code></pre>
+<h2>Visão funcional</h2>
+<pre><code class="language-text">JSON CONFIG MANAGER
+       |
+       +-- validate  -&gt; validar JSON
+       +-- get       -&gt; consultar valores
+       +-- set       -&gt; editar valores
+       +-- pretty    -&gt; formatar
+       +-- minify    -&gt; compactar
+</code></pre>
+<h2>Características destacadas</h2>
+<pre><code class="language-text">FUNCIONAL   - homologado
+CONFIÁVEL   - pronto para uso
+ÚTIL        - uso no dia a dia
+</code></pre>
+<p>O objetivo da ferramenta é fornecer gerenciamento simples e direto de
+configurações JSON pela linha de comando.</p>
+<h2>Arquivos do componente</h2>
+<p>Padrão POLYDEV:</p>
+<pre><code class="language-text">wxt-cpp-020-json-config-manager.cpp
+wxt-cpp-020-json-config-manager.exe
+wxt-cpp-020-json-config-manager.png
+wxt-cpp-020-json-config-manager-README.md
+</code></pre>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | 020 | JSON CONFIG MANAGER</strong></p>
+<p><em>Pequenas ferramentas. Grandes transformações.</em></p>
+</article><nav class="nav"><a href="wxt-cpp-019.html">← Anterior</a><a href="wxt-cpp-021.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 020</footer></body></html>

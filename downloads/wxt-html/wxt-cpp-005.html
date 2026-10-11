@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 005 — NetTools</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 005</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article>
+<h1>POLYDEV | WX-TOOLS | C++ | 005 — NetTools</h1>
+<h2>Visão geral</h2>
+<p>O <strong>NetTools v1.0</strong> é um utilitário de linha de comando em <strong>C++17</strong> para diagnóstico e varredura de rede em Linux.</p>
+<p>A ferramenta reúne scanner de portas TCP com multi-threading, ping múltiplo em paralelo, consultas DNS e listagem de interfaces de rede, com saída colorida e objetiva no terminal.</p>
+<h2>Principais recursos</h2>
+<ul>
+<li>Scanner de portas TCP com multi-threading.</li>
+<li>Ping múltiplo em paralelo.</li>
+<li>DNS lookup completo.</li>
+<li>Consultas A, CNAME, MX, NS e TXT.</li>
+<li>Listagem de interfaces de rede.</li>
+<li>Cores ANSI no terminal.</li>
+<li>Barra de progresso.</li>
+<li>Código C++17 leve e eficiente.</li>
+<li>Sem dependências externas.</li>
+</ul>
+<h2>Subcomandos</h2>
+<table>
+<thead>
+<tr>
+  <th>Comando</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>scan</code></td>
+  <td>Escaneia portas TCP de um host usando conexão direta</td>
+</tr>
+<tr>
+  <td><code>ping</code></td>
+  <td>Executa ping em múltiplos hosts em paralelo com estatísticas</td>
+</tr>
+<tr>
+  <td><code>dns</code></td>
+  <td>Executa DNS lookup completo — A, CNAME, MX, NS e TXT</td>
+</tr>
+<tr>
+  <td><code>ifaces</code></td>
+  <td>Lista interfaces de rede, status e endereços</td>
+</tr>
+</tbody>
+</table>
+<h2>Opções globais</h2>
+<table>
+<thead>
+<tr>
+  <th>Opção</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>--no-color</code></td>
+  <td>Desabilita cores ANSI no terminal</td>
+</tr>
+<tr>
+  <td><code>-h</code>, <code>--help</code></td>
+  <td>Exibe a mensagem de ajuda</td>
+</tr>
+</tbody>
+</table>
+<h2>Scanner TCP</h2>
+<p>O comando <code>scan</code> utiliza sockets não bloqueantes com <code>select()</code> para controlar o timeout e executa a análise com múltiplas threads.</p>
+<pre><code class="language-text">nettools scan [opções]
+</code></pre>
+<h3>Opções do scan</h3>
+<table>
+<thead>
+<tr>
+  <th>Opção</th>
+  <th style="text-align:right">Padrão</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>-h HOST</code></td>
+  <td style="text-align:right"><code>127.0.0.1</code></td>
+  <td>Host alvo, IP ou domínio</td>
+</tr>
+<tr>
+  <td><code>-s PORT</code></td>
+  <td style="text-align:right"><code>1</code></td>
+  <td>Porta inicial</td>
+</tr>
+<tr>
+  <td><code>-e PORT</code></td>
+  <td style="text-align:right"><code>1024</code></td>
+  <td>Porta final</td>
+</tr>
+<tr>
+  <td><code>-t THREADS</code></td>
+  <td style="text-align:right"><code>50</code></td>
+  <td>Número de threads</td>
+</tr>
+<tr>
+  <td><code>-T TIMEOUT</code></td>
+  <td style="text-align:right"><code>500</code></td>
+  <td>Timeout em milissegundos</td>
+</tr>
+</tbody>
+</table>
+<h2>Exemplos</h2>
+<h3>Escanear portas de um host</h3>
+<pre><code class="language-text">nettools scan -h 192.168.0.1 -s 1 -e 100
+</code></pre>
+<p>Exemplo de resultado:</p>
+<pre><code class="language-text">Scan de portas TCP - 192.168.0.1
+Threads: 50 | Timeout: 500 ms
+
+PORTA    ESTADO    SERVIÇO
+22       open      ssh
+80       open      http
+443      open      https
+3306     closed
+8080     closed
+</code></pre>
+<h3>Ping em múltiplos hosts</h3>
+<pre><code class="language-text">nettools ping 192.168.0.1 8.8.8.8
+</code></pre>
+<h3>DNS lookup</h3>
+<pre><code class="language-text">nettools dns exemplo.com
+</code></pre>
+<h3>Listar interfaces de rede</h3>
+<pre><code class="language-text">nettools ifaces
+</code></pre>
+<h2>Aplicações</h2>
+<p>O NetTools é indicado para:</p>
+<ul>
+<li>administradores de rede;</li>
+<li>profissionais de TI e segurança;</li>
+<li>diagnóstico de conectividade;</li>
+<li>identificação de serviços acessíveis;</li>
+<li>testes em ambientes Linux e servidores;</li>
+<li>estudos e aprendizado de redes.</li>
+</ul>
+<h2>Segurança e uso responsável</h2>
+<p>O scanner deve ser utilizado somente em hosts, redes e ambientes próprios ou para os quais exista autorização de teste.</p>
+<h2>Tecnologia</h2>
+<pre><code class="language-text">Linguagem : C++17
+Plataforma: Linux
+Tipo      : Aplicação de linha de comando
+Versão    : 1.0
+</code></pre>
+<h2>Filosofia</h2>
+<p><strong>Conectividade revela oportunidades.</strong></p>
+<p>O WX-TOOLS 005 concentra tarefas comuns de diagnóstico de rede em um utilitário pequeno, direto e eficiente.</p>
+<hr />
+<p><strong>POLYDEV | WX-TOOLS | C++ | 005 — NetTools v1.0</strong><br />
+<em>Ferramentas reais para desenvolvedores reais.</em></p>
+
+</article>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>
