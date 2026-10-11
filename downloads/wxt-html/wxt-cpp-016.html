@@ -1,4 +1,41 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Documentação POLYDEV WX-TOOLS 016"><title>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6edf7;font:16px/1.7 system-ui,Segoe UI,Arial,sans-serif}header{background:#111e32;border-bottom:2px solid #d9a441;padding:20px max(20px,calc((100vw - 1050px)/2))}.brand{color:#f3c969;font-size:13px;font-weight:800;letter-spacing:.13em}header h1{font-size:clamp(21px,3vw,31px);line-height:1.25;margin:7px 0 0}main{max-width:1050px;margin:30px auto;padding:0 22px 55px}h1,h2,h3{color:#f5c96d;line-height:1.3}h1{font-size:1.9rem}h2{margin-top:35px;border-bottom:1px solid #35445c;padding-bottom:8px}h3{margin-top:25px}p,li{overflow-wrap:anywhere}a{color:#8dc8ff}code{font:0.92em Consolas,'Courier New',monospace;color:#aee3fa}pre{background:#050c17;border:1px solid #34445c;border-radius:9px;padding:17px;overflow:auto}pre code{color:#e4edf8}table{border-collapse:collapse;display:block;overflow-x:auto;width:100%}td,th{border:1px solid #394b64;padding:9px 13px;text-align:left}th{background:#1b3048;color:#f6d17b}blockquote{border-left:4px solid #e7b74d;margin-left:0;padding:3px 18px;background:#14243a}hr{border:0;border-top:1px solid #35445c}footer{max-width:1050px;margin:auto;padding:25px 22px;color:#9cb0ca;border-top:1px solid #34445c}.nav{margin-top:12px}.nav a{margin-right:20px}</style></head><body><header><div class="brand">POLYDEV / WX-TOOLS / C++ / 016</div><h1>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</h1></header><main><article><h1>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</title>
+<style>
+:root{--ouro:#FFD700;--preto:#080808;--painel:#151515;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--preto);color:var(--texto);font:16px/1.65 Arial,Helvetica,sans-serif}
+header{background:#FFD700;color:#080808;padding:20px max(20px,calc((100% - 1020px)/2));border-bottom:4px solid #b38b00}
+header strong{font-size:clamp(22px,4vw,34px);letter-spacing:1px}
+header p{margin:2px 0;font-weight:bold}
+main{max-width:1060px;margin:auto;padding:22px 20px 60px}
+nav{position:sticky;top:0;background:#080808;padding:12px 0;border-bottom:1px solid #a78900;z-index:1}
+.botao{display:inline-block;padding:10px 18px;background:#FFD700;color:#000;border-radius:6px;text-decoration:none;font-weight:bold}
+.botao:hover{background:#e4bb00}
+article{background:var(--painel);border:1px solid #6f5900;border-radius:12px;padding:clamp(18px,4vw,38px);margin-top:20px;overflow-wrap:anywhere}
+h1,h2,h3{color:#FFD700;line-height:1.3}
+h1{font-size:clamp(22px,4vw,32px)}h2{border-bottom:1px solid #5e4b00;padding-bottom:7px;margin-top:30px}
+a{color:#ffe873}strong{color:#ffe873}
+code{font-family:Consolas,'Courier New',monospace;color:#ffe88a}
+pre{background:#050505;border:1px solid #7a6200;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre}
+pre code{color:#f3f3f3}
+table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;margin:16px 0}
+th,td{padding:10px 13px;border:1px solid #705900;text-align:left;min-width:120px}
+th{background:#463900;color:#FFD700}tr:nth-child(even){background:#202020}
+blockquote{border-left:4px solid #FFD700;padding-left:15px;color:#ddd}
+footer{text-align:center;color:#FFD700;padding:22px;border-top:1px solid #5d4c00}
+
+.sequencia{position:static;display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}.sequencia a{display:inline-block;padding:9px 14px;border:1px solid #a78900;border-radius:6px;text-decoration:none;color:#ffe873}.sequencia a:hover{background:#282100}
+</style>
+</head>
+<body>
+<header><strong>POLYDEV | WX-TOOLS</strong><p>DOCUMENTAÇÃO TÉCNICA • C++ • 016</p></header>
+<main>
+<nav><a class="botao" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<article><h1>POLYDEV | WX-TOOLS | C++ | 016 — SQL MDF Damage Mapper</h1>
 <h2>Visão geral</h2>
 <p>O <strong>SQL MDF Damage Mapper</strong> é uma ferramenta da coleção <strong>POLYDEV WX-TOOLS</strong>, desenvolvida para análise física de arquivos de dados do SQL Server.</p>
 <p>Seu objetivo é varrer as páginas de arquivos <strong>MDF/NDF</strong>, classificá-las e localizar regiões com possíveis inconsistências, produzindo um mapa de diagnóstico que auxilia investigações e trabalhos de recuperação.</p>
@@ -82,4 +119,9 @@ SQL Server 2017
 <hr />
 <p><strong>POLYDEV | WX-TOOLS | C++</strong><br />
 <em>Developer Tools for a Better Tomorrow</em></p>
-</article><nav class="nav"><a href="wxt-cpp-015.html">← Anterior</a><a href="wxt-cpp-017.html">Próximo →</a></nav></main><footer>POLYDEV · WX-TOOLS · Documentação técnica 016</footer></body></html>
+</article>
+<nav class="sequencia"><a href="wxt-cpp-015.html">← Anterior</a><a href="wxt-cpp-017.html">Próximo →</a></nav>
+</main>
+<footer>POLYDEV | SOLUÇÕES EM C++ • WX-TOOLS v1.0</footer>
+</body>
+</html>
