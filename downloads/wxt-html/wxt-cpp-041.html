@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WX-TOOLS 041 | SQL Job &amp; Agent Explorer | POLYDEV</title>
+  <style>
+    :root{color-scheme:dark;--bg:#07111e;--card:#0d2032;--line:#28506a;--gold:#f4cb62;--text:#eaf3fa;--muted:#b7cad8}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#07111e,#0b2940);font:16px/1.6 Arial,Helvetica,sans-serif;color:var(--text)}
+    .wrap{max-width:1040px;margin:auto;padding:30px 20px 60px}.back{display:inline-block;color:#091521;background:var(--gold);padding:10px 18px;border-radius:7px;text-decoration:none;font-weight:700;margin-bottom:24px}
+    .brand{font-size:14px;letter-spacing:3px;color:var(--gold);font-weight:bold}h1{font-size:clamp(27px,4vw,43px);margin:7px 0}h2{font-size:21px;color:var(--gold);margin:0 0 13px}.lead{color:var(--muted);font-size:18px;margin:0 0 24px}
+    section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:23px;margin:18px 0}p{margin:9px 0}ul{padding-left:22px}li{margin:8px 0}
+    code,pre{font-family:Consolas,"Courier New",monospace}pre{background:#06101c;border:1px solid #284b63;border-radius:8px;padding:16px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#bce8fa}
+    .meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{border:1px solid var(--line);padding:5px 12px;border-radius:20px;color:var(--muted);font-size:13px}footer{text-align:center;color:var(--muted);font-size:13px;padding-top:20px}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a>
+  <div class="brand">POLYDEV | WX-TOOLS | C++ | 041</div>
+  <h1>SQL Job &amp; Agent Explorer</h1>
+  <p class="lead">Explorador de jobs, etapas, histórico de execução e falhas do SQL Server Agent.</p>
+  <div class="meta"><span>C++17</span><span>Windows</span><span>ODBC Driver 18</span><span>SQL Server 2025</span><span>msdb</span><span>Somente leitura</span></div>
+  <section>
+    <h2>Descrição</h2>
+    <p>Utilitário de linha de comando desenvolvido em C++17 para consultar metadados do SQL Server Agent no banco <code>msdb</code>, sem modificar jobs ou registros. Permite identificar jobs cadastrados, suas etapas, o histórico de execuções e ocorrências de falhas ou cancelamentos.</p>
+  </section>
+  <section>
+    <h2>Comandos disponíveis</h2>
+    <ul>
+      <li><strong>jobs</strong> — lista os jobs, estado de habilitação, proprietário, categoria, datas e quantidade de etapas.</li>
+      <li><strong>steps</strong> — mostra as etapas, subsistemas, banco de execução, ações de sucesso/falha e política de repetição.</li>
+      <li><strong>history</strong> — consulta o histórico de execuções, status, duração e mensagens.</li>
+      <li><strong>failures</strong> — filtra execuções com falha ou canceladas.</li>
+    </ul>
+    <p>O parâmetro opcional <code>--limit</code> aceita valores de 1 a 100 nos comandos <code>steps</code>, <code>history</code> e <code>failures</code>.</p>
+  </section>
+  <section>
+    <h2>Exemplos de execução</h2>
+    <pre>E:\@LIB-C++\bin\wxt-cpp-041-sql-job-agent-explorer.exe --help
+E:\@LIB-C++\bin\wxt-cpp-041-sql-job-agent-explorer.exe jobs --server ".\WSRV25"
+E:\@LIB-C++\bin\wxt-cpp-041-sql-job-agent-explorer.exe steps --server ".\WSRV25" --limit 10
+E:\@LIB-C++\bin\wxt-cpp-041-sql-job-agent-explorer.exe history --server ".\WSRV25" --limit 10
+E:\@LIB-C++\bin\wxt-cpp-041-sql-job-agent-explorer.exe failures --server ".\WSRV25" --limit 10</pre>
+  </section>
+  <section>
+    <h2>Validação</h2>
+    <p>Os comandos <code>--help</code>, <code>jobs</code>, <code>steps</code>, <code>history</code> e <code>failures</code> foram testados na instância <code>.\WSRV25</code>. A leitura de mensagens Unicode foi corrigida e validada com caracteres acentuados em português.</p>
+    <p><strong>Observação:</strong> um resultado vazio em <code>failures</code> significa apenas que a consulta não encontrou ocorrências correspondentes; não garante ausência de falhas fora do histórico disponível.</p>
+  </section>
+  <footer>POLYDEV | WX-TOOLS 041 | SQL Job &amp; Agent Explorer</footer>
+</main>
+</body>
+</html>
