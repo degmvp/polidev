@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WX-TOOLS 040 | SQL Memory &amp; Buffer Explorer</title>
+<style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e9eef8;font:16px/1.6 system-ui,'Segoe UI',sans-serif}main{max-width:1040px;margin:auto;padding:32px 22px}h1,h2{color:#f5c84c}h1{margin:8px 0}.back{display:inline-block;padding:10px 18px;border:1px solid #f5c84c;border-radius:8px;color:#f5c84c;text-decoration:none;margin-bottom:22px}.meta{color:#a6b8cd}.panel{background:#121e30;border:1px solid #31425d;border-radius:12px;padding:20px;margin:20px 0}pre{background:#070d17;padding:16px;overflow:auto;border-radius:8px;color:#e3edff}code{font-family:Consolas,monospace}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #35455d;text-align:left;padding:10px;vertical-align:top}th{color:#f5c84c}.note{border-left:3px solid #f5c84c;padding-left:12px}@media(max-width:600px){main{padding:20px 12px}.panel{padding:14px}}</style>
+</head><body><main>
+<a class="back" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a>
+<div class="meta">POLYDEV | WX-TOOLS | C++17 | 040</div><h1>SQL Memory &amp; Buffer Explorer</h1>
+<p>Ferramenta de diagnóstico somente leitura para memória, memory clerks, buffer pool e pressão de memória no SQL Server 2025. Desenvolvida em C++17 para Windows com ODBC Driver 18.</p>
+<section class="panel"><h2>Identificação</h2><p><strong>Fonte:</strong> <code>wxt-cpp-040-sql-memory-buffer-explorer.cpp</code></p><p><strong>Executável:</strong> <code>wxt-cpp-040-sql-memory-buffer-explorer.exe</code></p><p><strong>Plataforma:</strong> Windows, Visual Studio 2022 Release x64, SQL Server 2025</p><p><strong>Modo:</strong> somente leitura (consultas a DMVs)</p></section>
+<section class="panel"><h2>Comandos</h2><table><thead><tr><th>Comando</th><th>Finalidade</th></tr></thead><tbody><tr><td><code>overview</code></td><td>Memória física do processo SQL Server, memória virtual comprometida, locked/large pages e sinalizadores de memória baixa.</td></tr><tr><td><code>clerks</code></td><td>Principais memory clerks e caches, páginas alocadas, memória virtual comprometida e AWE; aceita --limit.</td></tr><tr><td><code>buffers</code></td><td>Páginas em cache e dirty pages por banco de dados; aceita --db e --limit.</td></tr><tr><td><code>pressure</code></td><td>Memória física e pagefile do host, estado de memória, Total/Target Server Memory e concessões de memória pendentes.</td></tr></tbody></table></section>
+<section class="panel"><h2>Execução no PowerShell</h2><pre><code>E:\@LIB-C++\bin\wxt-cpp-040-sql-memory-buffer-explorer.exe --help
+E:\@LIB-C++\bin\wxt-cpp-040-sql-memory-buffer-explorer.exe overview --server &quot;.\WSRV25&quot;
+E:\@LIB-C++\bin\wxt-cpp-040-sql-memory-buffer-explorer.exe clerks --server &quot;.\WSRV25&quot; --limit 10
+E:\@LIB-C++\bin\wxt-cpp-040-sql-memory-buffer-explorer.exe buffers --server &quot;.\WSRV25&quot; --db WX_RECOVERY_LAB --limit 10
+E:\@LIB-C++\bin\wxt-cpp-040-sql-memory-buffer-explorer.exe pressure --server &quot;.\WSRV25&quot;</code></pre></section>
+<section class="panel"><h2>Homologação — SQL Server 2025</h2>
+<p>Compilação e comandos <code>--help</code>, <code>overview</code>, <code>clerks</code>, <code>buffers</code> e <code>pressure</code> validados na instância <code>.\WSRV25</code>.</p>
+<table><thead><tr><th>Comando</th><th>Resultado observado</th></tr></thead><tbody>
+<tr><td><code>overview</code></td><td>Memória física do processo: 1.273,24 MB; memória virtual comprometida: 1.559,54 MB; sinalizadores de memória baixa: 0.</td></tr>
+<tr><td><code>clerks</code></td><td>10 memory clerks listados; principais: CACHESTORE_SQLCP (211,56 MB), CACHESTORE_PHDR (189,08 MB), MEMORYCLERK_SQLBUFFERPOOL (178,38 MB).</td></tr>
+<tr><td><code>buffers</code></td><td>WX_RECOVERY_LAB: 3.084 páginas em cache, 24,09 MB e 61 páginas modificadas.</td></tr>
+<tr><td><code>pressure</code></td><td>Memória física do host: 32.653,23 MB; disponível: 3.597,87 MB; Total Server Memory: 1.237,81 MB; Target Server Memory: 3.194,78 MB; grants pending: 0.</td></tr>
+</tbody></table><p class="note">Os valores são registros dos testes e variam conforme a atividade da instância. O estado informado pelo SQL Server foi “Available physical memory is high”. Em SQL Server 2022 ou superior, algumas DMVs exigem VIEW SERVER PERFORMANCE STATE.</p></section>
+<p class="meta">POLYDEV | WX-TOOLS | 040 | SQL Memory &amp; Buffer Explorer</p>
+</main></body></html>
