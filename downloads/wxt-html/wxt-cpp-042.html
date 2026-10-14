@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WX-TOOLS | 042 | Hash &amp; Checksum Tool</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#09121e;color:#e8eff8;font:16px/1.65 system-ui,Segoe UI,Arial,sans-serif}header{background:linear-gradient(120deg,#102a47,#09121e);border-bottom:2px solid #e3b341;padding:28px max(24px,calc((100% - 1050px)/2))}main{max-width:1050px;margin:auto;padding:24px}h1{margin:5px 0;color:#f2c45c;font-size:2rem}h2{color:#f2c45c;border-bottom:1px solid #304258;padding-bottom:7px;margin-top:30px}p,li{color:#d5deeb}.eyebrow{color:#9fc4f5;letter-spacing:.1em;font-weight:700}.subtitle{color:#b7c9dd}code,pre{font-family:Consolas,monospace}pre{overflow-x:auto;padding:17px;background:#0e2034;border:1px solid #2a4663;border-radius:9px;color:#d2eaff}code{color:#9fe4f0}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #31445a}th{color:#f2c45c}a{color:#ffcf68}.back{display:inline-block;margin:18px 0;padding:10px 18px;border:1px solid #e3b341;border-radius:7px;text-decoration:none;font-weight:700}footer{padding:28px;text-align:center;color:#8fa6bf}
+</style></head>
+<body><header><div class="eyebrow">POLYDEV | WX-TOOLS | C++17</div><h1>042 — Hash &amp; Checksum Tool</h1><div class="subtitle">Cálculo de hashes e verificação de integridade de arquivos</div></header>
+<main><a class="back" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a>
+<h2>Visão geral</h2><p>Utilitário de linha de comando em C++17 que calcula MD5, SHA-1, SHA-256 e SHA-512, gera manifestos de diretórios e verifica alterações, ausências e divergências. Os algoritmos são implementados no próprio código, sem dependências externas de criptografia.</p>
+<h2>Comandos</h2><table><tr><th>Comando</th><th>Função</th></tr><tr><td><code>hash</code></td><td>Calcula hashes de um ou mais arquivos; aceita entrada padrão com <code>-</code>.</td></tr><tr><td><code>manifest</code></td><td>Gera manifesto de hashes para arquivos de um diretório; <code>-r</code> inclui subdiretórios.</td></tr><tr><td><code>verify</code></td><td>Compara arquivos com os hashes de um manifesto e informa OK, FAILED ou MISSING.</td></tr><tr><td><code>selftest</code></td><td>Executa vetores de teste e verifica a consistência de processamento em blocos.</td></tr></table>
+<h2>Sintaxe e opções</h2><pre>hash-tool hash &lt;arquivo&gt;... [--algo=SHA256] [--tag]
+hash-tool manifest &lt;diretorio&gt; [--algo=SHA256] [-r] [--out=ARQUIVO]
+hash-tool verify &lt;manifesto&gt; [--base=DIRETORIO] [--quiet]
+hash-tool selftest</pre><p><code>--algo</code> aceita MD5, SHA1, SHA256 (padrão) ou SHA512. <code>--tag</code> produz formato BSD; <code>--out</code> grava manifesto; <code>--base</code> define o diretório dos arquivos; <code>--quiet</code> suprime linhas OK.</p>
+<h2>Exemplos no ambiente POLYDEV</h2><pre>E:\@LIB-C++\bin\wxt-cpp-042-hash-checksum-tool.exe selftest
+
+E:\@LIB-C++\bin\wxt-cpp-042-hash-checksum-tool.exe hash E:\@LIB-C++\bin\wxt-cpp-042-hash-checksum-tool.exe --algo=sha256
+
+E:\@LIB-C++\bin\wxt-cpp-042-hash-checksum-tool.exe manifest E:\@LIB-C++\bin --algo=sha256 --out=E:\@LIB-C++\teste-042.sha256
+
+E:\@LIB-C++\bin\wxt-cpp-042-hash-checksum-tool.exe verify E:\@LIB-C++\teste-042.sha256 --base=E:\@LIB-C++\bin --quiet</pre>
+<h2>Homologação — 14/10/2026</h2><table><tr><th>Teste</th><th>Resultado</th></tr><tr><td>Compilação Visual Studio 2022</td><td>Concluída</td></tr><tr><td>Vetores de MD5, SHA-1, SHA-256 e SHA-512</td><td>17/17 PASS</td></tr><tr><td>Consistência de streaming</td><td>PASS</td></tr><tr><td>Comparação SHA-256 com Get-FileHash (PowerShell)</td><td>Hash idêntico</td></tr><tr><td>Manifesto de diretório</td><td>71 entradas geradas</td></tr><tr><td>Verificação de integridade</td><td>71 OK, 0 failed, 0 missing</td></tr></table>
+<h2>Códigos de saída</h2><table><tr><th>Código</th><th>Significado</th></tr><tr><td>0</td><td>Sucesso</td></tr><tr><td>1</td><td>Uso inválido</td></tr><tr><td>2</td><td>Erro de entrada/saída</td></tr><tr><td>3</td><td>Entrada ou algoritmo inválido</td></tr><tr><td>4</td><td>Falha na verificação, arquivo ausente ou divergência</td></tr><tr><td>5</td><td>Falha no selftest</td></tr></table>
+<h2>Observações</h2><p>MD5 e SHA-1 são oferecidos por compatibilidade e não devem ser usados para proteção contra adulteração intencional. Para verificação de integridade, prefira SHA-256 ou SHA-512. O manifesto não constitui assinatura digital autenticada. A homologação funcional não substitui auditoria criptográfica ou testes extensivos de casos extremos.</p>
+<a class="back" href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></main><footer>POLYDEV | WX-TOOLS — FAÇA CERTO QUE FUNCIONA!</footer></body></html>
