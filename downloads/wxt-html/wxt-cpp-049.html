@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WX-TOOLS 049 | Code Statistics</title>
+<style>
+body{font:16px/1.6 system-ui,Arial,sans-serif;background:#111820;color:#eef3f8;margin:0}
+header{background:#ffd700;color:#121212;padding:30px 6%}
+main{max-width:980px;margin:30px auto;padding:0 24px 40px}
+h1{margin:0}h2{color:#ffd700;margin-top:32px}
+code,pre{font-family:Consolas,monospace}
+pre{background:#05090c;padding:16px;overflow-x:auto;border-left:4px solid #ffd700}
+a{color:#ffd700}.nav{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.nav a{background:#ffd700;color:#111820;border-radius:7px;padding:10px 20px;font:700 15px system-ui,Arial,sans-serif;text-decoration:none}
+.nav a:hover{background:#ffe866}table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid #40505b;text-align:left;padding:8px}
+</style>
+</head>
+<body>
+<header><h1>POLYDEV | WX-TOOLS | 049</h1><strong>Code Statistics — C++17</strong></header>
+<main>
+<nav class="nav" aria-label="Navegação"><a href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<p>Ferramenta de linha de comando para contabilizar linhas de código, comentários e linhas vazias por linguagem em árvores de diretórios. Apresenta totais por linguagem, identifica linhas mistas (código e comentário), permite exclusões e exporta relatórios CSV e JSON. Operação somente leitura dos arquivos analisados.</p>
+<h2>Comandos</h2>
+<table><tr><th>Comando</th><th>Descrição</th></tr>
+<tr><td><code>scan &lt;directory&gt;</code></td><td>Analisa recursivamente um diretório e apresenta o resumo por linguagem.</td></tr>
+<tr><td><code>selftest</code></td><td>Executa a bateria consolidada de testes internos.</td></tr>
+<tr><td><code>--help</code></td><td>Exibe a ajuda de uso.</td></tr>
+<tr><td><code>--version</code></td><td>Exibe a versão.</td></tr></table>
+<h2>Opções de scan</h2>
+<table><tr><th>Opção</th><th>Descrição</th></tr>
+<tr><td><code>--exclude &lt;names&gt;</code></td><td>Exclui diretórios pelos nomes, separados por vírgulas.</td></tr>
+<tr><td><code>--include-hidden</code></td><td>Inclui arquivos e diretórios ocultos.</td></tr>
+<tr><td><code>--per-file</code></td><td>Exibe também as estatísticas por arquivo.</td></tr>
+<tr><td><code>--csv &lt;file&gt;</code></td><td>Exporta relatório CSV.</td></tr>
+<tr><td><code>--json &lt;file&gt;</code></td><td>Exporta relatório JSON.</td></tr></table>
+<h2>Exemplos — PowerShell</h2>
+<pre>E:\@LIB-C++\bin\wxt-cpp-049-code-statistics.exe scan "E:\@LIB-C++"
+
+E:\@LIB-C++\bin\wxt-cpp-049-code-statistics.exe scan "E:\@LIB-C++" --per-file
+
+E:\@LIB-C++\bin\wxt-cpp-049-code-statistics.exe scan "E:\@LIB-C++" --exclude bin,obj,build --csv "E:\@LIB-C++\relatorio-049.csv" --json "E:\@LIB-C++\relatorio-049.json"
+
+E:\@LIB-C++\bin\wxt-cpp-049-code-statistics.exe selftest</pre>
+<h2>Critérios de contagem</h2>
+<p><strong>CODE:</strong> linhas com código, incluindo linhas que também contêm comentários. <strong>COMMENTS:</strong> linhas somente de comentário. <strong>BLANK:</strong> linhas vazias. <strong>MIXED:</strong> subconjunto das linhas CODE que contêm código e comentário. <strong>TOTAL:</strong> total de linhas analisadas.</p>
+<p>Por padrão, diretórios comuns de dependências e compilação, como <code>.git</code>, <code>node_modules</code>, <code>bin</code>, <code>obj</code> e <code>build</code>, são ignorados. A análise é baseada em regras de sintaxe e não substitui um parser completo de cada linguagem.</p>
+<h2>Homologação</h2>
+<table><tr><th>Item</th><th>Resultado</th></tr>
+<tr><td>Ambiente</td><td>Visual Studio 2022 — C++17 — Release x64</td></tr>
+<tr><td>Executável</td><td><code>wxt-cpp-049-code-statistics.exe</code></td></tr>
+<tr><td>Selftest</td><td>15 passed, 0 failed</td></tr>
+<tr><td>Status</td><td>HOMOLOGADO</td></tr></table>
+</main>
+</body>
+</html>
