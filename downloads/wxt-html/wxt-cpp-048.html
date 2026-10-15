@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WX-TOOLS 048 | Timestamp Converter</title>
+<style>
+body{font:16px/1.6 system-ui,Arial,sans-serif;background:#111820;color:#eef3f8;margin:0}
+header{background:#ffd700;color:#121212;padding:30px 6%}
+main{max-width:980px;margin:30px auto;padding:0 24px}
+h1{margin:0}h2{color:#ffd700;margin-top:32px}
+code,pre{font-family:Consolas,monospace}
+pre{background:#05090c;padding:16px;overflow-x:auto;border-left:4px solid #ffd700}
+a{color:#ffd700}.nav{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.nav a{background:#ffd700;color:#111820;border-radius:7px;padding:10px 20px;font:700 15px system-ui,Arial,sans-serif;text-decoration:none}
+.nav a:hover{background:#ffe866}table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid #40505b;text-align:left;padding:8px}
+</style>
+</head>
+<body>
+<header><h1>POLYDEV | WX-TOOLS | 048</h1><strong>Timestamp Converter — C++17</strong></header>
+<main>
+<nav class="nav" aria-label="Navegação"><a href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<p>Utilitário de linha de comando para conversão bidirecional entre Unix Timestamp e data/hora ISO 8601. Suporta segundos, milissegundos, UTC, horário local e deslocamentos explícitos de fuso horário.</p>
+<h2>Comandos</h2>
+<table><tr><th>Comando</th><th>Função</th></tr>
+<tr><td><code>now</code></td><td>Mostra o horário atual e os timestamps Unix em segundos e milissegundos.</td></tr>
+<tr><td><code>to-date</code></td><td>Converte um Unix Timestamp inteiro para data e hora.</td></tr>
+<tr><td><code>to-unix</code></td><td>Converte uma data ISO 8601 para Unix Timestamp.</td></tr>
+<tr><td><code>selftest</code></td><td>Executa a bateria consolidada de testes internos.</td></tr>
+<tr><td><code>--help</code> / <code>--version</code></td><td>Exibe ajuda ou versão.</td></tr></table>
+<h2>Sintaxe</h2>
+<pre>wxt-cpp-048-timestamp-converter.exe now [--utc|--local]
+wxt-cpp-048-timestamp-converter.exe to-date &lt;integer&gt; [--unit s|ms] [--utc|--local]
+wxt-cpp-048-timestamp-converter.exe to-unix &lt;ISO8601&gt; [--unit s|ms] [--utc|--local]
+wxt-cpp-048-timestamp-converter.exe selftest</pre>
+<h2>Exemplos no PowerShell</h2>
+<pre>E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe --version
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe now --local
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe to-date 0 --utc
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe to-date 1700000000000 --unit ms
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe to-unix 1970-01-01T00:00:00Z
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe to-unix 2026-10-15T16:00:00-03:00
+E:\@LIB-C++in\wxt-cpp-048-timestamp-converter.exe selftest</pre>
+<h2>Opções e regras</h2>
+<p><code>--unit s|ms</code> seleciona segundos (padrão) ou milissegundos. <code>--utc</code> é o padrão; <code>--local</code> utiliza o fuso horário configurado no sistema operacional. Datas ISO 8601 aceitam <code>Z</code> e offsets como <code>-03:00</code>, que prevalecem sobre a opção UTC/local. São aceitas frações de até três dígitos. O horário local segue as regras de horário de verão do sistema.</p>
+<h2>Códigos de saída</h2>
+<table><tr><th>Código</th><th>Significado</th></tr>
+<tr><td>0</td><td>Sucesso</td></tr>
+<tr><td>1</td><td>Entrada inválida ou erro de conversão</td></tr>
+<tr><td>2</td><td>Falha no selftest</td></tr></table>
+<h2>Homologação</h2>
+<p>Compilado no Visual Studio 2022, Release x64. Selftest reportado: <strong>19 verificações aprovadas, nenhuma falha</strong>.</p>
+<p><strong>Programa:</strong> <code>wxt-cpp-048-timestamp-converter</code></p>
+</main></body></html>
