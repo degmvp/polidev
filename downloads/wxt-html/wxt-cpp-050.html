@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WX-TOOLS 050 | Test Data Generator</title>
+<style>
+body{font:16px/1.6 system-ui,Arial,sans-serif;background:#111820;color:#eef3f8;margin:0}
+header{background:#ffd700;color:#121212;padding:30px 6%}
+main{max-width:980px;margin:30px auto;padding:0 24px 40px}
+h1{margin:0}h2{color:#ffd700;margin-top:32px}
+code,pre{font-family:Consolas,monospace}
+pre{background:#05090c;padding:16px;overflow-x:auto;border-left:4px solid #ffd700}
+a{color:#ffd700}.nav{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.nav a{background:#ffd700;color:#111820;border-radius:7px;padding:10px 20px;font:700 15px system-ui,Arial,sans-serif;text-decoration:none}
+.nav a:hover{background:#ffe866}table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid #40505b;text-align:left;padding:8px}
+</style>
+</head>
+<body>
+<header><h1>POLYDEV | WX-TOOLS | 050</h1><strong>Test Data Generator — C++17</strong></header>
+<main>
+<nav class="nav" aria-label="Navegação"><a href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<p>Utilitário de linha de comando que gera dados sintéticos reproduzíveis em CSV, JSON e SQL. Com a mesma seed e os mesmos parâmetros, produz saídas idênticas. Gera arquivos para testes e demonstrações sem conexão direta com bancos de dados.</p>
+<h2>Comandos</h2>
+<table>
+<tr><th>Comando</th><th>Descrição</th></tr>
+<tr><td><code>generate</code></td><td>Gera registros sintéticos no formato escolhido.</td></tr>
+<tr><td><code>selftest</code></td><td>Executa a bateria consolidada de testes internos.</td></tr>
+<tr><td><code>--help</code></td><td>Exibe a ajuda de uso.</td></tr>
+<tr><td><code>--version</code></td><td>Exibe a versão.</td></tr>
+</table>
+<h2>Opções de geração</h2>
+<table>
+<tr><th>Opção</th><th>Descrição</th></tr>
+<tr><td><code>--rows N</code></td><td>Quantidade de registros; padrão 10, máximo 100.000.000.</td></tr>
+<tr><td><code>--seed N</code></td><td>Seed determinística de 64 bits sem sinal; padrão 2026.</td></tr>
+<tr><td><code>--format F</code></td><td><code>csv</code>, <code>json</code> ou <code>sql</code>; padrão <code>csv</code>.</td></tr>
+<tr><td><code>--output PATH</code></td><td>Arquivo de saída; use <code>-</code> para stdout (padrão).</td></tr>
+<tr><td><code>--table NAME</code></td><td>Nome da tabela nos INSERTs SQL; padrão <code>DadosTesteSinteticos</code>.</td></tr>
+</table>
+<h2>Exemplos — PowerShell</h2>
+<pre>E:\@LIB-C++\bin\wxt-cpp-050-test-data-generator.exe generate --rows 100000 --seed 2026 --format csv --output dados.csv
+
+E:\@LIB-C++\bin\wxt-cpp-050-test-data-generator.exe generate --rows 10 --format json --output dados.json
+
+E:\@LIB-C++\bin\wxt-cpp-050-test-data-generator.exe generate --rows 50 --format sql --table DadosTesteSinteticos --output dados.sql
+
+E:\@LIB-C++\bin\wxt-cpp-050-test-data-generator.exe selftest</pre>
+<h2>Determinismo e segurança</h2>
+<p>O gerador utiliza seed explícita para repetir os mesmos registros e inclui testes de equivalência byte a byte para CSV, JSON e SQL. Os e-mails são sintéticos e utilizam domínio reservado para exemplos. Os comandos apenas geram texto ou arquivos; não executam instruções no SQL Server.</p>
+<h2>Homologação</h2>
+<table>
+<tr><th>Item</th><th>Resultado</th></tr>
+<tr><td>Ambiente</td><td>Visual Studio 2022 — C++17 — Release x64</td></tr>
+<tr><td>Executável</td><td><code>wxt-cpp-050-test-data-generator.exe</code></td></tr>
+<tr><td>Selftest</td><td>22 passed, 0 failed</td></tr>
+<tr><td>Status</td><td>HOMOLOGADO</td></tr>
+</table>
+</main>
+</body>
+</html>
