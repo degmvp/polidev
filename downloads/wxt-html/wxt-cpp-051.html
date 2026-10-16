@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WX-TOOLS 051 | JSONL Log Analyzer</title>
+<style>
+body{font:16px/1.6 system-ui,Arial,sans-serif;background:#111820;color:#eef3f8;margin:0}
+header{background:#ffd700;color:#121212;padding:30px 6%}
+main{max-width:980px;margin:30px auto;padding:0 24px 40px}
+h1{margin:0}h2{color:#ffd700;margin-top:32px}
+code,pre{font-family:Consolas,monospace}
+pre{background:#05090c;padding:16px;overflow-x:auto;border-left:4px solid #ffd700}
+a{color:#ffd700}.nav{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.nav a{background:#ffd700;color:#111820;border-radius:7px;padding:10px 20px;font:700 15px system-ui,Arial,sans-serif;text-decoration:none}
+.nav a:hover{background:#ffe866}table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid #40505b;text-align:left;padding:8px}
+</style>
+</head>
+<body>
+<header><h1>POLYDEV | WX-TOOLS | 051</h1><strong>JSONL Log Analyzer — C++17</strong></header>
+<main>
+<nav class="nav" aria-label="Navegação"><a href="../../wx-tools-vitrine.html">← VOLTAR À WX-TOOLS</a></nav>
+<p>Analisa arquivos JSON Lines (JSONL) linha a linha, filtra registros por nível, intervalo de datas e campos, agrega eventos e gera relatórios em texto, CSV ou JSON. A leitura do arquivo de entrada não altera os logs originais.</p>
+<h2>Comandos</h2>
+<table>
+<tr><th>Comando</th><th>Descrição</th></tr>
+<tr><td><code>analyze</code></td><td>Analisa um arquivo JSONL e produz relatório.</td></tr>
+<tr><td><code>selftest</code></td><td>Executa os testes internos.</td></tr>
+<tr><td><code>--help</code></td><td>Mostra a ajuda.</td></tr>
+<tr><td><code>--version</code></td><td>Mostra a versão.</td></tr>
+</table>
+<h2>Opções de análise</h2>
+<table>
+<tr><th>Opção</th><th>Descrição</th></tr>
+<tr><td><code>--input FILE</code></td><td>Arquivo JSONL obrigatório; use <code>-</code> para stdin.</td></tr>
+<tr><td><code>--output FILE</code></td><td>Destino do relatório; padrão stdout.</td></tr>
+<tr><td><code>--format text|csv|json</code></td><td>Formato do relatório; padrão text.</td></tr>
+<tr><td><code>--level LEVEL</code></td><td>Filtra nível, sem diferenciar maiúsculas/minúsculas.</td></tr>
+<tr><td><code>--from ISO8601</code></td><td>Limite inicial inclusivo.</td></tr>
+<tr><td><code>--to ISO8601</code></td><td>Limite final inclusivo.</td></tr>
+<tr><td><code>--field KEY=VALUE</code></td><td>Filtra um campo escalar; aceita caminho com pontos.</td></tr>
+<tr><td><code>--group-by FIELD</code></td><td>Campo para agregação; padrão service.</td></tr>
+<tr><td><code>--level-field FIELD</code></td><td>Campo de nível; padrão level.</td></tr>
+<tr><td><code>--time-field FIELD</code></td><td>Campo de data/hora; padrão timestamp.</td></tr>
+<tr><td><code>--message-field FIELD</code></td><td>Campo de mensagem; padrão message.</td></tr>
+<tr><td><code>--top N</code></td><td>Limite de linhas por seção; padrão 10.</td></tr>
+</table>
+<h2>Exemplos — PowerShell</h2>
+<pre>E:\@LIB-C++\bin\wxt-cpp-051-jsonl-log-analyzer.exe analyze --input logs.jsonl
+
+E:\@LIB-C++\bin\wxt-cpp-051-jsonl-log-analyzer.exe analyze --input logs.jsonl --level ERROR --format csv --output erros.csv
+
+E:\@LIB-C++\bin\wxt-cpp-051-jsonl-log-analyzer.exe analyze --input logs.jsonl --from 2026-10-16T00:00:00Z --to 2026-10-16T23:59:59Z --field service=api --group-by service --format json --output resumo.json
+
+E:\@LIB-C++\bin\wxt-cpp-051-jsonl-log-analyzer.exe selftest</pre>
+<h2>Validação e segurança</h2>
+<p>Registros JSON inválidos são contabilizados e ignorados. Os timestamps aceitam o formato ISO 8601 com fuso UTC (Z) ou offset explícito (+/-HH:MM). A ferramenta não modifica o arquivo de entrada.</p>
+<h2>Homologação</h2>
+<table>
+<tr><th>Item</th><th>Resultado</th></tr>
+<tr><td>Ambiente</td><td>Visual Studio 2022 — C++17 — Release x64</td></tr>
+<tr><td>Executável</td><td><code>wxt-cpp-051-jsonl-log-analyzer.exe</code></td></tr>
+<tr><td>Selftest</td><td>29 passed, 0 failed</td></tr>
+<tr><td>Status</td><td>HOMOLOGADO</td></tr>
+</table>
+</main>
+</body>
+</html>
