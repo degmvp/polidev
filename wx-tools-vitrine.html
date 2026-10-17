@@ -300,6 +300,14 @@ footer h2{
 .confirmacao{display:none;margin-top:15px;padding:14px;border:1px solid #9acd32;border-radius:8px;background:#10210b;color:#cfff9b;font-weight:bold}
 
 
+/* Navegador de grupos — 5 ferramentas por pagina */
+.navegador-grupos{display:none;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 16px;flex-wrap:wrap}
+.navegador-grupos button{padding:10px 12px;background:#07131e;color:#FFD700;border:1px solid #21b8ff;border-radius:7px;font-weight:bold;cursor:pointer}
+.navegador-grupos button:hover:not(:disabled){background:#10324a}
+.navegador-grupos button:disabled{opacity:.4;cursor:default}
+.navegador-grupos span{color:#FFD700;font-weight:bold;font-size:13px;text-align:center}
+@media(max-width:420px){.navegador-grupos button{padding:10px 8px;font-size:12px}.navegador-grupos span{font-size:12px}}
+
 /* WX-TOOLS — documentação dinâmica */
 .doc-btn{background:#FFD700;color:#000;border:1px solid #FFD700}
 .doc-btn:hover{background:#e3b900}
@@ -335,6 +343,12 @@ footer h2{
 
     <aside class="sidebar">
         <h2 id="tituloMenu">Ferramentas WX</h2>
+
+        <div id="navegadorGrupos" class="navegador-grupos" aria-label="Navegacao por grupos de ferramentas">
+            <button id="grupoAnterior" type="button" onclick="mudarGrupo(-1)">◀ Anterior</button>
+            <span id="indicadorGrupo" aria-live="polite">Grupo 1 de 1</span>
+            <button id="grupoProximo" type="button" onclick="mudarGrupo(1)">Próximo ▶</button>
+        </div>
 
         <div id="listaFerramentas">
             Selecione uma linguagem.
@@ -464,6 +478,27 @@ const client =
 let registros = [];
 let registroAtual = null;
 let conteudoAtual = "";
+const TAMANHO_GRUPO = 5;
+let grupoAtual = 0;
+
+function atualizarNavegador(){
+    const navegador = document.getElementById("navegadorGrupos");
+    const totalGrupos = Math.ceil(registros.length / TAMANHO_GRUPO);
+    navegador.style.display = totalGrupos > 0 ? "flex" : "none";
+    if(totalGrupos === 0) return;
+    document.getElementById("indicadorGrupo").textContent =
+        "Grupo " + (grupoAtual + 1) + " de " + totalGrupos;
+    document.getElementById("grupoAnterior").disabled = grupoAtual === 0;
+    document.getElementById("grupoProximo").disabled = grupoAtual >= totalGrupos - 1;
+}
+
+function mudarGrupo(direcao){
+    const ultimo = Math.ceil(registros.length / TAMANHO_GRUPO) - 1;
+    const proximo = Math.max(0, Math.min(ultimo, grupoAtual + direcao));
+    if(proximo === grupoAtual) return;
+    grupoAtual = proximo;
+    montarLista();
+}
 
 function normalizarUrl(url){
     if(!url){
@@ -600,6 +635,8 @@ async function carregarFerramentas(){
         document.getElementById("tituloMenu");
 
     registros = [];
+    grupoAtual = 0;
+    atualizarNavegador();
     registroAtual = null;
     atualizarBotaoDocumentacao();
     conteudoAtual = "";
@@ -688,6 +725,7 @@ async function carregarFerramentas(){
             return na - nb;
         });
 
+        grupoAtual = 0;
         montarLista();
 
         status.textContent =
@@ -754,13 +792,20 @@ function montarLista(){
 
     lista.innerHTML = "";
 
-    registros.forEach((item,index) => {
+    const inicio = grupoAtual * TAMANHO_GRUPO;
+    const fim = inicio + TAMANHO_GRUPO;
+
+    registros.slice(inicio, fim).forEach((item,indiceLocal) => {
+        const index = inicio + indiceLocal;
 
         const card =
             document.createElement("div");
 
         card.className =
             "tool-card";
+        if(registroAtual && item.id === registroAtual.id){
+            card.classList.add("active");
+        }
 
         const arquivo =
             String(item.arquivo_url || "")
@@ -802,6 +847,7 @@ function montarLista(){
 
         lista.appendChild(card);
     });
+    atualizarNavegador();
 }
 
 async function abrirFerramenta(item){
@@ -1116,6 +1162,8 @@ async function cadastrarInteresse(ev){
             registroAtual=null;
             atualizarBotaoDocumentacao();
             registros=[];
+            grupoAtual=0;
+            atualizarNavegador();
             document.getElementById("linguagem").value="";
             document.getElementById("tituloMenu").textContent="Ferramentas WX";
             document.getElementById("listaFerramentas").innerHTML="Selecione uma linguagem.";
