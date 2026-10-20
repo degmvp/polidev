@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WX-TOOLS | C++ | 052 | DB Data Toolkit</title>
+  <style>
+    :root{color-scheme:light;--ouro:#ffd700;--ouro-claro:#fff4b8;--preto:#111111;--borda:#b99b00}
+    *{box-sizing:border-box}
+    body{margin:0;background:#fff9dc;color:var(--preto);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    header{background:var(--ouro);color:var(--preto);padding:34px max(20px,calc((100vw - 1040px)/2));border-bottom:4px solid var(--preto)}
+    header p{margin:4px 0 0;color:var(--preto)}
+    main{max-width:1040px;margin:28px auto 60px;padding:0 20px}
+    .back{display:inline-block;background:var(--ouro);color:var(--preto);text-decoration:none;padding:9px 16px;border-radius:7px;font-weight:700;margin-bottom:20px;border:2px solid var(--preto)}
+    .back:hover{background:#ffe766}
+    h1{font-size:clamp(1.6rem,3vw,2.5rem);margin:0}
+    h2{font-size:1.3rem;color:var(--preto);margin:0 0 12px;border-bottom:2px solid var(--ouro);padding-bottom:5px}
+    section{background:#fffdf0;border:1px solid var(--borda);border-radius:10px;padding:23px;margin:18px 0}
+    .status{display:inline-block;background:var(--ouro);color:var(--preto);border:1px solid var(--preto);border-radius:5px;padding:3px 9px;font-weight:700}
+    code,pre{font-family:Consolas,"Courier New",monospace}
+    pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--ouro-claro);color:var(--preto);padding:16px;border:1px solid var(--borda);border-left:5px solid var(--ouro);border-radius:5px;font-size:.88rem;line-height:1.55}
+    table{border-collapse:collapse;width:100%}
+    th,td{border-bottom:1px solid var(--borda);text-align:left;padding:10px;color:var(--preto)}
+    th{background:var(--ouro);color:var(--preto)}
+    .note{border-left:5px solid var(--ouro);padding:8px 14px;background:var(--ouro-claro);color:var(--preto)}
+    footer{text-align:center;color:var(--preto);background:var(--ouro);padding:20px;font-weight:700}
+  </style>
+</head>
+<body>
+<header><h1>WX-TOOLS | C++ | 052 | DB Data Toolkit</h1><p>POLYDEV · Consulta, exportação e cópia de dados entre bancos</p></header>
+<main>
+  <a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+  <section><h2>Visão geral</h2><p>Utilitário de linha de comando desenvolvido em C++17 para consultar dados, exportar resultados e copiar registros entre tabelas. O ambiente homologado é Windows x64, Visual Studio 2022, SQL Server 2025 e ODBC Driver 18.</p><p><span class="status">SQL Server 2025 — homologado</span> &nbsp; PostgreSQL — integração ainda não testada.</p></section>
+  <section><h2>Comandos disponíveis</h2>
+    <table><thead><tr><th>Comando</th><th>Finalidade</th></tr></thead><tbody>
+    <tr><td><code>--help / --version</code></td><td>Ajuda e versão do executável</td></tr>
+    <tr><td><code>probe</code></td><td>Verifica conexão com o banco</td></tr>
+    <tr><td><code>tables</code></td><td>Lista tabelas; aceita <code>--counts</code></td></tr>
+    <tr><td><code>query</code></td><td>Executa consulta e exporta em CSV ou JSONL</td></tr>
+    <tr><td><code>copy</code></td><td>Copia registros usando <code>--append</code>, <code>--truncate</code> ou <code>--create</code></td></tr>
+    </tbody></table>
+  </section>
+  <section><h2>Exemplo: conexão</h2><pre>E:\@LIB-C++\bin\wxt-cpp-052-db-data-toolkit.exe probe --source="mssql://Driver={ODBC Driver 18 for SQL Server};Server=.\WSRV25;Database=WX_RECOVERY_LAB;Trusted_Connection=yes;TrustServerCertificate=yes"</pre></section>
+  <section><h2>Exemplo: exportação CSV em UTF-8</h2><pre>E:\@LIB-C++\bin\wxt-cpp-052-db-data-toolkit.exe query --source="mssql://Driver={ODBC Driver 18 for SQL Server};Server=.\WSRV25;Database=WX_RECOVERY_LAB;Trusted_Connection=yes;TrustServerCertificate=yes" --sql="SELECT TOP 5 * FROM dbo.DadosTeste ORDER BY Id" --format=csv --out="E:\@LIB-C++\teste-052-utf8-final.csv"</pre><p>Resultado verificado: 5 registros; acentuação preservada, confirmada por análise hexadecimal e leitura via PowerShell.</p></section>
+  <section><h2>Exemplo: exportação JSONL em UTF-8</h2><pre>E:\@LIB-C++\bin\wxt-cpp-052-db-data-toolkit.exe query --source="mssql://Driver={ODBC Driver 18 for SQL Server};Server=.\WSRV25;Database=WX_RECOVERY_LAB;Trusted_Connection=yes;TrustServerCertificate=yes" --sql="SELECT TOP 5 * FROM dbo.DadosTeste ORDER BY Id" --format=jsonl --out="E:\@LIB-C++\teste-052-utf8.jsonl"</pre><p>Resultado verificado: 5 objetos JSON válidos, com caracteres acentuados preservados.</p></section>
+  <section><h2>Operações de cópia</h2><p>O comando <code>copy</code> aceita conexão de origem e destino, tabela de origem e destino, além de opções como <code>--batch</code>, <code>--limit</code> e <code>--commit-every</code>.</p><table><thead><tr><th>Modo</th><th>Comportamento</th><th>Validação</th></tr></thead><tbody><tr><td><code>--append</code></td><td>Adiciona registros ao destino</td><td>5 registros copiados</td></tr><tr><td><code>--truncate</code></td><td>Limpa o destino antes da cópia</td><td>5 registros finais</td></tr><tr><td><code>--create</code></td><td>Cria tabela de destino e copia dados</td><td>5 registros; integridade conferida</td></tr></tbody></table><p class="note"><strong>Atenção:</strong> <code>--truncate</code> remove os dados existentes na tabela de destino. Execute somente em tabelas apropriadas e após confirmar os parâmetros.</p></section>
+  <section><h2>Homologação</h2><p>Testados com êxito: <code>probe</code>, <code>tables</code>, contagens, <code>query</code> CSV/JSONL, modos de cópia, comparação de integridade e validação UTF-8. A validação PostgreSQL permanece pendente e não faz parte desta homologação.</p><p><strong>Executável:</strong> <code>wxt-cpp-052-db-data-toolkit.exe</code><br><strong>Slug:</strong> <code>wxt-cpp-052-db-data-toolkit</code></p></section>
+  <a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+</main><footer>POLYDEV · WX-TOOLS C++ · 052 · FAÇA CERTO QUE FUNCIONA!</footer>
+</body></html>
