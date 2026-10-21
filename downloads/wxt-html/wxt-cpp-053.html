@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POLYDEV | WX-TOOLS | 053 | SQL Vector Explorer</title>
+<style>
+:root{--ouro:#ffd700;--claro:#fff6c9;--texto:#111;--borda:#b79a00}
+*{box-sizing:border-box}body{margin:0;background:#fff9e3;color:var(--texto);font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif}
+header{background:var(--ouro);border-bottom:4px solid #111;padding:30px max(22px,calc((100vw - 1040px)/2))}h1{margin:0;font-size:clamp(1.7rem,3vw,2.5rem)}header p{margin:5px 0 0}
+main{max-width:1040px;margin:26px auto 50px;padding:0 20px}section{background:#fffdf1;border:1px solid var(--borda);border-radius:9px;padding:22px;margin:17px 0}h2{font-size:1.3rem;margin:0 0 12px;border-bottom:2px solid var(--ouro);padding-bottom:6px}
+a.back{display:inline-block;background:var(--ouro);border:2px solid #111;border-radius:7px;color:#111;font-weight:700;text-decoration:none;padding:9px 16px;margin:0 0 16px}a.back:hover{background:#ffe873}
+code,pre{font-family:Consolas,"Courier New",monospace}pre{background:var(--claro);color:#111;border:1px solid var(--borda);border-left:5px solid var(--ouro);border-radius:5px;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.9rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--borda);vertical-align:top}th{background:var(--ouro)}.status{background:var(--ouro);border:1px solid #111;border-radius:5px;padding:4px 10px;font-weight:700}.note{background:var(--claro);border-left:5px solid var(--ouro);padding:10px 14px}footer{text-align:center;background:var(--ouro);padding:18px;font-weight:700}
+</style>
+</head>
+<body>
+<header><h1>POLYDEV | WX-TOOLS | 053</h1><p><strong>SQL Vector Explorer — C++17 / ODBC</strong></p><p>Vector Database no SQL Server 2025 · Pesquisa e comparação de distâncias vetoriais</p></header>
+<main>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+<section><h2>Visão geral</h2><p>Ferramenta de linha de comando, somente leitura, para explorar colunas do tipo <code>VECTOR</code> no SQL Server 2025. Identifica dimensões e tipo-base dos vetores, pesquisa os vizinhos mais próximos e compara as distâncias euclidiana e de cosseno.</p><p><span class="status">v1.0.0 — HOMOLOGADO NO SQL SERVER 2025</span></p><p>Ambiente: Windows x64 · Visual Studio 2022 · C++17 · ODBC Driver 18 · autenticação integrada do Windows.</p></section>
+<section><h2>Comandos</h2><table><thead><tr><th>Comando</th><th>Finalidade</th></tr></thead><tbody>
+<tr><td><code>--help</code></td><td>Exibe ajuda e parâmetros.</td></tr>
+<tr><td><code>--version</code></td><td>Exibe a versão.</td></tr>
+<tr><td><code>columns</code></td><td>Descobre automaticamente colunas vetoriais no banco.</td></tr>
+<tr><td><code>info</code></td><td>Consulta informações da coluna vetorial de uma tabela.</td></tr>
+<tr><td><code>search</code></td><td>Pesquisa vetores próximos, com métrica <code>cosine</code> ou <code>euclidean</code>.</td></tr>
+<tr><td><code>compare</code></td><td>Mostra as duas distâncias para os registros consultados.</td></tr>
+</tbody></table></section>
+<section><h2>Configuração do laboratório</h2><table><tbody>
+<tr><th>Servidor</th><td><code>.\WSRV25</code></td></tr>
+<tr><th>Banco</th><td><code>WX_RECOVERY_LAB</code></td></tr>
+<tr><th>Tabela</th><td><code>dbo.WX_Vector_Lab</code></td></tr>
+<tr><th>Coluna</th><td><code>Embedding</code> — <code>VECTOR(3)</code>, base <code>float32</code></td></tr>
+<tr><th>Executável</th><td><code>wxt-cpp-053-sql-vector-explorer.exe</code></td></tr>
+</tbody></table><p>Parâmetros opcionais: <code>--server</code>, <code>--db</code>, <code>--table</code>, <code>--column</code>, <code>--metric</code> e <code>--top</code>.</p></section>
+<section><h2>Exemplos — PowerShell</h2><h3>Descobrir colunas vetoriais</h3><pre>E:\@LIB-C++\bin\wxt-cpp-053-sql-vector-explorer.exe columns --server=".\WSRV25" --db="WX_RECOVERY_LAB"</pre><h3>Inspecionar uma coluna</h3><pre>E:\@LIB-C++\bin\wxt-cpp-053-sql-vector-explorer.exe info --table=dbo.WX_Vector_Lab --column=Embedding</pre><h3>Pesquisar por distância de cosseno</h3><pre>E:\@LIB-C++\bin\wxt-cpp-053-sql-vector-explorer.exe search --table=dbo.WX_Vector_Lab --vector="[0.85,0.15,0.1]" --metric=cosine --top=3</pre><h3>Comparar duas métricas</h3><pre>E:\@LIB-C++\bin\wxt-cpp-053-sql-vector-explorer.exe compare --table=dbo.WX_Vector_Lab --vector="[0.85,0.15,0.1]" --top=5</pre></section>
+<section><h2>Resultados homologados</h2><p>A busca por cosseno retornou os três vizinhos mais próximos:</p><table><thead><tr><th>ID</th><th>Descrição</th><th>Distância de cosseno</th></tr></thead><tbody>
+<tr><td>1</td><td>Recuperação de páginas MDF</td><td>0,00203669</td></tr>
+<tr><td>2</td><td>Restauração de registros SQL</td><td>0,00245047</td></tr>
+<tr><td>5</td><td>Recuperação de tabelas danificadas</td><td>0,00740993</td></tr>
+</tbody></table><p>O comando <code>compare</code> retornou cinco registros com ambas as métricas, conferidas com os resultados obtidos no SSMS 22.</p><p class="note"><strong>Codificação:</strong> o executável emite os textos acentuados em UTF-8. Para visualização correta no PowerShell, execute <code>chcp 65001</code> antes dos comandos.</p></section>
+<section><h2>Notas técnicas</h2><p>Os vetores deste laboratório foram definidos manualmente para validar a infraestrutura. Eles não são embeddings gerados por um modelo de inteligência artificial; portanto, o teste demonstra proximidade numérica, não valida a qualidade de uma busca semântica real.</p><p>As consultas usam o tipo nativo <code>VECTOR</code>, metadados de <code>sys.columns</code> e a função <code>VECTOR_DISTANCE()</code> do SQL Server 2025. A ferramenta opera somente em leitura.</p><p><strong>Slug oficial:</strong> <code>wxt-cpp-053-sql-vector-explorer</code></p></section>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+</main>
+<footer>POLYDEV · WX-TOOLS C++ · 053 · FAÇA CERTO QUE FUNCIONA!</footer>
+</body>
+</html>
