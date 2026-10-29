@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="POLYDEV WX-TOOLS 054 — T-SQL Regex Modernizer: analisador estático offline de T-SQL, somente leitura, com sugestões de modernização para SQL Server 2025.">
+<title>WX-TOOLS | C++ | 054 | T-SQL Regex Modernizer</title>
+<style>
+:root{--ouro:#ffd700;--claro:#fff6c9;--texto:#111;--borda:#b79a00}
+*{box-sizing:border-box}body{margin:0;background:#fff9e3;color:var(--texto);font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif}
+header{background:var(--ouro);border-bottom:4px solid #111;padding:30px max(22px,calc((100vw - 1040px)/2))}h1{margin:0;font-size:clamp(1.7rem,3vw,2.5rem)}header p{margin:5px 0 0}
+main{max-width:1040px;margin:26px auto 50px;padding:0 20px}section{background:#fffdf1;border:1px solid var(--borda);border-radius:9px;padding:22px;margin:17px 0}h2{font-size:1.3rem;margin:0 0 12px;border-bottom:2px solid var(--ouro);padding-bottom:6px}
+a.back{display:inline-block;background:var(--ouro);border:2px solid #111;border-radius:7px;color:#111;font-weight:700;text-decoration:none;padding:9px 16px;margin:0 0 16px}a.back:hover{background:#ffe873}
+code,pre{font-family:Consolas,"Courier New",monospace}pre{background:var(--claro);color:#111;border:1px solid var(--borda);border-left:5px solid var(--ouro);border-radius:5px;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.9rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--borda);vertical-align:top}th{background:var(--ouro)}.status{background:var(--ouro);border:1px solid #111;border-radius:5px;padding:4px 10px;font-weight:700}.note{background:var(--claro);border-left:5px solid var(--ouro);padding:10px 14px}footer{text-align:center;background:var(--ouro);padding:18px;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+<div class="kicker">POLYDEV · WX-TOOLS · C++17 · 054</div>
+<h1>T-SQL Regex Modernizer</h1>
+<p class="lead">Analisador estático de código T-SQL para identificar oportunidades de modernização com expressões regulares do SQL Server 2025.</p>
+<p><strong>Versão 1.0 · Windows · Offline · Sem ODBC · Somente leitura</strong></p>
+
+</header>
+<main>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+<section><h2>Visão geral</h2><p>A ferramenta examina arquivos <code>.sql</code> e diretórios, localiza padrões conhecidos e apresenta recomendações para revisão humana. Não conecta ao banco, não executa SQL e não altera os arquivos analisados.</p></section>
+<section><h2>Regras disponíveis</h2><table><thead><tr><th>Regra</th><th>Detecção</th><th>Orientação</th></tr></thead><tbody>
+<tr><td>R1</td><td><code>PATINDEX(...)</code></td><td>Avaliar <code>REGEXP_INSTR</code> após validação do padrão; não converter diretamente curingas LIKE.</td></tr>
+<tr><td>R2</td><td>Casos específicos de <code>LIKE</code> e <code>NOT LIKE</code> com classes de caracteres</td><td>Sugerir <code>REGEXP_LIKE</code>, preservando identificadores qualificados e delimitados; evitar proposta quando houver cláusula <code>ESCAPE</code> detectada.</td></tr>
+<tr><td>R3</td><td><code>REPLACE(REPLACE(...))</code></td><td>Avaliar <code>REGEXP_REPLACE</code> preservando ordem e semântica.</td></tr>
+<tr><td>R6</td><td><code>CHARINDEX('%', ...)</code></td><td>Alertar que <code>%</code> é literal em <code>CHARINDEX</code>.</td></tr>
+</tbody></table><p>As regras R4 e R5 não estão implementadas nesta versão.</p></section>
+<section><h2>Comandos</h2><table><thead><tr><th>Comando</th><th>Função</th></tr></thead><tbody>
+<tr><td><code>scan</code></td><td>Lista as ocorrências identificadas.</td></tr><tr><td><code>suggest</code></td><td>Mostra propostas e notas de revisão.</td></tr><tr><td><code>dry-run</code></td><td>Exibe ANTES e DEPOIS (proposta não aplicada).</td></tr><tr><td><code>report</code></td><td>Exibe ou grava relatório textual em Markdown.</td></tr><tr><td><code>selftest</code></td><td>Executa verificações internas.</td></tr>
+</tbody></table></section>
+<section><h2>Exemplos de execução no PowerShell</h2><pre>&amp; "E:\@LIB-C++\bin\wxt-cpp-054-t-sql-regex-modernize.exe" selftest
+&amp; "E:\@LIB-C++\bin\wxt-cpp-054-t-sql-regex-modernize.exe" scan "C:\SQL\consulta.sql"
+&amp; "E:\@LIB-C++\bin\wxt-cpp-054-t-sql-regex-modernize.exe" suggest "C:\SQL\consulta.sql"
+&amp; "E:\@LIB-C++\bin\wxt-cpp-054-t-sql-regex-modernize.exe" dry-run "C:\SQL\consulta.sql"
+&amp; "E:\@LIB-C++\bin\wxt-cpp-054-t-sql-regex-modernize.exe" report "C:\SQL" -r "--out=C:\SQL\relatorio.md"</pre><p>O parâmetro <code>-r</code> inclui subdiretórios. O parâmetro <code>--out=...</code> é destinado ao comando <code>report</code>.</p></section>
+<section><h2>Exemplo de sugestão</h2><pre>SQL original:
+SELECT * FROM dbo.Clientes WHERE [Nome] LIKE '%[0-9]%';
+
+Sugestão para revisão:
+REGEXP_LIKE([Nome], '[0-9]')</pre><p class="note"><strong>Atenção:</strong> a sugestão não é aplicada automaticamente. Validar collation, tratamento de NULL, compatibilidade e equivalência semântica antes de usar no SQL Server 2025.</p></section>
+<section><h2>Validação e limitações</h2><ul><li>Compilação no Visual Studio e bateria de 50 testes conduzida no ambiente Windows do projeto.</li><li>Suporte testado para comentários, strings SQL, identificadores delimitados, arquivos e diretórios.</li><li>Arquivos UTF-16 com BOM são rejeitados com mensagem específica; suporte UTF-16 não implementado.</li><li>O analisador é heurístico: não substitui parser completo de T-SQL nem validação de execução em banco.</li><li>Não há garantia de equivalência automática entre padrões LIKE/PATINDEX e expressões regulares.</li></ul></section>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+</main>
+<footer>POLYDEV · WX-TOOLS C++ · 054 · FAÇA CERTO QUE FUNCIONA!</footer>
+</body></html>
