@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="POLYDEV WX-TOOLS 055 — Linux Command Center: cinco áreas e 13 operações de diagnóstico Linux em C++17, somente leitura.">
+<title>WX-TOOLS | C++ | 055 | Linux Command Center</title>
+<style>
+:root{--ouro:#ffd700;--claro:#fff6c9;--texto:#111;--borda:#b79a00}
+*{box-sizing:border-box}body{margin:0;background:#fff9e3;color:var(--texto);font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif}
+header{background:var(--ouro);border-bottom:4px solid #111;padding:30px max(22px,calc((100vw - 1040px)/2))}h1{margin:0;font-size:clamp(1.7rem,3vw,2.5rem)}header p{margin:5px 0 0}
+main{max-width:1040px;margin:26px auto 50px;padding:0 20px}section{background:#fffdf1;border:1px solid var(--borda);border-radius:9px;padding:22px;margin:17px 0}h2{font-size:1.3rem;margin:0 0 12px;border-bottom:2px solid var(--ouro);padding-bottom:6px}
+a.back{display:inline-block;background:var(--ouro);border:2px solid #111;border-radius:7px;color:#111;font-weight:700;text-decoration:none;padding:9px 16px;margin:0 0 16px}a.back:hover{background:#ffe873}
+code,pre{font-family:Consolas,"Courier New",monospace}pre{background:var(--claro);color:#111;border:1px solid var(--borda);border-left:5px solid var(--ouro);border-radius:5px;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.9rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--borda);vertical-align:top}th{background:var(--ouro)}.note{background:var(--claro);border-left:5px solid var(--ouro);padding:10px 14px}footer{text-align:center;background:var(--ouro);padding:18px;font-weight:700}
+</style>
+</head>
+<body>
+<header><div>POLYDEV · WX-TOOLS · C++17 · 055</div><h1>Linux Command Center</h1><p>Centro de diagnósticos Linux com operações organizadas por área, acessíveis por menu interativo ou argumentos CLI.</p><p><strong>Versão 1.0 · Linux · C++17 · Somente leitura · Sem shell intermediário · Sem sudo</strong></p></header>
+<main>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+<section><h2>Visão geral</h2><p>Ferramenta C++17 que reúne comandos nativos do Linux em operações padronizadas. Executa comandos fixos por <code>fork()</code> e <code>execvp()</code>, sem interpretar entradas como shell. Não instala pacotes, não altera serviços e não modifica arquivos.</p><p><strong>Fonte oficial:</strong> <code>wxt-cpp-055-linux-command-center.cpp</code><br><strong>Executável Linux:</strong> <code>wxt-cpp-055-linux-command-center</code></p></section>
+<section><h2>Áreas e operações disponíveis</h2><table><thead><tr><th>Área</th><th>Operação</th><th>Comandos integrados</th></tr></thead><tbody>
+<tr><td rowspan="3">Sistema <code>system</code></td><td><code>overview</code></td><td><code>uname -a</code>, <code>hostname</code>, <code>uptime</code></td></tr>
+<tr><td><code>cpu</code></td><td><code>lscpu</code></td></tr><tr><td><code>memory</code></td><td><code>free -h</code></td></tr>
+<tr><td rowspan="2">Arquivos <code>files</code></td><td><code>overview</code></td><td><code>pwd</code>, <code>ls -lah --</code></td></tr><tr><td><code>usage</code></td><td><code>du -sh -- .</code></td></tr>
+<tr><td rowspan="2">Discos <code>disk</code></td><td><code>overview</code></td><td><code>df -hT</code>, <code>lsblk</code></td></tr><tr><td><code>mounts</code></td><td><code>findmnt</code></td></tr>
+<tr><td rowspan="2">Processos <code>process</code></td><td><code>overview</code></td><td><code>free -h</code>, <code>ps</code></td></tr><tr><td><code>load</code></td><td><code>uptime</code>, <code>free -h</code></td></tr>
+<tr><td rowspan="4">Rede <code>network</code></td><td><code>overview</code></td><td><code>ip -brief address</code>, <code>ip route</code>, <code>ss -tuln</code></td></tr>
+<tr><td><code>interfaces</code></td><td><code>ip -brief address</code></td></tr><tr><td><code>routes</code></td><td><code>ip route</code></td></tr><tr><td><code>listening</code></td><td><code>ss -tuln</code></td></tr>
+</tbody></table><p><strong>Total:</strong> 5 áreas, 13 operações, 21 etapas catalogadas.</p></section>
+<section><h2>Compilação no Ubuntu</h2><pre>g++-13 -std=c++17 -O2 wxt-cpp-055-linux-command-center.cpp -o wxt-cpp-055-linux-command-center</pre><p>Requer compilador compatível com C++17 e os utilitários Linux chamados pelas operações.</p></section>
+<section><h2>Exemplos de utilização</h2><pre>./wxt-cpp-055-linux-command-center
+./wxt-cpp-055-linux-command-center list
+./wxt-cpp-055-linux-command-center selftest
+./wxt-cpp-055-linux-command-center --help
+./wxt-cpp-055-linux-command-center system overview
+./wxt-cpp-055-linux-command-center system cpu
+./wxt-cpp-055-linux-command-center files usage
+./wxt-cpp-055-linux-command-center disk mounts
+./wxt-cpp-055-linux-command-center process load
+./wxt-cpp-055-linux-command-center network overview</pre><p>No menu interativo, escolha a área pelo número e digite o nome da operação. Na tela de operação, Enter vazio retorna ao menu principal; a opção <code>0</code> encerra.</p></section>
+<section><h2>Resultados de homologação</h2><p>Compilado e executado na VM Ubuntu 24.04 do POLYDEV, com G++ 13.3.0. Foram verificados diagnósticos de sistema, CPU, memória, arquivos, discos, processos e rede, além do menu e da validação de argumentos.</p><pre>SELFTEST OK (areas=5, operacoes=13, etapas=21)
+network / overview
+Etapas: 3 | Falhas: 0</pre><p>O retorno <code>0</code> indica execução bem-sucedida; <code>1</code>, argumentos incorretos; <code>2</code>, área ou operação inexistente. Quando uma etapa de execução falha, a operação retorna <code>3</code>.</p><p class="note"><strong>Observação:</strong> Enter vazio no menu principal apresenta “Opcao invalida.”; o comportamento foi registrado como melhoria de usabilidade. Os testes foram realizados na VM do projeto, não em todas as distribuições Linux.</p></section>
+<section><h2>Limitações e segurança</h2><p>As operações são fixas e somente leitura. Não há editor de comandos arbitrários, execução via shell ou uso de <code>sudo</code>. Os resultados dependem da disponibilidade dos utilitários nativos e das permissões do usuário Linux. O programa apresenta a saída original dos comandos no terminal.</p></section>
+<a class="back" href="../../wx-tools-vitrine.html">← Voltar para WX-TOOLS</a>
+</main><footer>POLYDEV · WX-TOOLS C++ · 055 · FAÇA CERTO QUE FUNCIONA!</footer>
+</body></html>
