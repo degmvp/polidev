@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="POLYDEV WR-TOOLS 055 — Linux Command Center em Rust. Cinco áreas e 13 operações de diagnóstico Linux.">
+<title>WR-TOOLS | Rust | 055 | Linux Command Center</title>
+
+<style>
+:root {
+  --destaque:#f59e0b;
+  --claro:#1b2b40;
+  --texto:#edf5ff;
+  --borda:#3d5b78;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:#081321;
+  color:var(--texto);
+  font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif;
+}
+header {
+  background:linear-gradient(120deg,#132d45,#1d2435);
+  border-bottom:4px solid var(--destaque);
+  padding:30px max(22px,calc((100vw - 1040px)/2));
+}
+h1 {
+  margin:0;
+  font-size:clamp(1.7rem,3vw,2.5rem);
+}
+header p { margin:5px 0 0; }
+main {
+  max-width:1040px;
+  margin:26px auto 50px;
+  padding:0 20px;
+}
+section {
+  background:#102137;
+  border:1px solid var(--borda);
+  border-radius:9px;
+  padding:22px;
+  margin:17px 0;
+}
+h2 {
+  font-size:1.3rem;
+  margin:0 0 12px;
+  border-bottom:2px solid var(--destaque);
+  padding-bottom:6px;
+}
+a.back {
+  display:inline-block;
+  background:var(--destaque);
+  border:2px solid #111;
+  border-radius:7px;
+  color:#111;
+  font-weight:700;
+  text-decoration:none;
+  padding:9px 16px;
+  margin:0 0 16px;
+}
+a.back:hover { background:#ffd078; }
+code,pre {
+  font-family:Consolas,"Courier New",monospace;
+}
+pre {
+  background:#07101c;
+  color:#b9f5d6;
+  border:1px solid var(--borda);
+  border-left:5px solid var(--destaque);
+  border-radius:5px;
+  padding:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font-size:.9rem;
+}
+table {
+  border-collapse:collapse;
+  width:100%;
+}
+th,td {
+  text-align:left;
+  padding:9px;
+  border-bottom:1px solid var(--borda);
+  vertical-align:top;
+}
+th {
+  background:#28425d;
+  color:#fff;
+}
+.note {
+  background:var(--claro);
+  border-left:5px solid var(--destaque);
+  padding:10px 14px;
+}
+footer {
+  text-align:center;
+  background:#142b42;
+  border-top:3px solid var(--destaque);
+  padding:18px;
+  font-weight:700;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>POLYDEV · WR-TOOLS · RUST · 055</div>
+  <h1>Linux Command Center</h1>
+  <p>
+    Centro de diagnósticos Linux com operações
+    organizadas por área, acessíveis por menu
+    interativo ou argumentos CLI.
+  </p>
+  <p>
+    <strong>
+      Rust · Linux · Somente leitura ·
+      Sem shell intermediário · Sem sudo
+    </strong>
+  </p>
+</header>
+
+<main>
+
+<a class="back" href="../../wr-tools-vitrine.html">
+  ← Voltar para WR-TOOLS
+</a>
+
+<section>
+<h2>Visão geral</h2>
+<p>
+  Ferramenta desenvolvida em Rust a partir da
+  WX-TOOLS 055 em C++17. Reúne comandos nativos
+  do Linux em operações padronizadas.
+</p>
+<p>
+  Executa comandos fixos sem interpretação por
+  shell. Não instala pacotes, não altera serviços
+  e não modifica arquivos.
+</p>
+<p>
+  <strong>Fonte oficial:</strong>
+  <code>wr-rs-055-linux-command-center.rs</code>
+</p>
+<p>
+  <strong>Executável Linux:</strong>
+  <code>wr-rs-055-linux-command-center</code>
+</p>
+</section>
+
+<section>
+<h2>Áreas e operações disponíveis</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Área</th>
+  <th>Operação</th>
+  <th>Comandos integrados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td rowspan="3">Sistema <code>system</code></td>
+  <td><code>overview</code></td>
+  <td><code>uname -a</code>, <code>hostname</code>, <code>uptime</code></td>
+</tr>
+<tr>
+  <td><code>cpu</code></td>
+  <td><code>lscpu</code></td>
+</tr>
+<tr>
+  <td><code>memory</code></td>
+  <td><code>free -h</code></td>
+</tr>
+
+<tr>
+  <td rowspan="2">Arquivos <code>files</code></td>
+  <td><code>overview</code></td>
+  <td><code>pwd</code>, <code>ls -lah --</code></td>
+</tr>
+<tr>
+  <td><code>usage</code></td>
+  <td><code>du -sh -- .</code></td>
+</tr>
+
+<tr>
+  <td rowspan="2">Discos <code>disk</code></td>
+  <td><code>overview</code></td>
+  <td><code>df -hT</code>, <code>lsblk</code></td>
+</tr>
+<tr>
+  <td><code>mounts</code></td>
+  <td><code>findmnt</code></td>
+</tr>
+
+<tr>
+  <td rowspan="2">Processos <code>process</code></td>
+  <td><code>overview</code></td>
+  <td><code>free -h</code>, <code>ps</code></td>
+</tr>
+<tr>
+  <td><code>load</code></td>
+  <td><code>uptime</code>, <code>free -h</code></td>
+</tr>
+
+<tr>
+  <td rowspan="4">Rede <code>network</code></td>
+  <td><code>overview</code></td>
+  <td><code>ip -brief address</code>, <code>ip route</code>, <code>ss -tuln</code></td>
+</tr>
+<tr>
+  <td><code>interfaces</code></td>
+  <td><code>ip -brief address</code></td>
+</tr>
+<tr>
+  <td><code>routes</code></td>
+  <td><code>ip route</code></td>
+</tr>
+<tr>
+  <td><code>listening</code></td>
+  <td><code>ss -tuln</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>
+  <strong>Total:</strong>
+  5 áreas, 13 operações e 21 etapas catalogadas.
+</p>
+</section>
+
+<section>
+<h2>Compilação no Ubuntu</h2>
+
+<pre>rustc wr-rs-055-linux-command-center.rs</pre>
+
+<p>
+  Requer o compilador Rust e os utilitários Linux
+  utilizados pelas operações.
+</p>
+</section>
+
+<section>
+<h2>Exemplos de utilização</h2>
+
+<pre>./wr-rs-055-linux-command-center
+./wr-rs-055-linux-command-center list
+./wr-rs-055-linux-command-center selftest
+./wr-rs-055-linux-command-center --help
+./wr-rs-055-linux-command-center system overview
+./wr-rs-055-linux-command-center system cpu
+./wr-rs-055-linux-command-center system memory
+./wr-rs-055-linux-command-center files overview
+./wr-rs-055-linux-command-center files usage
+./wr-rs-055-linux-command-center disk overview
+./wr-rs-055-linux-command-center disk mounts
+./wr-rs-055-linux-command-center process overview
+./wr-rs-055-linux-command-center process load
+./wr-rs-055-linux-command-center network overview
+./wr-rs-055-linux-command-center network interfaces
+./wr-rs-055-linux-command-center network routes
+./wr-rs-055-linux-command-center network listening</pre>
+
+<p>
+  No menu interativo, escolha a área pelo número
+  e digite o nome da operação. Enter vazio na
+  seleção de operação retorna ao menu principal.
+  A opção <code>0</code> encerra o programa.
+</p>
+</section>
+
+<section>
+<h2>Resultados de homologação</h2>
+
+<p>
+  Ferramenta compilada e executada na VM Ubuntu
+  do projeto POLYDEV em 10/11/2026.
+</p>
+
+<pre>SELFTEST OK (areas=5, operacoes=13, etapas=21)
+
+system / overview
+Etapas: 3 | Falhas: 0
+
+network / overview
+Etapas: 3 | Falhas: 0</pre>
+
+<p>
+  Foram realizados testes das 13 operações,
+  abrangendo sistema, CPU, memória, arquivos,
+  discos, processos e rede.
+</p>
+
+<p>
+  O menu interativo e o encerramento do programa
+  também foram confirmados.
+</p>
+
+<p class="note">
+  <strong>Homologação:</strong>
+  realizada na VM Ubuntu do POLYDEV.
+  Não representa certificação em todas as
+  distribuições Linux.
+</p>
+</section>
+
+<section>
+<h2>Limitações e segurança</h2>
+
+<p>
+  As operações são fixas e somente leitura.
+  Não existe editor de comandos arbitrários,
+  execução por shell ou uso de sudo.
+</p>
+
+<p>
+  Os resultados dependem da disponibilidade
+  dos utilitários Linux e das permissões do
+  usuário que executa o programa.
+</p>
+
+<p>
+  A saída dos comandos é apresentada diretamente
+  no terminal.
+</p>
+</section>
+
+</main>
+
+<footer>
+  POLYDEV · WR-TOOLS RUST · 055 ·
+  FAÇA CERTO QUE FUNCIONA!
+</footer>
+
+</body>
+</html>
