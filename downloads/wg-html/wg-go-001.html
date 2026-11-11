@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>POLYDEV | WG-TOOLS | 001 | Network &amp; Port Monitor</title>
+<style>
+:root{color-scheme:dark;--bg:#07101e;--panel:#101e32;--line:#168fd0;--cyan:#6be3ff;--text:#eef8ff;--muted:#bdd0e2;--gold:#e8bc5b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#07101e,#102845 60%,#07101e);color:var(--text);font:16px/1.65 Arial,Helvetica,sans-serif}
+header,main,footer{max-width:1100px;margin:auto;padding:24px}header{text-align:center;border-bottom:2px solid var(--line)}
+h1{margin:8px 0;color:var(--cyan);font-size:clamp(25px,4vw,39px)}.eyebrow{color:var(--gold);font-weight:700;letter-spacing:.1em}header p{margin:5px 0;color:var(--muted)}
+section{margin:20px 0;padding:22px;background:var(--panel);border:1px solid #27638a;border-radius:12px;box-shadow:0 8px 25px #0004}
+h2{margin:0 0 12px;color:var(--cyan);font-size:22px}p{margin:8px 0}ul{padding-left:24px}li{margin:5px 0}
+code{color:#c2f5ff}pre{overflow:auto;padding:15px;border-radius:8px;background:#040c17;border:1px solid #244e72;color:#d8f4ff;white-space:pre-wrap;word-break:break-word}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.button{display:inline-block;padding:11px 18px;background:#087ab2;color:#fff;text-decoration:none;font-weight:bold;border:1px solid #46c9f5;border-radius:7px}.button:hover{background:#0b98d6}
+.note{border-left:4px solid var(--gold);padding-left:12px;color:#f5e6bd}footer{text-align:center;color:var(--gold);border-top:2px solid var(--line);font-weight:bold}small{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">POLYDEV • WG-TOOLS • GOLANG</div>
+<h1>001 | Network &amp; Port Monitor</h1>
+<p>Monitoramento e diagnóstico de conectividade TCP e HTTP/HTTPS</p>
+<p>Documentação técnica da ferramenta 001</p>
+</header>
+<main>
+<div class="actions"><a class="button" href="../../wg-tools-vitrine.html">Voltar para WG-TOOLS</a></div>
+<section><h2>1. Visão geral</h2><p>O Network &amp; Port Monitor é um utilitário de linha de comando desenvolvido em Go para verificar a conectividade com serviços de rede e endpoints web. Apresenta o resultado da tentativa de conexão, o tempo de resposta e informações de diagnóstico.</p></section>
+<section><h2>2. Recursos</h2><ul><li>Teste de conectividade TCP em host e porta.</li><li>Verificação de endpoints HTTP/HTTPS e retorno de status HTTP.</li><li>Medição de latência em milissegundos.</li><li>Registro de resultados em formatos JSON e CSV.</li><li>Compilação nativa para Windows e Linux.</li></ul></section>
+<section><h2>3. Arquivos e plataformas</h2><p><strong>Fonte Go:</strong> <code>wg-go-001-network-port-monitor.go</code></p><p><strong>Executável Windows:</strong> <code>wg-go-001.exe</code></p><p><strong>Executável Linux:</strong> <code>wg-go-001-linux</code></p><p><strong>Diretório de fontes no Windows:</strong> <code>E:\wggo\</code></p><p class="note">Os fontes são mantidos fora dos diretórios públicos de downloads.</p></section>
+<section><h2>4. Compilação no Windows</h2><pre>cd E:\wggo
+go build -o wg-go-001.exe .\wg-go-001-network-port-monitor.go</pre><p>Para gerar a versão Linux a partir do Windows, em PowerShell:</p><pre>$env:GOOS = "linux"
+$env:GOARCH = "amd64"
+go build -o wg-go-001-linux .\wg-go-001-network-port-monitor.go</pre><p><small>Após a compilação cruzada, restaure as variáveis de ambiente, se necessário, antes de compilar novamente para Windows.</small></p></section>
+<section><h2>5. Execução e testes</h2><p>A ferramenta recebe destinos TCP e URLs HTTP/HTTPS conforme os parâmetros implementados no programa. Na execução em PowerShell, ao informar uma lista vazia de URLs, utilize a forma <code>-urls=</code> para evitar a interpretação de um argumento vazio.</p><p><strong>Exemplos de destinos de teste:</strong></p><ul><li>TCP: <code>www.google.com:443</code></li><li>HTTP/HTTPS: <code>https://www.google.com</code></li><li>Ambiente local: <code>localhost:3000</code> ou <code>localhost:1433</code>, quando houver serviço correspondente.</li></ul><p class="note">Os nomes completos dos demais parâmetros devem ser consultados no programa ou na saída de ajuda da versão compilada; não são presumidos nesta documentação.</p></section>
+<section><h2>6. Interpretação dos resultados</h2><p><strong>OK:</strong> conexão ou requisição concluída com sucesso. <strong>Falha:</strong> serviço indisponível, conexão recusada, timeout ou outro erro informado no detalhe.</p><p>O tempo de resposta é apresentado em milissegundos. O resultado HTTP inclui o código e a descrição do status quando disponíveis.</p><pre>[
+  {
+    "target": "www.google.com:443",
+    "kind": "TCP",
+    "status": "OK",
+    "latency_ms": 102,
+    "detail": "conexao estabelecida"
+  },
+  {
+    "target": "https://www.google.com",
+    "kind": "HTTP",
+    "status": "OK",
+    "latency_ms": 713,
+    "detail": "200 OK"
+  }
+]</pre><p><small>Exemplo abreviado de uma execução anterior; latências e resultados variam conforme a rede.</small></p></section>
+<section><h2>7. Relatórios</h2><p>Os resultados podem ser gerados em <strong>JSON</strong> e <strong>CSV</strong> para análise, registro e comparação. Os campos observados incluem data/hora, destino, tipo do teste, status, latência e detalhe.</p></section>
+<section><h2>8. Observações operacionais</h2><ul><li>Uma porta fechada ou sem serviço pode retornar conexão recusada; isso não significa defeito no monitor.</li><li>Resultados dependem da conectividade, DNS, firewall e disponibilidade do destino.</li><li>O executável Linux deve ser testado na VM Ubuntu antes da homologação nessa plataforma.</li></ul></section>
+<div class="actions"><a class="button" href="../../wg-tools-vitrine.html">Voltar para WG-TOOLS</a></div>
+</main>
+<footer>POLYDEV | WG-TOOLS | Go (Golang)</footer>
+</body>
+</html>
