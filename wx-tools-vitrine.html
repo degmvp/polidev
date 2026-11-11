@@ -466,6 +466,7 @@ const CATEGORIAS = {
     wxtcpp: "C++",
     wxtc:   "C",
     wxtrs:  "Rust",
+    wrrs:   "WR-TOOLS | Rust",
     wxtgo:  "Go"
 };
 
@@ -763,26 +764,31 @@ async function carregarFerramentas(){
 function numeroFerramenta(item){
     const fontes = [item.arquivo_url, item.programa];
     for(const fonte of fontes){
-        const match = String(fonte || "").match(/wxt-cpp-(\d{3})-/i);
+        const match = String(fonte || "").match(/(?:wxt-cpp|wr-rs)-(\d{3})(?:-|\.|$)/i);
         if(match) return Number(match[1]);
     }
     return null;
 }
 
 function caminhoDocumentacao(item){
- if(!item || String(item.categoria||'').toLowerCase()!=='wxtcpp') return '';
+ if(!item) return '';
+ const categoria=String(item.categoria||'').toLowerCase();
  const n=numeroFerramenta(item);
- return n===null ? '' : 'downloads/wxt-html/wxt-cpp-'+String(n).padStart(3,'0')+'.html';
+ if(n===null) return '';
+ const numero=String(n).padStart(3,'0');
+ if(categoria==='wxtcpp') return 'downloads/wxt-html/wxt-cpp-'+numero+'.html';
+ if(categoria==='wrrs') return 'downloads/wr-html/wr-rs-'+numero+'.html';
+ return '';
 }
 function atualizarBotaoDocumentacao(){
  const b=document.getElementById('btnDocumentacao');
  b.disabled=!caminhoDocumentacao(registroAtual);
- b.title=b.disabled?'Selecione uma ferramenta C++':'Abrir documentação HTML';
+ b.title=b.disabled?'Selecione uma ferramenta com documentação':'Abrir documentação HTML';
 }
 function abrirDocumentacao(){
  const url=caminhoDocumentacao(registroAtual);
- if(!url){alert('Selecione uma ferramenta C++.');return;}
- window.location.href=url;
+ if(!url){alert('Documentação indisponível para esta ferramenta.');return;}
+ window.location.href=montarUrlLeitura(url);
 }
 
 function montarLista(){
@@ -976,7 +982,7 @@ async function baixarAtual(){
     const doc=caminhoDocumentacao(registroAtual);
     if(doc){
       try{
-        const r=await fetch(doc,{cache:'no-store'});
+        const r=await fetch(montarUrlLeitura(doc),{cache:'no-store'});
         if(!r.ok)throw new Error('HTTP '+r.status);
         const blob=await r.blob(), url=URL.createObjectURL(blob);
         const a=document.createElement('a');a.href=url;a.download=doc.split('/').pop();
