@@ -467,7 +467,8 @@ const CATEGORIAS = {
     wxtc:   "C",
     wxtrs:  "Rust",
     wrrs:   "WR-TOOLS | Rust",
-    wxtgo:  "Go"
+    wxtgo:  "Go",
+    wggo:   "WG-TOOLS | Golang"
 };
 
 const client =
@@ -764,7 +765,7 @@ async function carregarFerramentas(){
 function numeroFerramenta(item){
     const fontes = [item.arquivo_url, item.programa];
     for(const fonte of fontes){
-        const match = String(fonte || "").match(/(?:wxt-cpp|wr-rs)-(\d{3})(?:-|\.|$)/i);
+        const match = String(fonte || "").match(/(?:wxt-cpp|wr-rs|wg-go)-(\d{3})(?:-|\.|$)/i);
         if(match) return Number(match[1]);
     }
     return null;
@@ -778,6 +779,7 @@ function caminhoDocumentacao(item){
  const numero=String(n).padStart(3,'0');
  if(categoria==='wxtcpp') return 'downloads/wxt-html/wxt-cpp-'+numero+'.html';
  if(categoria==='wrrs') return 'downloads/wr-html/wr-rs-'+numero+'.html';
+  if(categoria==='wggo') return 'downloads/wg-html/wg-go-'+numero+'.html';
  return '';
 }
 function atualizarBotaoDocumentacao(){
