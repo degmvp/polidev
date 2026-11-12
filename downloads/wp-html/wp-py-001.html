@@ -1,52 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POLYDEV | WP-TOOLS | 001 | Network &amp; Port Monitor</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WP-TOOLS | 001 | Network &amp; Port Monitor</title>
 <style>
-:root{color-scheme:dark;--gold:#ffd700;--bg:#080808;--panel:#171717;--line:#987300;--text:#f2f2f2}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Arial,Helvetica,sans-serif}header,main,footer{max-width:1100px;margin:auto;padding:24px}header{text-align:center;border-bottom:2px solid var(--gold)}h1{color:var(--gold);margin:.2em 0;font-size:clamp(26px,4vw,40px)}h2{color:var(--gold);font-size:21px}p{margin:.6em 0}.tag{color:#e8c451;letter-spacing:2px;font-weight:bold}.banner{display:block;width:100%;height:auto;border:2px solid var(--gold);border-radius:12px;margin:22px auto;background:#111}.card{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:18px 22px;margin:18px 0}ul{padding-left:24px}li{margin:6px 0}code{color:#ffdf68;overflow-wrap:anywhere}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}a.button{background:var(--gold);color:#000;text-decoration:none;font-weight:bold;padding:12px 18px;border-radius:7px}a.button:hover{background:#e3bd00}footer{text-align:center;color:var(--gold);border-top:1px solid var(--line);font-weight:bold}@media(max-width:600px){header,main,footer{padding:16px}}
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0e0d09;color:#f5f0dd;font:17px/1.65 system-ui,sans-serif}main{max-width:1050px;margin:auto;padding:30px 22px 65px}header{border-bottom:2px solid #ffd700;padding:30px 0}h1{font-size:clamp(32px,6vw,56px);line-height:1.15;margin:12px 0}h2{color:#ffd700;margin-top:36px}a{color:#ffe68a}.back{display:inline-block;background:#ffd700;color:#151100;text-decoration:none;padding:12px 19px;border-radius:8px;font-weight:750}.eyebrow{color:#ffd700;letter-spacing:2px;font-weight:750}.note{padding:17px 20px;border-left:4px solid #ffd700;background:#242012;margin:22px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:#201d13;padding:20px;border:1px solid #75601b;border-radius:10px}.card h3{margin-top:0;color:#ffe68a}pre{background:#080706;padding:18px;border:1px solid #75601b;border-radius:8px;overflow:auto}code{font-family:Consolas,monospace;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:12px;border-bottom:1px solid #75601b}footer{margin-top:45px;border-top:1px solid #75601b;padding-top:24px;color:#d5c69c}@media(max-width:650px){.grid{grid-template-columns:1fr}body{font-size:16px}}
 </style>
 </head>
-<body>
-<header>
-<div class="tag">POLYDEV | WP-TOOLS | PYTHON</div>
-<h1>001 | Network &amp; Port Monitor</h1>
-<p>Documentação da ferramenta — Monitoramento de Rede e Portas</p>
-</header>
-<main>
-<img class="banner" src="../wp-ban/wp-py-001.png" alt="Banner WP-TOOLS 001 Network &amp; Port Monitor">
-<section class="card">
-<h2>Objetivo</h2>
-<p>Ferramenta Python destinada à análise de conectividade de rede e à verificação de portas e serviços em ambientes Windows e Linux.</p>
+<body><main>
+<a class="back" href="../../wp-tools-vitrine.html">← Voltar para WP-TOOLS</a>
+<header><p class="eyebrow">POLYDEV · WP-TOOLS · 001</p><h1>Network &amp; Port Monitor</h1><p>Documentação da ferramenta Python para monitoramento de rede e portas.</p></header>
+<div class="note"><strong>Situação:</strong> documentação inicial. A implementação Python e os resultados de execução ainda não foram apresentados para homologação nesta documentação.</div>
+<section class="grid">
+<article class="card"><h3>Conectividade TCP</h3><p>Verificação planejada de conexão com host e porta informados.</p></article>
+<article class="card"><h3>Serviços de rede</h3><p>Consulta planejada de disponibilidade de serviços.</p></article>
+<article class="card"><h3>Diagnóstico</h3><p>Identificação prevista de resultados e falhas de conexão.</p></article>
+<article class="card"><h3>Relatórios</h3><p>Registro previsto de resultados para análise.</p></article>
 </section>
-<section class="card">
-<h2>Funcionalidades previstas</h2>
-<ul>
-<li>Verificação de conectividade TCP com host e porta informados.</li>
-<li>Consulta de disponibilidade de serviços de rede.</li>
-<li>Identificação de resultados e falhas de conexão.</li>
-<li>Registro de resultados para análise e diagnóstico.</li>
-<li>Operação em Windows e Linux, conforme validação de ambiente.</li>
-</ul>
-</section>
-<section class="card">
-<h2>Identificação e estrutura</h2>
-<p><strong>Categoria Supabase:</strong> <code>wppy</code></p>
-<p><strong>Programa:</strong> <code>wp-py-001-network-port-monitor</code></p>
-<p><strong>Banner:</strong> <code>downloads/wp-ban/wp-py-001.png</code></p>
-<p><strong>Documentação:</strong> <code>downloads/wp-html/wp-py-001.html</code></p>
-<p><strong>Fontes privados:</strong> <code>E:\wppy\</code></p>
-</section>
-<section class="card">
-<h2>Situação</h2>
-<p>Documentação inicial. A implementação Python, os argumentos de execução e os resultados de testes serão documentados após a homologação da ferramenta.</p>
-</section>
-<nav class="actions" aria-label="Navegação">
-<a class="button" href="../../wp-tools-vitrine.html">Voltar para WP-TOOLS</a>
-<a class="button" href="../../home.html">Voltar Home</a>
-</nav>
-</main>
-<footer>POLYDEV | WP-TOOLS | PYTHON</footer>
-</body>
-</html>
+<h2>Objetivo</h2><p>Reunir verificações de conectividade e portas em uma ferramenta Python para diagnóstico de rede.</p>
+<h2>Identificação</h2>
+<table><tbody>
+<tr><th>Categoria Supabase</th><td><code>wppy</code></td></tr>
+<tr><th>Programa</th><td><code>wp-py-001-network-port-monitor</code></td></tr>
+<tr><th>Banner da ferramenta</th><td><code>downloads/wp-ban/wp-py-001.png</code></td></tr>
+<tr><th>Documentação</th><td><code>downloads/wp-html/wp-py-001.html</code></td></tr>
+<tr><th>Fontes privados</th><td><code>E:\wppy\</code></td></tr>
+</tbody></table>
+<h2>Execução e validação</h2><p>Comandos, argumentos, dependências e resultados de testes serão incluídos após a implementação e validação da ferramenta Python. Nenhum teste de execução é declarado nesta versão.</p>
+<footer><p>POLYDEV | WP-TOOLS | 001 | Python</p><a class="back" href="../../wp-tools-vitrine.html">← Voltar para WP-TOOLS</a></footer>
+</main></body></html>
